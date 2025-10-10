@@ -1,4 +1,3 @@
-import React from 'react';
 import { FileCheck, Download, Shield } from 'lucide-react';
 
 export default function CompliancePage() {
