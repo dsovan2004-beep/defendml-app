@@ -1,6 +1,3 @@
-// ============================================
-// FILE 4: src/pages/compliance.tsx
-// ============================================
 import React from 'react';
 import { FileCheck, Download, Shield } from 'lucide-react';
 
