@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Navigation from '@/components/Navigation';
+import Navigation from '../components/Navigation';
 import {
   Shield, AlertTriangle, Lock, FileCheck, TrendingUp, TrendingDown,
-  Zap, DollarSign, Clock, CheckCircle, Activity
+  Zap, DollarSign, Clock, Activity
 } from 'lucide-react';
 
 type Kpis = {
@@ -14,7 +14,7 @@ type Kpis = {
   success_rate: number;     // %
   scan_count: number;
 
-  // Optional extras (for nice demo tiles; safe for TS)
+  // Optional extras
   setup_time_minutes?: number;
   cost_saved_vs_calypso?: number;
   multi_llm_providers?: number;
@@ -48,15 +48,16 @@ export default function OverviewPage() {
       setLoading(true);
       setError(null);
       try {
-        // Call your Cloudflare Pages Function (server) that proxies & aggregates logs
+        // If you prefer env var base, swap the next line to:
+        // const apiBase = process.env.NEXT_PUBLIC_API_BASE ?? '';
+        // const res = await fetch(`${apiBase}/api/kpis?range_days=${rangeFilter}`, { cache: 'no-store' });
         const res = await fetch(`/api/kpis?range_days=${rangeFilter}`, { cache: 'no-store' });
         if (!res.ok) throw new Error('API connection failed');
         const data = await res.json();
-        // Expecting shape { ok: true, kpis: {...} }
         setKpis(data?.kpis ?? null);
       } catch (e) {
         console.error('API Error:', e);
-        // Premium mock to keep the page useful if API is offline
+        // Fallback demo data
         setKpis({
           threats_blocked: 2847,
           pii_prevented: 1234,
@@ -66,7 +67,6 @@ export default function OverviewPage() {
           success_rate: 99.94,
           scan_count: 45678,
 
-          // extras for the hero/competitive tiles
           setup_time_minutes: 28,
           cost_saved_vs_calypso: 48750,
           multi_llm_providers: 4,
