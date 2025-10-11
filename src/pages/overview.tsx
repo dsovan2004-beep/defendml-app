@@ -2,7 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Shield, AlertTriangle, Lock, FileCheck, TrendingUp, TrendingDown, Zap, DollarSign, Clock, CheckCircle, XCircle, Activity } from 'lucide-react';
 
 export default function DefendMLDashboard() {
-  const [kpis, setKpis] = useState(null);
+  type Kpis = {
+  threats_blocked: number;
+  pii_prevented: number;
+  policy_violations: number;
+  compliance_score: number;
+  avg_latency_ms: number;
+  success_rate: number;
+  scan_count: number;
+};
+
+const [kpis, setKpis] = useState<Kpis | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [rangeFilter, setRangeFilter] = useState(7);
