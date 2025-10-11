@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Navigation from '@/components/Navigation';
 import { Lock, Eye, EyeOff, AlertCircle, Shield, TrendingDown, DollarSign, FileCheck } from 'lucide-react';
 
 type Detection = string | { type?: string };
@@ -189,315 +190,318 @@ export default function PIIPage(): JSX.Element {
       : piiEvents.filter((e) => e.detections.some((d) => d === `pii.${selectedType}`));
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950">
-      <div className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <Lock className="w-8 h-8 text-blue-400" />
-                <h1 className="text-3xl font-bold text-white">PII Data Protection</h1>
+    <>
+      <Navigation />
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950">
+        <div className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
+          <div className="max-w-7xl mx-auto px-8 py-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <Lock className="w-8 h-8 text-blue-400" />
+                  <h1 className="text-3xl font-bold text-white">PII Data Protection</h1>
+                </div>
+                <p className="text-slate-300">
+                  Prevent data leaks before they happen with AI-powered detection
+                </p>
+                <p className="text-slate-500 text-sm mt-1">
+                  <span className="text-green-400 font-semibold">Lakera doesn't show this:</span>{' '}
+                  Real-time breach cost prevention
+                </p>
               </div>
-              <p className="text-slate-300">
-                Prevent data leaks before they happen with AI-powered detection
-              </p>
-              <p className="text-slate-500 text-sm mt-1">
-                <span className="text-green-400 font-semibold">Lakera doesn't show this:</span>{' '}
-                Real-time breach cost prevention
-              </p>
-            </div>
-            <button
-              onClick={() => setShowSensitive((s) => !s)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg transition-all"
-            >
-              {showSensitive ? (
-                <EyeOff className="w-4 h-4 text-blue-300" />
-              ) : (
-                <Eye className="w-4 h-4 text-blue-300" />
-              )}
-              <span className="text-sm font-medium text-blue-300">
-                {showSensitive ? 'Hide' : 'Show'} Sensitive Details
-              </span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-8 py-8 space-y-6">
-        {/* KPI tiles */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-gradient-to-br from-blue-500/10 to-cyan-600/10 rounded-xl p-6 border border-blue-500/20">
-            <div className="flex items-center justify-between mb-2">
-              <Shield className="w-6 h-6 text-blue-400" />
-              <div className="flex items-center gap-1 text-green-400 text-xs">
-                <TrendingDown className="w-3 h-3" />
-                <span>-12%</span>
-              </div>
-            </div>
-            <div className="text-4xl font-bold text-white mb-1">{totalPrevented}</div>
-            <div className="text-blue-300 text-sm font-medium">PII Leaks Prevented</div>
-            <div className="text-blue-400/60 text-xs mt-1">Across all LLM providers</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-purple-500/10 to-pink-600/10 rounded-xl p-6 border border-purple-500/20">
-            <div className="flex items-center justify-between mb-2">
-              <Eye className="w-6 h-6 text-purple-400" />
-            </div>
-            <div className="text-4xl font-bold text-white mb-1">{totalRedacted}</div>
-            <div className="text-purple-300 text-sm font-medium">Items Redacted</div>
-            <div className="text-purple-400/60 text-xs mt-1">Real-time sanitization</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 rounded-xl p-6 border border-green-500/20">
-            <div className="flex items-center justify-between mb-2">
-              <FileCheck className="w-6 h-6 text-green-400" />
-            </div>
-            <div className="text-4xl font-bold text-white mb-1">100%</div>
-            <div className="text-green-300 text-sm font-medium">Compliance Score</div>
-            <div className="text-green-400/60 text-xs mt-1">SOC 2, GDPR, HIPAA ready</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-orange-500/10 to-red-600/10 rounded-xl p-6 border border-orange-500/20">
-            <div className="flex items-center justify-between mb-2">
-              <DollarSign className="w-6 h-6 text-orange-400" />
-            </div>
-            <div className="text-4xl font-bold text-white mb-1">
-              ${(totalBreachCostPrevented / 1000).toFixed(1)}K
-            </div>
-            <div className="text-orange-300 text-sm font-medium">Breach Cost Prevented</div>
-            <div className="text-orange-400/60 text-xs mt-1">CalypsoAI doesn't track this!</div>
-          </div>
-        </div>
-
-        {/* Explainer */}
-        <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-xl p-4">
-          <div className="flex items-start gap-3">
-            <Lock className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <h4 className="text-sm font-semibold text-blue-300 mb-1">
-                💎 DefendML Exclusive: Breach Cost Prevention Tracking
-              </h4>
-              <p className="text-sm text-blue-200/80">
-                We calculate the average cost of each PII type breach (based on IBM's 2024 Cost of
-                Data Breach Report). See exactly how much money you're saving.{' '}
-                <span className="font-bold">No competitor offers this transparency.</span>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* PII type buttons */}
-        <div className="bg-black/30 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold text-white">PII Types Detected</h3>
-            <button
-              onClick={fetchPIIEvents}
-              className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded-lg text-sm font-medium transition-all border border-blue-500/30"
-            >
-              Refresh Data
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={() => setSelectedType('all')}
-              className={`px-4 py-3 rounded-lg border transition-all ${
-                selectedType === 'all'
-                  ? 'bg-blue-500 text-white border-blue-400 shadow-lg shadow-blue-500/30'
-                  : 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/10'
-              }`}
-            >
-              <div className="text-xs uppercase tracking-wide mb-1">All Types</div>
-              <div className="text-2xl font-bold">{totalPrevented}</div>
-            </button>
-            {Object.entries(piiTypeCounts).map(([type, count]) => (
               <button
-                key={type}
-                onClick={() => setSelectedType(type)}
+                onClick={() => setShowSensitive((s) => !s)}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg transition-all"
+              >
+                {showSensitive ? (
+                  <EyeOff className="w-4 h-4 text-blue-300" />
+                ) : (
+                  <Eye className="w-4 h-4 text-blue-300" />
+                )}
+                <span className="text-sm font-medium text-blue-300">
+                  {showSensitive ? 'Hide' : 'Show'} Sensitive Details
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-8 py-8 space-y-6">
+          {/* KPI tiles */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-gradient-to-br from-blue-500/10 to-cyan-600/10 rounded-xl p-6 border border-blue-500/20">
+              <div className="flex items-center justify-between mb-2">
+                <Shield className="w-6 h-6 text-blue-400" />
+                <div className="flex items-center gap-1 text-green-400 text-xs">
+                  <TrendingDown className="w-3 h-3" />
+                  <span>-12%</span>
+                </div>
+              </div>
+              <div className="text-4xl font-bold text-white mb-1">{totalPrevented}</div>
+              <div className="text-blue-300 text-sm font-medium">PII Leaks Prevented</div>
+              <div className="text-blue-400/60 text-xs mt-1">Across all LLM providers</div>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-500/10 to-pink-600/10 rounded-xl p-6 border border-purple-500/20">
+              <div className="flex items-center justify-between mb-2">
+                <Eye className="w-6 h-6 text-purple-400" />
+              </div>
+              <div className="text-4xl font-bold text-white mb-1">{totalRedacted}</div>
+              <div className="text-purple-300 text-sm font-medium">Items Redacted</div>
+              <div className="text-purple-400/60 text-xs mt-1">Real-time sanitization</div>
+            </div>
+
+            <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 rounded-xl p-6 border border-green-500/20">
+              <div className="flex items-center justify-between mb-2">
+                <FileCheck className="w-6 h-6 text-green-400" />
+              </div>
+              <div className="text-4xl font-bold text-white mb-1">100%</div>
+              <div className="text-green-300 text-sm font-medium">Compliance Score</div>
+              <div className="text-green-400/60 text-xs mt-1">SOC 2, GDPR, HIPAA ready</div>
+            </div>
+
+            <div className="bg-gradient-to-br from-orange-500/10 to-red-600/10 rounded-xl p-6 border border-orange-500/20">
+              <div className="flex items-center justify-between mb-2">
+                <DollarSign className="w-6 h-6 text-orange-400" />
+              </div>
+              <div className="text-4xl font-bold text-white mb-1">
+                ${(totalBreachCostPrevented / 1000).toFixed(1)}K
+              </div>
+              <div className="text-orange-300 text-sm font-medium">Breach Cost Prevented</div>
+              <div className="text-orange-400/60 text-xs mt-1">CalypsoAI doesn't track this!</div>
+            </div>
+          </div>
+
+          {/* Explainer */}
+          <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-xl p-4">
+            <div className="flex items-start gap-3">
+              <Lock className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="text-sm font-semibold text-blue-300 mb-1">
+                  💎 DefendML Exclusive: Breach Cost Prevention Tracking
+                </h4>
+                <p className="text-sm text-blue-200/80">
+                  We calculate the average cost of each PII type breach (based on IBM's 2024 Cost of
+                  Data Breach Report). See exactly how much money you're saving.{' '}
+                  <span className="font-bold">No competitor offers this transparency.</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* PII type buttons */}
+          <div className="bg-black/30 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-white">PII Types Detected</h3>
+              <button
+                onClick={fetchPIIEvents}
+                className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded-lg text-sm font-medium transition-all border border-blue-500/30"
+              >
+                Refresh Data
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => setSelectedType('all')}
                 className={`px-4 py-3 rounded-lg border transition-all ${
-                  selectedType === type
-                    ? piiTypeColors[type] || 'bg-blue-500/20 text-blue-300 border-blue-400/30'
-                    : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10'
+                  selectedType === 'all'
+                    ? 'bg-blue-500 text-white border-blue-400 shadow-lg shadow-blue-500/30'
+                    : 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/10'
                 }`}
               >
-                <div className="text-xs uppercase tracking-wide mb-1">
-                  {type.replace('_', ' ')}
-                </div>
-                <div className="text-2xl font-bold">{count}</div>
+                <div className="text-xs uppercase tracking-wide mb-1">All Types</div>
+                <div className="text-2xl font-bold">{totalPrevented}</div>
               </button>
-            ))}
-            {Object.keys(piiTypeCounts).length === 0 && (
-              <div className="text-slate-400 text-sm py-3">
-                No PII types detected yet - your data is secure! 🎉
-              </div>
-            )}
+              {Object.entries(piiTypeCounts).map(([type, count]) => (
+                <button
+                  key={type}
+                  onClick={() => setSelectedType(type)}
+                  className={`px-4 py-3 rounded-lg border transition-all ${
+                    selectedType === type
+                      ? piiTypeColors[type] || 'bg-blue-500/20 text-blue-300 border-blue-400/30'
+                      : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10'
+                  }`}
+                >
+                  <div className="text-xs uppercase tracking-wide mb-1">
+                    {type.replace('_', ' ')}
+                  </div>
+                  <div className="text-2xl font-bold">{count}</div>
+                </button>
+              ))}
+              {Object.keys(piiTypeCounts).length === 0 && (
+                <div className="text-slate-400 text-sm py-3">
+                  No PII types detected yet - your data is secure! 🎉
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Table */}
-        <div className="bg-black/30 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
-          <div className="px-6 py-4 border-b border-white/10 bg-white/5">
-            <h3 className="text-lg font-bold text-white">Recent PII Protection Events</h3>
-            <p className="text-slate-400 text-sm">
-              Real-time data leak prevention across all your LLM providers
-            </p>
-          </div>
+          {/* Table */}
+          <div className="bg-black/30 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+            <div className="px-6 py-4 border-b border-white/10 bg-white/5">
+              <h3 className="text-lg font-bold text-white">Recent PII Protection Events</h3>
+              <p className="text-slate-400 text-sm">
+                Real-time data leak prevention across all your LLM providers
+              </p>
+            </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-white/5 border-b border-white/10">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                    Timestamp
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                    PII Types
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                    Items Redacted
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                    LLM Provider
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                    Action
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                    Compliance
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                    Cost Saved
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {loading ? (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-white/5 border-b border-white/10">
                   <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center">
-                      <div className="flex flex-col items-center gap-3">
-                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-                        <span className="text-slate-400">Loading PII events...</span>
-                      </div>
-                    </td>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                      Timestamp
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                      PII Types
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                      Items Redacted
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                      LLM Provider
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                      Action
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                      Compliance
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                      Cost Saved
+                    </th>
                   </tr>
-                ) : filteredEvents.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center text-slate-400">
-                      <Lock className="w-12 h-12 mx-auto mb-3 text-slate-600" />
-                      <div className="font-medium">No PII events in this category</div>
-                      <div className="text-sm text-slate-500 mt-1">Your data is protected!</div>
-                    </td>
-                  </tr>
-                ) : (
-                  filteredEvents.map((event, idx) => (
-                    <tr key={(event.id as any) ?? idx} className="hover:bg-white/5 transition-all group">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-slate-300">
-                          {new Date(event.timestamp).toLocaleTimeString()}
-                        </div>
-                        <div className="text-xs text-slate-500">
-                          {new Date(event.timestamp).toLocaleDateString()}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex flex-wrap gap-1">
-                          {(event.detections || []).map((d, i) => {
-                            const type = d.replace('pii.', '');
-                            return (
-                              <span
-                                key={i}
-                                className={`px-2 py-1 rounded text-xs font-medium border ${
-                                  piiTypeColors[type] ||
-                                  'bg-blue-500/20 text-blue-200 border-blue-500/30'
-                                }`}
-                              >
-                                {type.replace('_', ' ')}
-                              </span>
-                            );
-                          })}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-2xl font-bold text-blue-400">
-                          {event.redacted_count || 0}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span className="text-sm text-slate-300 font-medium">
-                            {event.llm_provider || 'Unknown'}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${
-                            event.action === 'blocked'
-                              ? 'bg-red-500/20 text-red-300 border-red-500/30'
-                              : 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
-                          }`}
-                        >
-                          {event.action?.toString().toUpperCase()}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-3 py-1.5 bg-green-500/20 text-green-300 rounded-lg text-xs font-bold border border-green-500/30">
-                          {event.compliance_impact}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-1">
-                          <DollarSign className="w-3 h-3 text-green-400" />
-                          <span className="text-sm font-bold text-green-400">
-                            ${(event.cost_of_breach_prevented || 0).toLocaleString()}
-                          </span>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {loading ? (
+                    <tr>
+                      <td colSpan={7} className="px-6 py-12 text-center">
+                        <div className="flex flex-col items-center gap-3">
+                          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+                          <span className="text-slate-400">Loading PII events...</span>
                         </div>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Bottom cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 border border-green-500/20 rounded-xl p-6">
-            <div className="flex items-start gap-3">
-              <FileCheck className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" />
-              <div>
-                <h4 className="text-sm font-semibold text-green-300 mb-2">Automatic Compliance</h4>
-                <p className="text-sm text-green-200/80 mb-3">
-                  All PII detection events are automatically logged for SOC 2, GDPR, and HIPAA
-                  compliance audits.
-                </p>
-                <button className="px-4 py-2 bg-green-500/20 hover:bg-green-500/30 text-green-300 rounded-lg text-sm font-medium transition-all border border-green-500/30">
-                  Download Audit Report
-                </button>
-              </div>
+                  ) : filteredEvents.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="px-6 py-12 text-center text-slate-400">
+                        <Lock className="w-12 h-12 mx-auto mb-3 text-slate-600" />
+                        <div className="font-medium">No PII events in this category</div>
+                        <div className="text-sm text-slate-500 mt-1">Your data is protected!</div>
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredEvents.map((event, idx) => (
+                      <tr key={(event.id as any) ?? idx} className="hover:bg-white/5 transition-all group">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-slate-300">
+                            {new Date(event.timestamp).toLocaleTimeString()}
+                          </div>
+                          <div className="text-xs text-slate-500">
+                            {new Date(event.timestamp).toLocaleDateString()}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex flex-wrap gap-1">
+                            {(event.detections || []).map((d, i) => {
+                              const type = d.replace('pii.', '');
+                              return (
+                                <span
+                                  key={i}
+                                  className={`px-2 py-1 rounded text-xs font-medium border ${
+                                    piiTypeColors[type] ||
+                                    'bg-blue-500/20 text-blue-200 border-blue-500/30'
+                                  }`}
+                                >
+                                  {type.replace('_', ' ')}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="text-2xl font-bold text-blue-400">
+                            {event.redacted_count || 0}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span className="text-sm text-slate-300 font-medium">
+                              {event.llm_provider || 'Unknown'}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${
+                              event.action === 'blocked'
+                                ? 'bg-red-500/20 text-red-300 border-red-500/30'
+                                : 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
+                            }`}
+                          >
+                            {event.action?.toString().toUpperCase()}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="px-3 py-1.5 bg-green-500/20 text-green-300 rounded-lg text-xs font-bold border border-green-500/30">
+                            {event.compliance_impact}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-1">
+                            <DollarSign className="w-3 h-3 text-green-400" />
+                            <span className="text-sm font-bold text-green-400">
+                              ${(event.cost_of_breach_prevented || 0).toLocaleString()}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-500/10 to-cyan-600/10 border border-blue-500/20 rounded-xl p-6">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-6 h-6 text-blue-400 flex-shrink-0 mt-0.5" />
-              <div>
-                <h4 className="text-sm font-semibold text-blue-300 mb-2">Data Breach Economics</h4>
-                <p className="text-sm text-blue-200/80 mb-2">
-                  Average cost per PII record breach (IBM 2024 Report):
-                </p>
-                <ul className="text-xs text-blue-200/70 space-y-1">
-                  <li>• Email: $165 per record</li>
-                  <li>• SSN: $250 per record</li>
-                  <li>• Credit Card: $350 per record</li>
-                  <li>• Medical Records: $429 per record</li>
-                </ul>
+          {/* Bottom cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 border border-green-500/20 rounded-xl p-6">
+              <div className="flex items-start gap-3">
+                <FileCheck className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-sm font-semibold text-green-300 mb-2">Automatic Compliance</h4>
+                  <p className="text-sm text-green-200/80 mb-3">
+                    All PII detection events are automatically logged for SOC 2, GDPR, and HIPAA
+                    compliance audits.
+                  </p>
+                  <button className="px-4 py-2 bg-green-500/20 hover:bg-green-500/30 text-green-300 rounded-lg text-sm font-medium transition-all border border-green-500/30">
+                    Download Audit Report
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-blue-500/10 to-cyan-600/10 border border-blue-500/20 rounded-xl p-6">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-6 h-6 text-blue-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-sm font-semibold text-blue-300 mb-2">Data Breach Economics</h4>
+                  <p className="text-sm text-blue-200/80 mb-2">
+                    Average cost per PII record breach (IBM 2024 Report):
+                  </p>
+                  <ul className="text-xs text-blue-200/70 space-y-1">
+                    <li>• Email: $165 per record</li>
+                    <li>• SSN: $250 per record</li>
+                    <li>• Credit Card: $350 per record</li>
+                    <li>• Medical Records: $429 per record</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
