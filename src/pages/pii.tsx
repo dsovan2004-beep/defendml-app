@@ -1,34 +1,108 @@
 import React, { useState, useEffect } from 'react';
 import { Lock, Eye, EyeOff, AlertCircle, Shield, TrendingDown, DollarSign, FileCheck } from 'lucide-react';
 
-export default function PIIPage() {
-  const [piiEvents, setPiiEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [showSensitive, setShowSensitive] = useState(false);
-  const [selectedType, setSelectedType] = useState('all');
+type Detection = string | { type?: string };
+type ApiLog =
+  | {
+      id?: string | number;
+      ts?: string;
+      timestamp?: string;
+      detections?: Detection[] | string[];
+      action?: 'blocked' | 'sanitized' | string;
+      status?: string;
+      redacted_count?: number;
+      llm_provider?: string;
+      compliance_impact?: string;
+      cost_of_breach_prevented?: number;
+    }
+  | Record<string, any>;
+
+type PiiEvent = {
+  id?: string | number;
+  timestamp: string;
+  detections: string[]; // normalized to 'pii.email', etc.
+  action: 'blocked' | 'sanitized' | string;
+  status?: string;
+  redacted_count?: number;
+  llm_provider?: string;
+  compliance_impact?: string;
+  cost_of_breach_prevented?: number;
+};
+
+const piiTypeColors: Record<string, string> = {
+  email: 'bg-blue-500/20 text-blue-300 border-blue-400/30',
+  phone: 'bg-purple-500/20 text-purple-300 border-purple-400/30',
+  ssn: 'bg-red-500/20 text-red-300 border-red-400/30',
+  credit_card: 'bg-orange-500/20 text-orange-300 border-orange-400/30',
+  address: 'bg-green-500/20 text-green-300 border-green-400/30',
+};
+
+export default function PIIPage(): JSX.Element {
+  const [piiEvents, setPiiEvents] = useState<PiiEvent[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [showSensitive, setShowSensitive] = useState<boolean>(false);
+  const [selectedType, setSelectedType] = useState<string>('all');
 
   useEffect(() => {
     fetchPIIEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchPIIEvents = async () => {
+  async function fetchPIIEvents() {
     setLoading(true);
     try {
-      const apiBase = process.env.NEXT_PUBLIC_API_BASE || 'https://defendml-api.dsovan2004.workers.dev';
+      const apiBase =
+        process.env.NEXT_PUBLIC_API_BASE || 'https://defendml-api.dsovan2004.workers.dev';
       const response = await fetch(`${apiBase}/api/logs/recent?limit=500`);
-      
+
       if (!response.ok) throw new Error('Failed to fetch PII events');
-      
+
       const data = await response.json();
-      
-      const piiLogs = data.logs?.filter(log => {
-        const detections = log.detections || [];
-        return detections.some(d => d.startsWith('pii.'));
-      }) || [];
-      
-      setPiiEvents(piiLogs);
+
+      // Flexibly handle API shape: some backends return { data: [...] }, others { logs: [...] }
+      const rawLogs: ApiLog[] = Array.isArray(data?.logs)
+        ? data.logs
+        : Array.isArray(data?.data)
+        ? data.data
+        : [];
+
+      const normalized: PiiEvent[] = rawLogs
+        .map((log) => {
+          const detectionsRaw: Detection[] =
+            (log as any)?.detections && Array.isArray((log as any).detections)
+              ? ((log as any).detections as Detection[])
+              : [];
+
+          const detections = detectionsRaw
+            .map((d) => (typeof d === 'string' ? d : d?.type || ''))
+            .filter(Boolean);
+
+          // Keep only PII detections
+          if (!detections.some((d) => d.startsWith('pii.'))) return null;
+
+          const timestamp =
+            (log as any).timestamp ||
+            (log as any).ts ||
+            new Date().toISOString();
+
+          return {
+            id: (log as any).id,
+            timestamp,
+            detections,
+            action: (log as any).action || 'sanitized',
+            status: (log as any).status || 'success',
+            redacted_count: (log as any).redacted_count ?? 0,
+            llm_provider: (log as any).llm_provider || 'Unknown',
+            compliance_impact: (log as any).compliance_impact || 'GDPR',
+            cost_of_breach_prevented: (log as any).cost_of_breach_prevented ?? 0,
+          } as PiiEvent;
+        })
+        .filter(Boolean) as PiiEvent[];
+
+      setPiiEvents(normalized);
     } catch (err) {
       console.error('Error fetching PII events:', err);
+      // Fallback demo data
       setPiiEvents([
         {
           id: 1,
@@ -39,81 +113,80 @@ export default function PIIPage() {
           redacted_count: 2,
           llm_provider: 'Claude 3.5 Sonnet',
           compliance_impact: 'GDPR',
-          cost_of_breach_prevented: 5200
+          cost_of_breach_prevented: 5200,
         },
         {
           id: 2,
-          timestamp: new Date(Date.now() - 1800000).toISOString(),
+          timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
           detections: ['pii.ssn', 'pii.address'],
           action: 'blocked',
           status: 'success',
           redacted_count: 2,
           llm_provider: 'GPT-4',
           compliance_impact: 'HIPAA',
-          cost_of_breach_prevented: 8500
+          cost_of_breach_prevented: 8500,
         },
         {
           id: 3,
-          timestamp: new Date(Date.now() - 3600000).toISOString(),
+          timestamp: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
           detections: ['pii.credit_card'],
           action: 'sanitized',
           status: 'success',
           redacted_count: 1,
           llm_provider: 'Claude 3.5 Sonnet',
           compliance_impact: 'PCI-DSS',
-          cost_of_breach_prevented: 12000
+          cost_of_breach_prevented: 12000,
         },
         {
           id: 4,
-          timestamp: new Date(Date.now() - 5400000).toISOString(),
+          timestamp: new Date(Date.now() - 90 * 60 * 1000).toISOString(),
           detections: ['pii.email', 'pii.ssn'],
           action: 'blocked',
           status: 'success',
           redacted_count: 2,
           llm_provider: 'Gemini Pro',
           compliance_impact: 'GDPR',
-          cost_of_breach_prevented: 6800
+          cost_of_breach_prevented: 6800,
         },
         {
           id: 5,
-          timestamp: new Date(Date.now() - 7200000).toISOString(),
+          timestamp: new Date(Date.now() - 120 * 60 * 1000).toISOString(),
           detections: ['pii.phone', 'pii.address', 'pii.email'],
           action: 'sanitized',
           status: 'success',
           redacted_count: 3,
           llm_provider: 'Claude 3.5 Sonnet',
           compliance_impact: 'GDPR',
-          cost_of_breach_prevented: 9200
-        }
+          cost_of_breach_prevented: 9200,
+        },
       ]);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  const piiTypeCounts = piiEvents.reduce((acc, event) => {
-    (event.detections || []).forEach(detection => {
-      const type = detection.replace('pii.', '');
-      acc[type] = (acc[type] || 0) + 1;
-    });
-    return acc;
-  }, {});
+  const piiTypeCounts: Record<string, number> = piiEvents.reduce(
+    (acc: Record<string, number>, event: PiiEvent) => {
+      (event.detections || []).forEach((d) => {
+        const type = d.replace('pii.', '');
+        acc[type] = (acc[type] || 0) + 1;
+      });
+      return acc;
+    },
+    {}
+  );
 
   const totalPrevented = piiEvents.length;
   const totalRedacted = piiEvents.reduce((sum, e) => sum + (e.redacted_count || 0), 0);
-  const totalBreachCostPrevented = piiEvents.reduce((sum, e) => sum + (e.cost_of_breach_prevented || 0), 0);
+  const totalBreachCostPrevented = piiEvents.reduce(
+    (sum, e) => sum + (e.cost_of_breach_prevented || 0),
+    0
+  );
 
-  const filteredEvents = selectedType === 'all' 
-    ? piiEvents 
-    : piiEvents.filter(e => e.detections.some(d => d === `pii.${selectedType}`));
-
-  const piiTypeColors = {
-    email: 'bg-blue-500/20 text-blue-300 border-blue-400/30',
-    phone: 'bg-purple-500/20 text-purple-300 border-purple-400/30',
-    ssn: 'bg-red-500/20 text-red-300 border-red-400/30',
-    credit_card: 'bg-orange-500/20 text-orange-300 border-orange-400/30',
-    address: 'bg-green-500/20 text-green-300 border-green-400/30',
-  };
+  const filteredEvents =
+    selectedType === 'all'
+      ? piiEvents
+      : piiEvents.filter((e) => e.detections.some((d) => d === `pii.${selectedType}`));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950">
@@ -125,16 +198,23 @@ export default function PIIPage() {
                 <Lock className="w-8 h-8 text-blue-400" />
                 <h1 className="text-3xl font-bold text-white">PII Data Protection</h1>
               </div>
-              <p className="text-slate-300">Prevent data leaks before they happen with AI-powered detection</p>
+              <p className="text-slate-300">
+                Prevent data leaks before they happen with AI-powered detection
+              </p>
               <p className="text-slate-500 text-sm mt-1">
-                <span className="text-green-400 font-semibold">Lakera doesn't show this:</span> Real-time breach cost prevention
+                <span className="text-green-400 font-semibold">Lakera doesn't show this:</span>{' '}
+                Real-time breach cost prevention
               </p>
             </div>
             <button
-              onClick={() => setShowSensitive(!showSensitive)}
+              onClick={() => setShowSensitive((s) => !s)}
               className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg transition-all"
             >
-              {showSensitive ? <EyeOff className="w-4 h-4 text-blue-300" /> : <Eye className="w-4 h-4 text-blue-300" />}
+              {showSensitive ? (
+                <EyeOff className="w-4 h-4 text-blue-300" />
+              ) : (
+                <Eye className="w-4 h-4 text-blue-300" />
+              )}
               <span className="text-sm font-medium text-blue-300">
                 {showSensitive ? 'Hide' : 'Show'} Sensitive Details
               </span>
@@ -144,6 +224,7 @@ export default function PIIPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-8 py-8 space-y-6">
+        {/* KPI tiles */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-gradient-to-br from-blue-500/10 to-cyan-600/10 rounded-xl p-6 border border-blue-500/20">
             <div className="flex items-center justify-between mb-2">
@@ -180,12 +261,15 @@ export default function PIIPage() {
             <div className="flex items-center justify-between mb-2">
               <DollarSign className="w-6 h-6 text-orange-400" />
             </div>
-            <div className="text-4xl font-bold text-white mb-1">${(totalBreachCostPrevented / 1000).toFixed(1)}K</div>
+            <div className="text-4xl font-bold text-white mb-1">
+              ${(totalBreachCostPrevented / 1000).toFixed(1)}K
+            </div>
             <div className="text-orange-300 text-sm font-medium">Breach Cost Prevented</div>
             <div className="text-orange-400/60 text-xs mt-1">CalypsoAI doesn't track this!</div>
           </div>
         </div>
 
+        {/* Explainer */}
         <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-xl p-4">
           <div className="flex items-start gap-3">
             <Lock className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
@@ -194,17 +278,19 @@ export default function PIIPage() {
                 💎 DefendML Exclusive: Breach Cost Prevention Tracking
               </h4>
               <p className="text-sm text-blue-200/80">
-                We calculate the average cost of each PII type breach (based on IBM's 2024 Cost of Data Breach Report). 
-                See exactly how much money you're saving. <span className="font-bold">No competitor offers this transparency.</span>
+                We calculate the average cost of each PII type breach (based on IBM's 2024 Cost of
+                Data Breach Report). See exactly how much money you're saving.{' '}
+                <span className="font-bold">No competitor offers this transparency.</span>
               </p>
             </div>
           </div>
         </div>
 
+        {/* PII type buttons */}
         <div className="bg-black/30 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-white">PII Types Detected</h3>
-            <button 
+            <button
               onClick={fetchPIIEvents}
               className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded-lg text-sm font-medium transition-all border border-blue-500/30"
             >
@@ -233,20 +319,27 @@ export default function PIIPage() {
                     : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10'
                 }`}
               >
-                <div className="text-xs uppercase tracking-wide mb-1">{type.replace('_', ' ')}</div>
+                <div className="text-xs uppercase tracking-wide mb-1">
+                  {type.replace('_', ' ')}
+                </div>
                 <div className="text-2xl font-bold">{count}</div>
               </button>
             ))}
             {Object.keys(piiTypeCounts).length === 0 && (
-              <div className="text-slate-400 text-sm py-3">No PII types detected yet - your data is secure! 🎉</div>
+              <div className="text-slate-400 text-sm py-3">
+                No PII types detected yet - your data is secure! 🎉
+              </div>
             )}
           </div>
         </div>
 
+        {/* Table */}
         <div className="bg-black/30 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
           <div className="px-6 py-4 border-b border-white/10 bg-white/5">
             <h3 className="text-lg font-bold text-white">Recent PII Protection Events</h3>
-            <p className="text-slate-400 text-sm">Real-time data leak prevention across all your LLM providers</p>
+            <p className="text-slate-400 text-sm">
+              Real-time data leak prevention across all your LLM providers
+            </p>
           </div>
 
           <div className="overflow-x-auto">
@@ -296,7 +389,7 @@ export default function PIIPage() {
                   </tr>
                 ) : (
                   filteredEvents.map((event, idx) => (
-                    <tr key={event.id || idx} className="hover:bg-white/5 transition-all group">
+                    <tr key={(event.id as any) ?? idx} className="hover:bg-white/5 transition-all group">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-slate-300">
                           {new Date(event.timestamp).toLocaleTimeString()}
@@ -307,13 +400,14 @@ export default function PIIPage() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-wrap gap-1">
-                          {(event.detections || []).map((detection, i) => {
-                            const type = detection.replace('pii.', '');
+                          {(event.detections || []).map((d, i) => {
+                            const type = d.replace('pii.', '');
                             return (
-                              <span 
-                                key={i} 
+                              <span
+                                key={i}
                                 className={`px-2 py-1 rounded text-xs font-medium border ${
-                                  piiTypeColors[type] || 'bg-blue-500/20 text-blue-200 border-blue-500/30'
+                                  piiTypeColors[type] ||
+                                  'bg-blue-500/20 text-blue-200 border-blue-500/30'
                                 }`}
                               >
                                 {type.replace('_', ' ')}
@@ -323,7 +417,9 @@ export default function PIIPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-2xl font-bold text-blue-400">{event.redacted_count || 0}</span>
+                        <span className="text-2xl font-bold text-blue-400">
+                          {event.redacted_count || 0}
+                        </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
@@ -334,12 +430,14 @@ export default function PIIPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${
-                          event.action === 'blocked' 
-                            ? 'bg-red-500/20 text-red-300 border-red-500/30' 
-                            : 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
-                        }`}>
-                          {event.action?.toUpperCase()}
+                        <span
+                          className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${
+                            event.action === 'blocked'
+                              ? 'bg-red-500/20 text-red-300 border-red-500/30'
+                              : 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
+                          }`}
+                        >
+                          {event.action?.toString().toUpperCase()}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -363,6 +461,7 @@ export default function PIIPage() {
           </div>
         </div>
 
+        {/* Bottom cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 border border-green-500/20 rounded-xl p-6">
             <div className="flex items-start gap-3">
@@ -370,7 +469,8 @@ export default function PIIPage() {
               <div>
                 <h4 className="text-sm font-semibold text-green-300 mb-2">Automatic Compliance</h4>
                 <p className="text-sm text-green-200/80 mb-3">
-                  All PII detection events are automatically logged for SOC 2, GDPR, and HIPAA compliance audits.
+                  All PII detection events are automatically logged for SOC 2, GDPR, and HIPAA
+                  compliance audits.
                 </p>
                 <button className="px-4 py-2 bg-green-500/20 hover:bg-green-500/30 text-green-300 rounded-lg text-sm font-medium transition-all border border-green-500/30">
                   Download Audit Report
