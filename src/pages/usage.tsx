@@ -1,6 +1,22 @@
 import React from 'react';
-import Navigation from '@/components/Navigation';
+import Link from 'next/link';
 import { BarChart3, DollarSign, TrendingUp } from 'lucide-react';
+
+// Inline Navigation so this page is a single file
+function Navigation() {
+  return (
+    <header className="w-full border-b border-white/10 bg-black/20 backdrop-blur-xl">
+      <nav className="mx-auto max-w-7xl px-8 py-4 flex items-center gap-6 text-sm">
+        <Link href="/" className="text-white font-semibold">DefendML</Link>
+        <div className="ml-auto flex items-center gap-6">
+          <Link href="/usage" className="text-slate-300 hover:text-white transition">Usage</Link>
+          <Link href="/threats" className="text-slate-300 hover:text-white transition">Threats</Link>
+          <Link href="/settings" className="text-slate-300 hover:text-white transition">Settings</Link>
+        </div>
+      </nav>
+    </header>
+  );
+}
 
 export default function UsagePage() {
   return (
@@ -16,7 +32,7 @@ export default function UsagePage() {
             <p className="text-slate-300">Track costs and usage across all your LLM providers</p>
           </div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto px-8 py-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div className="bg-gradient-to-br from-indigo-500/10 to-purple-600/10 rounded-xl p-6 border border-indigo-500/20">
@@ -25,14 +41,14 @@ export default function UsagePage() {
               <div className="text-indigo-300 font-medium">Total Scans</div>
               <div className="text-indigo-400/60 text-sm mt-1">Last 30 days</div>
             </div>
-            
+
             <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 rounded-xl p-6 border border-green-500/20">
               <DollarSign className="w-8 h-8 text-green-400 mb-3" />
               <div className="text-4xl font-bold text-white mb-2">$847</div>
               <div className="text-green-300 font-medium">Monthly Cost</div>
               <div className="text-green-400/60 text-sm mt-1">10x cheaper than Lakera</div>
             </div>
-            
+
             <div className="bg-gradient-to-br from-blue-500/10 to-cyan-600/10 rounded-xl p-6 border border-blue-500/20">
               <TrendingUp className="w-8 h-8 text-blue-400 mb-3" />
               <div className="text-4xl font-bold text-white mb-2">+23%</div>
@@ -40,6 +56,7 @@ export default function UsagePage() {
               <div className="text-blue-400/60 text-sm mt-1">Healthy trajectory</div>
             </div>
           </div>
+
           <div className="bg-white/5 backdrop-blur-lg rounded-xl p-8 border border-white/10">
             <p className="text-slate-300 text-lg mb-4">
               Coming soon: Detailed usage analytics with date range filters
