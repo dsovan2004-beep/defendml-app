@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navigation from '@/components/Navigation';
+import Navigation from '../components/Navigation';
 import { Shield, AlertTriangle, Clock, Filter, TrendingUp, Zap, Target, Activity } from 'lucide-react';
 
 type Detection = string | { type?: string };
