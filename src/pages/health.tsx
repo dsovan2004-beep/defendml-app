@@ -1,5 +1,6 @@
+// src/pages/health.tsx
 import React from 'react';
-import Navigation from '@/components/Navigation';
+import Navigation from '../components/Navigation';
 import { Activity, Zap, CheckCircle } from 'lucide-react';
 
 export default function HealthPage() {
@@ -40,6 +41,7 @@ export default function HealthPage() {
               <div className="text-purple-400/60 text-sm mt-1">Across 4 providers</div>
             </div>
           </div>
+
           <div className="bg-white/5 backdrop-blur-lg rounded-xl p-8 border border-white/10">
             <p className="text-slate-300 text-lg mb-4">
               Coming soon: Real-time health metrics and provider performance breakdowns
