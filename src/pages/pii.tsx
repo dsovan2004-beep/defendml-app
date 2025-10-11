@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Navigation from '@/components/Navigation';
+import Navigation from '../components/Navigation';
 import { Lock, Eye, EyeOff, AlertCircle, Shield, TrendingDown, DollarSign, FileCheck } from 'lucide-react';
 
 type Detection = string | { type?: string };
@@ -21,7 +21,7 @@ type ApiLog =
 type PiiEvent = {
   id?: string | number;
   timestamp: string;
-  detections: string[]; // normalized to 'pii.email', etc.
+  detections: string[];
   action: 'blocked' | 'sanitized' | string;
   status?: string;
   redacted_count?: number;
@@ -60,7 +60,6 @@ export default function PIIPage(): JSX.Element {
 
       const data = await response.json();
 
-      // Flexibly handle API shape: some backends return { data: [...] }, others { logs: [...] }
       const rawLogs: ApiLog[] = Array.isArray(data?.logs)
         ? data.logs
         : Array.isArray(data?.data)
@@ -78,7 +77,6 @@ export default function PIIPage(): JSX.Element {
             .map((d) => (typeof d === 'string' ? d : d?.type || ''))
             .filter(Boolean);
 
-          // Keep only PII detections
           if (!detections.some((d) => d.startsWith('pii.'))) return null;
 
           const timestamp =
@@ -103,7 +101,6 @@ export default function PIIPage(): JSX.Element {
       setPiiEvents(normalized);
     } catch (err) {
       console.error('Error fetching PII events:', err);
-      // Fallback demo data
       setPiiEvents([
         {
           id: 1,
