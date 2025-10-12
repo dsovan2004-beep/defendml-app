@@ -1,0 +1,52 @@
+name: Burst Rate-Limit Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Endpoint to hit
+        default: https://defendml-api.dsovan2004.workers.dev/api/health/full
+        required: true
+      requests:
+        description: Total number of requests
+        default: "80"
+        required: true
+      concurrency:
+        description: Parallel requests
+        default: "20"
+        required: true
+
+jobs:
+  burst:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show plan
+        run: |
+          echo "URL=${{ inputs.url }}"
+          echo "REQUESTS=${{ inputs.requests }}"
+          echo "CONCURRENCY=${{ inputs.concurrency }}"
+
+      - name: Send burst
+        shell: bash
+        run: |
+          URL="${{ inputs.url }}"
+          COUNT="${{ inputs.requests }}"
+          CONC="${{ inputs.concurrency }}"
+
+          seq "$COUNT" | xargs -I{} -P "$CONC" bash -c \
+            'curl -s -o /dev/null -w "%{http_code}\n" "'"$URL"'"' \
+            | tee results.txt
+
+          echo "----- Summary -----"
+          OK=$(grep -c '^200$' results.txt || true)
+          RL=$(grep -c '^429$' results.txt || true)
+          OTHER=$(grep -Ev '^(200|429)$' results.txt | wc -l | tr -d ' ' || true)
+          echo "200 OK : $OK"
+          echo "429 RL : $RL"
+          echo "Other  : $OTHER"
+
+      - name: Upload raw results
+        uses: actions/upload-artifact@v4
+        with:
+          name: burst-results
+          path: results.txt
