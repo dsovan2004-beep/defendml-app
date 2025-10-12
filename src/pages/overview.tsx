@@ -1,305 +1,171 @@
-import React, { useState, useEffect } from 'react';
-import Navigation from '../components/Navigation';
-import RequireAuth from '../components/RequireAuth';
-import {
-  Shield, AlertTriangle, Lock, FileCheck, TrendingUp, TrendingDown,
-  Zap, DollarSign, Clock, Activity
-} from 'lucide-react';
+import { useState } from 'react';
+import { Shield, Lock, Zap, AlertCircle } from 'lucide-react';
 
-type Kpis = {
-  threats_blocked: number;
-  pii_prevented: number;
-  policy_violations: number;
-  compliance_score: number; // %
-  avg_latency_ms: number;
-  success_rate: number;     // %
-  scan_count: number;
+export default function LoginPage() {
+  const [email, setEmail] = useState('admin@defendml.com');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  // Optional extras
-  setup_time_minutes?: number;
-  cost_saved_vs_calypso?: number;
-  multi_llm_providers?: number;
-  trend_threats?: number;
-  trend_pii?: number;
-  trend_policy?: number;
-  trend_compliance?: number;
-  trend_latency?: number;
-  trend_success?: number;
-};
+  const handleSubmit = async () => {
+    setError('');
+    setLoading(true);
 
-const TrendIndicator: React.FC<{ value?: number }> = ({ value }) => {
-  if (value === undefined || value === null) return null;
-  const isPositive = value > 0;
-  return (
-    <div className={`flex items-center gap-1 text-xs font-medium ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
-      {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-      {Math.abs(value).toFixed(1)}%
-    </div>
-  );
-};
+    try {
+      // Update this to your actual Worker URL
+      const apiBase = process.env.NEXT_PUBLIC_API_BASE || 'https://defendml-api.your-username.workers.dev';
+      
+      const response = await fetch(`${apiBase}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
 
-// Keep your page content in a named component
-function OverviewPage() {
-  const [kpis, setKpis] = useState<Kpis | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState<string | null>(null);
-  const [rangeFilter, setRangeFilter] = useState<number>(7);
+      const data = await response.json();
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        // If you prefer env var base, swap the next line to:
-        // const apiBase = process.env.NEXT_PUBLIC_API_BASE ?? '';
-        // const res = await fetch(`${apiBase}/api/kpis?range_days=${rangeFilter}`, { cache: 'no-store' });
-        const res = await fetch(`/api/kpis?range_days=${rangeFilter}`, { cache: 'no-store' });
-        if (!res.ok) throw new Error('API connection failed');
-        const data = await res.json();
-        setKpis(data?.kpis ?? null);
-      } catch (e) {
-        console.error('API Error:', e);
-        // Fallback demo data
-        setKpis({
-          threats_blocked: 2847,
-          pii_prevented: 1234,
-          policy_violations: 89,
-          compliance_score: 99.2,
-          avg_latency_ms: 42,
-          success_rate: 99.94,
-          scan_count: 45678,
-
-          setup_time_minutes: 28,
-          cost_saved_vs_calypso: 48750,
-          multi_llm_providers: 4,
-          trend_threats: 15.3,
-          trend_pii: -8.2,
-          trend_policy: 12.1,
-          trend_compliance: 0.8,
-          trend_latency: -3.2,
-          trend_success: 0.1,
-        });
-        setError('Demo mode — API offline');
-      } finally {
-        setLoading(false);
+      if (response.ok && data.token) {
+        localStorage.setItem('token', data.token);
+        
+        // Handle redirect
+        const params = new URLSearchParams(window.location.search);
+        const next = params.get('next') || '/overview';
+        window.location.href = next;
+      } else {
+        setError(data.error || 'Invalid credentials. Please try again.');
       }
-    })();
-  }, [rangeFilter]);
+    } catch (err) {
+      setError('Connection error. Please check your network and try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  if (loading) {
-    return (
-      <>
-        <Navigation />
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
-            <p className="text-slate-400">Loading DefendML Dashboard...</p>
-          </div>
-        </div>
-      </>
-    );
-  }
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  };
 
   return (
-    <>
-      <Navigation />
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
-        {/* Header */}
-        <div className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
-          <div className="max-w-7xl mx-auto px-8 py-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2">DefendML Command Center</h1>
-                <p className="text-slate-400">Real-time AI security (live logs → KPIs)</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-lg">
-                  <Zap className="w-4 h-4 text-purple-300" />
-                  <span className="text-sm font-medium text-purple-300">Cloudflare Pages + Worker</span>
-                </div>
-                <select
-                  value={rangeFilter}
-                  onChange={(e) => setRangeFilter(Number(e.target.value))}
-                  className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                >
-                  <option value={7}>Last 7 Days</option>
-                  <option value={14}>Last 14 Days</option>
-                  <option value={30}>Last 30 Days</option>
-                </select>
-              </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center p-4">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-48 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 -right-48 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
+        {/* Main Card */}
+        <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 p-8 shadow-2xl">
+          
+          {/* Logo & Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl mb-4 shadow-lg shadow-purple-500/50">
+              <Shield className="w-8 h-8 text-white" />
             </div>
+            <h1 className="text-2xl font-bold text-white mb-2">Welcome to DefendML</h1>
+            <p className="text-slate-400">Secure your AI infrastructure</p>
+          </div>
+
+          {/* Form */}
+          <div className="space-y-5">
+            
+            {/* Email Field */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
+                Email address
+              </label>
+              <input 
+                type="email" 
+                id="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                placeholder="you@company.com"
+              />
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
+                Password
+              </label>
+              <input 
+                type="password" 
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                placeholder="••••••••"
+              />
+            </div>
+
+            {/* Remember & Forgot */}
+            <div className="flex items-center justify-between">
+              <label className="flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 bg-white/5 border-white/20 rounded text-purple-500 focus:ring-purple-500 focus:ring-offset-0"
+                />
+                <span className="ml-2 text-sm text-slate-400">Remember me</span>
+              </label>
+              <a href="#" className="text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors">
+                Forgot password?
+              </a>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/30 text-red-300 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <button 
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 px-4 rounded-lg font-medium hover:from-purple-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-950 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-500/30"
+            >
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  Signing in...
+                </span>
+              ) : (
+                'Sign in'
+              )}
+            </button>
+          </div>
+
+          {/* Footer */}
+          <div className="mt-6 text-center text-sm text-slate-400">
+            Don't have an account?{' '}
+            <a href="#" className="font-medium text-purple-400 hover:text-purple-300 transition-colors">
+              Contact admin
+            </a>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-8 py-8 space-y-8">
-          {error && (
-            <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 flex items-center gap-3">
-              <AlertTriangle className="w-5 h-5 text-yellow-400" />
-              <span className="text-yellow-300 text-sm">{error}</span>
-            </div>
-          )}
-
-          {/* HERO SECTION */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gradient-to-br from-green-500/20 to-emerald-600/20 rounded-2xl p-6 border border-green-500/30">
-              <div className="flex items-center justify-between mb-4">
-                <Clock className="w-8 h-8 text-green-400" />
-                <span className="text-xs font-semibold text-green-300 bg-green-500/20 px-3 py-1 rounded-full">Setup</span>
-              </div>
-              <div className="text-4xl font-bold text-white mb-2">{kpis?.setup_time_minutes ?? 28} min</div>
-              <div className="text-green-300 text-sm font-medium mb-1">Time to value</div>
-              <div className="text-green-400 text-xs">Self-serve onboarding</div>
-            </div>
-
-            <div className="bg-gradient-to-br from-blue-500/20 to-cyan-600/20 rounded-2xl p-6 border border-blue-500/30">
-              <div className="flex items-center justify-between mb-4">
-                <DollarSign className="w-8 h-8 text-blue-400" />
-                <span className="text-xs font-semibold text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full">ROI</span>
-              </div>
-              <div className="text-4xl font-bold text-white mb-2">${(kpis?.cost_saved_vs_calypso ?? 48750).toLocaleString()}</div>
-              <div className="text-blue-300 text-sm font-medium mb-1">Annual Savings</div>
-              <div className="text-blue-400 text-xs">vs. heavy enterprise stacks</div>
-            </div>
-
-            <div className="bg-gradient-to-br from-purple-500/20 to-pink-600/20 rounded-2xl p-6 border border-purple-500/30">
-              <div className="flex items-center justify-between mb-4">
-                <Activity className="w-8 h-8 text-purple-400" />
-                <span className="text-xs font-semibold text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">Interop</span>
-              </div>
-              <div className="text-4xl font-bold text-white mb-2">{kpis?.multi_llm_providers ?? 4}+</div>
-              <div className="text-purple-300 text-sm font-medium mb-1">LLM Providers</div>
-              <div className="text-purple-400 text-xs">No vendor lock-in</div>
-            </div>
+        {/* Security Badges */}
+        <div className="mt-6 space-y-3">
+          <div className="flex items-center justify-center gap-2 text-sm text-slate-500">
+            <Lock className="w-4 h-4" />
+            <span>ASL 3 Certified Security</span>
           </div>
-
-          {/* CORE SECURITY METRICS */}
-          <div>
-            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-              <Shield className="w-6 h-6 text-purple-400" />
-              Security Performance
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-gradient-to-br from-red-500/10 to-orange-600/10 rounded-xl p-6 border border-red-500/20 hover:border-red-500/40 transition-all">
-                <div className="flex items-start justify-between mb-4">
-                  <AlertTriangle className="w-6 h-6 text-red-400" />
-                  <TrendIndicator value={kpis?.trend_threats} />
-                </div>
-                <div className="text-4xl font-bold text-white mb-2">{(kpis?.threats_blocked ?? 0).toLocaleString()}</div>
-                <div className="text-red-300 text-sm font-medium mb-1">Threats Blocked</div>
-                <div className="text-red-400/70 text-xs">Prompt injection, jailbreaks</div>
-              </div>
-
-              <div className="bg-gradient-to-br from-blue-500/10 to-cyan-600/10 rounded-xl p-6 border border-blue-500/20 hover:border-blue-500/40 transition-all">
-                <div className="flex items-start justify-between mb-4">
-                  <Lock className="w-6 h-6 text-blue-400" />
-                  <TrendIndicator value={kpis?.trend_pii} />
-                </div>
-                <div className="text-4xl font-bold text-white mb-2">{(kpis?.pii_prevented ?? 0).toLocaleString()}</div>
-                <div className="text-blue-300 text-sm font-medium mb-1">PII Prevented</div>
-                <div className="text-blue-400/70 text-xs">Data leak prevention</div>
-              </div>
-
-              <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 rounded-xl p-6 border border-green-500/20 hover:border-green-500/40 transition-all">
-                <div className="flex items-start justify-between mb-4">
-                  <FileCheck className="w-6 h-6 text-green-400" />
-                  <TrendIndicator value={kpis?.trend_compliance} />
-                </div>
-                <div className="text-4xl font-bold text-white mb-2">{(kpis?.compliance_score ?? 0).toFixed(1)}%</div>
-                <div className="text-green-300 text-sm font-medium mb-1">Compliance Score</div>
-                <div className="text-green-400/70 text-xs">SOC 2 / GDPR / HIPAA</div>
-              </div>
-
-              <div className="bg-gradient-to-br from-purple-500/10 to-pink-600/10 rounded-xl p-6 border border-purple-500/20 hover:border-purple-500/40 transition-all">
-                <div className="flex items-start justify-between mb-4">
-                  <Zap className="w-6 h-6 text-purple-400" />
-                  <TrendIndicator value={kpis?.trend_latency} />
-                </div>
-                <div className="text-4xl font-bold text-white mb-2">{kpis?.avg_latency_ms ?? 0}ms</div>
-                <div className="text-purple-300 text-sm font-medium mb-1">Avg Latency</div>
-                <div className="text-purple-400/70 text-xs">Low overhead</div>
-              </div>
-            </div>
-          </div>
-
-          {/* LIVE THREAT FEED (stub) */}
-          <div className="bg-black/30 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
-            <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                <h3 className="text-lg font-bold text-white">Live Threat Feed</h3>
-                <span className="text-xs text-slate-400">(demo)</span>
-              </div>
-              <a href="/threats" className="text-sm text-purple-400 hover:text-purple-300 font-medium">View All →</a>
-            </div>
-            <div className="p-6 space-y-3">
-              {[
-                { time: '2 min ago', type: 'Prompt Injection', severity: 'CRITICAL', action: 'BLOCKED', source: 'Claude' },
-                { time: '5 min ago', type: 'PII Leak (SSN)', severity: 'HIGH', action: 'SANITIZED', source: 'GPT-4' },
-                { time: '8 min ago', type: 'Jailbreak Attempt', severity: 'HIGH', action: 'BLOCKED', source: 'Gemini' },
-                { time: '12 min ago', type: 'Policy Violation', severity: 'MEDIUM', action: 'FLAGGED', source: 'Claude' },
-              ].map((t, i) => (
-                <div key={i} className="flex items-center justify-between p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-all">
-                  <div className="flex items-center gap-4">
-                    <div className={`w-3 h-3 rounded-full ${
-                      t.severity === 'CRITICAL' ? 'bg-red-500' :
-                      t.severity === 'HIGH' ? 'bg-orange-500' : 'bg-yellow-500'
-                    }`} />
-                    <div>
-                      <div className="text-white font-medium text-sm">{t.type}</div>
-                      <div className="text-slate-400 text-xs">{t.time} • {t.source}</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      t.severity === 'CRITICAL' ? 'bg-red-500/20 text-red-300' :
-                      t.severity === 'HIGH' ? 'bg-orange-500/20 text-orange-300' :
-                      'bg-yellow-500/20 text-yellow-300'
-                    }`}>
-                      {t.severity}
-                    </span>
-                    <span className={`px-3 py-1 rounded-lg text-xs font-medium ${
-                      t.action === 'BLOCKED' ? 'bg-red-50 text-red-700' :
-                      t.action === 'SANITIZED' ? 'bg-yellow-50 text-yellow-700' :
-                      'bg-blue-50 text-blue-700'
-                    }`}>
-                      {t.action}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* QUICK ACTIONS */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="/threats" className="p-6 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-purple-500/50 transition-all block">
-              <Shield className="w-8 h-8 text-purple-400 mb-3" />
-              <div className="text-white font-semibold mb-1">View Threats</div>
-              <div className="text-slate-400 text-sm">Live attack feed & analytics</div>
-            </a>
-            <a href="/pii" className="p-6 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-blue-500/50 transition-all block">
-              <Lock className="w-8 h-8 text-blue-400 mb-3" />
-              <div className="text-white font-semibold mb-1">PII Protection</div>
-              <div className="text-slate-400 text-sm">Data leak prevention logs</div>
-            </a>
-            <a href="/compliance" className="p-6 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-green-500/50 transition-all block">
-              <FileCheck className="w-8 h-8 text-green-400 mb-3" />
-              <div className="text-white font-semibold mb-1">Compliance Reports</div>
-              <div className="text-slate-400 text-sm">One-click audit packs</div>
-            </a>
+          
+          <div className="flex items-center justify-center gap-2 text-sm text-slate-500">
+            <Zap className="w-4 h-4" />
+            <span>Powered by Cloudflare</span>
           </div>
         </div>
       </div>
-    </>
-  );
-}
-
-// Default export is the protected wrapper.
-// (Allow any logged-in user; add role="admin" to restrict to admins.)
-export default function Protected() {
-  return (
-    <RequireAuth>
-      <OverviewPage />
-    </RequireAuth>
+    </div>
   );
 }
