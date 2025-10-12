@@ -40,7 +40,7 @@ function HealthPageContent() {
               <Activity className="w-8 h-8 text-purple-400 mb-3" />
               <div className="text-4xl font-bold text-white mb-2">45K</div>
               <div className="text-purple-300 font-medium">Requests Today</div>
-              <div className="text-purple-400/60 text-sm mt-1">Across 4 providers</div>
+              <div className="text-purple-400/60 text-sm mt-1">Across 5 providers</div>
             </div>
           </div>
 
@@ -52,6 +52,7 @@ function HealthPageContent() {
                 { provider: 'OpenAI (GPT-4)', latency: '38ms', success: '99.8%', requests: '18.2K', color: 'green' },
                 { provider: 'Anthropic (Claude)', latency: '42ms', success: '99.9%', requests: '15.6K', color: 'purple' },
                 { provider: 'Google (Gemini)', latency: '45ms', success: '99.6%', requests: '8.4K', color: 'blue' },
+                { provider: 'Perplexity AI', latency: '48ms', success: '99.4%', requests: '3.5K', color: 'cyan' },
                 { provider: 'Mistral AI', latency: '51ms', success: '99.2%', requests: '2.8K', color: 'orange' }
               ].map((item, index) => (
                 <div key={index} className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
