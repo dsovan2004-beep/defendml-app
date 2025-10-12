@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
+import RequireAuth from '../components/RequireAuth';
 import {
   Shield, AlertTriangle, Lock, FileCheck, TrendingUp, TrendingDown,
   Zap, DollarSign, Clock, Activity
@@ -37,10 +38,11 @@ const TrendIndicator: React.FC<{ value?: number }> = ({ value }) => {
   );
 };
 
-export default function OverviewPage() {
+// Keep your page content in a named component
+function OverviewPage() {
   const [kpis, setKpis] = useState<Kpis | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError]   = useState<string | null>(null);
+  const [error,   setError]   = useState<string | null>(null);
   const [rangeFilter, setRangeFilter] = useState<number>(7);
 
   useEffect(() => {
@@ -289,5 +291,15 @@ export default function OverviewPage() {
         </div>
       </div>
     </>
+  );
+}
+
+// Default export is the protected wrapper.
+// (Allow any logged-in user; add role="admin" to restrict to admins.)
+export default function Protected() {
+  return (
+    <RequireAuth>
+      <OverviewPage />
+    </RequireAuth>
   );
 }
