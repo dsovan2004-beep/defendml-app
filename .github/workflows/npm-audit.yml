@@ -17,17 +17,17 @@ jobs:
           node-version: '18'
           
       - name: Install dependencies
-        run: npm ci
+        run: npm install  # Changed from npm ci to npm install
         
       - name: Run security audit (show details)
         run: npm audit
         continue-on-error: true
         
-      - name: Show audit report
-        run: npm audit --json > audit-report.json || true
+      - name: Generate package-lock.json
+        run: npm install --package-lock-only
         
-      - name: Upload audit report
+      - name: Upload package-lock.json
         uses: actions/upload-artifact@v4
         with:
-          name: npm-audit-report
-          path: audit-report.json
+          name: package-lock
+          path: package-lock.json
