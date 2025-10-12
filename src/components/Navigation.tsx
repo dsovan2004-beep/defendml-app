@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Menu, X, Shield, AlertTriangle, Lock, FileCheck, Activity, BarChart3, ScrollText } from 'lucide-react';
+import { Menu, X, Shield, AlertTriangle, Lock, FileCheck, Activity, BarChart3, ScrollText, LogOut } from 'lucide-react';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +19,14 @@ export default function Navigation() {
 
   const isActive = (href: string) => router.pathname === href;
 
+  const handleLogout = () => {
+    // Clear the JWT token
+    localStorage.removeItem('token');
+    
+    // Redirect to login
+    router.push('/login');
+  };
+
   return (
     <nav className="bg-slate-900 border-b border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,7 +43,7 @@ export default function Navigation() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-4">
             <div className="flex items-center space-x-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -55,6 +63,15 @@ export default function Navigation() {
                 );
               })}
             </div>
+
+            {/* Logout Button - Desktop */}
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/50 rounded-lg text-red-300 hover:text-red-200 transition-all text-sm font-medium"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
           </div>
 
           {/* Mobile menu button */}
@@ -91,6 +108,18 @@ export default function Navigation() {
                 </Link>
               );
             })}
+
+            {/* Logout Button - Mobile */}
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                handleLogout();
+              }}
+              className="w-full flex items-center gap-3 px-3 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-300 text-base font-medium transition-all"
+            >
+              <LogOut className="w-5 h-5" />
+              Logout
+            </button>
           </div>
         </div>
       )}
