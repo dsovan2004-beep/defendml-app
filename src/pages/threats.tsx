@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navigation from '../components/Navigation';
+import RequireAuth from '../components/RequireAuth';
 import { Shield, AlertTriangle, Clock, Filter, TrendingUp, Zap, Target, Activity } from 'lucide-react';
 
 type Detection = string | { type?: string };
@@ -17,7 +18,7 @@ interface ApiLog {
   user_id?: string;
 }
 
-export default function ThreatsPage() {
+function ThreatsPageContent() {
   const [threats, setThreats] = useState<ApiLog[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [filter, setFilter] = useState<'all' | 'critical' | 'high' | 'medium'>('all');
@@ -418,5 +419,13 @@ export default function ThreatsPage() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function ThreatsPage() {
+  return (
+    <RequireAuth role="admin">
+      <ThreatsPageContent />
+    </RequireAuth>
   );
 }
