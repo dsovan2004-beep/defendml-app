@@ -1,12 +1,12 @@
 import React from 'react';
 import Navigation from '../components/Navigation';
+import RequireAuth from '../components/RequireAuth';
 import { ScrollText, Search, Download } from 'lucide-react';
 
-export default function AuditPage() {
+function AuditPageContent() {
   return (
     <>
       <Navigation />
-
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-amber-950 to-slate-950">
         {/* Header */}
         <div className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
@@ -20,7 +20,6 @@ export default function AuditPage() {
             </p>
           </div>
         </div>
-
         {/* Body */}
         <div className="max-w-7xl mx-auto px-8 py-8">
           <div className="bg-gradient-to-br from-amber-500/10 to-orange-600/10 rounded-2xl p-8 border border-amber-500/20">
@@ -35,7 +34,6 @@ export default function AuditPage() {
                 </p>
               </div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div className="bg-white/5 rounded-xl p-6 border border-white/10">
                 <div className="text-4xl font-bold text-amber-400 mb-2">45,678</div>
@@ -50,7 +48,6 @@ export default function AuditPage() {
                 <div className="text-slate-300 font-medium">Retention</div>
               </div>
             </div>
-
             <button
               type="button"
               className="flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-semibold transition-all shadow-lg shadow-amber-500/30"
@@ -58,7 +55,6 @@ export default function AuditPage() {
               <Download className="w-5 h-5" />
               Export Audit Logs (CSV)
             </button>
-
             <p className="text-amber-300 text-sm mt-4">
               Coming soon: Full audit log search and export capabilities
             </p>
@@ -66,5 +62,13 @@ export default function AuditPage() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function AuditPage() {
+  return (
+    <RequireAuth role="admin">
+      <AuditPageContent />
+    </RequireAuth>
   );
 }
