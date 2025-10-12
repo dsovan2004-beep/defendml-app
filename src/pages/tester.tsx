@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Navigation from '../components/Navigation';
 import RequireAuth from '../components/RequireAuth';
-import { Flask, Send, Shield, AlertTriangle, CheckCircle2, Zap } from 'lucide-react';
+import { Beaker, Send, Shield, AlertTriangle, CheckCircle2, Zap } from 'lucide-react';
 
 const API = "https://defendml-api.dsovan2004.workers.dev";
 
@@ -42,7 +42,7 @@ function TesterPageContent() {
         <div className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-8 py-6">
             <div className="flex items-center gap-3 mb-2">
-              <Flask className="w-8 h-8 text-purple-400" />
+              <Beaker className="w-8 h-8 text-purple-400" />
               <h1 className="text-3xl font-bold text-white">Security Tester</h1>
             </div>
             <p className="text-slate-300">Test prompts against DefendML security guardrails</p>
@@ -118,7 +118,7 @@ function TesterPageContent() {
               {!result && !loading && (
                 <div className="h-64 flex items-center justify-center border-2 border-dashed border-purple-500/30 rounded-lg">
                   <div className="text-center">
-                    <Flask className="w-12 h-12 text-purple-500/50 mx-auto mb-3" />
+                    <Beaker className="w-12 h-12 text-purple-500/50 mx-auto mb-3" />
                     <p className="text-slate-500">Enter text and click "Run Security Scan" to see results</p>
                   </div>
                 </div>
