@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
+import RequireAuth from '../components/RequireAuth';
 import { Lock, Eye, EyeOff, AlertCircle, Shield, TrendingDown, DollarSign, FileCheck } from 'lucide-react';
 
 type Detection = string | { type?: string };
@@ -38,7 +39,7 @@ const piiTypeColors: Record<string, string> = {
   address: 'bg-green-500/20 text-green-300 border-green-400/30',
 };
 
-export default function PIIPage(): JSX.Element {
+function PIIPageContent(): JSX.Element {
   const [piiEvents, setPiiEvents] = useState<PiiEvent[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showSensitive, setShowSensitive] = useState<boolean>(false);
@@ -53,7 +54,7 @@ export default function PIIPage(): JSX.Element {
     setLoading(true);
     try {
       const apiBase =
-        process.env.NEXT_PUBLIC_API_BASE || 'https://defendml-api.dsovan2004.workers.dev';
+        process.env.NEXT_PUBLIC_API_BASE || 'https://defendml-api.dsovan2004-beep.workers.dev';
       const response = await fetch(`${apiBase}/api/logs/recent?limit=500`);
 
       if (!response.ok) throw new Error('Failed to fetch PII events');
@@ -500,5 +501,14 @@ export default function PIIPage(): JSX.Element {
         </div>
       </div>
     </>
+  );
+}
+
+// Default export with RequireAuth protection
+export default function PIIPage() {
+  return (
+    <RequireAuth role="admin">
+      <PIIPageContent />
+    </RequireAuth>
   );
 }
