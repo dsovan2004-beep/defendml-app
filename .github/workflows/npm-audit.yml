@@ -1,0 +1,33 @@
+name: NPM Security Audit
+
+on:
+  workflow_dispatch:  # Manual trigger
+  push:
+    branches: [ main ]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run security audit (show details)
+        run: npm audit
+        continue-on-error: true
+        
+      - name: Show audit report
+        run: npm audit --json > audit-report.json || true
+        
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-report
+          path: audit-report.json
