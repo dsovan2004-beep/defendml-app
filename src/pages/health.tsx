@@ -1,9 +1,10 @@
 // src/pages/health.tsx
 import React from 'react';
 import Navigation from '../components/Navigation';
+import RequireAuth from '../components/RequireAuth';
 import { Activity, Zap, CheckCircle } from 'lucide-react';
 
-export default function HealthPage() {
+function HealthPageContent() {
   return (
     <>
       <Navigation />
@@ -53,5 +54,13 @@ export default function HealthPage() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function HealthPage() {
+  return (
+    <RequireAuth role="admin">
+      <HealthPageContent />
+    </RequireAuth>
   );
 }
