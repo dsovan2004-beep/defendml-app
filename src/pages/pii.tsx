@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
+import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
 import { Lock, Eye, EyeOff, AlertCircle, Shield, TrendingDown, DollarSign, FileCheck } from 'lucide-react';
 
@@ -188,9 +189,9 @@ function PIIPageContent(): JSX.Element {
       : piiEvents.filter((e) => e.detections.some((d) => d === `pii.${selectedType}`));
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navigation />
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950">
+      <div className="flex-1 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950">
         <div className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-8 py-6">
             <div className="flex items-center justify-between">
@@ -500,7 +501,8 @@ function PIIPageContent(): JSX.Element {
           </div>
         </div>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 }
 
