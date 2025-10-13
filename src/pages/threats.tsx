@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
+import { UserRole } from '../types/roles';
 import { Shield, AlertTriangle, Clock, Filter, TrendingUp, Zap, Target, Activity } from 'lucide-react';
 
 type Detection = string | { type?: string };
@@ -426,7 +427,7 @@ function ThreatsPageContent() {
 
 export default function ThreatsPage() {
   return (
-    <RequireAuth role="admin">
+    <RequireAuth role={[UserRole.SUPER_ADMIN, UserRole.SECURITY_ANALYST]}>
       <ThreatsPageContent />
     </RequireAuth>
   );
