@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
+import { UserRole } from '../types/roles';
 import { ScrollText, Search, Download, Filter, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
 
 function AuditPageContent() {
@@ -280,7 +281,7 @@ function AuditPageContent() {
 
 export default function AuditPage() {
   return (
-    <RequireAuth role="admin">
+    <RequireAuth role={UserRole.SUPER_ADMIN}>
       <AuditPageContent />
     </RequireAuth>
   );
