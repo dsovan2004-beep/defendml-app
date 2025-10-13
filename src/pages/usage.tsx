@@ -1,7 +1,8 @@
+// src/pages/usage.tsx
 import React from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import RequireAuth from '../components/RequireAuth';
+import RequireAuth, { UserRole } from '../components/RequireAuth';
 import { BarChart3, DollarSign, TrendingUp, Calendar, Zap, Users } from 'lucide-react';
 
 function UsagePageContent() {
@@ -169,7 +170,7 @@ function UsagePageContent() {
 
 export default function UsagePage() {
   return (
-    <RequireAuth role="admin">
+    <RequireAuth role={UserRole.SUPER_ADMIN}>
       <UsagePageContent />
     </RequireAuth>
   );
