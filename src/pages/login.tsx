@@ -25,24 +25,36 @@ export default function Login() {
     setBusy(true);
 
     try {
-      const base = process.env.NEXT_PUBLIC_API_BASE || "https://defendml-api.dsovan2004-beep.workers.dev";
-      const res = await fetch(`${base}/auth/login`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      // Demo credentials validation (mock mode)
+      const validCredentials = [
+        { email: "admin@defendml.com", password: "demo123", role: "admin" },
+        { email: "analyst@defendml.com", password: "demo123", role: "analyst" },
+        { email: "viewer@defendml.com", password: "demo123", role: "viewer" },
+      ];
 
-      const data = await res.json();
+      const user = validCredentials.find(
+        (cred) => cred.email === email && cred.password === password
+      );
 
-      if (!res.ok || !data?.token) {
-        setError(data?.error || "Login failed");
+      if (!user) {
+        setError("Invalid email or password. Try: admin@defendml.com / demo123");
         setBusy(false);
         return;
       }
 
+      // Create a mock JWT token
+      const mockToken = btoa(JSON.stringify({
+        email: user.email,
+        role: user.role,
+        exp: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
+      }));
+
       // Store token (use defendml_token to match RequireAuth)
-      localStorage.setItem("defendml_token", data.token);
-      (globalThis as any)._defendmlToken = data.token;
+      localStorage.setItem("defendml_token", mockToken);
+      (globalThis as any)._defendmlToken = mockToken;
+
+      // Small delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       const params = new URLSearchParams(window.location.search);
       window.location.replace(params.get("next") || "/dashboard");
@@ -138,7 +150,7 @@ export default function Login() {
 
           {/* Demo Credentials Helper */}
           <div className="mt-6 pt-6 border-t border-slate-700/50">
-            <p className="text-xs text-slate-500 text-center mb-3">Demo Credentials</p>
+            <p className="text-xs text-slate-500 text-center mb-3">🔑 Demo Credentials (Click to Auto-Fill)</p>
             <div className="space-y-2">
               <button
                 type="button"
@@ -148,7 +160,7 @@ export default function Login() {
                 }}
                 className="w-full px-3 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/50 rounded-lg text-slate-300 text-sm transition-colors text-left"
               >
-                <span className="font-semibold text-purple-400">Admin:</span> admin@defendml.com
+                <span className="font-semibold text-purple-400">Admin:</span> admin@defendml.com / demo123
               </button>
               <button
                 type="button"
@@ -158,7 +170,17 @@ export default function Login() {
                 }}
                 className="w-full px-3 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/50 rounded-lg text-slate-300 text-sm transition-colors text-left"
               >
-                <span className="font-semibold text-blue-400">Analyst:</span> analyst@defendml.com
+                <span className="font-semibold text-blue-400">Analyst:</span> analyst@defendml.com / demo123
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail("viewer@defendml.com");
+                  setPassword("demo123");
+                }}
+                className="w-full px-3 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/50 rounded-lg text-slate-300 text-sm transition-colors text-left"
+              >
+                <span className="font-semibold text-green-400">Viewer:</span> viewer@defendml.com / demo123
               </button>
             </div>
           </div>
