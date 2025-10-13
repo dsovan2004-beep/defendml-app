@@ -1,12 +1,11 @@
-
-
 import React, { useState } from "react";
-import RequireAuth from "../../components/RequireAuth"; // note the relative path
+import RequireAuth from "../../components/RequireAuth";
 import Navigation from "../../components/Navigation";
+import { UserRole } from "../../types/roles";
 
 export default function ProtectedUsersUpload() {
   return (
-    <RequireAuth role="admin">
+    <RequireAuth role={UserRole.SUPER_ADMIN}>
       <UsersUploadPage />
     </RequireAuth>
   );
@@ -25,6 +24,8 @@ function UsersUploadPage() {
     setStatus("Uploading…");
 
     // TODO: wire to your API endpoint for bulk import
+    // const formData = new FormData();
+    // formData.append("file", file);
     // const res = await fetch("/api/admin/users/upload", { method: "POST", body: formData });
 
     setTimeout(() => setStatus("✅ Uploaded (demo stub)"), 800); // stub UX
