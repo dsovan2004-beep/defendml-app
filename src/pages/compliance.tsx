@@ -2,6 +2,7 @@ import { FileCheck, CheckCircle2, AlertCircle, Clock } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
+import { UserRole } from '../types/roles';
 
 function CompliancePageContent() {
   return (
@@ -131,11 +132,15 @@ function CompliancePageContent() {
                         <div className="text-xs text-slate-500 mt-1">{item.standard}</div>
                       </div>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      item.status === 'complete' ? 'bg-green-500/10 text-green-400 border border-green-500/30' :
-                      item.status === 'in-progress' ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/30' :
-                      'bg-slate-500/10 text-slate-400 border border-slate-500/30'
-                    }`}>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        item.status === 'complete'
+                          ? 'bg-green-500/10 text-green-400 border border-green-500/30'
+                          : item.status === 'in-progress'
+                          ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/30'
+                          : 'bg-slate-500/10 text-slate-400 border border-slate-500/30'
+                      }`}
+                    >
                       {item.status === 'complete' ? 'Complete' : item.status === 'in-progress' ? 'In Progress' : 'Pending'}
                     </span>
                   </div>
@@ -152,7 +157,7 @@ function CompliancePageContent() {
 
 export default function CompliancePage() {
   return (
-    <RequireAuth role="admin">
+    <RequireAuth role={UserRole.SUPER_ADMIN}>
       <CompliancePageContent />
     </RequireAuth>
   );
