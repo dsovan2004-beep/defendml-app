@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
+import { UserRole } from '../types/roles';
 import { Lock, Eye, EyeOff, AlertCircle, Shield, TrendingDown, DollarSign, FileCheck } from 'lucide-react';
 
 type Detection = string | { type?: string };
@@ -509,7 +510,7 @@ function PIIPageContent(): JSX.Element {
 // Default export with RequireAuth protection
 export default function PIIPage() {
   return (
-    <RequireAuth role="admin">
+    <RequireAuth role={UserRole.SUPER_ADMIN}>
       <PIIPageContent />
     </RequireAuth>
   );
