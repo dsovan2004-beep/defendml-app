@@ -1,13 +1,14 @@
 import React from 'react';
 import Navigation from '../components/Navigation';
+import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
 import { ScrollText, Search, Download } from 'lucide-react';
 
 function AuditPageContent() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navigation />
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-amber-950 to-slate-950">
+      <div className="flex-1 bg-gradient-to-br from-slate-950 via-amber-950 to-slate-950">
         {/* Header */}
         <div className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-8 py-6">
@@ -61,7 +62,8 @@ function AuditPageContent() {
           </div>
         </div>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 }
 
