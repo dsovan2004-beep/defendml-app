@@ -1,13 +1,12 @@
 // src/components/RequireAuth.tsx
-// Role-Based Access Control + Auth guard (single file)
+// Role-Based Access Control + Auth guard with Mock Token Support
 
 import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/router";
-import { UserRole, hasPermission } from "../types/roles";
 
 interface Props {
   children: ReactNode;
-  role?: UserRole | UserRole[];
+  role?: string | string[];
   resource?: string;
   action?: "create" | "read" | "update" | "delete" | "export";
 }
@@ -15,7 +14,7 @@ interface Props {
 /** Read token from a safe place we control */
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
-  return (window as any)._defendmlToken || localStorage.getItem("token");
+  return (window as any)._defendmlToken || localStorage.getItem("defendml_token");
 }
 
 function redirectToLogin() {
@@ -26,9 +25,36 @@ function redirectToLogin() {
   window.location.replace(`/login?next=${next}`);
 }
 
-// Safely get the "admin" enum value even if enum shape changes.
-const ADMIN_ROLE: UserRole =
-  ((UserRole as any).ADMIN as UserRole) ?? ("admin" as unknown as UserRole);
+/** Decode mock JWT token */
+function decodeMockToken(token: string): { email: string; role: string; exp: number } | null {
+  try {
+    const decoded = JSON.parse(atob(token));
+    if (decoded.exp && decoded.exp < Date.now()) {
+      return null; // Token expired
+    }
+    return decoded;
+  } catch {
+    return null;
+  }
+}
+
+/** Check if user has permission for resource/action */
+function hasPermission(userRole: string, resource: string, action: string): boolean {
+  // Admin has all permissions
+  if (userRole === "admin") return true;
+
+  // Analyst can read and export
+  if (userRole === "analyst") {
+    return action === "read" || action === "export";
+  }
+
+  // Viewer can only read
+  if (userRole === "viewer") {
+    return action === "read";
+  }
+
+  return false;
+}
 
 export default function RequireAuth({
   children,
@@ -37,7 +63,7 @@ export default function RequireAuth({
   action = "read",
 }: Props) {
   const [ok, setOk] = useState<boolean | null>(null);
-  const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [accessDenied, setAccessDenied] = useState<string | null>(null);
   const router = useRouter();
 
@@ -49,9 +75,53 @@ export default function RequireAuth({
       if (!token) return redirectToLogin();
 
       try {
+        // Try to decode as mock token first
+        const mockUser = decodeMockToken(token);
+
+        if (mockUser) {
+          // ========== MOCK TOKEN MODE ==========
+          const apiRole = mockUser.role;
+          setUserRole(apiRole);
+
+          // GLOBAL OVERRIDE: admin can access everything
+          if (apiRole === "admin") {
+            if (!cancelled) setOk(true);
+            return;
+          }
+
+          // If a page specifies allowed roles, check them
+          if (role) {
+            const allowed = new Set<string>(
+              Array.isArray(role) ? role : [role]
+            );
+            allowed.add("admin"); // Always include admin
+
+            if (!allowed.has(apiRole)) {
+              if (!cancelled) {
+                setAccessDenied(`role-mismatch:${Array.from(allowed).join(",")}`);
+                setOk(false);
+              }
+              return;
+            }
+          }
+
+          // Resource/action permission check
+          if (resource && !hasPermission(apiRole, resource, action)) {
+            if (!cancelled) {
+              setAccessDenied(`permission-denied:${resource}:${action}`);
+              setOk(false);
+            }
+            return;
+          }
+
+          if (!cancelled) setOk(true);
+          return;
+        }
+
+        // ========== API TOKEN MODE (fallback) ==========
         const base =
           process.env.NEXT_PUBLIC_API_BASE ||
-          "https://defendml-api.dsovan2004.workers.dev";
+          "https://defendml-api.dsovan2004-beep.workers.dev";
 
         const res = await fetch(`${base}/auth/verify`, {
           headers: { authorization: `Bearer ${token}` },
@@ -61,28 +131,27 @@ export default function RequireAuth({
 
         if (!res.ok || !data?.ok) return redirectToLogin();
 
-        // Normalize role (supports "role" or first entry of "roles")
-        const apiRole: UserRole | undefined =
-          (data?.user?.role as UserRole | undefined) ??
+        // Normalize role
+        const apiRole: string | undefined =
+          data?.user?.role ??
           (Array.isArray(data?.user?.roles) && data.user.roles[0]);
 
         if (!apiRole) return redirectToLogin();
 
         setUserRole(apiRole);
 
-        // ----- GLOBAL OVERRIDE: admin can access everything -----
-        if (apiRole === ADMIN_ROLE) {
+        // GLOBAL OVERRIDE: admin can access everything
+        if (apiRole === "admin") {
           if (!cancelled) setOk(true);
           return;
         }
-        // --------------------------------------------------------
 
-        // If a page specifies allowed roles, implicitly include admin in that list
+        // If a page specifies allowed roles, check them
         if (role) {
-          const allowed = new Set<UserRole>(
-            (Array.isArray(role) ? role : [role]) as UserRole[]
+          const allowed = new Set<string>(
+            Array.isArray(role) ? role : [role]
           );
-          allowed.add(ADMIN_ROLE);
+          allowed.add("admin"); // Always include admin
 
           if (!allowed.has(apiRole)) {
             if (!cancelled) {
@@ -93,7 +162,7 @@ export default function RequireAuth({
           }
         }
 
-        // Resource/action permission check (admin already passed above)
+        // Resource/action permission check
         if (resource && !hasPermission(apiRole, resource, action)) {
           if (!cancelled) {
             setAccessDenied(`permission-denied:${resource}:${action}`);
