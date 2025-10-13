@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import RequireAuth from "../components/RequireAuth";
+import { UserRole } from "../types/roles";
 
 type ScanLog = {
   id: string;
@@ -103,7 +104,7 @@ function DashboardPage() {
 
 export default function Protected() {
   return (
-    <RequireAuth role="admin">
+    <RequireAuth role={UserRole.SUPER_ADMIN}>
       <DashboardPage />
     </RequireAuth>
   );
