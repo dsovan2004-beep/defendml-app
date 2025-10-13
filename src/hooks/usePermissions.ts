@@ -1,15 +1,15 @@
 // src/hooks/usePermissions.ts
 // Custom hook for checking permissions in components
 
-import { useAuth } from '@/contexts/AuthContext';
-import { UserRole, hasPermission } from '@/types/roles';
+import { useAuth } from "../contexts/AuthContext";
+import { UserRole, hasPermission } from "../types/roles";
 
 export function usePermissions() {
   const { user } = useAuth();
 
   const can = (
     resource: string,
-    action: 'create' | 'read' | 'update' | 'delete' | 'export'
+    action: "create" | "read" | "update" | "delete" | "export"
   ): boolean => {
     if (!user) return false;
     return hasPermission(user.role, resource, action);
@@ -21,25 +21,12 @@ export function usePermissions() {
     return roles.includes(user.role);
   };
 
-  const isSuperAdmin = (): boolean => {
-    return isRole(UserRole.SUPER_ADMIN);
-  };
+  const isSuperAdmin = (): boolean => isRole(UserRole.SUPER_ADMIN);
+  const isSecurityAnalyst = (): boolean => isRole(UserRole.SECURITY_ANALYST);
+  const isViewer = (): boolean => isRole(UserRole.VIEWER);
 
-  const isSecurityAnalyst = (): boolean => {
-    return isRole(UserRole.SECURITY_ANALYST);
-  };
-
-  const isViewer = (): boolean => {
-    return isRole(UserRole.VIEWER);
-  };
-
-  const canExport = (): boolean => {
-    return isSuperAdmin() || isSecurityAnalyst();
-  };
-
-  const canManageUsers = (): boolean => {
-    return isSuperAdmin();
-  };
+  const canExport = (): boolean => isSuperAdmin() || isSecurityAnalyst();
+  const canManageUsers = (): boolean => isSuperAdmin();
 
   return {
     can,
