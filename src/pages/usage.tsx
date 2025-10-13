@@ -2,7 +2,7 @@
 import React from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import RequireAuth, { UserRole } from '../components/RequireAuth';
+import RequireAuth from '../components/RequireAuth';
 import { BarChart3, DollarSign, TrendingUp, Calendar, Zap, Users } from 'lucide-react';
 
 function UsagePageContent() {
@@ -170,7 +170,9 @@ function UsagePageContent() {
 
 export default function UsagePage() {
   return (
-    <RequireAuth role={UserRole.SUPER_ADMIN}>
+    // If your RequireAuth expects a specific enum type, this literal keeps it admin-only
+    // without importing the enum from elsewhere.
+    <RequireAuth role={'super_admin' as any}>
       <UsagePageContent />
     </RequireAuth>
   );
