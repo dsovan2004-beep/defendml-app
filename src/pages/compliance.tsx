@@ -1,12 +1,13 @@
 import { FileCheck, CheckCircle2, AlertCircle, Clock } from 'lucide-react';
 import Navigation from '../components/Navigation';
+import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
 
 function CompliancePageContent() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navigation />
-      <div className="min-h-screen bg-slate-950">
+      <div className="flex-1 bg-slate-950">
         {/* Header */}
         <div className="bg-slate-900 border-b border-slate-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -144,7 +145,8 @@ function CompliancePageContent() {
           </div>
         </div>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 }
 
