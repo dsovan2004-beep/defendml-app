@@ -1,13 +1,14 @@
 import React from 'react';
 import Navigation from '../components/Navigation';
+import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
 import { BarChart3, DollarSign, TrendingUp, Calendar, Zap, Users } from 'lucide-react';
 
 function UsagePageContent() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navigation />
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
+      <div className="flex-1 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
         <div className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-8 py-6">
             <div className="flex items-center gap-3 mb-2">
@@ -161,7 +162,8 @@ function UsagePageContent() {
           </div>
         </div>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 }
 
