@@ -144,13 +144,13 @@ export default function Navigation() {
               <div className="flex items-center gap-3">
                 {/* User role badge */}
                 {userRole && (
-                  <span className="px-3 py-1 bg-purple-500/10 border border-purple-500/30 rounded-lg text-purple-300 text-xs font-medium">
+                  <span className="px-3 py-1 bg-purple-500/20 border border-purple-500/40 rounded-lg text-purple-200 text-xs font-semibold">
                     {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
                   </span>
                 )}
                 <button
                   onClick={doLogout}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/50 rounded-lg text-red-300 hover:text-red-200 transition-all text-sm font-medium"
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white transition-all text-sm font-medium shadow-lg"
                 >
                   <LogOut className="w-4 h-4" />
                   Logout
@@ -230,7 +230,7 @@ export default function Navigation() {
             {/* User role badge (mobile) */}
             {token && userRole && (
               <div className="px-3 py-2">
-                <span className="inline-block px-3 py-1 bg-purple-500/10 border border-purple-500/30 rounded-lg text-purple-300 text-sm font-medium">
+                <span className="inline-block px-3 py-1 bg-purple-500/20 border border-purple-500/40 rounded-lg text-purple-200 text-sm font-semibold">
                   Role: {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
                 </span>
               </div>
@@ -243,7 +243,7 @@ export default function Navigation() {
                   setIsOpen(false);
                   doLogout();
                 }}
-                className="w-full flex items-center gap-3 px-3 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-300 text-base font-medium transition-all"
+                className="w-full flex items-center gap-3 px-3 py-3 bg-red-600 hover:bg-red-700 rounded-lg text-white text-base font-medium transition-all shadow-lg"
               >
                 <LogOut className="w-5 h-5" />
                 Logout
