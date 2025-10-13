@@ -1,9 +1,8 @@
 // src/components/RequireAuth.tsx
-// Role-Based Access Control + Auth guard
+// Role-Based Access Control + Auth guard (single file)
 
 import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/router";
-// FIX: use relative path (no "@/")
 import { UserRole, hasPermission } from "../types/roles";
 
 interface Props {
@@ -27,6 +26,10 @@ function redirectToLogin() {
   window.location.replace(`/login?next=${next}`);
 }
 
+// Safely get the "admin" enum value even if enum shape changes.
+const ADMIN_ROLE: UserRole =
+  ((UserRole as any).ADMIN as UserRole) ?? ("admin" as unknown as UserRole);
+
 export default function RequireAuth({
   children,
   role,
@@ -48,7 +51,7 @@ export default function RequireAuth({
       try {
         const base =
           process.env.NEXT_PUBLIC_API_BASE ||
-          "https://defendml-api.dsovan2004.workers.dev"; // safer fallback
+          "https://defendml-api.dsovan2004.workers.dev";
 
         const res = await fetch(`${base}/auth/verify`, {
           headers: { authorization: `Bearer ${token}` },
@@ -58,27 +61,39 @@ export default function RequireAuth({
 
         if (!res.ok || !data?.ok) return redirectToLogin();
 
-        // Normalize role (supports "role" or "roles" array from API)
+        // Normalize role (supports "role" or first entry of "roles")
         const apiRole: UserRole | undefined =
           (data?.user?.role as UserRole | undefined) ??
           (Array.isArray(data?.user?.roles) && data.user.roles[0]);
 
         if (!apiRole) return redirectToLogin();
+
         setUserRole(apiRole);
 
-        // Role allowlist check
+        // ----- GLOBAL OVERRIDE: admin can access everything -----
+        if (apiRole === ADMIN_ROLE) {
+          if (!cancelled) setOk(true);
+          return;
+        }
+        // --------------------------------------------------------
+
+        // If a page specifies allowed roles, implicitly include admin in that list
         if (role) {
-          const allowed = Array.isArray(role) ? role : [role];
-          if (!allowed.includes(apiRole)) {
+          const allowed = new Set<UserRole>(
+            (Array.isArray(role) ? role : [role]) as UserRole[]
+          );
+          allowed.add(ADMIN_ROLE);
+
+          if (!allowed.has(apiRole)) {
             if (!cancelled) {
-              setAccessDenied(`role-mismatch:${allowed.join(",")}`);
+              setAccessDenied(`role-mismatch:${Array.from(allowed).join(",")}`);
               setOk(false);
             }
             return;
           }
         }
 
-        // Resource/action permission check
+        // Resource/action permission check (admin already passed above)
         if (resource && !hasPermission(apiRole, resource, action)) {
           if (!cancelled) {
             setAccessDenied(`permission-denied:${resource}:${action}`);
