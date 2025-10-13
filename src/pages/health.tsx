@@ -3,6 +3,7 @@ import React from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
+import { UserRole } from '../types/roles';
 import { Activity, Zap, CheckCircle, TrendingUp, Server, Database, Gauge } from 'lucide-react';
 
 function HealthPageContent() {
@@ -185,7 +186,7 @@ function HealthPageContent() {
 
 export default function HealthPage() {
   return (
-    <RequireAuth role="admin">
+    <RequireAuth role={UserRole.SUPER_ADMIN}>
       <HealthPageContent />
     </RequireAuth>
   );
