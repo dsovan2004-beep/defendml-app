@@ -2,6 +2,7 @@ import { useState } from "react";
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
+import { UserRole } from '../types/roles';
 import { Beaker, Send, Shield, AlertTriangle, CheckCircle2, Zap } from 'lucide-react';
 
 const API = "https://defendml-api.dsovan2004.workers.dev";
@@ -13,7 +14,7 @@ function TesterPageContent() {
 
   async function run() {
     if (!input.trim()) return;
-    
+
     setLoading(true);
     try {
       const r = await fetch(`${API}/api/scan`, {
@@ -115,7 +116,7 @@ function TesterPageContent() {
                 <Zap className="w-5 h-5 text-purple-400" />
                 Scan Results
               </h3>
-              
+
               {!result && !loading && (
                 <div className="h-64 flex items-center justify-center border-2 border-dashed border-purple-500/30 rounded-lg">
                   <div className="text-center">
@@ -205,7 +206,7 @@ function TesterPageContent() {
 
 export default function TesterPage() {
   return (
-    <RequireAuth role="admin">
+    <RequireAuth role={UserRole.SUPER_ADMIN}>
       <TesterPageContent />
     </RequireAuth>
   );
