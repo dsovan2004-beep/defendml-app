@@ -150,7 +150,7 @@ export default function Navigation() {
                 )}
                 <button
                   onClick={doLogout}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white transition-all text-sm font-medium shadow-lg"
+                  className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 border border-purple-500/50 rounded-lg text-white transition-all text-sm font-medium shadow-lg"
                 >
                   <LogOut className="w-4 h-4" />
                   Logout
@@ -243,7 +243,7 @@ export default function Navigation() {
                   setIsOpen(false);
                   doLogout();
                 }}
-                className="w-full flex items-center gap-3 px-3 py-3 bg-red-600 hover:bg-red-700 rounded-lg text-white text-base font-medium transition-all shadow-lg"
+                className="w-full flex items-center gap-3 px-3 py-3 bg-purple-600 hover:bg-purple-700 border border-purple-500/50 rounded-lg text-white text-base font-medium transition-all shadow-lg"
               >
                 <LogOut className="w-5 h-5" />
                 Logout
