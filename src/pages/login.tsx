@@ -12,7 +12,7 @@ export default function Login() {
   useEffect(() => {
     const token =
       (globalThis as any)._defendmlToken ||
-      (typeof window !== "undefined" ? localStorage.getItem("token") : null);
+      (typeof window !== "undefined" ? localStorage.getItem("defendml_token") : null);
     if (token) {
       const params = new URLSearchParams(window.location.search);
       window.location.replace(params.get("next") || "/dashboard");
@@ -25,7 +25,7 @@ export default function Login() {
     setBusy(true);
 
     try {
-      const base = process.env.NEXT_PUBLIC_API_BASE || "";
+      const base = process.env.NEXT_PUBLIC_API_BASE || "https://defendml-api.dsovan2004-beep.workers.dev";
       const res = await fetch(`${base}/auth/login`, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -40,8 +40,8 @@ export default function Login() {
         return;
       }
 
-      // Store token
-      localStorage.setItem("token", data.token);
+      // Store token (use defendml_token to match RequireAuth)
+      localStorage.setItem("defendml_token", data.token);
       (globalThis as any)._defendmlToken = data.token;
 
       const params = new URLSearchParams(window.location.search);
@@ -135,6 +135,33 @@ export default function Login() {
               {busy ? "Signing in..." : "Sign in"}
             </button>
           </form>
+
+          {/* Demo Credentials Helper */}
+          <div className="mt-6 pt-6 border-t border-slate-700/50">
+            <p className="text-xs text-slate-500 text-center mb-3">Demo Credentials</p>
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail("admin@defendml.com");
+                  setPassword("demo123");
+                }}
+                className="w-full px-3 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/50 rounded-lg text-slate-300 text-sm transition-colors text-left"
+              >
+                <span className="font-semibold text-purple-400">Admin:</span> admin@defendml.com
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail("analyst@defendml.com");
+                  setPassword("demo123");
+                }}
+                className="w-full px-3 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/50 rounded-lg text-slate-300 text-sm transition-colors text-left"
+              >
+                <span className="font-semibold text-blue-400">Analyst:</span> analyst@defendml.com
+              </button>
+            </div>
+          </div>
 
           {/* Footer */}
           <div className="mt-6 text-center">
