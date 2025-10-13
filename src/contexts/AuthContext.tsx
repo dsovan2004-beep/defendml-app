@@ -1,109 +1,126 @@
 // src/contexts/AuthContext.tsx
-// Updated AuthContext with Role-Based Access Control
+// AuthContext wired to Cloudflare Worker JWT auth (+ RBAC ready)
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useRouter } from 'next/router';
-import { UserRole, User } from '@/types/roles';
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { useRouter } from "next/router";
+import type { User } from "../types/roles"; // <- FIXED: relative import (no "@/")
 
-interface AuthContextType {
+type AuthContextType = {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  loading: boolean;
   isAuthenticated: boolean;
-  isLoading: boolean;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => void;
+};
+
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+  isAuthenticated: false,
+  login: async () => false,
+  logout: () => {},
+});
+
+function getToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return (window as any)._defendmlToken || localStorage.getItem("token");
+}
+function setToken(token: string | null) {
+  if (typeof window === "undefined") return;
+  if (token) {
+    (window as any)._defendmlToken = token;
+    localStorage.setItem("token", token);
+  } else {
+    delete (window as any)._defendmlToken;
+    localStorage.removeItem("token");
+  }
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
+  // Use your Pages env var if set; otherwise fallback to worker URL
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_BASE || "https://defendml-api.dsovan2004.workers.dev";
+
+  // Bootstrap: verify existing token -> populate user
   useEffect(() => {
-    // Check if user is already logged in (from localStorage)
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    let cancelled = false;
+    async function init() {
+      setLoading(true);
+      const token = getToken();
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
       try {
-        setUser(JSON.parse(storedUser));
-      } catch (e) {
-        localStorage.removeItem('user');
+        const res = await fetch(`${API_BASE}/auth/verify`, {
+          headers: { authorization: `Bearer ${token}` },
+          credentials: "omit",
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data?.ok && data?.user) {
+          if (!cancelled) setUser(data.user as User);
+        } else {
+          setToken(null);
+          if (!cancelled) setUser(null);
+        }
+      } catch {
+        setToken(null);
+        if (!cancelled) setUser(null);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     }
-    setIsLoading(false);
-  }, []);
+    init();
+    return () => {
+      cancelled = true;
+    };
+  }, [API_BASE]);
 
-  const login = async (email: string, password: string) => {
-    setIsLoading(true);
+  // Login -> /auth/login -> store token+user
+  async function login(email: string, password: string) {
+    setLoading(true);
     try {
-      // TODO: Replace with actual API call
-      // For now, demo login with role assignment
-      
-      // Demo users with different roles
-      const demoUsers: Record<string, User> = {
-        'admin@defendml.com': {
-          id: '1',
-          email: 'admin@defendml.com',
-          name: 'Admin User',
-          role: UserRole.SUPER_ADMIN,
-          department: 'IT',
-          createdAt: new Date().toISOString(),
-          lastLogin: new Date().toISOString(),
-          isActive: true,
-        },
-        'analyst@defendml.com': {
-          id: '2',
-          email: 'analyst@defendml.com',
-          name: 'Security Analyst',
-          role: UserRole.SECURITY_ANALYST,
-          department: 'Security',
-          createdAt: new Date().toISOString(),
-          lastLogin: new Date().toISOString(),
-          isActive: true,
-        },
-        'viewer@defendml.com': {
-          id: '3',
-          email: 'viewer@defendml.com',
-          name: 'Viewer User',
-          role: UserRole.VIEWER,
-          department: 'Engineering',
-          createdAt: new Date().toISOString(),
-          lastLogin: new Date().toISOString(),
-          isActive: true,
-        },
-      };
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.success || !data?.token) return false;
 
-      // Simple demo authentication
-      if (demoUsers[email] && password === 'demo123') {
-        const loggedInUser = demoUsers[email];
-        setUser(loggedInUser);
-        localStorage.setItem('user', JSON.stringify(loggedInUser));
-        router.push('/overview');
-      } else {
-        throw new Error('Invalid credentials');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
+      setToken(data.token);
+      setUser(data.user as User);
+      // optional: redirect to last intended page via ?next=
+      const url = new URL(window.location.href);
+      const next = url.searchParams.get("next") || "/overview";
+      router.push(next);
+      return true;
+    } catch {
+      return false;
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
-  };
+  }
 
-  const logout = () => {
+  function logout() {
+    setToken(null);
     setUser(null);
-    localStorage.removeItem('user');
-    router.push('/login');
-  };
+    if (router.pathname !== "/login") router.push("/login");
+  }
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        loading,
+        isAuthenticated: !!user,
         login,
         logout,
-        isAuthenticated: !!user,
-        isLoading,
       }}
     >
       {children}
@@ -112,9 +129,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  return useContext(AuthContext);
 }
