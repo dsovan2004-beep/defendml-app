@@ -57,7 +57,7 @@ export default function Login() {
       await new Promise(resolve => setTimeout(resolve, 500));
 
       const params = new URLSearchParams(window.location.search);
-      window.location.replace(params.get("next") || "/dashboard");
+      window.location.replace(params.get("next") || "/overview");
     } catch (err: any) {
       setError(err?.message || "Login error");
       setBusy(false);
