@@ -186,27 +186,27 @@ function ThreatsPageContent() {
       
       <div className="flex-1 bg-gradient-to-br from-slate-950 via-red-950 to-slate-950">
         <div className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
-          <div className="max-w-7xl mx-auto px-8 py-6">
-            <div className="flex items-center justify-between">
+          <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <Shield className="w-8 h-8 text-red-400" />
-                  <h1 className="text-3xl font-bold text-white">Threat Intelligence</h1>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-white">Threat Intelligence</h1>
                 </div>
-                <p className="text-slate-300">Real-time attack detection powered by Anthropic ASL-3</p>
-                <p className="text-slate-500 text-sm mt-1">
+                <p className="text-slate-300 text-sm sm:text-base">Real-time attack detection powered by Anthropic ASL-3</p>
+                <p className="text-slate-500 text-xs sm:text-sm mt-1">
                   <span className="text-green-400 font-semibold">CalypsoAI doesn't offer this:</span> Live threat feed by LLM provider
                 </p>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-lg">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                <div className="flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-lg text-xs sm:text-sm">
                   <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium text-red-300">Live Feed</span>
+                  <span className="font-medium text-red-300">Live Feed</span>
                 </div>
                 <select
                   value={timeRange}
                   onChange={(e) => setTimeRange(e.target.value as typeof timeRange)}
-                  className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                  className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-red-500 w-full sm:w-auto"
                 >
                   <option value="1h">Last Hour</option>
                   <option value="24h">Last 24 Hours</option>
@@ -218,7 +218,7 @@ function ThreatsPageContent() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-8 py-8 space-y-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="bg-gradient-to-br from-red-500/10 to-orange-600/10 rounded-xl p-6 border border-red-500/20">
               <div className="flex items-center justify-between mb-2">
@@ -262,13 +262,13 @@ function ThreatsPageContent() {
           </div>
 
           <div className="bg-white/5 backdrop-blur-lg rounded-xl p-4 border border-white/10">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
                 <div className="flex items-center gap-2">
                   <Filter className="w-4 h-4 text-slate-400" />
                   <span className="text-sm font-medium text-slate-300">Filter by Risk</span>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {(['all', 'critical', 'high', 'medium'] as const).map((level) => (
                     <button
                       key={level}
@@ -289,7 +289,7 @@ function ThreatsPageContent() {
               </div>
               <button
                 onClick={fetchThreats}
-                className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg text-sm font-medium transition-all border border-red-500/30"
+                className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg text-sm font-medium transition-all border border-red-500/30 w-full sm:w-auto"
               >
                 Refresh Feed
               </button>
