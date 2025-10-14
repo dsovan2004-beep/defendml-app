@@ -83,7 +83,7 @@ function OverviewPage() {
     return (
       <div className="min-h-screen flex flex-col">
         <Navigation />
-        <div className="flex-1 bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center">
+        <div className="flex-1 bg-slate-950 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
             <p className="text-slate-400">Loading DefendML Dashboard...</p>
@@ -99,7 +99,7 @@ function OverviewPage() {
       <Navigation />
       
       <div className="flex-1 bg-slate-950">
-        <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-xl">
+        <div className="border-b border-slate-800 bg-slate-900">
           <div className="max-w-7xl mx-auto px-8 py-6">
             <div className="flex items-center justify-between">
               <div>
@@ -114,7 +114,7 @@ function OverviewPage() {
                 <select
                   value={rangeFilter}
                   onChange={(e) => setRangeFilter(Number(e.target.value))}
-                  className="px-4 py-2 bg-slate-800/80 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   <option value={7}>Last 7 Days</option>
                   <option value={14}>Last 14 Days</option>
@@ -134,7 +134,7 @@ function OverviewPage() {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-green-500/50 transition-all">
+            <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 hover:border-green-500/50 transition-all">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center">
                   <Clock className="w-6 h-6 text-green-400" />
@@ -146,7 +146,7 @@ function OverviewPage() {
               <div className="text-slate-400 text-xs">Self-serve onboarding</div>
             </div>
 
-            <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-blue-500/50 transition-all">
+            <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 hover:border-blue-500/50 transition-all">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
                   <DollarSign className="w-6 h-6 text-blue-400" />
@@ -158,7 +158,7 @@ function OverviewPage() {
               <div className="text-slate-400 text-xs">vs. heavy enterprise stacks</div>
             </div>
 
-            <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all">
+            <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 hover:border-purple-500/50 transition-all">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
                   <Activity className="w-6 h-6 text-purple-400" />
@@ -177,7 +177,7 @@ function OverviewPage() {
               Security Performance
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-slate-900 rounded-xl p-6 border border-slate-700 hover:border-red-500/50 transition-all">
+              <div className="bg-slate-900 rounded-xl p-6 border border-slate-800 hover:border-red-500/50 transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <AlertTriangle className="w-6 h-6 text-red-400" />
                   <TrendIndicator value={kpis?.trend_threats} />
@@ -187,7 +187,7 @@ function OverviewPage() {
                 <div className="text-slate-400 text-xs">Prompt injection, jailbreaks</div>
               </div>
 
-              <div className="bg-slate-900 rounded-xl p-6 border border-slate-700 hover:border-blue-500/50 transition-all">
+              <div className="bg-slate-900 rounded-xl p-6 border border-slate-800 hover:border-blue-500/50 transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <Lock className="w-6 h-6 text-blue-400" />
                   <TrendIndicator value={kpis?.trend_pii} />
@@ -197,7 +197,7 @@ function OverviewPage() {
                 <div className="text-slate-400 text-xs">Data leak prevention</div>
               </div>
 
-              <div className="bg-slate-900 rounded-xl p-6 border border-slate-700 hover:border-green-500/50 transition-all">
+              <div className="bg-slate-900 rounded-xl p-6 border border-slate-800 hover:border-green-500/50 transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <FileCheck className="w-6 h-6 text-green-400" />
                   <TrendIndicator value={kpis?.trend_compliance} />
@@ -207,7 +207,7 @@ function OverviewPage() {
                 <div className="text-slate-400 text-xs">SOC 2 / GDPR / HIPAA</div>
               </div>
 
-              <div className="bg-slate-900 rounded-xl p-6 border border-slate-700 hover:border-purple-500/50 transition-all">
+              <div className="bg-slate-900 rounded-xl p-6 border border-slate-800 hover:border-purple-500/50 transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <Zap className="w-6 h-6 text-purple-400" />
                   <TrendIndicator value={kpis?.trend_latency} />
@@ -219,8 +219,8 @@ function OverviewPage() {
             </div>
           </div>
 
-          <div className="bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-slate-700/50 overflow-hidden">
-            <div className="px-6 py-4 border-b border-slate-700/50 flex items-center justify-between">
+          <div className="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                 <h3 className="text-lg font-bold text-white">Live Threat Feed</h3>
@@ -235,7 +235,7 @@ function OverviewPage() {
                 { time: '8 min ago', type: 'Jailbreak Attempt', severity: 'HIGH', action: 'BLOCKED', source: 'Gemini' },
                 { time: '12 min ago', type: 'Policy Violation', severity: 'MEDIUM', action: 'FLAGGED', source: 'Claude' },
               ].map((t, i) => (
-                <div key={i} className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg hover:bg-slate-800/70 transition-all border border-slate-700/30">
+                <div key={i} className="flex items-center justify-between p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition-all border border-slate-700">
                   <div className="flex items-center gap-4">
                     <div className={`w-3 h-3 rounded-full ${
                       t.severity === 'CRITICAL' ? 'bg-red-500' :
@@ -268,17 +268,17 @@ function OverviewPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="/threats" className="p-6 bg-slate-900/80 backdrop-blur-sm hover:bg-slate-800/80 rounded-xl border border-slate-700/50 hover:border-purple-500/50 transition-all block">
+            <a href="/threats" className="p-6 bg-slate-900 hover:bg-slate-800 rounded-xl border border-slate-800 hover:border-purple-500/50 transition-all block">
               <Shield className="w-8 h-8 text-purple-400 mb-3" />
               <div className="text-white font-semibold mb-1">View Threats</div>
               <div className="text-slate-400 text-sm">Live attack feed & analytics</div>
             </a>
-            <a href="/pii" className="p-6 bg-slate-900/80 backdrop-blur-sm hover:bg-slate-800/80 rounded-xl border border-slate-700/50 hover:border-blue-500/50 transition-all block">
+            <a href="/pii" className="p-6 bg-slate-900 hover:bg-slate-800 rounded-xl border border-slate-800 hover:border-blue-500/50 transition-all block">
               <Lock className="w-8 h-8 text-blue-400 mb-3" />
               <div className="text-white font-semibold mb-1">PII Protection</div>
               <div className="text-slate-400 text-sm">Data leak prevention logs</div>
             </a>
-            <a href="/compliance" className="p-6 bg-slate-900/80 backdrop-blur-sm hover:bg-slate-800/80 rounded-xl border border-slate-700/50 hover:border-green-500/50 transition-all block">
+            <a href="/compliance" className="p-6 bg-slate-900 hover:bg-slate-800 rounded-xl border border-slate-800 hover:border-green-500/50 transition-all block">
               <FileCheck className="w-8 h-8 text-green-400 mb-3" />
               <div className="text-white font-semibold mb-1">Compliance Reports</div>
               <div className="text-slate-400 text-sm">One-click audit packs</div>
