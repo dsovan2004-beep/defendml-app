@@ -83,10 +83,19 @@ function SettingsPageContent() {
                           <h2 className="text-2xl font-bold text-white mb-2">User Management</h2>
                           <p className="text-slate-400">Add, remove, and manage team member access</p>
                         </div>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-all">
-                          <Plus className="w-4 h-4" />
-                          Add User
-                        </button>
+                        <div className="flex items-center gap-3">
+                          <a
+                            href="/admin/users"
+                            className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-all"
+                          >
+                            <Upload className="w-4 h-4" />
+                            Bulk Upload
+                          </a>
+                          <button className="flex items-center gap-2 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-all">
+                            <Plus className="w-4 h-4" />
+                            Add User
+                          </button>
+                        </div>
                       </div>
 
                       {/* Search and Filters */}
