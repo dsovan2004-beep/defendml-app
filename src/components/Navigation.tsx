@@ -14,6 +14,7 @@ import {
   LogOut,
   Users,
   LogIn,
+  Settings,
 } from "lucide-react";
 
 /** Decode mock JWT token to get user info */
@@ -60,6 +61,7 @@ export default function Navigation() {
     { name: "Health", href: "/health", icon: Activity },
     { name: "Usage", href: "/usage", icon: BarChart3 },
     { name: "Audit", href: "/audit", icon: ScrollText },
+    { name: "Settings", href: "/settings", icon: Settings },
   ];
 
   // Admin-only items
