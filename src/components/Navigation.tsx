@@ -12,7 +12,6 @@ import {
   BarChart3,
   ScrollText,
   LogOut,
-  Users,
   LogIn,
   Settings,
 } from "lucide-react";
@@ -64,10 +63,7 @@ export default function Navigation() {
     { name: "Settings", href: "/settings", icon: Settings },
   ];
 
-  // Admin-only items
-  const adminItems = [
-    { name: "Users Upload", href: "/admin/users", icon: Users },
-  ];
+  // Admin items removed - now accessible via Settings → User Management → Bulk Upload
 
   const isActive = (href: string) => router.pathname === href;
 
@@ -118,26 +114,6 @@ export default function Navigation() {
                     </Link>
                   );
                 })}
-
-                {/* Admin-only links */}
-                {userRole === "admin" &&
-                  adminItems.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                          isActive(item.href)
-                            ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
-                            : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                        }`}
-                      >
-                        <Icon className="w-4 h-4" />
-                        {item.name}
-                      </Link>
-                    );
-                  })}
               </div>
             )}
 
@@ -205,27 +181,6 @@ export default function Navigation() {
                     </Link>
                   );
                 })}
-
-                {/* Admin-only (mobile) */}
-                {userRole === "admin" &&
-                  adminItems.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => setIsOpen(false)}
-                        className={`flex items-center gap-3 px-3 py-3 rounded-lg text-base font-medium transition-all ${
-                          isActive(item.href)
-                            ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
-                            : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                        }`}
-                      >
-                        <Icon className="w-5 h-5" />
-                        {item.name}
-                      </Link>
-                    );
-                  })}
               </>
             )}
 
