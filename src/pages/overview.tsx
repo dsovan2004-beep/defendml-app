@@ -134,7 +134,7 @@ function OverviewPage() {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 hover:border-green-500/50 transition-all">
+            <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-purple-500/20 hover:border-green-500/50 transition-all">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center">
                   <Clock className="w-6 h-6 text-green-400" />
@@ -146,7 +146,7 @@ function OverviewPage() {
               <div className="text-slate-400 text-xs">Self-serve onboarding</div>
             </div>
 
-            <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 hover:border-blue-500/50 transition-all">
+            <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-purple-500/20 hover:border-blue-500/50 transition-all">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
                   <DollarSign className="w-6 h-6 text-blue-400" />
@@ -158,7 +158,7 @@ function OverviewPage() {
               <div className="text-slate-400 text-xs">vs. heavy enterprise stacks</div>
             </div>
 
-            <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 hover:border-purple-500/50 transition-all">
+            <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-purple-500/20 hover:border-purple-500/50 transition-all">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
                   <Activity className="w-6 h-6 text-purple-400" />
