@@ -134,7 +134,7 @@ function OverviewPage() {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-slate-900/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:border-green-500/50 transition-all">
+            <div className="bg-slate-900 rounded-2xl p-6 border border-slate-700 hover:border-green-500/50 transition-all">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center">
                   <Clock className="w-6 h-6 text-green-400" />
@@ -146,7 +146,7 @@ function OverviewPage() {
               <div className="text-slate-400 text-xs">Self-serve onboarding</div>
             </div>
 
-            <div className="bg-slate-900/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:border-blue-500/50 transition-all">
+            <div className="bg-slate-900 rounded-2xl p-6 border border-slate-700 hover:border-blue-500/50 transition-all">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
                   <DollarSign className="w-6 h-6 text-blue-400" />
@@ -158,7 +158,7 @@ function OverviewPage() {
               <div className="text-slate-400 text-xs">vs. heavy enterprise stacks</div>
             </div>
 
-            <div className="bg-slate-900/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:border-purple-500/50 transition-all">
+            <div className="bg-slate-900 rounded-2xl p-6 border border-slate-700 hover:border-purple-500/50 transition-all">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
                   <Activity className="w-6 h-6 text-purple-400" />
@@ -177,7 +177,7 @@ function OverviewPage() {
               Security Performance
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-slate-900/80 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50 hover:border-red-500/50 transition-all">
+              <div className="bg-slate-900 rounded-xl p-6 border border-slate-700 hover:border-red-500/50 transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <AlertTriangle className="w-6 h-6 text-red-400" />
                   <TrendIndicator value={kpis?.trend_threats} />
@@ -187,7 +187,7 @@ function OverviewPage() {
                 <div className="text-slate-400 text-xs">Prompt injection, jailbreaks</div>
               </div>
 
-              <div className="bg-slate-900/80 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50 hover:border-blue-500/50 transition-all">
+              <div className="bg-slate-900 rounded-xl p-6 border border-slate-700 hover:border-blue-500/50 transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <Lock className="w-6 h-6 text-blue-400" />
                   <TrendIndicator value={kpis?.trend_pii} />
@@ -197,7 +197,7 @@ function OverviewPage() {
                 <div className="text-slate-400 text-xs">Data leak prevention</div>
               </div>
 
-              <div className="bg-slate-900/80 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50 hover:border-green-500/50 transition-all">
+              <div className="bg-slate-900 rounded-xl p-6 border border-slate-700 hover:border-green-500/50 transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <FileCheck className="w-6 h-6 text-green-400" />
                   <TrendIndicator value={kpis?.trend_compliance} />
@@ -207,7 +207,7 @@ function OverviewPage() {
                 <div className="text-slate-400 text-xs">SOC 2 / GDPR / HIPAA</div>
               </div>
 
-              <div className="bg-slate-900/80 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50 hover:border-purple-500/50 transition-all">
+              <div className="bg-slate-900 rounded-xl p-6 border border-slate-700 hover:border-purple-500/50 transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <Zap className="w-6 h-6 text-purple-400" />
                   <TrendIndicator value={kpis?.trend_latency} />
