@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="DefendML - Enterprise-grade AI security in 30 minutes. Block prompt injections, prevent data leaks, maintain 99.2% compliance.">
     <title>DefendML - Enterprise AI Security Platform</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%237c3aed'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='system-ui'%3ED%3C/text%3E%3C/svg%3E">
     <style>
         * {
             margin: 0;
@@ -27,9 +25,6 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
         }
 
         .logo {
@@ -126,7 +121,6 @@
             gap: 1rem;
             justify-content: center;
             margin-bottom: 1rem;
-            flex-wrap: wrap;
         }
 
         .email-input {
@@ -301,188 +295,6 @@
         .step-content p {
             color: rgba(255,255,255,0.8);
         }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .pricing-card {
-            background: white;
-            border-radius: 16px;
-            padding: 2.5rem;
-            border: 2px solid #e5e7eb;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .pricing-card.featured {
-            border-color: #7c3aed;
-            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.2);
-        }
-
-        .popular-badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #7c3aed;
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .pricing-header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding-bottom: 2rem;
-            border-bottom: 2px solid #f3f4f6;
-        }
-
-        .pricing-header h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #1a1a1a;
-        }
-
-        .price {
-            margin: 1rem 0;
-        }
-
-        .price-amount {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #7c3aed;
-        }
-
-        .price-period {
-            font-size: 1.1rem;
-            color: #6b7280;
-        }
-
-        .price-desc {
-            color: #6b7280;
-            font-size: 1rem;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .pricing-features li {
-            padding: 0.75rem 0;
-            color: #4b5563;
-            font-size: 0.95rem;
-        }
-
-        .pricing-button {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .pricing-button.primary {
-            background: #7c3aed;
-            color: white;
-        }
-
-        .pricing-button.primary:hover {
-            background: #6d28d9;
-            transform: translateY(-2px);
-        }
-
-        .pricing-button.secondary {
-            background: white;
-            color: #7c3aed;
-            border: 2px solid #7c3aed;
-        }
-
-        .pricing-button.secondary:hover {
-            background: #f3f0ff;
-        }
-
-        .pricing-note {
-            text-align: center;
-            margin-top: 3rem;
-            padding: 1.5rem;
-            background: white;
-            border-radius: 12px;
-            border: 2px solid #7c3aed;
-        }
-
-        .pricing-note p {
-            font-size: 1.1rem;
-            color: #1a1a1a;
-            margin: 0;
-        }
-
-        .faq-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .faq-item {
-            background: rgba(255,255,255,0.05);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .faq-item h3 {
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-            color: white;
-        }
-
-        .faq-item p {
-            color: rgba(255,255,255,0.8);
-            line-height: 1.7;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .email-form {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .email-input {
-                width: 100%;
-                max-width: 400px;
-            }
-            
-            nav {
-                display: none;
-            }
-            
-            .faq-grid {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
@@ -497,7 +309,7 @@
             <a href="#how">How It Works</a>
             <a href="#pricing">Pricing</a>
             <a href="#faq">FAQ</a>
-            <a href="https://app.defendml.com" class="cta-button">Dashboard</a>
+            <a href="#" class="cta-button">Get Started</a>
         </nav>
     </header>
 
@@ -513,8 +325,8 @@
             Deploy enterprise-grade AI guardrails in under 30 minutes. Block prompt injections, prevent data leaks, and maintain 99.2% compliance—without vendor lock-in or enterprise pricing.
         </p>
         <div class="email-form">
-            <input type="email" class="email-input" placeholder="Enter your work email" id="emailInput">
-            <button class="submit-button" onclick="handleSubmit()">Get Early Access</button>
+            <input type="email" class="email-input" placeholder="Enter your work email">
+            <button class="submit-button">Get Early Access</button>
         </div>
         <p class="waitlist-info">Join 200+ teams on the waitlist • Coming Soon</p>
     </section>
@@ -673,7 +485,7 @@
                         <li>✓ Community support</li>
                         <li>✓ 7-day audit logs</li>
                     </ul>
-                    <button class="pricing-button secondary" onclick="handleGetStarted('starter')">Get Started Free</button>
+                    <button class="pricing-button secondary">Get Started Free</button>
                 </div>
 
                 <div class="pricing-card featured">
@@ -696,7 +508,7 @@
                         <li>✓ Custom compliance rules</li>
                         <li>✓ SOC 2 / GDPR / HIPAA</li>
                     </ul>
-                    <button class="pricing-button primary" onclick="handleGetStarted('professional')">Start Free Trial</button>
+                    <button class="pricing-button primary">Start Free Trial</button>
                 </div>
 
                 <div class="pricing-card">
@@ -717,4 +529,84 @@
                         <li>✓ SLA guarantees</li>
                         <li>✓ On-premise deployment</li>
                     </ul>
-                    <button class="pricing-button secondary" onclick="handleGetStarted('enterprise')">Contact Sales
+                    <button class="pricing-button secondary">Contact Sales</button>
+                </div>
+            </div>
+
+            <div class="pricing-note">
+                <p><strong>Save $48,750/year</strong> compared to traditional enterprise security stacks. No hidden fees.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-dark" id="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>How long does setup really take?</h3>
+                    <p>Most teams are up and running in under 30 minutes. Our SDK integrates with just a few lines of code, and we provide pre-built templates for common frameworks (Python, Node.js, React). The dashboard guides you through configuration step-by-step.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Which LLM providers do you support?</h3>
+                    <p>We currently support OpenAI (GPT-3.5, GPT-4), Anthropic (Claude), Cohere, and any custom models. We're provider-agnostic by design—no vendor lock-in. You can switch providers anytime without changing your security configuration.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>What does ASL-3 Security Framework mean?</h3>
+                    <p>ASL-3 (AI Safety Level 3) is Anthropic's classification for advanced security controls. It means DefendML leverages the same security research and guardrails that protect Claude, including state-of-the-art prompt injection defense and constitutional AI principles.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>How does PII detection work?</h3>
+                    <p>We use ML models trained on millions of examples to detect and sanitize 50+ types of PII (SSN, credit cards, emails, phone numbers, etc.) in real-time. You can customize detection rules and choose between redaction, masking, or encryption. Accuracy is 99%+ with <1% false positives.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>What's your compliance coverage?</h3>
+                    <p>DefendML helps you maintain SOC 2, GDPR, HIPAA, and CCPA compliance with built-in policy templates, automated audit logging, and data residency controls. We don't replace your compliance program—we make it easier to implement.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Does this add latency to my AI responses?</h3>
+                    <p>Average overhead is just 42ms. We use edge computing and smart caching to minimize latency. Most users don't notice any difference in response times, and the security benefits far outweigh the minimal performance impact.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Can I try it before committing?</h3>
+                    <p>Absolutely! Our Starter plan is free forever for up to 10K requests/month. Professional and Enterprise plans include a 14-day free trial with full features. No credit card required to start.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>How do you calculate the $48,750 savings?</h3>
+                    <p>This is based on average costs of enterprise security stacks (WAF, DLP, SIEM) plus AI-specific tools. Traditional solutions cost $4K-8K/month and require dedicated security engineers. DefendML consolidates these tools and automates most tasks, saving both licensing and labor costs.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>What happens if DefendML goes down?</h3>
+                    <p>We have 99.9% uptime SLA for Professional+ plans. If our service is unavailable, your AI applications continue to work—requests pass through without security checks. You can also configure fail-open or fail-closed behavior based on your risk tolerance.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Can I self-host DefendML?</h3>
+                    <p>Yes, Enterprise customers can deploy DefendML on-premise or in their own cloud environment. This gives you complete control over data residency and compliance requirements while still receiving updates and support from our team.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background: #f9fafb;">
+        <div class="container" style="text-align: center;">
+            <h2 class="section-title">Ready to Secure Your AI?</h2>
+            <p style="font-size: 1.25rem; color: #6b7280; margin-bottom: 2rem;">
+                Join 200+ teams building safe, compliant AI applications
+            </p>
+            <div class="email-form">
+                <input type="email" class="email-input" placeholder="Enter your work email">
+                <button class="submit-button">Get Early Access</button>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
