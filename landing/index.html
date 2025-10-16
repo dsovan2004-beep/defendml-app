@@ -38,6 +38,13 @@
             gap: 0.5rem;
             font-size: 1.5rem;
             font-weight: 700;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .logo:hover {
+            opacity: 0.9;
         }
 
         .logo-icon {
@@ -66,18 +73,6 @@
 
         nav a:hover {
             opacity: 0.8;
-        }
-
-        .cta-button {
-            background: #7c3aed;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: transform 0.2s;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
         }
 
         .hero {
@@ -553,6 +548,72 @@
             scroll-behavior: smooth;
         }
 
+        .footer {
+            background: #1a1a2e;
+            color: #e5e7eb;
+            padding: 2rem 2rem 1.5rem;
+            border-top: 1px solid #2d3748;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-copyright {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #a78bfa;
+        }
+
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #9ca3af;
+        }
+
+        .footer-badge-icon {
+            color: #10b981;
+            font-size: 1rem;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -572,25 +633,30 @@
                 display: none;
             }
             
-            .faq-grid {
-                grid-template-columns: 1fr;
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-left, .footer-right {
+                flex-direction: column;
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
     <header class="header">
-        <div class="logo">
+        <a href="#" class="logo" onclick="scrollToTop()">
             <div class="logo-icon">D</div>
             DefendML
-        </div>
+        </a>
         <nav>
             <a href="#problem">Problem</a>
             <a href="#solution">Solution</a>
             <a href="#how">How It Works</a>
             <a href="#pricing">Pricing</a>
             <a href="#faq">FAQ</a>
-            <a href="https://app.defendml.com" class="cta-button">Dashboard</a>
         </nav>
     </header>
 
@@ -758,15 +824,17 @@
                         </div>
                         <p class="price-desc">Perfect for testing and small projects</p>
                     </div>
-                    <ul class="pricing-features">
-                        <li>✓ Up to 10K requests/month</li>
-                        <li>✓ Basic threat detection</li>
-                        <li>✓ PII sanitization</li>
-                        <li>✓ 2 LLM providers</li>
-                        <li>✓ Community support</li>
-                        <li>✓ 7-day audit logs</li>
-                    </ul>
-                    <button class="pricing-button secondary" onclick="handleGetStarted('starter')">Get Started Free</button>
+                    <div class="pricing-body">
+                        <ul class="pricing-features">
+                            <li>Up to 10K requests/month</li>
+                            <li>Basic threat detection</li>
+                            <li>PII sanitization</li>
+                            <li>2 LLM providers</li>
+                            <li>Community support</li>
+                            <li>7-day audit logs</li>
+                        </ul>
+                        <button class="pricing-button secondary" onclick="handleGetStarted('starter')">Get Started Free</button>
+                    </div>
                 </div>
 
                 <div class="pricing-card featured">
@@ -779,17 +847,19 @@
                         </div>
                         <p class="price-desc">For growing teams and production apps</p>
                     </div>
-                    <ul class="pricing-features">
-                        <li>✓ Up to 500K requests/month</li>
-                        <li>✓ Advanced threat detection</li>
-                        <li>✓ Real-time threat feed</li>
-                        <li>✓ 4+ LLM providers</li>
-                        <li>✓ Priority support</li>
-                        <li>✓ 90-day audit logs</li>
-                        <li>✓ Custom compliance rules</li>
-                        <li>✓ SOC 2 / GDPR / HIPAA</li>
-                    </ul>
-                    <button class="pricing-button primary" onclick="handleGetStarted('professional')">Start Free Trial</button>
+                    <div class="pricing-body">
+                        <ul class="pricing-features">
+                            <li>Up to 500K requests/month</li>
+                            <li>Advanced threat detection</li>
+                            <li>Real-time threat feed</li>
+                            <li>4+ LLM providers</li>
+                            <li>Priority support</li>
+                            <li>90-day audit logs</li>
+                            <li>Custom compliance rules</li>
+                            <li>SOC 2 / GDPR / HIPAA</li>
+                        </ul>
+                        <button class="pricing-button primary" onclick="handleGetStarted('professional')">Start Free Trial</button>
+                    </div>
                 </div>
 
                 <div class="pricing-card">
@@ -800,14 +870,230 @@
                         </div>
                         <p class="price-desc">For large-scale deployments</p>
                     </div>
-                    <ul class="pricing-features">
-                        <li>✓ Unlimited requests</li>
-                        <li>✓ Dedicated infrastructure</li>
-                        <li>✓ Custom integrations</li>
-                        <li>✓ White-label options</li>
-                        <li>✓ 24/7 dedicated support</li>
-                        <li>✓ Unlimited audit logs</li>
-                        <li>✓ SLA guarantees</li>
-                        <li>✓ On-premise deployment</li>
-                    </ul>
-                    <button class="pricing-button secondary" onclick="handleGetStarted('enterprise')">Contact Sales
+                    <div class="pricing-body">
+                        <ul class="pricing-features">
+                            <li>Unlimited requests</li>
+                            <li>Dedicated infrastructure</li>
+                            <li>Custom integrations</li>
+                            <li>White-label options</li>
+                            <li>24/7 dedicated support</li>
+                            <li>Unlimited audit logs</li>
+                            <li>SLA guarantees</li>
+                            <li>On-premise deployment</li>
+                        </ul>
+                        <button class="pricing-button secondary" onclick="handleGetStarted('enterprise')">Contact Sales</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pricing-note">
+                <p><strong>Save $48,750/year</strong> compared to traditional enterprise security stacks. No hidden fees.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-dark" id="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>How long does setup really take?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Most teams are up and running in under 30 minutes. Our SDK integrates with just a few lines of code, and we provide pre-built templates for common frameworks (Python, Node.js, React). The dashboard guides you through configuration step-by-step.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Which LLM providers do you support?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We currently support OpenAI (GPT-3.5, GPT-4), Anthropic (Claude), Cohere, and any custom models. We're provider-agnostic by design—no vendor lock-in. You can switch providers anytime without changing your security configuration.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>What does ASL-3 Security Framework mean?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>ASL-3 (AI Safety Level 3) is Anthropic's classification for advanced security controls. It means DefendML leverages the same security research and guardrails that protect Claude, including state-of-the-art prompt injection defense and constitutional AI principles.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>How does PII detection work?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We use ML models trained on millions of examples to detect and sanitize 50+ types of PII (SSN, credit cards, emails, phone numbers, etc.) in real-time. You can customize detection rules and choose between redaction, masking, or encryption. Accuracy is 99%+ with <1% false positives.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>What's your compliance coverage?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>DefendML helps you maintain SOC 2, GDPR, HIPAA, and CCPA compliance with built-in policy templates, automated audit logging, and data residency controls. We don't replace your compliance program—we make it easier to implement.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Does this add latency to my AI responses?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Average overhead is just 42ms. We use edge computing and smart caching to minimize latency. Most users don't notice any difference in response times, and the security benefits far outweigh the minimal performance impact.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Can I try it before committing?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely! Our Starter plan is free forever for up to 10K requests/month. Professional and Enterprise plans include a 14-day free trial with full features. No credit card required to start.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>How do you calculate the $48,750 savings?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>This is based on average costs of enterprise security stacks (WAF, DLP, SIEM) plus AI-specific tools. Traditional solutions cost $4K-8K/month and require dedicated security engineers. DefendML consolidates these tools and automates most tasks, saving both licensing and labor costs.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>What happens if DefendML goes down?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We have 99.9% uptime SLA for Professional+ plans. If our service is unavailable, your AI applications continue to work—requests pass through without security checks. You can also configure fail-open or fail-closed behavior based on your risk tolerance.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Can I self-host DefendML?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, Enterprise customers can deploy DefendML on-premise or in their own cloud environment. This gives you complete control over data residency and compliance requirements while still receiving updates and support from our team.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background: #f9fafb;">
+        <div class="container" style="text-align: center;">
+            <h2 class="section-title">Ready to Secure Your AI?</h2>
+            <p style="font-size: 1.25rem; color: #6b7280; margin-bottom: 2rem;">
+                Join 200+ teams building safe, compliant AI applications
+            </p>
+            <div class="email-form">
+                <input type="email" class="email-input" placeholder="Enter your work email" id="emailInputFooter">
+                <button class="submit-button" onclick="handleSubmit()">Get Early Access</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-copyright">© 2025 DefendML</div>
+                <div class="footer-links">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#api">API Docs</a>
+                    <a href="#status">Status</a>
+                </div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-badge">
+                    <span class="footer-badge-icon">🛡️</span>
+                    <span>SOC 2 Certified</span>
+                </div>
+                <div class="footer-badge">
+                    <span class="footer-badge-icon">⚡</span>
+                    <span>Powered by Anthropic ASL-3</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function handleSubmit() {
+            const email = document.getElementById('emailInput').value || document.getElementById('emailInputFooter').value;
+            
+            if (!email) {
+                alert('Please enter your email address');
+                return;
+            }
+            
+            if (!email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            console.log('Email submitted:', email);
+            alert('Thank you! We\'ll contact you soon about early access.');
+            
+            document.getElementById('emailInput').value = '';
+            document.getElementById('emailInputFooter').value = '';
+        }
+        
+        function handleGetStarted(plan) {
+            console.log('Plan selected:', plan);
+            
+            if (plan === 'enterprise') {
+                alert('Thank you for your interest in Enterprise! Please email us at sales@defendml.com');
+            } else {
+                window.location.href = 'https://app.defendml.com';
+            }
+        }
+        
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInputs = document.querySelectorAll('.email-input');
+            emailInputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        handleSubmit();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
