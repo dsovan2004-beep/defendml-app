@@ -1,8 +1,8 @@
 ---
 name: "\U0001F9ED Customer Onboarding Record"
 about: Track new tenant onboarding steps for audit & acquisition.
-title: ''
-labels: ''
+title: "\U0001F9ED Customer Onboarding – [Customer Name]"
+labels: audit, customer, onboarding
 assignees: ''
 
 ---
