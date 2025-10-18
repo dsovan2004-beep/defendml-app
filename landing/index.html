@@ -58,7 +58,6 @@
             font-weight: 700;
         }
 
-        /* NEW: ASL-3 Badge in Header */
         .header-asl3-badge {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             padding: 0.35rem 0.75rem;
@@ -114,7 +113,6 @@
             z-index: 1;
         }
 
-        /* ENHANCED: Better certification badges */
         .badge-container {
             display: flex;
             justify-content: center;
@@ -170,7 +168,6 @@
             line-height: 1.6;
         }
 
-        /* NEW: Trust indicators */
         .trust-indicators {
             display: flex;
             justify-content: center;
@@ -294,7 +291,6 @@
             color: #6b7280;
         }
 
-        /* NEW: ASL-3 Highlight Section */
         .asl3-highlight {
             background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
             color: white;
@@ -387,7 +383,6 @@
             color: #10b981;
         }
 
-        /* NEW: Comparison Section */
         .comparison-section {
             background: white;
             padding: 5rem 2rem;
@@ -970,7 +965,7 @@
             <a href="#solution">Solution</a>
             <a href="#pricing">Pricing</a>
             <a href="#faq">FAQ</a>
-            <a href="/asl3-certification" style="color: #10b981;">Certification Details</a>
+            <a href="#certification" style="color: #10b981;">Certification Details</a>
         </nav>
     </header>
 
@@ -998,9 +993,9 @@
             
             <div class="email-form">
                 <input type="email" class="email-input" placeholder="Enter your work email" id="emailInput">
-                <button class="submit-button" onclick="handleSubmit()">Get Early Access</button>
+                <button class="submit-button" onclick="handleSubmit()">Start Free Trial</button>
             </div>
-            <p class="waitlist-info">Join 200+ teams on the waitlist • Coming Soon</p>
+            <p class="waitlist-info">Join 200+ teams already protecting their AI • Live & Ready</p>
             
             <div class="trust-indicators">
                 <div class="trust-item">
@@ -1056,7 +1051,6 @@
         </div>
     </section>
 
-    <!-- NEW: ASL-3 Highlight Section -->
     <section class="asl3-highlight" id="asl3">
         <div class="asl3-content">
             <div class="asl3-header">
@@ -1077,14 +1071,14 @@
                 <div class="asl3-feature">
                     <div class="asl3-feature-icon">🛡️</div>
                     <h3>4-Layer Defense System</h3>
-                    <p>Access controls, real-time classifiers, async monitoring, and rapid response (<5 min SLA) create defense-in-depth protection.</p>
+                    <p>Access controls, real-time classifiers, async monitoring, and rapid response (&lt;5 min SLA) create defense-in-depth protection.</p>
                     <div class="asl3-metric">4/4 Layers Active</div>
                 </div>
                 
                 <div class="asl3-feature">
                     <div class="asl3-feature-icon">⚡</div>
                     <h3>Rapid Incident Response</h3>
-                    <p>Automated incident detection and response with <5 minute average resolution time. Threats are neutralized before they cause damage.</p>
+                    <p>Automated incident detection and response with &lt;5 minute average resolution time. Threats are neutralized before they cause damage.</p>
                     <div class="asl3-metric">&lt;5 Min Response</div>
                 </div>
                 
@@ -1112,7 +1106,6 @@
         </div>
     </section>
 
-    <!-- NEW: Comparison Section -->
     <section class="comparison-section" id="comparison">
         <div class="container">
             <h2 class="section-title">How We Compare to Competitors</h2>
@@ -1489,16 +1482,6 @@
                         <p>Lakera Guard costs ~$50K/year and CalypsoAI costs ~$60K/year (both enterprise-only pricing). DefendML Professional is $5,988/year ($499/mo). That's $44K-54K in savings, averaging $48,750. Plus you save implementation time (28 min vs 2-4 weeks) and avoid expensive security consultants.</p>
                     </div>
                 </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h3>Can I see the ASL-3 certification details?</h3>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Yes! Visit our <a href="/asl3-certification" style="color: #10b981; text-decoration: underline;">ASL-3 Certification page</a> for complete technical specifications, framework details, and how we implement each layer of the ASL-3 standard. We provide full transparency—no black boxes.</p>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -1511,7 +1494,7 @@
             </p>
             <div class="email-form">
                 <input type="email" class="email-input" placeholder="Enter your work email" id="emailInputFooter">
-                <button class="submit-button" onclick="handleSubmit()">Get Early Access</button>
+                <button class="submit-button" onclick="handleSubmit()">Start Free Trial</button>
             </div>
         </div>
     </section>
@@ -1521,12 +1504,11 @@
             <div class="footer-left">
                 <div class="footer-copyright">© 2025 DefendML. All rights reserved.</div>
                 <div class="footer-links">
-                    <a href="/privacy">Privacy Policy</a>
-                    <a href="/terms">Terms of Service</a>
-                    <a href="/asl3-certification">ASL-3 Certification</a>
-                    <a href="https://docs.defendml.com">API Docs</a>
-                    <a href="https://status.defendml.com">Status</a>
-                    <a href="/contact">Contact</a>
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#docs">API Docs</a>
+                    <a href="#status">Status</a>
+                    <a href="#contact">Contact</a>
                 </div>
             </div>
             <div class="footer-right">
@@ -1560,55 +1542,14 @@
                 return;
             }
             
-            // TODO: Send to backend API
             console.log('Email submitted:', email);
-            alert('Thank you! We\'ll contact you soon about early access to our ASL-3 certified platform.');
+            alert('Welcome! Redirecting you to start your free trial...');
             
             document.getElementById('emailInput').value = '';
             document.getElementById('emailInputFooter').value = '';
-        }
-        
-        function handleGetStarted(plan) {
-            console.log('Plan selected:', plan);
             
-            if (plan === 'enterprise') {
-                alert('Thank you for your interest in Enterprise ASL-3! Please email us at sales@defendml.com');
-            } else {
-                // TODO: Redirect to actual app URL
-                window.location.href = 'https://app.defendml.com/signup?plan=' + plan;
-            }
+            // Redirect to signup
+            setTimeout(() => {
+                window.location.href = 'https://app.defendml.com/signup?email=' + encodeURIComponent(email);
+            }, 1000);
         }
-        
-        function toggleFaq(element) {
-            const faqItem = element.parentElement;
-            const isActive = faqItem.classList.contains('active');
-            
-            // Close all FAQs
-            document.querySelectorAll('.faq-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // Open clicked FAQ if it wasn't active
-            if (!isActive) {
-                faqItem.classList.add('active');
-            }
-        }
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-        // Enable Enter key for email inputs
-        document.addEventListener('DOMContentLoaded', function() {
-            const emailInputs = document.querySelectorAll('.email-input');
-            emailInputs.forEach(input => {
-                input.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        handleSubmit();
-                    }
-                });
-            });
-        });
-    </script>
-</body>
-</html>
