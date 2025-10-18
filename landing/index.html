@@ -11,7 +11,47 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        
+        function handleGetStarted(plan) {
+            console.log('Plan selected:', plan);
+            
+            if (plan === 'enterprise') {
+                alert('Thank you for your interest in Enterprise ASL-3! Please email us at sales@defendml.com');
+            } else {
+                window.location.href = 'https://app.defendml.com/signup?plan=' + plan;
+            }
         }
+        
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInputs = document.querySelectorAll('.email-input');
+            emailInputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        handleSubmit();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -1504,6 +1544,8 @@
             <div class="footer-left">
                 <div class="footer-copyright">© 2025 DefendML. All rights reserved.</div>
                 <div class="footer-links">
+                    <a href="/about">About</a>
+                    <a href="/team">Team</a>
                     <a href="#privacy">Privacy Policy</a>
                     <a href="#terms">Terms of Service</a>
                     <a href="#docs">API Docs</a>
