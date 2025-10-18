@@ -3,7 +3,6 @@ import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
 import { Shield, AlertTriangle, Lock, FileCheck, TrendingUp, TrendingDown, Zap, DollarSign, Clock, Users, Activity, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
-import { UserRole } from '../types/roles';
 
 interface KPI {
   threats_blocked: number;
@@ -88,7 +87,7 @@ const Overview: React.FC = () => {
   };
 
   return (
-    <RequireAuth allowedRoles={[UserRole.VIEWER, UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
+    <RequireAuth>
       <div className="min-h-screen bg-black text-white">
         <Navigation />
         
