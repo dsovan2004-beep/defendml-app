@@ -7,140 +7,953 @@
     <title>DefendML - The Only ASL-3 Certified AI Security Platform</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%237c3aed'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='system-ui'%3ED%3C/text%3E%3C/svg%3E">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; color: #1a1a1a; line-height: 1.6; }
-        .header { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-        .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.5rem; font-weight: 700; text-decoration: none; color: white; cursor: pointer; }
-        .logo:hover { opacity: 0.9; }
-        .logo-icon { width: 36px; height: 36px; background: #7c3aed; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
-        .header-asl3-badge { background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 0.35rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; margin-left: 0.75rem; text-transform: uppercase; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3); }
-        nav { display: flex; gap: 2rem; align-items: center; }
-        nav a { color: white; text-decoration: none; font-weight: 500; transition: opacity 0.2s; }
-        nav a:hover { opacity: 0.8; }
-        .hero { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%); color: white; padding: 5rem 2rem; text-align: center; position: relative; overflow: hidden; }
-        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 50%, rgba(124, 58, 237, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.15) 0%, transparent 50%); pointer-events: none; }
-        .hero-content { position: relative; z-index: 1; }
-        .badge-container { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.2); border: 2px solid rgba(16, 185, 129, 0.4); padding: 0.75rem 1.25rem; border-radius: 24px; font-size: 0.95rem; font-weight: 600; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
-        .badge-icon { font-size: 1.2rem; }
-        .badge-secondary { background: rgba(124, 58, 237, 0.2); border-color: rgba(124, 58, 237, 0.4); box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2); }
-        h1 { font-size: 4rem; margin-bottom: 1.5rem; font-weight: 900; line-height: 1.1; }
-        .gradient-text { background: linear-gradient(135deg, #10b981 0%, #34d399 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .hero p.lead { font-size: 1.35rem; margin-bottom: 2.5rem; opacity: 0.95; max-width: 900px; margin-left: auto; margin-right: auto; line-height: 1.6; }
-        .trust-indicators { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; font-size: 0.9rem; opacity: 0.9; }
-        .trust-item { display: flex; align-items: center; gap: 0.5rem; }
-        .trust-item-icon { color: #10b981; font-size: 1.1rem; }
-        .email-form { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
-        .email-input { padding: 1.1rem 1.75rem; border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; width: 360px; font-size: 1rem; background: rgba(255,255,255,0.95); transition: all 0.3s; }
-        .email-input:focus { outline: none; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); }
-        .submit-button { padding: 1.1rem 2.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-size: 1rem; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3); }
-        .submit-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); }
-        .waitlist-info { font-size: 0.95rem; opacity: 0.85; }
-        .metrics { background: #f9fafb; padding: 4rem 2rem; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-top: 2rem; }
-        .metric-card { background: white; padding: 2.5rem 2rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center; border: 2px solid transparent; transition: all 0.3s; }
-        .metric-card:hover { border-color: #7c3aed; transform: translateY(-4px); box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15); }
-        .metric-value { font-size: 3rem; font-weight: 900; color: #7c3aed; margin-bottom: 0.5rem; }
-        .metric-value.green { color: #10b981; }
-        .metric-label { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; }
-        .metric-desc { font-size: 0.9rem; color: #6b7280; }
-        .asl3-highlight { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; padding: 5rem 2rem; position: relative; overflow: hidden; }
-        .asl3-highlight::before { content: ''; position: absolute; top: 0; right: 0; width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); border-radius: 50%; transform: translate(30%, -30%); }
-        .asl3-content { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
-        .asl3-header { text-align: center; margin-bottom: 4rem; }
-        .asl3-header h2 { font-size: 3rem; margin-bottom: 1rem; font-weight: 800; }
-        .asl3-header p { font-size: 1.25rem; opacity: 0.9; max-width: 800px; margin: 0 auto; }
-        .asl3-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-        .asl3-feature { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s; }
-        .asl3-feature:hover { background: rgba(255,255,255,0.15); transform: translateY(-4px); }
-        .asl3-feature-icon { font-size: 2.5rem; margin-bottom: 1rem; }
-        .asl3-feature h3 { font-size: 1.3rem; margin-bottom: 0.75rem; font-weight: 700; }
-        .asl3-feature p { opacity: 0.9; line-height: 1.6; }
-        .asl3-metric { display: inline-block; background: rgba(16, 185, 129, 0.2); padding: 0.4rem 1rem; border-radius: 20px; font-weight: 700; font-size: 1.1rem; margin-top: 0.5rem; color: #10b981; }
-        .comparison-section { background: white; padding: 5rem 2rem; }
-        .comparison-table-container { max-width: 1200px; margin: 3rem auto 0; overflow-x: auto; }
-        .comparison-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
-        .comparison-table thead { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: white; }
-        .comparison-table th { padding: 1.5rem 1.5rem; text-align: left; font-weight: 700; font-size: 1rem; }
-        .comparison-table th:first-child { font-size: 0.9rem; opacity: 0.8; width: 30%; }
-        .comparison-table .defendml-col { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); position: relative; }
-        .comparison-table .defendml-col::after { content: '★ BEST VALUE'; position: absolute; top: 0.5rem; right: 0.5rem; background: #10b981; padding: 0.25rem 0.5rem; border-radius: 8px; font-size: 0.7rem; font-weight: 700; }
-        .comparison-table td { padding: 1.25rem 1.5rem; border-bottom: 1px solid #f3f4f6; font-size: 0.95rem; }
-        .comparison-table tbody tr:hover { background: #f9fafb; }
-        .comparison-table tbody tr:last-child td { border-bottom: none; }
-        .check-icon { color: #10b981; font-weight: 700; font-size: 1.2rem; }
-        .cross-icon { color: #ef4444; font-weight: 700; font-size: 1.2rem; }
-        .partial-icon { color: #f59e0b; font-weight: 700; font-size: 1.2rem; }
-        .section { padding: 5rem 2rem; }
-        .section-title { font-size: 3rem; text-align: center; margin-bottom: 1rem; font-weight: 800; }
-        .section-subtitle { text-align: center; color: #6b7280; margin-bottom: 4rem; font-size: 1.2rem; max-width: 800px; margin-left: auto; margin-right: auto; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; }
-        .feature-card { background: white; padding: 2.5rem; border-radius: 16px; border: 2px solid #e5e7eb; transition: all 0.3s; }
-        .feature-card:hover { border-color: #7c3aed; transform: translateY(-6px); box-shadow: 0 12px 28px rgba(124, 58, 237, 0.15); }
-        .feature-icon { width: 60px; height: 60px; background: #ede9fe; color: #7c3aed; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 1.5rem; }
-        .feature-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 0.75rem; }
-        .feature-desc { color: #6b7280; line-height: 1.6; }
-        .bg-dark { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: white; }
-        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; margin-top: 3rem; max-width: 1100px; margin-left: auto; margin-right: auto; }
-        .pricing-card { background: white; border-radius: 20px; padding: 0; border: 2px solid #e5e7eb; position: relative; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; }
-        .pricing-card:hover { transform: translateY(-12px); box-shadow: 0 24px 48px rgba(0,0,0,0.12); border-color: #7c3aed; }
-        .pricing-card.featured { border-color: #7c3aed; box-shadow: 0 16px 40px rgba(124, 58, 237, 0.25); transform: scale(1.05); }
-        .pricing-card.featured:hover { transform: scale(1.05) translateY(-12px); }
-        .popular-badge { position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 0.5rem 1.5rem; border-bottom-left-radius: 12px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
-        .pricing-header { text-align: center; padding: 2.5rem 2rem 2rem 2rem; background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%); }
-        .pricing-card.featured .pricing-header { background: linear-gradient(135deg, #ede9fe 0%, #f3f0ff 100%); }
-        .pricing-header h3 { font-size: 1.6rem; margin-bottom: 0.5rem; color: #1a1a1a; font-weight: 700; }
-        .price { margin: 1.5rem 0 0.5rem 0; display: flex; align-items: baseline; justify-content: center; gap: 0.25rem; }
-        .price-amount { font-size: 3.5rem; font-weight: 900; color: #7c3aed; line-height: 1; }
-        .price-period { font-size: 1.1rem; color: #6b7280; font-weight: 500; }
-        .price-desc { color: #6b7280; font-size: 0.95rem; margin-top: 0.5rem; }
-        .pricing-body { padding: 2rem; }
-        .pricing-features { list-style: none; margin-bottom: 2rem; }
-        .pricing-features li { padding: 0.85rem 0; color: #374151; font-size: 0.95rem; display: flex; align-items: start; gap: 0.75rem; border-bottom: 1px solid #f3f4f6; }
-        .pricing-features li:last-child { border-bottom: none; }
-        .pricing-features li::before { content: "✓"; color: #10b981; font-weight: 700; font-size: 1.1rem; flex-shrink: 0; }
-        .pricing-button { width: 100%; padding: 1.1rem 1.5rem; border: none; border-radius: 10px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 0.5px; }
-        .pricing-button.primary { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3); }
-        .pricing-button.primary:hover { box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4); transform: translateY(-2px); }
-        .pricing-button.secondary { background: white; color: #7c3aed; border: 2px solid #7c3aed; }
-        .pricing-button.secondary:hover { background: #f3f0ff; transform: translateY(-2px); }
-        .pricing-note { text-align: center; margin-top: 4rem; padding: 2.5rem; background: linear-gradient(135deg, #ede9fe 0%, #f3f0ff 100%); border-radius: 20px; border: 2px solid #7c3aed; }
-        .pricing-note p { font-size: 1.3rem; color: #1a1a1a; margin: 0; font-weight: 600; }
-        .pricing-note strong { color: #7c3aed; font-size: 1.5rem; font-weight: 800; }
-        .faq-container { max-width: 900px; margin: 3rem auto 0; }
-        .faq-item { background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 1rem; overflow: hidden; transition: all 0.3s; }
-        .faq-item:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
-        .faq-question { padding: 1.75rem 2rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; user-select: none; }
-        .faq-question h3 { font-size: 1.25rem; margin: 0; color: white; font-weight: 600; }
-        .faq-icon { font-size: 1.5rem; color: #10b981; transition: transform 0.3s; flex-shrink: 0; }
-        .faq-item.active .faq-icon { transform: rotate(45deg); }
-        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease-out; padding: 0 2rem; }
-        .faq-item.active .faq-answer { max-height: 500px; padding: 0 2rem 1.75rem 2rem; }
-        .faq-answer p { color: rgba(255,255,255,0.8); line-height: 1.7; margin: 0; }
-        html { scroll-behavior: smooth; }
-        .footer { background: #1a1a2e; color: #e5e7eb; padding: 2rem 2rem 1.5rem; border-top: 1px solid #2d3748; }
-        .footer-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
-        .footer-left { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
-        .footer-copyright { color: #9ca3af; font-size: 0.9rem; }
-        .footer-links { display: flex; gap: 2rem; flex-wrap: wrap; }
-        .footer-links a { color: #e5e7eb; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
-        .footer-links a:hover { color: #10b981; }
-        .footer-right { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
-        .footer-badge { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #9ca3af; }
-        .footer-badge-icon { color: #10b981; font-size: 1rem; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .logo:hover {
+            opacity: 0.9;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: #7c3aed;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* NEW: ASL-3 Badge in Header */
+        .header-asl3-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 0.35rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-left: 0.75rem;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ENHANCED: Better certification badges */
+        .badge-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid rgba(16, 185, 129, 0.4);
+            padding: 0.75rem 1.25rem;
+            border-radius: 24px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .badge-icon {
+            font-size: 1.2rem;
+        }
+
+        .badge-secondary {
+            background: rgba(124, 58, 237, 0.2);
+            border-color: rgba(124, 58, 237, 0.4);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p.lead {
+            font-size: 1.35rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* NEW: Trust indicators */
+        .trust-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .trust-item-icon {
+            color: #10b981;
+            font-size: 1.1rem;
+        }
+
+        .email-form {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .email-input {
+            padding: 1.1rem 1.75rem;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            width: 360px;
+            font-size: 1rem;
+            background: rgba(255,255,255,0.95);
+            transition: all 0.3s;
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+        }
+
+        .submit-button {
+            padding: 1.1rem 2.5rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .waitlist-info {
+            font-size: 0.95rem;
+            opacity: 0.85;
+        }
+
+        .metrics {
+            background: #f9fafb;
+            padding: 4rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .metric-card:hover {
+            border-color: #7c3aed;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #7c3aed;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value.green {
+            color: #10b981;
+        }
+
+        .metric-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-desc {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        /* NEW: ASL-3 Highlight Section */
+        .asl3-highlight {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: white;
+            padding: 5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .asl3-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        .asl3-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .asl3-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .asl3-header h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .asl3-header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .asl3-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .asl3-feature {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+
+        .asl3-feature:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-4px);
+        }
+
+        .asl3-feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .asl3-feature h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .asl3-feature p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .asl3-metric {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+            color: #10b981;
+        }
+
+        /* NEW: Comparison Section */
+        .comparison-section {
+            background: white;
+            padding: 5rem 2rem;
+        }
+
+        .comparison-table-container {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            overflow-x: auto;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table thead {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            color: white;
+        }
+
+        .comparison-table th {
+            padding: 1.5rem 1.5rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .comparison-table th:first-child {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            width: 30%;
+        }
+
+        .comparison-table .defendml-col {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            position: relative;
+        }
+
+        .comparison-table .defendml-col::after {
+            content: '★ BEST VALUE';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #10b981;
+            padding: 0.25rem 0.5rem;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .comparison-table td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .comparison-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .cross-icon {
+            color: #ef4444;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .partial-icon {
+            color: #f59e0b;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .section {
+            padding: 5rem 2rem;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 4rem;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: #7c3aed;
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(124, 58, 237, 0.15);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: #ede9fe;
+            color: #7c3aed;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-desc {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .bg-dark {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            color: white;
+        }
+
+        .how-it-works {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #7c3aed;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .step-content h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.4rem;
+        }
+
+        .step-content p {
+            color: rgba(255,255,255,0.85);
+            line-height: 1.7;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            border: 2px solid #e5e7eb;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 24px 48px rgba(0,0,0,0.12);
+            border-color: #7c3aed;
+        }
+
+        .pricing-card.featured {
+            border-color: #7c3aed;
+            box-shadow: 0 16px 40px rgba(124, 58, 237, 0.25);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-12px);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-bottom-left-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .pricing-header {
+            text-align: center;
+            padding: 2.5rem 2rem 2rem 2rem;
+            background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+        }
+
+        .pricing-card.featured .pricing-header {
+            background: linear-gradient(135deg, #ede9fe 0%, #f3f0ff 100%);
+        }
+
+        .pricing-header h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .price {
+            margin: 1.5rem 0 0.5rem 0;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+
+        .price-amount {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #7c3aed;
+            line-height: 1;
+        }
+
+        .price-period {
+            font-size: 1.1rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .price-desc {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        .pricing-body {
+            padding: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.85rem 0;
+            color: #374151;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features li::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .pricing-button {
+            width: 100%;
+            padding: 1.1rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+        }
+
+        .pricing-button.primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        .pricing-button.primary:hover {
+            box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .pricing-button.secondary {
+            background: white;
+            color: #7c3aed;
+            border: 2px solid #7c3aed;
+        }
+
+        .pricing-button.secondary:hover {
+            background: #f3f0ff;
+            transform: translateY(-2px);
+        }
+
+        .pricing-note {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2.5rem;
+            background: linear-gradient(135deg, #ede9fe 0%, #f3f0ff 100%);
+            border-radius: 20px;
+            border: 2px solid #7c3aed;
+        }
+
+        .pricing-note p {
+            font-size: 1.3rem;
+            color: #1a1a1a;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .pricing-note strong {
+            color: #7c3aed;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 3rem auto 0;
+        }
+
+        .faq-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .faq-question {
+            padding: 1.75rem 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            user-select: none;
+        }
+
+        .faq-question h3 {
+            font-size: 1.25rem;
+            margin: 0;
+            color: white;
+            font-weight: 600;
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            color: #10b981;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            padding: 0 2rem;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 2rem 1.75rem 2rem;
+        }
+
+        .faq-answer p {
+            color: rgba(255,255,255,0.8);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .footer {
+            background: #1a1a2e;
+            color: #e5e7eb;
+            padding: 2rem 2rem 1.5rem;
+            border-top: 1px solid #2d3748;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-copyright {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #10b981;
+        }
+
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #9ca3af;
+        }
+
+        .footer-badge-icon {
+            color: #10b981;
+            font-size: 1rem;
+        }
+
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            .asl3-header h2 { font-size: 2rem; }
-            .section-title { font-size: 2rem; }
-            .email-form { flex-direction: column; align-items: center; }
-            .email-input { width: 100%; max-width: 400px; }
-            nav { display: none; }
-            .comparison-table { font-size: 0.85rem; }
-            .comparison-table th, .comparison-table td { padding: 1rem 0.75rem; }
-            .footer-content { flex-direction: column; text-align: center; }
-            .footer-left, .footer-right { flex-direction: column; width: 100%; }
-            .badge-container { flex-direction: column; align-items: center; }
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .asl3-header h2 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .email-form {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .email-input {
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            nav {
+                display: none;
+            }
+            
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 1rem 0.75rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-left, .footer-right {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .badge-container {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
@@ -157,7 +970,7 @@
             <a href="#solution">Solution</a>
             <a href="#pricing">Pricing</a>
             <a href="#faq">FAQ</a>
-            <a href="/asl3-certification.html" style="color: #10b981;">Certification Details</a>
+            <a href="/asl3-certification" style="color: #10b981;">Certification Details</a>
         </nav>
     </header>
 
@@ -210,24 +1023,558 @@
         </div>
     </section>
 
-    <!-- Continue in next message due to length... -->
+    <section class="metrics">
+        <div class="container">
+            <h2 class="section-title">Real Results, Real Time</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value green">99.6%</div>
+                    <div class="metric-label">Classifier Accuracy</div>
+                    <div class="metric-desc">Constitutional AI detection</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$48,750</div>
+                    <div class="metric-label">Annual Savings</div>
+                    <div class="metric-desc">vs. Lakera/CalypsoAI</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">28 min</div>
+                    <div class="metric-label">Time to Value</div>
+                    <div class="metric-desc">Self-serve onboarding</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">42ms</div>
+                    <div class="metric-label">P95 Latency</div>
+                    <div class="metric-desc">5x faster than competitors</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value green">4/4</div>
+                    <div class="metric-label">Defense Layers</div>
+                    <div class="metric-desc">Complete protection</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: ASL-3 Highlight Section -->
+    <section class="asl3-highlight" id="asl3">
+        <div class="asl3-content">
+            <div class="asl3-header">
+                <h2>What is ASL-3 Certification?</h2>
+                <p>
+                    ASL-3 (AI Safety Level 3) is Anthropic's framework for advanced AI security. DefendML is the <strong>first and only</strong> LLM security platform to achieve full ASL-3 alignment—the same standards that protect Claude Opus 4.
+                </p>
+            </div>
+            
+            <div class="asl3-features">
+                <div class="asl3-feature">
+                    <div class="asl3-feature-icon">🎯</div>
+                    <h3>Constitutional Classifiers</h3>
+                    <p>Real-time AI-driven classifiers monitor every input and output, trained on millions of attack patterns to block CBRN-related queries and jailbreaks.</p>
+                    <div class="asl3-metric">99.6% Accuracy</div>
+                </div>
+                
+                <div class="asl3-feature">
+                    <div class="asl3-feature-icon">🛡️</div>
+                    <h3>4-Layer Defense System</h3>
+                    <p>Access controls, real-time classifiers, async monitoring, and rapid response (<5 min SLA) create defense-in-depth protection.</p>
+                    <div class="asl3-metric">4/4 Layers Active</div>
+                </div>
+                
+                <div class="asl3-feature">
+                    <div class="asl3-feature-icon">⚡</div>
+                    <h3>Rapid Incident Response</h3>
+                    <p>Automated incident detection and response with <5 minute average resolution time. Threats are neutralized before they cause damage.</p>
+                    <div class="asl3-metric">&lt;5 Min Response</div>
+                </div>
+                
+                <div class="asl3-feature">
+                    <div class="asl3-feature-icon">🔐</div>
+                    <h3>Model Weight Protection</h3>
+                    <p>Multi-party authorization, encryption at rest, and egress monitoring prevent model theft and unauthorized access.</p>
+                    <div class="asl3-metric">100+ Controls</div>
+                </div>
+                
+                <div class="asl3-feature">
+                    <div class="asl3-feature-icon">🐛</div>
+                    <h3>Bug Bounty Program</h3>
+                    <p>Active red team partnerships and vulnerability disclosure process ensure continuous security improvements.</p>
+                    <div class="asl3-metric">Active Program</div>
+                </div>
+                
+                <div class="asl3-feature">
+                    <div class="asl3-feature-icon">📊</div>
+                    <h3>Complete Transparency</h3>
+                    <p>Unlike competitors' black-box approaches, see exactly how your AI is protected with real-time metrics and confidence scores.</p>
+                    <div class="asl3-metric">100% Visible</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Comparison Section -->
+    <section class="comparison-section" id="comparison">
+        <div class="container">
+            <h2 class="section-title">How We Compare to Competitors</h2>
+            <p class="section-subtitle">
+                DefendML offers the same (or better) features as enterprise solutions like Lakera and CalypsoAI—but with ASL-3 certification, full transparency, and 10x lower cost.
+            </p>
+            
+            <div class="comparison-table-container">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th class="defendml-col">DefendML</th>
+                            <th>Lakera Guard</th>
+                            <th>CalypsoAI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ASL-3 Framework Compliance</strong></td>
+                            <td><span class="check-icon">✓</span> Full alignment</td>
+                            <td><span class="cross-icon">✗</span> Not mentioned</td>
+                            <td><span class="cross-icon">✗</span> Not mentioned</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constitutional Classifiers Transparency</strong></td>
+                            <td><span class="check-icon">✓</span> 99.6% shown</td>
+                            <td><span class="cross-icon">✗</span> Black box</td>
+                            <td><span class="cross-icon">✗</span> Black box</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4-Layer Defense Visibility</strong></td>
+                            <td><span class="check-icon">✓</span> All layers shown</td>
+                            <td><span class="cross-icon">✗</span> Limited</td>
+                            <td><span class="partial-icon">~</span> Partial</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Real-Time Threat Feed</strong></td>
+                            <td><span class="check-icon">✓</span> With confidence</td>
+                            <td><span class="check-icon">✓</span> Yes</td>
+                            <td><span class="check-icon">✓</span> Yes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PII Protection</strong></td>
+                            <td><span class="check-icon">✓</span> + Cost tracking</td>
+                            <td><span class="check-icon">✓</span> Yes</td>
+                            <td><span class="check-icon">✓</span> Yes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Compliance Dashboard</strong></td>
+                            <td><span class="check-icon">✓</span> 94% score</td>
+                            <td><span class="partial-icon">~</span> Basic</td>
+                            <td><span class="partial-icon">~</span> Basic</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Incident Response SLA</strong></td>
+                            <td><span class="check-icon">✓</span> &lt;5 min target</td>
+                            <td><span class="cross-icon">✗</span> Not specified</td>
+                            <td><span class="cross-icon">✗</span> Not specified</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Latency (P95)</strong></td>
+                            <td><span class="check-icon">✓</span> 42ms</td>
+                            <td><span class="partial-icon">~</span> Variable</td>
+                            <td><span class="cross-icon">✗</span> Not disclosed</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pricing Transparency</strong></td>
+                            <td><span class="check-icon">✓</span> $499/mo</td>
+                            <td><span class="cross-icon">✗</span> Enterprise only</td>
+                            <td><span class="cross-icon">✗</span> Enterprise only</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Self-Serve Onboarding</strong></td>
+                            <td><span class="check-icon">✓</span> 28 minutes</td>
+                            <td><span class="cross-icon">✗</span> Sales required</td>
+                            <td><span class="cross-icon">✗</span> Sales required</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Annual Cost</strong></td>
+                            <td><strong style="color: #10b981;">$5,988</strong></td>
+                            <td>~$50,000+</td>
+                            <td>~$60,000+</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pricing-note" style="margin-top: 3rem;">
+                <p><strong>Save $48,750/year</strong> with DefendML vs traditional enterprise security stacks. Same features, better transparency, ASL-3 certified.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="problem">
+        <div class="container">
+            <h2 class="section-title">Your AI Operations Face Critical Governance Gaps</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚫</div>
+                    <div class="feature-title">No Enterprise-Grade Controls</div>
+                    <div class="feature-desc">Lacking secure, scalable operations and oversight for AI at scale</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <div class="feature-title">No RBAC or Audit Logging</div>
+                    <div class="feature-desc">Can't enforce oversight or track who did what, when, and why</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚠️</div>
+                    <div class="feature-title">Hallucinations & Policy Violations</div>
+                    <div class="feature-desc">Poor model grounding creates compliance risks and erodes trust</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <div class="feature-title">Legal & Reputational Risk</div>
+                    <div class="feature-desc">Sensitive data exposure leads to compliance violations and program shutdowns</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-dark" id="solution">
+        <div class="container">
+            <h2 class="section-title">Complete AI Security, Zero Compromise</h2>
+            <p class="section-subtitle">Real-time protection across all your LLM providers with ASL-3 certified guardrails</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-title">Prompt Injection Defense</div>
+                    <div class="feature-desc">Block jailbreaks and adversarial attacks before they reach your models with 99.6% accuracy</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <div class="feature-title">PII & Data Leak Prevention</div>
+                    <div class="feature-desc">Automatically sanitize sensitive data in real-time with breach cost tracking</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Live Threat Intelligence</div>
+                    <div class="feature-desc">Monitor and respond to security events with confidence scores and classifier transparency</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <div class="feature-title">Multi-Provider Support</div>
+                    <div class="feature-desc">Work with Claude, GPT-4, Gemini, and more without vendor lock-in</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-title">Compliance Automation</div>
+                    <div class="feature-desc">Built-in SOC 2, GDPR, and HIPAA compliance with 94% score tracking</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Ultra-Low Latency</div>
+                    <div class="feature-desc">42ms P95 latency—5x faster than competitors, security without slowdown</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="how">
+        <div class="container">
+            <h2 class="section-title">How DefendML Works</h2>
+            <p class="section-subtitle">Leveraging Anthropic's $500M+ R&D in AI safety with ASL-3 certified guardrails</p>
+            <div class="how-it-works">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Connect Your AI Infrastructure</h3>
+                        <p>Simple API integration or SDK. Works with OpenAI, Anthropic, Cohere, and custom models. Takes less than 30 minutes with self-serve setup.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Configure ASL-3 Security Policies</h3>
+                        <p>Set up constitutional classifiers, 4-layer defense, and compliance rules with our intuitive dashboard. Pre-built ASL-3 templates included.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Real-Time Protection Activates</h3>
+                        <p>Every prompt is analyzed with 99.6% accuracy and 42ms latency. Threats are blocked, compliance is enforced, you see everything.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Monitor with Full Transparency</h3>
+                        <p>Track classifier confidence, defense layer status, and incident response times. Unlike competitors' black boxes, you see exactly how protection works.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="pricing" style="background: #f9fafb;">
+        <div class="container">
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <p class="section-subtitle">ASL-3 certified security at 10x lower cost than enterprise alternatives</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Starter</h3>
+                        <div class="price">
+                            <span class="price-amount">Free</span>
+                        </div>
+                        <p class="price-desc">Perfect for testing and small projects</p>
+                    </div>
+                    <div class="pricing-body">
+                        <ul class="pricing-features">
+                            <li>Up to 10K requests/month</li>
+                            <li>Basic threat detection</li>
+                            <li>PII sanitization</li>
+                            <li>2 LLM providers</li>
+                            <li>Community support</li>
+                            <li>7-day audit logs</li>
+                        </ul>
+                        <button class="pricing-button secondary" onclick="handleGetStarted('starter')">Get Started Free</button>
+                    </div>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="popular-badge">ASL-3 Certified</div>
+                    <div class="pricing-header">
+                        <h3>Professional</h3>
+                        <div class="price">
+                            <span class="price-amount">$499</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                        <p class="price-desc">Full ASL-3 compliance for production</p>
+                    </div>
+                    <div class="pricing-body">
+                        <ul class="pricing-features">
+                            <li>Up to 500K requests/month</li>
+                            <li>Constitutional classifiers (99.6% accuracy)</li>
+                            <li>4-layer defense system</li>
+                            <li>Real-time threat feed with confidence</li>
+                            <li>Incident response (&lt;5 min SLA)</li>
+                            <li>4+ LLM providers</li>
+                            <li>Priority support</li>
+                            <li>90-day audit logs</li>
+                            <li>SOC 2 / GDPR / HIPAA</li>
+                            <li>Full transparency dashboard</li>
+                        </ul>
+                        <button class="pricing-button primary" onclick="handleGetStarted('professional')">Start Free Trial</button>
+                    </div>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Enterprise</h3>
+                        <div class="price">
+                            <span class="price-amount">Custom</span>
+                        </div>
+                        <p class="price-desc">For large-scale deployments</p>
+                    </div>
+                    <div class="pricing-body">
+                        <ul class="pricing-features">
+                            <li>Unlimited requests</li>
+                            <li>Dedicated ASL-3 infrastructure</li>
+                            <li>Custom integrations</li>
+                            <li>White-label options</li>
+                            <li>24/7 dedicated support</li>
+                            <li>Unlimited audit logs</li>
+                            <li>SLA guarantees</li>
+                            <li>On-premise deployment</li>
+                            <li>Bug bounty program access</li>
+                        </ul>
+                        <button class="pricing-button secondary" onclick="handleGetStarted('enterprise')">Contact Sales</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pricing-note">
+                <p><strong>Save $48,750/year</strong> compared to Lakera Guard ($50K) and CalypsoAI ($60K). Same ASL-3 security, better transparency, no enterprise sales cycles.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-dark" id="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>What makes DefendML different from Lakera or CalypsoAI?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>DefendML is the only platform with full ASL-3 certification and 100% transparency. Unlike Lakera's black-box approach or CalypsoAI's enterprise-only model, we show you exactly how your AI is protected (99.6% classifier accuracy, 42ms latency, confidence scores). Plus we're 10x cheaper ($499/mo vs $4K-5K/mo) with 28-minute self-serve setup instead of weeks-long enterprise sales.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>What does ASL-3 Certification actually mean?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>ASL-3 (AI Safety Level 3) is Anthropic's framework for advanced AI security—the same standard protecting Claude Opus 4. It includes constitutional classifiers for real-time threat detection, 4-layer defense-in-depth, rapid incident response (&lt;5 min), model weight protection, and continuous red team testing. We're the first LLM security platform to achieve full ASL-3 alignment.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>How long does setup really take?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Most teams are up and running in under 30 minutes with our self-serve platform. Our SDK integrates with just a few lines of code, and we provide pre-built ASL-3 templates for common frameworks. No enterprise sales calls, no weeks-long implementation—just sign up and start protecting your AI.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Which LLM providers do you support?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We support OpenAI (GPT-3.5, GPT-4), Anthropic (Claude), Google (Gemini), Cohere, and any custom models. We're provider-agnostic by design—no vendor lock-in. Switch providers anytime without changing your security configuration.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>How does your 99.6% classifier accuracy compare?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our constitutional classifiers achieve 99.6% accuracy with &lt;1% false positives—and we actually show you these metrics in real-time. Lakera and CalypsoAI don't disclose their accuracy rates or show confidence scores. We also provide per-threat confidence levels so you can see exactly how sure the system is about each detection.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>What's your compliance coverage?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>DefendML helps you maintain SOC 2, GDPR, HIPAA, and CCPA compliance with built-in policy templates, automated audit logging (90-day retention), and data residency controls. Our compliance dashboard shows your current score (most customers: 94%+) with detailed breakdowns by framework.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Does this add latency to my AI responses?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Average overhead is just 42ms (P95 latency)—5x faster than competitors. Dropbox reported needing to work closely with Lakera to optimize their latency. We use edge computing and smart caching to minimize impact. Most users don't notice any difference in response times.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Can I try it before committing?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely! Our Starter plan is free forever for up to 10K requests/month. Professional and Enterprise plans include a 14-day free trial with full ASL-3 features. No credit card required to start.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>How do you calculate the $48,750 savings?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Lakera Guard costs ~$50K/year and CalypsoAI costs ~$60K/year (both enterprise-only pricing). DefendML Professional is $5,988/year ($499/mo). That's $44K-54K in savings, averaging $48,750. Plus you save implementation time (28 min vs 2-4 weeks) and avoid expensive security consultants.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Can I see the ASL-3 certification details?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! Visit our <a href="/asl3-certification" style="color: #10b981; text-decoration: underline;">ASL-3 Certification page</a> for complete technical specifications, framework details, and how we implement each layer of the ASL-3 standard. We provide full transparency—no black boxes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background: #f9fafb;">
+        <div class="container" style="text-align: center;">
+            <h2 class="section-title">Ready to Secure Your AI with ASL-3?</h2>
+            <p style="font-size: 1.3rem; color: #6b7280; margin-bottom: 2.5rem;">
+                Join 200+ teams building safe, compliant AI applications with Anthropic-level security
+            </p>
+            <div class="email-form">
+                <input type="email" class="email-input" placeholder="Enter your work email" id="emailInputFooter">
+                <button class="submit-button" onclick="handleSubmit()">Get Early Access</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-copyright">© 2025 DefendML. All rights reserved.</div>
+                <div class="footer-links">
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/asl3-certification">ASL-3 Certification</a>
+                    <a href="https://docs.defendml.com">API Docs</a>
+                    <a href="https://status.defendml.com">Status</a>
+                    <a href="/contact">Contact</a>
+                </div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-badge">
+                    <span class="footer-badge-icon">🛡️</span>
+                    <span>SOC 2 Type II Certified</span>
+                </div>
+                <div class="footer-badge">
+                    <span class="footer-badge-icon">✓</span>
+                    <span>ASL-3 Certified Platform</span>
+                </div>
+                <div class="footer-badge">
+                    <span class="footer-badge-icon">⚡</span>
+                    <span>Powered by Anthropic</span>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
         function handleSubmit() {
             const email = document.getElementById('emailInput').value || document.getElementById('emailInputFooter').value;
-            if (!email) { alert('Please enter your email address'); return; }
-            if (!email.includes('@')) { alert('Please enter a valid email address'); return; }
+            
+            if (!email) {
+                alert('Please enter your email address');
+                return;
+            }
+            
+            if (!email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            // TODO: Send to backend API
             console.log('Email submitted:', email);
             alert('Thank you! We\'ll contact you soon about early access to our ASL-3 certified platform.');
+            
             document.getElementById('emailInput').value = '';
-            if(document.getElementById('emailInputFooter')) document.getElementById('emailInputFooter').value = '';
+            document.getElementById('emailInputFooter').value = '';
         }
         
         function handleGetStarted(plan) {
             console.log('Plan selected:', plan);
+            
             if (plan === 'enterprise') {
                 alert('Thank you for your interest in Enterprise ASL-3! Please email us at sales@defendml.com');
             } else {
+                // TODO: Redirect to actual app URL
                 window.location.href = 'https://app.defendml.com/signup?plan=' + plan;
             }
         }
@@ -235,19 +1582,30 @@
         function toggleFaq(element) {
             const faqItem = element.parentElement;
             const isActive = faqItem.classList.contains('active');
-            document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('active'));
-            if (!isActive) faqItem.classList.add('active');
+            
+            // Close all FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked FAQ if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
         }
 
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
+        // Enable Enter key for email inputs
         document.addEventListener('DOMContentLoaded', function() {
             const emailInputs = document.querySelectorAll('.email-input');
             emailInputs.forEach(input => {
                 input.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') handleSubmit();
+                    if (e.key === 'Enter') {
+                        handleSubmit();
+                    }
                 });
             });
         });
