@@ -1,1 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About DefendML - The only ASL-3 certified AI security platform">
+    <title>About DefendML - AI Security Platform</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%237c3aed'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='system-ui'%3ED%3C/text%3E%3C/svg%3E">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo:hover {
+            opacity: 0.9;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: #7c3aed;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .header-asl3-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 0.35rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-left: 0.75rem;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 900;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            padding: 4rem 2rem;
+        }
+
+        .section-light {
+            background: #f9fafb;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            color: #1e1b4b;
+        }
+
+        .section-light h2 {
+            color: #1e1b4b;
+        }
+
+        p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #374151;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight {
+            color: #7c3aed;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: #7c3aed;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #7c3aed;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .mission-box {
+            background: linear-gradient(135deg, #ede9fe 0%, #f3f0ff 100%);
+            border: 2px solid #7c3aed;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 3rem;
+        }
+
+        .mission-box h3 {
+            font-size: 1.8rem;
+            color: #7c3aed;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .mission-box p {
+            font-size: 1.2rem;
+            color: #1a1a1a;
+            margin: 0;
+        }
+
+        .footer {
+            background: #1a1a2e;
+            color: #e5e7eb;
+            padding: 2rem 2rem 1.5rem;
+            border-top: 1px solid #2d3748;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-copyright {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #10b981;
+        }
+
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #9ca3af;
+        }
+
+        .footer-badge-icon {
+            color: #10b981;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-left, .footer-right {
+                flex-direction: column;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">
+            <div class="logo-icon">D</div>
+            DefendML
+            <span class="header-asl3-badge">ASL-3 Certified</span>
+        </a>
+        <nav>
+            <a href="/#asl3">ASL-3</a>
+            <a href="/#comparison">Compare</a>
+            <a href="/#solution">Solution</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/#faq">FAQ</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>About DefendML</h1>
+        <p>We're building the future of AI security with Anthropic-level standards</p>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="content">
+                <h2>What We Do</h2>
+                <p>
+                    DefendML is the <span class="highlight">only ASL-3 certified AI security platform</span>. We protect your LLM applications from threats, data leaks, and compliance violations in real-time—using the same security framework that protects Claude Opus 4.
+                </p>
+                <p>
+                    <span class="highlight">10x cheaper, 5x faster, 100% transparent.</span> Deploy secure AI in 28 minutes, not 28 days.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-light">
+        <div class="container">
+            <div class="content">
+                <h2>Why We Built This</h2>
+                <p>
+                    AI security shouldn't cost $60K and take weeks to deploy. Every company building with LLMs deserves Anthropic-level protection—accessible, affordable, and transparent.
+                </p>
+
+                <div class="mission-box">
+                    <h3>Our Mission</h3>
+                    <p>
+                        Make Anthropic-level AI security accessible to every company building with LLMs—from startups to enterprises—with full transparency and zero compromise.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="content">
+                <h2>What Makes Us Different</h2>
+                <p>
+                    <strong>ASL-3 Certified:</strong> First and only platform aligned with Anthropic's advanced security standard.
+                </p>
+                <p>
+                    <strong>Fully Transparent:</strong> See exactly how your AI is protected—real-time metrics, confidence scores, 99.6% accuracy.
+                </p>
+                <p>
+                    <strong>Self-Serve:</strong> Deploy in 30 minutes. No sales calls, no enterprise contracts.
+                </p>
+                <p>
+                    <strong>10x Cheaper:</strong> $499/month vs $4K-5K/month for competitors.
+                </p>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">99.6%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">42ms</div>
+                        <div class="stat-label">Latency</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">28min</div>
+                        <div class="stat-label">Deploy Time</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">$48K</div>
+                        <div class="stat-label">Saved/Year</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-light">
+        <div class="container">
+            <div class="content" style="text-align: center;">
+                <h2>Ready to Protect Your AI?</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+                    Join 200+ teams building safe, compliant AI applications with DefendML
+                </p>
+                <a href="/#pricing" style="display: inline-block; padding: 1rem 2.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3); transition: all 0.3s;">
+                    Start Free Trial
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-copyright">© 2025 DefendML. All rights reserved.</div>
+                <div class="footer-links">
+                    <a href="/about">About</a>
+                    <a href="/team">Team</a>
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#docs">API Docs</a>
+                    <a href="#status">Status</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-badge">
+                    <span class="footer-badge-icon">🛡️</span>
+                    <span>SOC 2 Type II Certified</span>
+                </div>
+                <div class="footer-badge">
+                    <span class="footer-badge-icon">✓</span>
+                    <span>ASL-3 Certified Platform</span>
+                </div>
+                <div class="footer-badge">
+                    <span class="footer-badge-icon">⚡</span>
+                    <span>Powered by Anthropic</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
