@@ -1,274 +1,295 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DefendML - Dashboard Overview (ASL-3 Enhanced)</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            background: #000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        .animate-pulse {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-    </style>
-</head>
-<body class="bg-black text-white min-h-screen">
-    <!-- Navigation (Simplified) -->
-    <nav class="border-b border-gray-800 bg-black/50 backdrop-blur-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <span class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                        DefendML
-                    </span>
-                </div>
-            </div>
-        </div>
-    </nav>
+import React, { useState, useEffect } from 'react';
+import Navigation from '../components/Navigation';
+import Footer from '../components/Footer';
+import RequireAuth from '../components/RequireAuth';
+import { Shield, AlertTriangle, Lock, FileCheck, TrendingUp, TrendingDown, Zap, DollarSign, Clock, Users, Activity, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { UserRole } from '../types/roles';
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Header with ASL-3 Badge -->
-        <div class="mb-8">
-            <div class="flex items-center gap-3 mb-2">
-                <h1 class="text-3xl font-bold">Dashboard Overview</h1>
-                <span class="px-3 py-1 bg-green-500/20 border border-green-500/50 text-green-400 text-xs font-semibold rounded-full">
-                    ASL-3 CERTIFIED
-                </span>
-            </div>
-            <p class="text-slate-400">Real-time AI security monitoring with Anthropic ASL-3 standards</p>
-        </div>
+interface KPI {
+  threats_blocked: number;
+  pii_redacted: number;
+  compliance_score: number;
+  cost_saved_vs_calypso: number;
+  multi_llm_providers: number;
+  avg_latency_ms: number;
+}
 
-        <!-- ASL-3 Compliance Status Widget -->
-        <div class="mb-8 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-purple-500/30">
-            <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white">ASL-3 Compliance Status</h2>
-                        <p class="text-sm text-slate-400">Anthropic Safety Level 3 Framework</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2 px-4 py-2 rounded-full border text-green-400 bg-green-500/20 border-green-500/50">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                    <span class="font-semibold text-sm">COMPLIANT</span>
-                </div>
-            </div>
+interface ASL3Metrics {
+  overall_score: number;
+  status: 'COMPLIANT' | 'IN_PROGRESS' | 'NON_COMPLIANT';
+  classifier_accuracy: number;
+  defense_layers_active: number;
+  incident_response_time: number;
+  false_positive_rate: number;
+}
 
-            <!-- Metrics Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                <div class="bg-black/40 rounded-lg p-4 border border-purple-500/20">
-                    <div class="text-2xl font-bold text-purple-400 mb-1">99.6%</div>
-                    <div class="text-xs text-slate-400">Classifier Accuracy</div>
-                </div>
-                <div class="bg-black/40 rounded-lg p-4 border border-purple-500/20">
-                    <div class="text-2xl font-bold text-purple-400 mb-1">4/4</div>
-                    <div class="text-xs text-slate-400">Defense Layers Active</div>
-                </div>
-                <div class="bg-black/40 rounded-lg p-4 border border-purple-500/20">
-                    <div class="text-2xl font-bold text-purple-400 mb-1">2.8s</div>
-                    <div class="text-xs text-slate-400">Incident Response</div>
-                </div>
-                <div class="bg-black/40 rounded-lg p-4 border border-purple-500/20">
-                    <div class="text-2xl font-bold text-purple-400 mb-1">0.3%</div>
-                    <div class="text-xs text-slate-400">False Positive Rate</div>
-                </div>
-                <div class="bg-black/40 rounded-lg p-4 border border-purple-500/20">
-                    <div class="text-2xl font-bold text-green-400 mb-1">96.5%</div>
-                    <div class="text-xs text-slate-400">Overall ASL-3 Score</div>
-                </div>
-            </div>
+const Overview: React.FC = () => {
+  const [kpis, setKpis] = useState<KPI | null>(null);
+  const [asl3Metrics, setAsl3Metrics] = useState<ASL3Metrics | null>(null);
+  const [loading, setLoading] = useState(true);
 
-            <!-- Info Footer -->
-            <div class="mt-4 pt-4 border-t border-purple-500/20">
-                <p class="text-sm text-slate-400">
-                    ASL-3 certification ensures constitutional AI alignment, multi-layer defense architecture, and transparent threat detection.
-                    <a href="#" class="text-purple-400 hover:text-purple-300 ml-2 font-semibold">View Details →</a>
+  useEffect(() => {
+    fetchKPIs();
+    fetchASL3Metrics();
+  }, []);
+
+  const fetchKPIs = async () => {
+    try {
+      // Mock data - replace with actual API call
+      const mockData: KPI = {
+        threats_blocked: 1247,
+        pii_redacted: 3891,
+        compliance_score: 98.5,
+        cost_saved_vs_calypso: 48750,
+        multi_llm_providers: 4,
+        avg_latency_ms: 45
+      };
+      setKpis(mockData);
+    } catch (error) {
+      console.error('Error fetching KPIs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchASL3Metrics = async () => {
+    try {
+      // Mock data - replace with actual API call
+      const mockData: ASL3Metrics = {
+        overall_score: 96.5,
+        status: 'COMPLIANT',
+        classifier_accuracy: 99.6,
+        defense_layers_active: 4,
+        incident_response_time: 2.8,
+        false_positive_rate: 0.3
+      };
+      setAsl3Metrics(mockData);
+    } catch (error) {
+      console.error('Error fetching ASL-3 metrics:', error);
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'COMPLIANT': return 'text-green-400 bg-green-500/20 border-green-500/50';
+      case 'IN_PROGRESS': return 'text-yellow-400 bg-yellow-500/20 border-yellow-500/50';
+      case 'NON_COMPLIANT': return 'text-red-400 bg-red-500/20 border-red-500/50';
+      default: return 'text-gray-400 bg-gray-500/20 border-gray-500/50';
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'COMPLIANT': return <CheckCircle className="w-5 h-5" />;
+      case 'IN_PROGRESS': return <AlertCircle className="w-5 h-5" />;
+      case 'NON_COMPLIANT': return <XCircle className="w-5 h-5" />;
+      default: return <AlertCircle className="w-5 h-5" />;
+    }
+  };
+
+  return (
+    <RequireAuth allowedRoles={[UserRole.VIEWER, UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
+      <div className="min-h-screen bg-black text-white">
+        <Navigation />
+        
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Header with ASL-3 Badge */}
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-2">
+              <h1 className="text-3xl font-bold">Dashboard Overview</h1>
+              <span className="px-3 py-1 bg-green-500/20 border border-green-500/50 text-green-400 text-xs font-semibold rounded-full">
+                ASL-3 CERTIFIED
+              </span>
+            </div>
+            <p className="text-slate-400">Real-time AI security monitoring with Anthropic ASL-3 standards</p>
+          </div>
+
+          {/* ASL-3 Compliance Status Widget */}
+          {asl3Metrics && (
+            <div className="mb-8 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-purple-500/30">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
+                    <Shield className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-white">ASL-3 Compliance Status</h2>
+                    <p className="text-sm text-slate-400">Anthropic Safety Level 3 Framework</p>
+                  </div>
+                </div>
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-full border ${getStatusColor(asl3Metrics.status)}`}>
+                  {getStatusIcon(asl3Metrics.status)}
+                  <span className="font-semibold text-sm">{asl3Metrics.status.replace('_', ' ')}</span>
+                </div>
+              </div>
+
+              {/* Metrics Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div className="bg-black/40 rounded-lg p-4 border border-purple-500/20">
+                  <div className="text-2xl font-bold text-purple-400 mb-1">{asl3Metrics.classifier_accuracy}%</div>
+                  <div className="text-xs text-slate-400">Classifier Accuracy</div>
+                </div>
+                <div className="bg-black/40 rounded-lg p-4 border border-purple-500/20">
+                  <div className="text-2xl font-bold text-purple-400 mb-1">{asl3Metrics.defense_layers_active}/4</div>
+                  <div className="text-xs text-slate-400">Defense Layers Active</div>
+                </div>
+                <div className="bg-black/40 rounded-lg p-4 border border-purple-500/20">
+                  <div className="text-2xl font-bold text-purple-400 mb-1">{asl3Metrics.incident_response_time}s</div>
+                  <div className="text-xs text-slate-400">Incident Response</div>
+                </div>
+                <div className="bg-black/40 rounded-lg p-4 border border-purple-500/20">
+                  <div className="text-2xl font-bold text-purple-400 mb-1">{asl3Metrics.false_positive_rate}%</div>
+                  <div className="text-xs text-slate-400">False Positive Rate</div>
+                </div>
+                <div className="bg-black/40 rounded-lg p-4 border border-purple-500/20">
+                  <div className="text-2xl font-bold text-green-400 mb-1">{asl3Metrics.overall_score}%</div>
+                  <div className="text-xs text-slate-400">Overall ASL-3 Score</div>
+                </div>
+              </div>
+
+              {/* Info Footer */}
+              <div className="mt-4 pt-4 border-t border-purple-500/20">
+                <p className="text-sm text-slate-400">
+                  ASL-3 certification ensures constitutional AI alignment, multi-layer defense architecture, and transparent threat detection.
+                  <a href="/threats" className="text-purple-400 hover:text-purple-300 ml-2 font-semibold">View Details →</a>
                 </p>
+              </div>
             </div>
-        </div>
+          )}
 
-        <!-- Top KPI Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+            </div>
+          ) : (
+            <>
+              {/* Top KPI Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
+                      <Shield className="w-6 h-6 text-purple-400" />
                     </div>
-                    <span class="text-xs font-semibold text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">Security</span>
+                    <span className="text-xs font-semibold text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">Security</span>
+                  </div>
+                  <div className="text-4xl font-bold text-white mb-2">{kpis?.threats_blocked.toLocaleString()}</div>
+                  <div className="text-slate-300 text-sm font-medium mb-1">Threats Blocked</div>
+                  <div className="text-slate-400 text-xs">Prompt injections + jailbreaks</div>
                 </div>
-                <div class="text-4xl font-bold text-white mb-2">1,247</div>
-                <div class="text-slate-300 text-sm font-medium mb-1">Threats Blocked</div>
-                <div class="text-slate-400 text-xs">Prompt injections + jailbreaks</div>
-            </div>
 
-            <div class="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                        </svg>
+                <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center">
+                      <Lock className="w-6 h-6 text-green-400" />
                     </div>
-                    <span class="text-xs font-semibold text-green-300 bg-green-500/20 px-3 py-1 rounded-full">Privacy</span>
+                    <span className="text-xs font-semibold text-green-300 bg-green-500/20 px-3 py-1 rounded-full">Privacy</span>
+                  </div>
+                  <div className="text-4xl font-bold text-white mb-2">{kpis?.pii_redacted.toLocaleString()}</div>
+                  <div className="text-slate-300 text-sm font-medium mb-1">PII Instances Redacted</div>
+                  <div className="text-slate-400 text-xs">SSN, credit cards, emails</div>
                 </div>
-                <div class="text-4xl font-bold text-white mb-2">3,891</div>
-                <div class="text-slate-300 text-sm font-medium mb-1">PII Instances Redacted</div>
-                <div class="text-slate-400 text-xs">SSN, credit cards, emails</div>
-            </div>
 
-            <div class="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
-                            <polyline points="10 9 9 9 8 9"/>
-                        </svg>
+                <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
+                      <FileCheck className="w-6 h-6 text-blue-400" />
                     </div>
-                    <span class="text-xs font-semibold text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full">Compliance</span>
+                    <span className="text-xs font-semibold text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full">Compliance</span>
+                  </div>
+                  <div className="text-4xl font-bold text-white mb-2">{kpis?.compliance_score}%</div>
+                  <div className="text-slate-300 text-sm font-medium mb-1">Compliance Score</div>
+                  <div className="text-slate-400 text-xs">SOC 2, ISO 27001, GDPR</div>
                 </div>
-                <div class="text-4xl font-bold text-white mb-2">98.5%</div>
-                <div class="text-slate-300 text-sm font-medium mb-1">Compliance Score</div>
-                <div class="text-slate-400 text-xs">SOC 2, ISO 27001, GDPR</div>
-            </div>
-        </div>
+              </div>
 
-        <!-- Bottom Competitive Advantage Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-black rounded-2xl p-6 border border-gray-800 hover:border-blue-500/50 transition-all">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="1" x2="12" y2="23"/>
-                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                        </svg>
+              {/* Bottom Competitive Advantage Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-black rounded-2xl p-6 border border-gray-800 hover:border-blue-500/50 transition-all">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
+                      <DollarSign className="w-6 h-6 text-blue-400" />
                     </div>
-                    <span class="text-xs font-semibold text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full">ROI</span>
+                    <span className="text-xs font-semibold text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full">ROI</span>
+                  </div>
+                  <div className="text-4xl font-bold text-white mb-2">${(kpis?.cost_saved_vs_calypso ?? 48750).toLocaleString()}</div>
+                  <div className="text-slate-300 text-sm font-medium mb-1">Annual Savings</div>
+                  <div className="text-slate-400 text-xs">vs. Lakera/CalypsoAI ($50K-60K/yr)</div>
                 </div>
-                <div class="text-4xl font-bold text-white mb-2">$48,750</div>
-                <div class="text-slate-300 text-sm font-medium mb-1">Annual Savings</div>
-                <div class="text-slate-400 text-xs">vs. Lakera/CalypsoAI ($50K-60K/yr)</div>
-            </div>
 
-            <div class="bg-black rounded-2xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                        </svg>
+                <div className="bg-black rounded-2xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
+                      <Activity className="w-6 h-6 text-purple-400" />
                     </div>
-                    <span class="text-xs font-semibold text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">Interop</span>
+                    <span className="text-xs font-semibold text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">Interop</span>
+                  </div>
+                  <div className="text-4xl font-bold text-white mb-2">{kpis?.multi_llm_providers ?? 4}+</div>
+                  <div className="text-slate-300 text-sm font-medium mb-1">LLM Providers</div>
+                  <div className="text-slate-400 text-xs">OpenAI, Anthropic, AWS, Azure</div>
                 </div>
-                <div class="text-4xl font-bold text-white mb-2">4+</div>
-                <div class="text-slate-300 text-sm font-medium mb-1">LLM Providers</div>
-                <div class="text-slate-400 text-xs">OpenAI, Anthropic, AWS, Azure</div>
-            </div>
 
-            <div class="bg-black rounded-2xl p-6 border border-gray-800 hover:border-green-500/50 transition-all">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                        </svg>
+                <div className="bg-black rounded-2xl p-6 border border-gray-800 hover:border-green-500/50 transition-all">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center">
+                      <Zap className="w-6 h-6 text-green-400" />
                     </div>
-                    <span class="text-xs font-semibold text-green-300 bg-green-500/20 px-3 py-1 rounded-full">Speed</span>
+                    <span className="text-xs font-semibold text-green-300 bg-green-500/20 px-3 py-1 rounded-full">Speed</span>
+                  </div>
+                  <div className="text-4xl font-bold text-white mb-2">{kpis?.avg_latency_ms}ms</div>
+                  <div className="text-slate-300 text-sm font-medium mb-1">Avg Latency (P95)</div>
+                  <div className="text-slate-400 text-xs">5x faster than CalypsoAI</div>
                 </div>
-                <div class="text-4xl font-bold text-white mb-2">45ms</div>
-                <div class="text-slate-300 text-sm font-medium mb-1">Avg Latency (P95)</div>
-                <div class="text-slate-400 text-xs">5x faster than CalypsoAI</div>
-            </div>
-        </div>
+              </div>
 
-        <!-- Live Threat Feed -->
-        <div class="mt-8 bg-slate-900 rounded-2xl p-6 border border-gray-800">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-bold flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                        <line x1="12" y1="9" x2="12" y2="13"/>
-                        <line x1="12" y1="17" x2="12.01" y2="17"/>
-                    </svg>
+              {/* Live Threat Feed */}
+              <div className="mt-8 bg-slate-900 rounded-2xl p-6 border border-gray-800">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold flex items-center gap-2">
+                    <AlertTriangle className="w-5 h-5 text-yellow-400" />
                     Live Threat Feed
-                    <span class="text-xs text-slate-500 font-normal">(real-time)</span>
-                </h2>
-                <a href="#" class="text-purple-400 hover:text-purple-300 text-sm font-semibold">
+                    <span className="text-xs text-slate-500 font-normal">(real-time)</span>
+                  </h2>
+                  <a href="/threats" className="text-purple-400 hover:text-purple-300 text-sm font-semibold">
                     View All Threats →
-                </a>
-            </div>
-            <div class="space-y-3">
-                <div class="flex items-center justify-between p-3 bg-black rounded-lg border border-gray-800 hover:border-purple-500/50 transition-all">
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-orange-500"></div>
-                        <div>
-                            <div class="font-medium text-white">Prompt Injection</div>
-                            <div class="text-xs text-slate-500">Detected 2m ago • Confidence: 98.0%</div>
-                        </div>
-                    </div>
-                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-orange-500/20 text-orange-400">HIGH</span>
+                  </a>
                 </div>
-
-                <div class="flex items-center justify-between p-3 bg-black rounded-lg border border-gray-800 hover:border-purple-500/50 transition-all">
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                <div className="space-y-3">
+                  {[
+                    { type: 'Prompt Injection', severity: 'HIGH', time: '2m ago', confidence: '98.0%' },
+                    { type: 'PII Leak Attempt', severity: 'CRITICAL', time: '5m ago', confidence: '95.0%' },
+                    { type: 'Jailbreak Attempt', severity: 'HIGH', time: '12m ago', confidence: '99.0%' },
+                    { type: 'Data Exfiltration', severity: 'MEDIUM', time: '18m ago', confidence: '87.0%' }
+                  ].map((threat, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-3 bg-black rounded-lg border border-gray-800 hover:border-purple-500/50 transition-all">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-2 h-2 rounded-full ${
+                          threat.severity === 'CRITICAL' ? 'bg-red-500 animate-pulse' :
+                          threat.severity === 'HIGH' ? 'bg-orange-500' : 'bg-yellow-500'
+                        }`} />
                         <div>
-                            <div class="font-medium text-white">PII Leak Attempt</div>
-                            <div class="text-xs text-slate-500">Detected 5m ago • Confidence: 95.0%</div>
+                          <div className="font-medium text-white">{threat.type}</div>
+                          <div className="text-xs text-slate-500">Detected {threat.time} • Confidence: {threat.confidence}</div>
                         </div>
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        threat.severity === 'CRITICAL' ? 'bg-red-500/20 text-red-400' :
+                        threat.severity === 'HIGH' ? 'bg-orange-500/20 text-orange-400' :
+                        'bg-yellow-500/20 text-yellow-400'
+                      }`}>
+                        {threat.severity}
+                      </span>
                     </div>
-                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-red-500/20 text-red-400">CRITICAL</span>
+                  ))}
                 </div>
+              </div>
+            </>
+          )}
+        </main>
 
-                <div class="flex items-center justify-between p-3 bg-black rounded-lg border border-gray-800 hover:border-purple-500/50 transition-all">
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-orange-500"></div>
-                        <div>
-                            <div class="font-medium text-white">Jailbreak Attempt</div>
-                            <div class="text-xs text-slate-500">Detected 12m ago • Confidence: 99.0%</div>
-                        </div>
-                    </div>
-                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-orange-500/20 text-orange-400">HIGH</span>
-                </div>
+        <Footer />
+      </div>
+    </RequireAuth>
+  );
+};
 
-                <div class="flex items-center justify-between p-3 bg-black rounded-lg border border-gray-800 hover:border-purple-500/50 transition-all">
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-                        <div>
-                            <div class="font-medium text-white">Data Exfiltration</div>
-                            <div class="text-xs text-slate-500">Detected 18m ago • Confidence: 87.0%</div>
-                        </div>
-                    </div>
-                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-500/20 text-yellow-400">MEDIUM</span>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-gray-800 mt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="text-center text-slate-500 text-sm">
-                © 2024 DefendML. ASL-3 Certified AI Security Platform.
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
+export default Overview;
