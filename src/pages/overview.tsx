@@ -82,7 +82,7 @@ function OverviewPage() {
           trend_latency: -3.2,
           trend_success: 0.1,
         });
-        setError('Demo mode — API offline');
+        // Removed error banner - using demo data silently
       } finally {
         setLoading(false);
       }
@@ -146,13 +146,6 @@ function OverviewPage() {
         </div>
 
         <div className="max-w-7xl mx-auto px-8 py-8 space-y-8">
-          {error && (
-            <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 flex items-center gap-3">
-              <AlertTriangle className="w-5 h-5 text-yellow-400" />
-              <span className="text-yellow-300 text-sm">{error}</span>
-            </div>
-          )}
-
           {/* ASL-3 Compliance Status Widget */}
           {asl3Metrics && (
             <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-purple-500/30">
