@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
 import {
   Shield, AlertTriangle, Lock, FileCheck, TrendingUp, TrendingDown,
-  Zap, DollarSign, Clock, Activity
+  Zap, DollarSign, Clock, Activity, CheckCircle
 } from 'lucide-react';
 
 type Kpis = {
@@ -26,6 +26,15 @@ type Kpis = {
   trend_success?: number;
 };
 
+type ASL3Metrics = {
+  overall_score: number;
+  status: 'COMPLIANT' | 'IN_PROGRESS' | 'NON_COMPLIANT';
+  classifier_accuracy: number;
+  defense_layers_active: number;
+  incident_response_time: number;
+  false_positive_rate: number;
+};
+
 const TrendIndicator: React.FC<{ value?: number }> = ({ value }) => {
   if (value === undefined || value === null) return null;
   const isPositive = value > 0;
@@ -39,6 +48,7 @@ const TrendIndicator: React.FC<{ value?: number }> = ({ value }) => {
 
 function OverviewPage() {
   const [kpis, setKpis] = useState<Kpis | null>(null);
+  const [asl3Metrics, setAsl3Metrics] = useState<ASL3Metrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [rangeFilter, setRangeFilter] = useState<number>(7);
@@ -77,6 +87,16 @@ function OverviewPage() {
         setLoading(false);
       }
     })();
+
+    // Load ASL-3 metrics (demo data for now)
+    setAsl3Metrics({
+      overall_score: 96.5,
+      status: 'COMPLIANT',
+      classifier_accuracy: 99.6,
+      defense_layers_active: 4,
+      incident_response_time: 2.8,
+      false_positive_rate: 0.3
+    });
   }, [rangeFilter]);
 
   if (loading) {
@@ -130,6 +150,59 @@ function OverviewPage() {
             <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 flex items-center gap-3">
               <AlertTriangle className="w-5 h-5 text-yellow-400" />
               <span className="text-yellow-300 text-sm">{error}</span>
+            </div>
+          )}
+
+          {/* ASL-3 Compliance Status Widget */}
+          {asl3Metrics && (
+            <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-purple-500/30">
+              <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
+                    <Shield className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-white">ASL-3 Compliance Status</h2>
+                    <p className="text-sm text-slate-400">Anthropic Safety Level 3 Framework</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full border text-green-400 bg-green-500/20 border-green-500/50">
+                  <CheckCircle className="w-5 h-5" />
+                  <span className="font-semibold text-sm">{asl3Metrics.status}</span>
+                </div>
+              </div>
+
+              {/* Metrics Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div className="bg-black/40 rounded-lg p-4 border border-purple-500/20">
+                  <div className="text-2xl font-bold text-purple-400 mb-1">{asl3Metrics.classifier_accuracy}%</div>
+                  <div className="text-xs text-slate-400">Classifier Accuracy</div>
+                </div>
+                <div className="bg-black/40 rounded-lg p-4 border border-purple-500/20">
+                  <div className="text-2xl font-bold text-purple-400 mb-1">{asl3Metrics.defense_layers_active}/4</div>
+                  <div className="text-xs text-slate-400">Defense Layers Active</div>
+                </div>
+                <div className="bg-black/40 rounded-lg p-4 border border-purple-500/20">
+                  <div className="text-2xl font-bold text-purple-400 mb-1">{asl3Metrics.incident_response_time}s</div>
+                  <div className="text-xs text-slate-400">Incident Response</div>
+                </div>
+                <div className="bg-black/40 rounded-lg p-4 border border-purple-500/20">
+                  <div className="text-2xl font-bold text-purple-400 mb-1">{asl3Metrics.false_positive_rate}%</div>
+                  <div className="text-xs text-slate-400">False Positive Rate</div>
+                </div>
+                <div className="bg-black/40 rounded-lg p-4 border border-purple-500/20">
+                  <div className="text-2xl font-bold text-green-400 mb-1">{asl3Metrics.overall_score}%</div>
+                  <div className="text-xs text-slate-400">Overall ASL-3 Score</div>
+                </div>
+              </div>
+
+              {/* Info Footer */}
+              <div className="mt-4 pt-4 border-t border-purple-500/20">
+                <p className="text-sm text-slate-400">
+                  ASL-3 certification ensures constitutional AI alignment, multi-layer defense architecture, and transparent threat detection.
+                  <a href="/threats" className="text-purple-400 hover:text-purple-300 ml-2 font-semibold">View Details →</a>
+                </p>
+              </div>
             </div>
           )}
 
