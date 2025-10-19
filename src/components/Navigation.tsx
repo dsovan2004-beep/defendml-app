@@ -5,7 +5,6 @@ import {
   Menu,
   X,
   Shield,
-  AlertTriangle,
   Lock,
   FileCheck,
   Activity,
@@ -14,7 +13,7 @@ import {
   LogOut,
   LogIn,
   Settings,
-  CheckCircle,
+  LayoutDashboard,
 } from "lucide-react";
 
 /** Decode mock JWT token to get user info */
@@ -54,20 +53,25 @@ export default function Navigation() {
   }, [router.pathname]); // Re-check on route change
 
   const navItems = [
-    { name: "Overview", href: "/overview", icon: Shield },
-    { name: "Threats", href: "/threats", icon: AlertTriangle },
+    { name: "Overview", href: "/overview", icon: LayoutDashboard },
+    { name: "Security Center", href: "/security", icon: Shield }, // NEW - replaces Threats & ASL-3
     { name: "PII Protection", href: "/pii", icon: Lock },
     { name: "Compliance", href: "/compliance", icon: FileCheck },
-    { name: "ASL-3 Status", href: "/asl3-status", icon: CheckCircle },
     { name: "Health", href: "/health", icon: Activity },
     { name: "Usage", href: "/usage", icon: BarChart3 },
     { name: "Audit", href: "/audit", icon: ScrollText },
     { name: "Settings", href: "/settings", icon: Settings },
   ];
 
-  // Admin items removed - now accessible via Settings → User Management → Bulk Upload
-
-  const isActive = (href: string) => router.pathname === href;
+  const isActive = (href: string) => {
+    // Handle Security Center active state for old routes
+    if (href === "/security") {
+      return router.pathname === "/security" || 
+             router.pathname === "/threats" || 
+             router.pathname === "/asl3-status";
+    }
+    return router.pathname === href;
+  };
 
   const doLogout = () => {
     // Clear token from both locations
