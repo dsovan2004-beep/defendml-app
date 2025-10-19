@@ -11,47 +11,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        
-        function handleGetStarted(plan) {
-            console.log('Plan selected:', plan);
-            
-            if (plan === 'enterprise') {
-                alert('Thank you for your interest in Enterprise ASL-3! Please email us at sales@defendml.com');
-            } else {
-                window.location.href = 'https://app.defendml.com/signup?plan=' + plan;
-            }
         }
-        
-        function toggleFaq(element) {
-            const faqItem = element.parentElement;
-            const isActive = faqItem.classList.contains('active');
-            
-            document.querySelectorAll('.faq-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            if (!isActive) {
-                faqItem.classList.add('active');
-            }
-        }
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const emailInputs = document.querySelectorAll('.email-input');
-            emailInputs.forEach(input => {
-                input.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        handleSubmit();
-                    }
-                });
-            });
-        });
-    </script>
-</body>
-</html>
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -269,6 +229,12 @@
         .submit-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .waitlist-info {
@@ -1571,7 +1537,7 @@
     </footer>
 
     <script>
-        function handleSubmit() {
+        async function handleSubmit() {
             const email = document.getElementById('emailInput').value || document.getElementById('emailInputFooter').value;
             
             if (!email) {
@@ -1584,14 +1550,120 @@
                 return;
             }
             
-            console.log('Email submitted:', email);
-            alert('Welcome! Redirecting you to start your free trial...');
+            // Show loading state
+            const submitButtons = document.querySelectorAll('.submit-button');
+            submitButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.textContent = 'Creating account...';
+            });
             
-            document.getElementById('emailInput').value = '';
-            document.getElementById('emailInputFooter').value = '';
-            
-            // Redirect to signup
-            setTimeout(() => {
-                window.location.href = 'https://app.defendml.com/signup?email=' + encodeURIComponent(email);
-            }, 1000);
+            try {
+                // Call your DefendML API to create the account
+                const response = await fetch('https://defendml-api.dsovan2004.workers.dev/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: generateRandomPassword(),
+                        name: email.split('@')[0],
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.ok) {
+                    // Success! Account created
+                    console.log('Account created successfully:', email);
+                    
+                    // Store token in localStorage
+                    localStorage.setItem('defendml_token', data.token);
+                    
+                    // Show success and redirect
+                    alert('🎉 Account created! Redirecting to your dashboard...');
+                    
+                    // Clear inputs
+                    document.getElementById('emailInput').value = '';
+                    document.getElementById('emailInputFooter').value = '';
+                    
+                    // Redirect to app
+                    setTimeout(() => {
+                        window.location.href = `https://app.defendml.com?welcome=true&email=${encodeURIComponent(email)}`;
+                    }, 1000);
+                    
+                } else {
+                    // Handle errors
+                    if (data.error && data.error.includes('already exists')) {
+                        alert('This email is already registered. Redirecting you to login...');
+                        setTimeout(() => {
+                            window.location.href = `https://app.defendml.com/login?email=${encodeURIComponent(email)}`;
+                        }, 1500);
+                    } else {
+                        alert(data.error || 'Something went wrong. Please try again.');
+                        submitButtons.forEach(btn => {
+                            btn.disabled = false;
+                            btn.textContent = 'Start Free Trial';
+                        });
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Signup error:', error);
+                alert('Network error. Please check your connection and try again.');
+                submitButtons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.textContent = 'Start Free Trial';
+                });
+            }
         }
+        
+        function generateRandomPassword() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+            let password = '';
+            for (let i = 0; i < 16; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return password;
+        }
+        
+        function handleGetStarted(plan) {
+            console.log('Plan selected:', plan);
+            
+            if (plan === 'enterprise') {
+                alert('Thank you for your interest in Enterprise ASL-3! Please email us at sales@defendml.com');
+            } else {
+                window.location.href = 'https://app.defendml.com/signup?plan=' + plan;
+            }
+        }
+        
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInputs = document.querySelectorAll('.email-input');
+            emailInputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        handleSubmit();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
