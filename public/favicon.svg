@@ -1,9 +1,20 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background rounded square -->
+  <!-- Background -->
   <rect width="32" height="32" rx="6" fill="url(#gradient)"/>
   
-  <!-- Letter D -->
-  <text x="16" y="24" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white" text-anchor="middle">D</text>
+  <!-- Shield icon -->
+  <path d="M16 6L10 9V14C10 18.5 12.5 22.5 16 24C19.5 22.5 22 18.5 22 14V9L16 6Z" 
+        fill="white" 
+        stroke="white" 
+        stroke-width="0.5"/>
+  
+  <!-- Inner shield detail (optional checkmark) -->
+  <path d="M14 15L15.5 16.5L18 13.5" 
+        stroke="url(#gradient)" 
+        stroke-width="1.5" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        fill="none"/>
   
   <!-- Gradient definition -->
   <defs>
