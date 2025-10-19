@@ -87,6 +87,7 @@ export default function Navigation() {
   return (
     <nav className="bg-slate-900 border-b border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Top Bar - Logo and Auth Only */}
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
@@ -99,47 +100,21 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-4">
-            {token && (
-              <div className="flex items-center space-x-1">
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                        isActive(item.href)
-                          ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
-                          : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                      }`}
-                    >
-                      <Icon className="w-4 h-4" />
-                      {item.name}
-                    </Link>
-                  );
-                })}
-              </div>
+          {/* Auth Buttons (Desktop) */}
+          <div className="hidden md:flex items-center gap-3">
+            {token && userRole && (
+              <span className="px-3 py-1 bg-purple-500/20 border border-purple-500/40 rounded-lg text-purple-200 text-xs font-semibold">
+                {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
+              </span>
             )}
-
-            {/* Auth button (Desktop) */}
             {token ? (
-              <div className="flex items-center gap-3">
-                {/* User role badge */}
-                {userRole && (
-                  <span className="px-3 py-1 bg-purple-500/20 border border-purple-500/40 rounded-lg text-purple-200 text-xs font-semibold">
-                    {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
-                  </span>
-                )}
-                <button
-                  onClick={doLogout}
-                  className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 border border-purple-500/50 rounded-lg text-white transition-all text-sm font-medium shadow-lg"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Logout
-                </button>
-              </div>
+              <button
+                onClick={doLogout}
+                className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 border border-purple-500/50 rounded-lg text-white transition-all text-sm font-medium shadow-lg"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </button>
             ) : (
               <Link
                 href="/login"
@@ -161,6 +136,29 @@ export default function Navigation() {
             </button>
           </div>
         </div>
+
+        {/* Navigation Tabs - Below Header (Desktop Only) */}
+        {token && (
+          <div className="hidden md:flex items-center gap-2 pb-3 overflow-x-auto">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
+                    isActive(item.href)
+                      ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
+                      : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  {item.name}
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Mobile menu */}
