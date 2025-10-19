@@ -14,7 +14,6 @@ import {
   LogOut,
   LogIn,
   Settings,
-  CheckCircle,
 } from "lucide-react";
 
 /** Decode mock JWT token to get user info */
@@ -58,12 +57,13 @@ export default function Navigation() {
     { name: "Threats", href: "/threats", icon: AlertTriangle },
     { name: "PII Protection", href: "/pii", icon: Lock },
     { name: "Compliance", href: "/compliance", icon: FileCheck },
-    { name: "ASL-3 Status", href: "/asl3-status", icon: CheckCircle },
     { name: "Health", href: "/health", icon: Activity },
     { name: "Usage", href: "/usage", icon: BarChart3 },
     { name: "Audit", href: "/audit", icon: ScrollText },
     { name: "Settings", href: "/settings", icon: Settings },
   ];
+
+  // Admin items removed - now accessible via Settings → User Management → Bulk Upload
 
   const isActive = (href: string) => router.pathname === href;
 
