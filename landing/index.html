@@ -1633,8 +1633,9 @@ const response = await fetch('https://defendml-api.dsovan2004.workers.dev/api/au
             if (plan === 'enterprise') {
                 alert('Thank you for your interest in Enterprise ASL-3! Please email us at sales@defendml.com');
             } else {
-                window.location.href = 'https://app.defendml.com/signup?plan=' + plan;
-            }
+// Redirect to main signup on landing page
+        window.location.href = 'https://defendml.com';
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);            }
         }
         
         function toggleFaq(element) {
