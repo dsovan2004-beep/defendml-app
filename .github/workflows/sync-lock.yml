@@ -1,0 +1,23 @@
+name: Sync Lockfile
+on:
+  workflow_dispatch: {}
+  push:
+    paths:
+      - package.json
+
+permissions:
+  contents: write
+
+jobs:
+  update-lockfile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: sync package-lock.json with package.json"
+          file_pattern: package-lock.json
