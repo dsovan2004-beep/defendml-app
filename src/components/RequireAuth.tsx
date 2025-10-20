@@ -19,9 +19,17 @@ function getToken(): string | null {
 
 function redirectToLogin() {
   if (typeof window === "undefined") return;
-  const next = encodeURIComponent(
-    window.location.pathname + window.location.search
-  );
+
+  const { pathname, search } = window.location;
+
+  // Public routes that must stay accessible without login
+  const PUBLIC_PATHS = ["/login", "/reset-password", "/auth/callback"];
+
+  // Do not redirect if user is already on a public route
+  if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
+    return;
+  }
+  const next = encodeURIComponent(pathname + search);
   window.location.replace(`/login?next=${next}`);
 }
 
