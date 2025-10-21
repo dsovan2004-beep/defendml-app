@@ -17,7 +17,8 @@ export default function ResetPassword() {
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<Message>({ type: '', text: '' });
   const [isValidToken, setIsValidToken] = useState<boolean>(false);
-  useEffect(() => {
+ 
+useEffect(() => {
   if (typeof window === "undefined") return;
 
   (async () => {
@@ -31,9 +32,10 @@ export default function ResetPassword() {
 
     if (access_token && refresh_token) {
       try {
+        // Restore Supabase session from the reset email link
         await supabase.auth.setSession({ access_token, refresh_token });
 
-        // Clean up the URL so the hash disappears
+        // Clean URL to remove hash
         window.history.replaceState({}, "", window.location.pathname);
 
         setIsValidToken(true);
@@ -43,6 +45,7 @@ export default function ResetPassword() {
         console.error("Session bootstrap failed:", e);
       }
     }
+
     // ----- Case 2: Legacy querystring format (?token=&type=recovery&email=) -----
     const sp = new URLSearchParams(window.location.search);
     const token = sp.get("token");
@@ -59,6 +62,7 @@ export default function ResetPassword() {
         console.error("Legacy verifyOtp failed:", e);
       }
     }
+
     // ----- Neither worked -----
     setIsValidToken(false);
     setMessage({
@@ -66,9 +70,8 @@ export default function ResetPassword() {
       text: "Invalid or expired reset link. Please request a new password reset.",
     });
   })();
-}, []);
+}, []); // <-- make sure this is the only closing line for the effect
 
-  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
