@@ -26,10 +26,9 @@ export function writeLegacyToken(email: string, role = "viewer") {
 
 /** Remove legacy token on sign-out */
 export function clearLegacyToken() {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("defendml_token");
-    delete (window as any)._defendmlToken;
-  }
+  if (typeof window === "undefined") return;
+  localStorage.removeItem("defendml_token");
+  delete (window as any)._defendmlToken;
 }
 
 /** True if the legacy token exists and is valid */
