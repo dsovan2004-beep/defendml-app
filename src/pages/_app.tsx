@@ -1,13 +1,11 @@
+// src/pages/_app.tsx
 import type { AppProps } from "next/app";
 import { useEffect } from "react";
-import "../styles/globals.css";
-import {
-  supabase,
-  mirrorSessionToLegacy,
-} from "../lib/auth-bridge";
-
-import RequireAuth from "../components/RequireAuth";
 import { useRouter } from "next/router";
+import "../styles/globals.css";
+
+import { supabase, mirrorSessionToLegacy } from "../lib/auth-bridge";
+import RequireAuth from "../components/RequireAuth";
 
 const PUBLIC_PATHS = ["/login", "/reset-password", "/auth/callback", "/"];
 
@@ -16,14 +14,14 @@ export default function App({ Component, pageProps }: AppProps) {
   const path = router?.pathname || "";
 
   useEffect(() => {
-    // On load, mirror current session -> legacy token
+    // Mirror Supabase session into legacy token on load
     (async () => {
       const { data } = await supabase.auth.getSession();
       mirrorSessionToLegacy(data.session);
     })();
 
-    // On any auth change, mirror again
-    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    // Mirror again whenever auth state changes
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       mirrorSessionToLegacy(session);
     });
 
@@ -32,12 +30,12 @@ export default function App({ Component, pageProps }: AppProps) {
     };
   }, []);
 
-  // Public routes render raw
+  // Render public routes (no auth)
   if (PUBLIC_PATHS.some((p) => path === p || path.startsWith(p))) {
     return <Component {...pageProps} />;
   }
 
-  // Everything else is protected
+  // Protect all other routes
   return (
     <RequireAuth>
       <Component {...pageProps} />
