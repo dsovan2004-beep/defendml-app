@@ -1,8 +1,10 @@
 // src/components/RequireAuth.tsx
-// Role-Based Access Control + Auth guard with Mock Token Support
+// Role-Based Access Control + Auth guard
+// Accepts Supabase session -> mock token -> API /auth/verify
 
 import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/router";
+import { createClient } from "@supabase/supabase-js";
 
 interface Props {
   children: ReactNode;
@@ -11,7 +13,12 @@ interface Props {
   action?: "create" | "read" | "update" | "delete" | "export";
 }
 
-/** Read token from a safe place we control */
+/** Supabase client (same envs used on /reset-password) */
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+/** Read token from a safe place we control (demo / worker token) */
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
   return (window as any)._defendmlToken || localStorage.getItem("defendml_token");
@@ -19,16 +26,14 @@ function getToken(): string | null {
 
 function redirectToLogin() {
   if (typeof window === "undefined") return;
-
   const { pathname, search } = window.location;
 
   // Public routes that must stay accessible without login
   const PUBLIC_PATHS = ["/login", "/reset-password", "/auth/callback"];
 
   // Do not redirect if user is already on a public route
-  if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
-    return;
-  }
+  if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) return;
+
   const next = encodeURIComponent(pathname + search);
   window.location.replace(`/login?next=${next}`);
 }
@@ -37,39 +42,22 @@ function redirectToLogin() {
 function decodeMockToken(token: string): { email: string; role: string; exp: number } | null {
   try {
     const decoded = JSON.parse(atob(token));
-    if (decoded.exp && decoded.exp < Date.now()) {
-      return null; // Token expired
-    }
+    if (decoded.exp && decoded.exp < Date.now()) return null; // expired
     return decoded;
   } catch {
     return null;
   }
 }
 
-/** Check if user has permission for resource/action */
+/** Simple RBAC helper */
 function hasPermission(userRole: string, resource: string, action: string): boolean {
-  // Admin has all permissions
-  if (userRole === "admin") return true;
-
-  // Analyst can read and export
-  if (userRole === "analyst") {
-    return action === "read" || action === "export";
-  }
-
-  // Viewer can only read
-  if (userRole === "viewer") {
-    return action === "read";
-  }
-
+  if (userRole === "admin") return true;                  // admin = all
+  if (userRole === "analyst") return action === "read" || action === "export";
+  if (userRole === "viewer") return action === "read";
   return false;
 }
 
-export default function RequireAuth({
-  children,
-  role,
-  resource,
-  action = "read",
-}: Props) {
+export default function RequireAuth({ children, role, resource, action = "read" }: Props) {
   const [ok, setOk] = useState<boolean | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [accessDenied, setAccessDenied] = useState<string | null>(null);
@@ -79,31 +67,21 @@ export default function RequireAuth({
     let cancelled = false;
 
     async function run() {
-      const token = getToken();
-      if (!token) return redirectToLogin();
-
       try {
-        // Try to decode as mock token first
-        const mockUser = decodeMockToken(token);
+        // ===== 0) Supabase session (first-class path) =====
+        const { data: sessionData } = await supabase.auth.getSession();
+        const supaSession = sessionData?.session;
 
-        if (mockUser) {
-          // ========== MOCK TOKEN MODE ==========
-          const apiRole = mockUser.role;
+        if (supaSession?.access_token) {
+          // If you store role in user_metadata, read it; otherwise default to viewer
+          // const apiRole = (supaSession.user?.user_metadata?.role as string) ?? "viewer";
+          const apiRole = "viewer";
           setUserRole(apiRole);
 
-          // GLOBAL OVERRIDE: admin can access everything
-          if (apiRole === "admin") {
-            if (!cancelled) setOk(true);
-            return;
-          }
-
-          // If a page specifies allowed roles, check them
+          // Role allow-list (if provided by page)
           if (role) {
-            const allowed = new Set<string>(
-              Array.isArray(role) ? role : [role]
-            );
-            allowed.add("admin"); // Always include admin
-
+            const allowed = new Set<string>(Array.isArray(role) ? role : [role]);
+            allowed.add("admin");
             if (!allowed.has(apiRole)) {
               if (!cancelled) {
                 setAccessDenied(`role-mismatch:${Array.from(allowed).join(",")}`);
@@ -113,7 +91,44 @@ export default function RequireAuth({
             }
           }
 
-          // Resource/action permission check
+          // Resource/action check (optional)
+          if (resource && !hasPermission(apiRole, resource, action)) {
+            if (!cancelled) {
+              setAccessDenied(`permission-denied:${resource}:${action}`);
+              setOk(false);
+            }
+            return;
+          }
+
+          if (!cancelled) setOk(true);
+          return; // <- stop here; we are authenticated
+        }
+
+        // ===== 1) Mock token (demo path) =====
+        const token = getToken();
+        const mockUser = token ? decodeMockToken(token) : null;
+
+        if (mockUser) {
+          const apiRole = mockUser.role;
+          setUserRole(apiRole);
+
+          if (apiRole === "admin") {
+            if (!cancelled) setOk(true);
+            return;
+          }
+
+          if (role) {
+            const allowed = new Set<string>(Array.isArray(role) ? role : [role]);
+            allowed.add("admin");
+            if (!allowed.has(apiRole)) {
+              if (!cancelled) {
+                setAccessDenied(`role-mismatch:${Array.from(allowed).join(",")}`);
+                setOk(false);
+              }
+              return;
+            }
+          }
+
           if (resource && !hasPermission(apiRole, resource, action)) {
             if (!cancelled) {
               setAccessDenied(`permission-denied:${resource}:${action}`);
@@ -126,60 +141,65 @@ export default function RequireAuth({
           return;
         }
 
-        // ========== API TOKEN MODE (fallback) ==========
-        const base =
-          process.env.NEXT_PUBLIC_API_BASE ||
-          "https://defendml-api.dsovan2004-beep.workers.dev";
+        // ===== 2) API token verification (worker path) =====
+        if (token) {
+          const base =
+            process.env.NEXT_PUBLIC_API_BASE ||
+            "https://defendml-api.dsovan2004-beep.workers.dev";
 
-        const res = await fetch(`${base}/auth/verify`, {
-          headers: { authorization: `Bearer ${token}` },
-          credentials: "omit",
-        });
-        const data = await res.json().catch(() => ({}));
+          const res = await fetch(`${base}/auth/verify`, {
+            headers: { authorization: `Bearer ${token}` },
+            credentials: "omit",
+          });
+          const data = await res.json().catch(() => ({} as any));
 
-        if (!res.ok || !data?.ok) return redirectToLogin();
+          if (!res.ok || !data?.ok) {
+            if (!cancelled) redirectToLogin();
+            return;
+          }
 
-        // Normalize role
-        const apiRole: string | undefined =
-          data?.user?.role ??
-          (Array.isArray(data?.user?.roles) && data.user.roles[0]);
+          const apiRole: string | undefined =
+            data?.user?.role ??
+            (Array.isArray(data?.user?.roles) && data.user.roles[0]);
 
-        if (!apiRole) return redirectToLogin();
+          if (!apiRole) {
+            if (!cancelled) redirectToLogin();
+            return;
+          }
 
-        setUserRole(apiRole);
+          setUserRole(apiRole);
 
-        // GLOBAL OVERRIDE: admin can access everything
-        if (apiRole === "admin") {
-          if (!cancelled) setOk(true);
-          return;
-        }
+          if (apiRole === "admin") {
+            if (!cancelled) setOk(true);
+            return;
+          }
 
-        // If a page specifies allowed roles, check them
-        if (role) {
-          const allowed = new Set<string>(
-            Array.isArray(role) ? role : [role]
-          );
-          allowed.add("admin"); // Always include admin
+          if (role) {
+            const allowed = new Set<string>(Array.isArray(role) ? role : [role]);
+            allowed.add("admin");
+            if (!allowed.has(apiRole)) {
+              if (!cancelled) {
+                setAccessDenied(`role-mismatch:${Array.from(allowed).join(",")}`);
+                setOk(false);
+              }
+              return;
+            }
+          }
 
-          if (!allowed.has(apiRole)) {
+          if (resource && !hasPermission(apiRole, resource, action)) {
             if (!cancelled) {
-              setAccessDenied(`role-mismatch:${Array.from(allowed).join(",")}`);
+              setAccessDenied(`permission-denied:${resource}:${action}`);
               setOk(false);
             }
             return;
           }
-        }
 
-        // Resource/action permission check
-        if (resource && !hasPermission(apiRole, resource, action)) {
-          if (!cancelled) {
-            setAccessDenied(`permission-denied:${resource}:${action}`);
-            setOk(false);
-          }
+          if (!cancelled) setOk(true);
           return;
         }
 
-        if (!cancelled) setOk(true);
+        // ===== 3) Nothing matched → login =====
+        if (!cancelled) redirectToLogin();
       } catch {
         if (!cancelled) redirectToLogin();
       }
