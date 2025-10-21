@@ -4,7 +4,11 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import "../styles/globals.css";
 
-import { supabase, mirrorSessionToLegacy } from "../lib/auth-bridge";
+import {
+  supabase,
+  mirrorSessionToLegacy,
+  clearLegacyToken,
+} from "../lib/auth-bridge";
 import RequireAuth from "../components/RequireAuth";
 
 const PUBLIC_PATHS = ["/login", "/reset-password", "/auth/callback", "/"];
@@ -14,23 +18,29 @@ export default function App({ Component, pageProps }: AppProps) {
   const path = router?.pathname || "";
 
   useEffect(() => {
-    // Mirror Supabase session into legacy token on load
+    // On first load, mirror the Supabase session into local storage token
     (async () => {
       const { data } = await supabase.auth.getSession();
       mirrorSessionToLegacy(data.session);
     })();
 
-    // Mirror again whenever auth state changes
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      mirrorSessionToLegacy(session);
-    });
+    // Listen for any sign-in / sign-out changes
+    const { data: sub } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === "SIGNED_OUT") {
+          clearLegacyToken();
+        } else {
+          mirrorSessionToLegacy(session);
+        }
+      }
+    );
 
     return () => {
       sub.subscription.unsubscribe();
     };
   }, []);
 
-  // Render public routes (no auth)
+  // Allow public routes (login, password reset, callback)
   if (PUBLIC_PATHS.some((p) => path === p || path.startsWith(p))) {
     return <Component {...pageProps} />;
   }
