@@ -17,21 +17,57 @@ export default function ResetPassword() {
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<Message>({ type: '', text: '' });
   const [isValidToken, setIsValidToken] = useState<boolean>(false);
-
   useEffect(() => {
-    // Check if we have a recovery token in the URL
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = hashParams.get('access_token');
-    const type = hashParams.get('type');
+  if (typeof window === "undefined") return;
 
-    if (accessToken && type === 'recovery') {
-      setIsValidToken(true);
-    } else {
-      setMessage({
-        type: 'error',
-        text: 'Invalid or expired reset link. Please request a new password reset.'
-      });
+  (async () => {
+    // ----- Case 1: Supabase {{ .ConfirmationURL }} flow (hash fragment) -----
+    const rawHash = window.location.hash.startsWith("#")
+      ? window.location.hash.slice(1)
+      : "";
+    const hash = new URLSearchParams(rawHash);
+    const access_token = hash.get("access_token");
+    const refresh_token = hash.get("refresh_token");
+
+    if (access_token && refresh_token) {
+      try {
+        await supabase.auth.setSession({ access_token, refresh_token });
+
+        // Clean up the URL so the hash disappears
+        window.history.replaceState({}, "", window.location.pathname);
+
+        setIsValidToken(true);
+        setMessage({ type: "", text: "" });
+        return;
+      } catch (e) {
+        console.error("Session bootstrap failed:", e);
+      }
     }
+    // ----- Case 2: Legacy querystring format (?token=&type=recovery&email=) -----
+    const sp = new URLSearchParams(window.location.search);
+    const token = sp.get("token");
+    const type = sp.get("type");
+    const email = sp.get("email");
+
+    if (token && type === "recovery" && email) {
+      try {
+        await supabase.auth.verifyOtp({ email, token, type: "recovery" });
+        setIsValidToken(true);
+        setMessage({ type: "", text: "" });
+        return;
+      } catch (e) {
+        console.error("Legacy verifyOtp failed:", e);
+      }
+    }
+    // ----- Neither worked -----
+    setIsValidToken(false);
+    setMessage({
+      type: "error",
+      text: "Invalid or expired reset link. Please request a new password reset.",
+    });
+  })();
+}, []);
+
   }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
