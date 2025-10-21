@@ -4,7 +4,8 @@ import "../styles/globals.css";
 import {
   supabase,
   mirrorSessionToLegacy,
-} from "@/lib/auth-bridge";
+} from "../lib/auth-bridge";
+
 import RequireAuth from "@/components/RequireAuth";
 import { useRouter } from "next/router";
 
