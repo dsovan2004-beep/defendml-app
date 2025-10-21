@@ -1,7 +1,7 @@
 // src/pages/_app.tsx
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
-import RequireAuth from "@/components/RequireAuth";
+import RequireAuth from "../components/RequireAuth";
 import "../styles/globals.css";
 
 export default function App({ Component, pageProps }: AppProps) {
