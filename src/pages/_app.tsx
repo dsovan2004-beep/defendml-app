@@ -6,7 +6,7 @@ import {
   mirrorSessionToLegacy,
 } from "../lib/auth-bridge";
 
-import RequireAuth from "@/components/RequireAuth";
+import RequireAuth from "../components/RequireAuth";
 import { useRouter } from "next/router";
 
 const PUBLIC_PATHS = ["/login", "/reset-password", "/auth/callback", "/"];
