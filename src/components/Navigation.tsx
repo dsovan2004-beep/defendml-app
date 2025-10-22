@@ -1,3 +1,4 @@
+// src/components/Navigation.tsx
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -15,14 +16,13 @@ import {
   Settings,
   LayoutDashboard,
 } from "lucide-react";
+import { supabase, clearLegacyToken } from "../lib/auth-bridge";
 
 /** Decode mock JWT token to get user info */
 function decodeMockToken(token: string): { email: string; role: string; exp: number } | null {
   try {
     const decoded = JSON.parse(atob(token));
-    if (decoded.exp && decoded.exp < Date.now()) {
-      return null; // Token expired
-    }
+    if (decoded.exp && decoded.exp < Date.now()) return null; // Token expired
     return decoded;
   } catch {
     return null;
@@ -37,24 +37,21 @@ export default function Navigation() {
 
   useEffect(() => {
     // Read token from storage
-    const storedToken = 
-      (window as any)._defendmlToken || 
-      localStorage.getItem("defendml_token");
-    
+    const storedToken =
+      (window as any)._defendmlToken || localStorage.getItem("defendml_token");
+
     setToken(storedToken);
 
-    // Try to decode mock token to get role
+    // Decode user info
     if (storedToken) {
       const mockUser = decodeMockToken(storedToken);
-      if (mockUser) {
-        setUserRole(mockUser.role);
-      }
+      if (mockUser) setUserRole(mockUser.role);
     }
-  }, [router.pathname]); // Re-check on route change
+  }, [router.pathname]);
 
   const navItems = [
     { name: "Overview", href: "/overview", icon: LayoutDashboard },
-    { name: "Security Center", href: "/security", icon: Shield }, // NEW - replaces Threats & ASL-3
+    { name: "Security Center", href: "/security", icon: Shield },
     { name: "PII Protection", href: "/pii", icon: Lock },
     { name: "Compliance", href: "/compliance", icon: FileCheck },
     { name: "Health", href: "/health", icon: Activity },
@@ -66,28 +63,32 @@ export default function Navigation() {
   const isActive = (href: string) => {
     // Handle Security Center active state for old routes
     if (href === "/security") {
-      return router.pathname === "/security" || 
-             router.pathname === "/threats" || 
-             router.pathname === "/asl3-status";
+      return (
+        router.pathname === "/security" ||
+        router.pathname === "/threats" ||
+        router.pathname === "/asl3-status"
+      );
     }
     return router.pathname === href;
   };
 
-  const doLogout = () => {
-    // Clear token from both locations
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("defendml_token");
-      delete (window as any)._defendmlToken;
+  /** ✅ Proper Supabase + Legacy Logout */
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut(); // sign out session
+      clearLegacyToken(); // remove local mirror tokens
+      setToken(null);
+      setUserRole(null);
+      window.location.replace("/login"); // hard redirect to login
+    } catch (err) {
+      console.error("Logout failed:", err);
     }
-    setToken(null);
-    setUserRole(null);
-    router.push("/login");
   };
 
   return (
     <nav className="bg-slate-900 border-b border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top Bar - Logo and Auth Only */}
+        {/* Top Bar */}
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
@@ -100,7 +101,7 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Auth Buttons (Desktop) */}
+          {/* Right side (auth + role) */}
           <div className="hidden md:flex items-center gap-3">
             {token && userRole && (
               <span className="px-3 py-1 bg-purple-500/20 border border-purple-500/40 rounded-lg text-purple-200 text-xs font-semibold">
@@ -109,7 +110,7 @@ export default function Navigation() {
             )}
             {token ? (
               <button
-                onClick={doLogout}
+                onClick={handleLogout}
                 className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 border border-purple-500/50 rounded-lg text-white transition-all text-sm font-medium shadow-lg"
               >
                 <LogOut className="w-4 h-4" />
@@ -126,7 +127,7 @@ export default function Navigation() {
             )}
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile menu toggle */}
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -137,7 +138,7 @@ export default function Navigation() {
           </div>
         </div>
 
-        {/* Navigation Tabs - Below Header (Desktop Only) */}
+        {/* Desktop Nav Tabs */}
         {token && (
           <div className="hidden md:flex items-center gap-2 pb-3 overflow-x-auto">
             {navItems.map((item) => {
@@ -161,7 +162,7 @@ export default function Navigation() {
         )}
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Nav */}
       {isOpen && (
         <div className="md:hidden border-t border-slate-800">
           <div className="px-2 pt-2 pb-3 space-y-1">
@@ -188,7 +189,7 @@ export default function Navigation() {
               </>
             )}
 
-            {/* User role badge (mobile) */}
+            {/* Role (mobile) */}
             {token && userRole && (
               <div className="px-3 py-2">
                 <span className="inline-block px-3 py-1 bg-purple-500/20 border border-purple-500/40 rounded-lg text-purple-200 text-sm font-semibold">
@@ -197,12 +198,12 @@ export default function Navigation() {
               </div>
             )}
 
-            {/* Auth button (Mobile) */}
+            {/* Auth (mobile) */}
             {token ? (
               <button
                 onClick={() => {
                   setIsOpen(false);
-                  doLogout();
+                  handleLogout();
                 }}
                 className="w-full flex items-center gap-3 px-3 py-3 bg-purple-600 hover:bg-purple-700 border border-purple-500/50 rounded-lg text-white text-base font-medium transition-all shadow-lg"
               >
