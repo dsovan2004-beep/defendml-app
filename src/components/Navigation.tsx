@@ -1,4 +1,6 @@
 // src/components/Navigation.tsx
+"use client";
+
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -15,14 +17,17 @@ import {
   LogIn,
   Settings,
   LayoutDashboard,
+  AlertTriangle,
+  ShieldCheck,
 } from "lucide-react";
 import { supabase, clearLegacyToken } from "../lib/auth-bridge";
+import { FF_ASL3_STATUS, FF_INCIDENT_CENTER } from "@/utils/featureFlags";
 
 /** Decode mock JWT token to get user info */
 function decodeMockToken(token: string): { email: string; role: string; exp: number } | null {
   try {
     const decoded = JSON.parse(atob(token));
-    if (decoded.exp && decoded.exp < Date.now()) return null; // Token expired
+    if (decoded.exp && decoded.exp < Date.now()) return null;
     return decoded;
   } catch {
     return null;
@@ -36,19 +41,17 @@ export default function Navigation() {
   const router = useRouter();
 
   useEffect(() => {
-    // Read token from storage
     const storedToken =
       (window as any)._defendmlToken || localStorage.getItem("defendml_token");
-
     setToken(storedToken);
 
-    // Decode user info
     if (storedToken) {
       const mockUser = decodeMockToken(storedToken);
       if (mockUser) setUserRole(mockUser.role);
     }
   }, [router.pathname]);
 
+  /** ✅ Nav Items — core + gated by feature flags */
   const navItems = [
     { name: "Overview", href: "/overview", icon: LayoutDashboard },
     { name: "Security Center", href: "/security", icon: Shield },
@@ -58,10 +61,17 @@ export default function Navigation() {
     { name: "Usage", href: "/usage", icon: BarChart3 },
     { name: "Audit", href: "/audit", icon: ScrollText },
     { name: "Settings", href: "/settings", icon: Settings },
+
+    // ✅ Gated links — feature flags + role based
+    ...(FF_ASL3_STATUS && userRole === "Admin"
+      ? [{ name: "ASL-3 Status", href: "/asl3-status", icon: ShieldCheck }]
+      : []),
+    ...(FF_INCIDENT_CENTER && userRole === "SuperAdmin"
+      ? [{ name: "Incident Center", href: "/incidents", icon: AlertTriangle }]
+      : []),
   ];
 
   const isActive = (href: string) => {
-    // Handle Security Center active state for old routes
     if (href === "/security") {
       return (
         router.pathname === "/security" ||
@@ -75,11 +85,11 @@ export default function Navigation() {
   /** ✅ Proper Supabase + Legacy Logout */
   const handleLogout = async () => {
     try {
-      await supabase.auth.signOut(); // sign out session
-      clearLegacyToken(); // remove local mirror tokens
+      await supabase.auth.signOut();
+      clearLegacyToken();
       setToken(null);
       setUserRole(null);
-      window.location.replace("/login"); // hard redirect to login
+      window.location.replace("/login");
     } catch (err) {
       console.error("Logout failed:", err);
     }
@@ -101,7 +111,7 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Right side (auth + role) */}
+          {/* Right Side */}
           <div className="hidden md:flex items-center gap-3">
             {token && userRole && (
               <span className="px-3 py-1 bg-purple-500/20 border border-purple-500/40 rounded-lg text-purple-200 text-xs font-semibold">
@@ -127,7 +137,7 @@ export default function Navigation() {
             )}
           </div>
 
-          {/* Mobile menu toggle */}
+          {/* Mobile Toggle */}
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
