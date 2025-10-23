@@ -21,7 +21,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { supabase, clearLegacyToken } from "../lib/auth-bridge";
-import { FF_ASL3_STATUS, FF_INCIDENT_CENTER } from "@/utils/featureFlags";
+import { FF_ASL3_STATUS, FF_INCIDENT_CENTER } from "../utils/featureFlags";
 
 /** Decode mock JWT token to get user info */
 function decodeMockToken(token: string): { email: string; role: string; exp: number } | null {
