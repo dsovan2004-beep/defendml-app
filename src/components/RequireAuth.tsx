@@ -1,10 +1,11 @@
 // src/components/RequireAuth.tsx
-// Role-Based Access Control + Auth guard
-// Accepts Supabase session -> mock token -> API /auth/verify
+// Unified Auth Guard: Demo (superadmin) → Supabase → Legacy Mock Token
+// Keeps role allow-list + resource/action permission checks
 
 import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/router";
 import { createClient } from "@supabase/supabase-js";
+import { getDemoSession } from "../lib/authClient";
 
 interface Props {
   children: ReactNode;
@@ -13,51 +14,55 @@ interface Props {
   action?: "create" | "read" | "update" | "delete" | "export";
 }
 
-/** Supabase client (same envs used on /reset-password) */
+/** Supabase client */
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-/** Read token from a safe place we control (demo / worker token) */
-function getToken(): string | null {
+/** Legacy mock token support (back-compat only) */
+function getLegacyToken(): string | null {
   if (typeof window === "undefined") return null;
   return (window as any)._defendmlToken || localStorage.getItem("defendml_token");
 }
-
-function redirectToLogin() {
-  if (typeof window === "undefined") return;
-  const { pathname, search } = window.location;
-
-  // Public routes that must stay accessible without login
-  const PUBLIC_PATHS = ["/login", "/reset-password", "/auth/callback"];
-
-  // Do not redirect if user is already on a public route
-  if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) return;
-
-  const next = encodeURIComponent(pathname + search);
-  window.location.replace(`/login?next=${next}`);
-}
-
-/** Decode mock JWT token */
-function decodeMockToken(token: string): { email: string; role: string; exp: number } | null {
+function decodeLegacyMockToken(
+  token: string
+): { email: string; role: string; exp?: number } | null {
   try {
     const decoded = JSON.parse(atob(token));
-    if (decoded.exp && decoded.exp < Date.now()) return null; // expired
+    if (decoded.exp && decoded.exp < Date.now()) return null;
     return decoded;
   } catch {
     return null;
   }
 }
 
-/** Simple RBAC helper */
-function hasPermission(userRole: string, resource: string, action: string): boolean {
-  if (userRole === "admin") return true;                  // admin = all
-  if (userRole === "analyst") return action === "read" || action === "export";
-  if (userRole === "viewer") return action === "read";
+function redirectToLogin() {
+  if (typeof window === "undefined") return;
+  const { pathname, search } = window.location;
+
+  // Public routes accessible without auth
+  const PUBLIC_PATHS = ["/login", "/reset-password", "/auth/callback"];
+  if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) return;
+
+  const next = encodeURIComponent(pathname + search);
+  window.location.replace(`/login?next=${next}`);
+}
+
+/** Basic RBAC with superadmin/admin overrides */
+function hasPermission(userRole: string, _resource: string, action: string): boolean {
+  const r = userRole.toLowerCase();
+  if (r === "superadmin" || r === "admin") return true; // full access
+  if (r === "analyst") return action === "read" || action === "export";
+  if (r === "viewer") return action === "read";
   return false;
 }
 
-export default function RequireAuth({ children, role, resource, action = "read" }: Props) {
+export default function RequireAuth({
+  children,
+  role,
+  resource,
+  action = "read",
+}: Props) {
   const [ok, setOk] = useState<boolean | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [accessDenied, setAccessDenied] = useState<string | null>(null);
@@ -66,23 +71,67 @@ export default function RequireAuth({ children, role, resource, action = "read" 
   useEffect(() => {
     let cancelled = false;
 
-    async function run() {
+    async function check() {
       try {
-        // ===== 0) Supabase session (first-class path) =====
+        // ─────────────────────────────────────────────────────────────────────
+        // 1) DEMO SESSION (from authClient.ts) → preferred for sales demos
+        // ─────────────────────────────────────────────────────────────────────
+        const demo = getDemoSession();
+        if (demo) {
+          const roleFound = (demo.role || "superadmin").toLowerCase();
+          setUserRole(roleFound);
+
+          // role allow-list (page-level)
+          if (role) {
+            const allowed = new Set(
+              (Array.isArray(role) ? role : [role]).map((r) => r.toLowerCase())
+            );
+            // always allow privileged roles
+            allowed.add("admin");
+            allowed.add("superadmin");
+            if (!allowed.has(roleFound)) {
+              if (!cancelled) {
+                setAccessDenied(`role-mismatch:${Array.from(allowed).join(",")}`);
+                setOk(false);
+              }
+              return;
+            }
+          }
+
+          // resource/action permission (optional)
+          if (resource && !hasPermission(roleFound, resource, action)) {
+            if (!cancelled) {
+              setAccessDenied(`permission-denied:${resource}:${action}`);
+              setOk(false);
+            }
+            return;
+          }
+
+          if (!cancelled) setOk(true);
+          return;
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // 2) SUPABASE SESSION (primary real auth)
+        // ─────────────────────────────────────────────────────────────────────
         const { data: sessionData } = await supabase.auth.getSession();
         const supaSession = sessionData?.session;
 
         if (supaSession?.access_token) {
-          // If you store role in user_metadata, read it; otherwise default to viewer
-          // const apiRole = (supaSession.user?.user_metadata?.role as string) ?? "viewer";
-          const apiRole = "viewer";
-          setUserRole(apiRole);
+          // If you store role in user_metadata, read it; default to viewer
+          const userRes = await supabase.auth.getUser();
+          const supabaseRole =
+            ((userRes.data.user?.user_metadata as any)?.role as string) || "viewer";
+          const roleFound = supabaseRole.toLowerCase();
+          setUserRole(roleFound);
 
-          // Role allow-list (if provided by page)
           if (role) {
-            const allowed = new Set<string>(Array.isArray(role) ? role : [role]);
+            const allowed = new Set(
+              (Array.isArray(role) ? role : [role]).map((r) => r.toLowerCase())
+            );
             allowed.add("admin");
-            if (!allowed.has(apiRole)) {
+            allowed.add("superadmin");
+            if (!allowed.has(roleFound)) {
               if (!cancelled) {
                 setAccessDenied(`role-mismatch:${Array.from(allowed).join(",")}`);
                 setOk(false);
@@ -91,45 +140,7 @@ export default function RequireAuth({ children, role, resource, action = "read" 
             }
           }
 
-          // Resource/action check (optional)
-          if (resource && !hasPermission(apiRole, resource, action)) {
-            if (!cancelled) {
-              setAccessDenied(`permission-denied:${resource}:${action}`);
-              setOk(false);
-            }
-            return;
-          }
-
-          if (!cancelled) setOk(true);
-          return; // <- stop here; we are authenticated
-        }
-
-        // ===== 1) Mock token (demo path) =====
-        const token = getToken();
-        const mockUser = token ? decodeMockToken(token) : null;
-
-        if (mockUser) {
-          const apiRole = mockUser.role;
-          setUserRole(apiRole);
-
-          if (apiRole === "admin") {
-            if (!cancelled) setOk(true);
-            return;
-          }
-
-          if (role) {
-            const allowed = new Set<string>(Array.isArray(role) ? role : [role]);
-            allowed.add("admin");
-            if (!allowed.has(apiRole)) {
-              if (!cancelled) {
-                setAccessDenied(`role-mismatch:${Array.from(allowed).join(",")}`);
-                setOk(false);
-              }
-              return;
-            }
-          }
-
-          if (resource && !hasPermission(apiRole, resource, action)) {
+          if (resource && !hasPermission(roleFound, resource, action)) {
             if (!cancelled) {
               setAccessDenied(`permission-denied:${resource}:${action}`);
               setOk(false);
@@ -141,43 +152,23 @@ export default function RequireAuth({ children, role, resource, action = "read" 
           return;
         }
 
-        // ===== 2) API token verification (worker path) =====
-        if (token) {
-          const base =
-            process.env.NEXT_PUBLIC_API_BASE ||
-            "https://defendml-api.dsovan2004-beep.workers.dev";
+        // ─────────────────────────────────────────────────────────────────────
+        // 3) LEGACY MOCK TOKEN (back-compat for older demo path)
+        // ─────────────────────────────────────────────────────────────────────
+        const legacy = getLegacyToken();
+        const legacyUser = legacy ? decodeLegacyMockToken(legacy) : null;
 
-          const res = await fetch(`${base}/auth/verify`, {
-            headers: { authorization: `Bearer ${token}` },
-            credentials: "omit",
-          });
-          const data = await res.json().catch(() => ({} as any));
-
-          if (!res.ok || !data?.ok) {
-            if (!cancelled) redirectToLogin();
-            return;
-          }
-
-          const apiRole: string | undefined =
-            data?.user?.role ??
-            (Array.isArray(data?.user?.roles) && data.user.roles[0]);
-
-          if (!apiRole) {
-            if (!cancelled) redirectToLogin();
-            return;
-          }
-
-          setUserRole(apiRole);
-
-          if (apiRole === "admin") {
-            if (!cancelled) setOk(true);
-            return;
-          }
+        if (legacyUser?.role) {
+          const roleFound = legacyUser.role.toLowerCase();
+          setUserRole(roleFound);
 
           if (role) {
-            const allowed = new Set<string>(Array.isArray(role) ? role : [role]);
+            const allowed = new Set(
+              (Array.isArray(role) ? role : [role]).map((r) => r.toLowerCase())
+            );
             allowed.add("admin");
-            if (!allowed.has(apiRole)) {
+            allowed.add("superadmin");
+            if (!allowed.has(roleFound)) {
               if (!cancelled) {
                 setAccessDenied(`role-mismatch:${Array.from(allowed).join(",")}`);
                 setOk(false);
@@ -186,7 +177,7 @@ export default function RequireAuth({ children, role, resource, action = "read" 
             }
           }
 
-          if (resource && !hasPermission(apiRole, resource, action)) {
+          if (resource && !hasPermission(roleFound, resource, action)) {
             if (!cancelled) {
               setAccessDenied(`permission-denied:${resource}:${action}`);
               setOk(false);
@@ -198,20 +189,23 @@ export default function RequireAuth({ children, role, resource, action = "read" 
           return;
         }
 
-        // ===== 3) Nothing matched → login =====
+        // ─────────────────────────────────────────────────────────────────────
+        // 4) Nothing matched → send to /login
+        // ─────────────────────────────────────────────────────────────────────
         if (!cancelled) redirectToLogin();
       } catch {
         if (!cancelled) redirectToLogin();
       }
     }
 
-    run();
+    check();
     return () => {
       cancelled = true;
     };
-  }, [role, resource, action]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [role, resource, action, router.pathname]);
 
-  // Loading state
+  // Loading
   if (ok === null) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center">
