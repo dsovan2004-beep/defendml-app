@@ -60,7 +60,7 @@ function Navigation() {
           <div className="w-8 h-8 rounded-xl bg-purple-600/30 border border-purple-500/40 grid place-items-center">
             <Shield className="w-4 h-4 text-purple-300" />
           </div>
-        <span className="font-semibold text-white">DefendML</span>
+          <span className="font-semibold text-white">DefendML</span>
         </div>
         <nav className="hidden md:flex items-center gap-6 text-sm">
           <button onClick={() => router.push('/overview')} className="text-slate-300 hover:text-white">
@@ -185,7 +185,7 @@ const piiTypeColors: Record<string, string> = {
 function PIIPageContent(): JSX.Element {
   const [piiEvents, setPiiEvents] = useState<PiiEvent[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [showSensitive, setShowSensitive] = useState<boolean>(false);
+  const [showSensitive, setShowSensitive] = useState<boolean>(false); // ← keep ONLY this declaration
   const [selectedType, setSelectedType] = useState<string>('all');
 
   useEffect(() => {
@@ -325,13 +325,10 @@ function PIIPageContent(): JSX.Element {
     0
   );
 
-  const [selectedType, setSelectedType] = useState<string>('all');
   const filteredEvents =
     selectedType === 'all'
       ? piiEvents
       : piiEvents.filter((e) => e.detections.some((d) => d === `pii.${selectedType}`));
-
-  const [showSensitive, setShowSensitive] = useState<boolean>(false);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -436,7 +433,7 @@ function PIIPageContent(): JSX.Element {
           {/* PII type buttons */}
           <div className="bg-black/30 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text.white">PII Types Detected</h3>
+              <h3 className="text-lg font-bold text-white">PII Types Detected</h3>
               <button
                 onClick={fetchPIIEvents}
                 className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded-lg text-sm font-medium transition-all border border-blue-500/30"
@@ -450,7 +447,7 @@ function PIIPageContent(): JSX.Element {
                 className={`px-4 py-3 rounded-lg border transition-all ${
                   selectedType === 'all'
                     ? 'bg-blue-500 text-white border-blue-400 shadow-lg shadow-blue-500/30'
-                    : 'bg.white/5 text-slate-300 border-white/10 hover:bg-white/10'
+                    : 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/10'
                 }`}
               >
                 <div className="text-xs uppercase tracking-wide mb-1">All Types</div>
@@ -571,7 +568,7 @@ function PIIPageContent(): JSX.Element {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                            <span className="text-sm text-slate-300 font.medium">
+                            <span className="text-sm text-slate-300 font-medium">
                               {event.llm_provider || 'Unknown'}
                             </span>
                           </div>
@@ -626,7 +623,7 @@ function PIIPageContent(): JSX.Element {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from.blue-500/10 to-cyan-600/10 border border-blue-500/20 rounded-xl p-6">
+            <div className="bg-gradient-to-br from-blue-500/10 to-cyan-600/10 border border-blue-500/20 rounded-xl p-6">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-6 h-6 text-blue-400 flex-shrink-0 mt-0.5" />
                 <div>
