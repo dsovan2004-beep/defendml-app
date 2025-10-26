@@ -22,36 +22,66 @@ import {
 } from "lucide-react";
 import { supabase, clearLegacyToken } from "../lib/auth-bridge";
 import { FF_ASL3_STATUS, FF_INCIDENT_CENTER } from "../utils/featureFlags";
+import {
+  getDemoSession,
+  clearDemoSession,
+  getEffectiveRole,
+} from "../lib/authClient";
 
-/** Decode mock JWT token to get user info */
-function decodeMockToken(token: string): { email: string; role: string; exp: number } | null {
-  try {
-    const decoded = JSON.parse(atob(token));
-    if (decoded.exp && decoded.exp < Date.now()) return null;
-    return decoded;
-  } catch {
-    return null;
-  }
+// Normalize roles like "superadmin" -> "SuperAdmin"
+function prettyRole(r: string | null | undefined) {
+  if (!r) return "Viewer";
+  return r
+    .split(/[\s_-]+/)
+    .map((p) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
+    .join("");
+}
+function isSuperAdmin(role: string) {
+  return role.toLowerCase() === "superadmin";
+}
+function isAdmin(role: string) {
+  return role.toLowerCase() === "admin" || isSuperAdmin(role);
 }
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
+  const [authed, setAuthed] = useState(false);
+  const [role, setRole] = useState<string>("viewer");
   const router = useRouter();
 
   useEffect(() => {
-    const storedToken =
-      (window as any)._defendmlToken || localStorage.getItem("defendml_token");
-    setToken(storedToken);
+    let mounted = true;
+    (async () => {
+      // 1) Demo session wins (for sales demos)
+      const demo = getDemoSession();
+      if (demo) {
+        if (!mounted) return;
+        setAuthed(true);
+        setRole(demo.role || "superadmin");
+        return;
+      }
 
-    if (storedToken) {
-      const mockUser = decodeMockToken(storedToken);
-      if (mockUser) setUserRole(mockUser.role);
-    }
+      // 2) Supabase session fallback
+      const { data } = await supabase.auth.getSession();
+      if (!mounted) return;
+      if (data.session) {
+        const userRes = await supabase.auth.getUser();
+        const supabaseRole =
+          ((userRes.data.user?.user_metadata as any)?.role as string) || "viewer";
+        setAuthed(true);
+        setRole(getEffectiveRole(supabaseRole)); // will just return supabaseRole here
+      } else {
+        setAuthed(false);
+        setRole("viewer");
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
   }, [router.pathname]);
 
-  /** ✅ Nav Items — core + gated by feature flags */
+  /** ✅ Nav Items — core + (optional) feature-flagged links */
   const navItems = [
     { name: "Overview", href: "/overview", icon: LayoutDashboard },
     { name: "Security Center", href: "/security", icon: Shield },
@@ -62,11 +92,11 @@ export default function Navigation() {
     { name: "Audit", href: "/audit", icon: ScrollText },
     { name: "Settings", href: "/settings", icon: Settings },
 
-    // ✅ Gated links — feature flags + role based
-    ...(FF_ASL3_STATUS && userRole === "Admin"
+    // 🔐 Feature-flagged links (role-aware). Demo superadmin can see all.
+    ...(FF_ASL3_STATUS && (isAdmin(role) || isSuperAdmin(role))
       ? [{ name: "ASL-3 Status", href: "/asl3-status", icon: ShieldCheck }]
       : []),
-    ...(FF_INCIDENT_CENTER && userRole === "SuperAdmin"
+    ...(FF_INCIDENT_CENTER && isSuperAdmin(role)
       ? [{ name: "Incident Center", href: "/incidents", icon: AlertTriangle }]
       : []),
   ];
@@ -82,13 +112,14 @@ export default function Navigation() {
     return router.pathname === href;
   };
 
-  /** ✅ Proper Supabase + Legacy Logout */
+  /** ✅ Unified logout: demo + legacy + supabase */
   const handleLogout = async () => {
     try {
-      await supabase.auth.signOut();
-      clearLegacyToken();
-      setToken(null);
-      setUserRole(null);
+      clearDemoSession(); // demo off
+      clearLegacyToken(); // old mock token off
+      await supabase.auth.signOut(); // supabase off
+      setAuthed(false);
+      setRole("viewer");
       window.location.replace("/login");
     } catch (err) {
       console.error("Logout failed:", err);
@@ -113,12 +144,12 @@ export default function Navigation() {
 
           {/* Right Side */}
           <div className="hidden md:flex items-center gap-3">
-            {token && userRole && (
+            {authed && (
               <span className="px-3 py-1 bg-purple-500/20 border border-purple-500/40 rounded-lg text-purple-200 text-xs font-semibold">
-                {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
+                {prettyRole(role)}
               </span>
             )}
-            {token ? (
+            {authed ? (
               <button
                 onClick={handleLogout}
                 className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 border border-purple-500/50 rounded-lg text-white transition-all text-sm font-medium shadow-lg"
@@ -149,7 +180,7 @@ export default function Navigation() {
         </div>
 
         {/* Desktop Nav Tabs */}
-        {token && (
+        {authed && (
           <div className="hidden md:flex items-center gap-2 pb-3 overflow-x-auto">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -176,7 +207,7 @@ export default function Navigation() {
       {isOpen && (
         <div className="md:hidden border-t border-slate-800">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            {token && (
+            {authed && (
               <>
                 {navItems.map((item) => {
                   const Icon = item.icon;
@@ -200,16 +231,16 @@ export default function Navigation() {
             )}
 
             {/* Role (mobile) */}
-            {token && userRole && (
+            {authed && (
               <div className="px-3 py-2">
                 <span className="inline-block px-3 py-1 bg-purple-500/20 border border-purple-500/40 rounded-lg text-purple-200 text-sm font-semibold">
-                  Role: {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
+                  Role: {prettyRole(role)}
                 </span>
               </div>
             )}
 
             {/* Auth (mobile) */}
-            {token ? (
+            {authed ? (
               <button
                 onClick={() => {
                   setIsOpen(false);
