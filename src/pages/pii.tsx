@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import RequireAuth from '../components/RequireAuth';
-import { UserRole } from '../types/roles';
 import { Lock, Eye, EyeOff, AlertCircle, Shield, TrendingDown, DollarSign, FileCheck } from 'lucide-react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/router';
 
+/* ---------- Types ---------- */
 type Detection = string | { type?: string };
+
 type ApiLog =
   | {
       id?: string | number;
@@ -33,6 +35,79 @@ type PiiEvent = {
   cost_of_breach_prevented?: number;
 };
 
+/* ---------- Role Guard (admin OR super_admin) ---------- */
+function useResolvedRole() {
+  const [role, setRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClientComponentClient();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const [{ data: sessionData }, { data: userData }] = await Promise.all([
+          supabase.auth.getSession(),
+          supabase.auth.getUser(),
+        ]);
+
+        // Try decoding JWT payload first
+        let jwtRole: string | undefined;
+        const token = sessionData?.session?.access_token;
+        if (token) {
+          try {
+            const payload = JSON.parse(atob(token.split('.')[1] || ''));
+            jwtRole =
+              payload?.role ??
+              payload?.app_metadata?.role ??
+              payload?.user_metadata?.role;
+          } catch {
+            // ignore decode errors
+          }
+        }
+
+        const metaRole =
+          userData?.user?.app_metadata?.role ??
+          userData?.user?.user_metadata?.role;
+
+        const resolved = jwtRole ?? metaRole ?? 'viewer';
+        setRole(resolved);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [supabase]);
+
+  return { role, loading };
+}
+
+function AccessDenied({ role }: { role: string | null }) {
+  const router = useRouter();
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Navigation />
+      <div className="flex-1 bg-gradient-to-br from-slate-950 via-red-950 to-slate-950 flex items-center justify-center">
+        <div className="text-center p-8 rounded-2xl bg-black/30 border border-white/10 backdrop-blur-xl max-w-md">
+          <div className="text-4xl mb-4 text-red-500">⚠️</div>
+          <h1 className="text-2xl font-bold text-white">Access Denied</h1>
+          <p className="text-slate-300 mt-3">You don’t have permission to access this page.</p>
+          <p className="mt-4 text-sm text-slate-400">
+            Your role: <span className="text-pink-400">{role ?? 'unknown'}</span>
+            <br />
+            Required role: <span className="text-purple-400">super_admin or admin</span>
+          </p>
+          <button
+            onClick={() => router.push('/overview')}
+            className="mt-6 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition"
+          >
+            Go to Dashboard
+          </button>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+/* ---------- PII Page Content ---------- */
 const piiTypeColors: Record<string, string> = {
   email: 'bg-blue-500/20 text-blue-300 border-blue-400/30',
   phone: 'bg-purple-500/20 text-purple-300 border-purple-400/30',
@@ -104,6 +179,7 @@ function PIIPageContent(): JSX.Element {
       setPiiEvents(normalized);
     } catch (err) {
       console.error('Error fetching PII events:', err);
+      // Fallback demo data
       setPiiEvents([
         {
           id: 1,
@@ -501,17 +577,31 @@ function PIIPageContent(): JSX.Element {
             </div>
           </div>
         </div>
-      </div>
+      </div>      
       <Footer />
     </div>
   );
 }
 
-// Default export with RequireAuth protection
+/* ---------- Default Export: Guard + Content ---------- */
 export default function PIIPage() {
-  return (
-    <RequireAuth role={UserRole.SUPER_ADMIN}>
-      <PIIPageContent />
-    </RequireAuth>
-  );
+  const { role, loading } = useResolvedRole();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navigation />
+        <div className="flex-1 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 flex items-center justify-center">
+          <div className="text-slate-400">Checking access…</div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!role || !['super_admin', 'admin'].includes(role)) {
+    return <AccessDenied role={role} />;
+  }
+
+  return <PIIPageContent />;
 }
