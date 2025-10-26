@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Lock, Eye, EyeOff, AlertCircle, Shield, TrendingDown, DollarSign, FileCheck } from 'lucide-react';
+import { getDemoSession } from '../lib/authClient';
 
 /* =========================
    Types
@@ -36,6 +37,18 @@ type PiiEvent = {
 };
 
 /* =========================
+   Helpers
+========================= */
+function normalizeRole(r?: string | null) {
+  if (!r) return 'viewer';
+  return r.replace(/[\s_-]+/g, '').toLowerCase(); // "super_admin" -> "superadmin"
+}
+function prettyRole(r?: string | null) {
+  const n = normalizeRole(r);
+  return n.charAt(0).toUpperCase() + n.slice(1);
+}
+
+/* =========================
    Local UI: Navigation & Footer
 ========================= */
 function Navigation() {
@@ -47,7 +60,7 @@ function Navigation() {
           <div className="w-8 h-8 rounded-xl bg-purple-600/30 border border-purple-500/40 grid place-items-center">
             <Shield className="w-4 h-4 text-purple-300" />
           </div>
-          <span className="font-semibold text-white">DefendML</span>
+        <span className="font-semibold text-white">DefendML</span>
         </div>
         <nav className="hidden md:flex items-center gap-6 text-sm">
           <button onClick={() => router.push('/overview')} className="text-slate-300 hover:text-white">
@@ -74,7 +87,7 @@ function Footer() {
 }
 
 /* =========================
-   Auth / Role Guard (admin OR super_admin)
+   Auth / Role Guard (accepts demo superadmin)
 ========================= */
 function useResolvedRole() {
   const [role, setRole] = useState<string | null>(null);
@@ -89,6 +102,14 @@ function useResolvedRole() {
   useEffect(() => {
     (async () => {
       try {
+        // 0) Demo session (new path) — wins immediately for sales demos
+        const demo = getDemoSession();
+        if (demo?.role) {
+          setRole(normalizeRole(demo.role));
+          return;
+        }
+
+        // 1) Supabase session
         const [{ data: sessionData }, { data: userData }] = await Promise.all([
           supabase.auth.getSession(),
           supabase.auth.getUser(),
@@ -112,7 +133,7 @@ function useResolvedRole() {
           (userData?.user?.app_metadata as any)?.role ??
           (userData?.user?.user_metadata as any)?.role;
 
-        setRole((jwtRole ?? metaRole ?? 'viewer') as string);
+        setRole(normalizeRole(jwtRole ?? metaRole ?? 'viewer'));
       } finally {
         setLoading(false);
       }
@@ -133,9 +154,9 @@ function AccessDenied({ role }: { role: string | null }) {
           <h1 className="text-2xl font-bold text-white">Access Denied</h1>
           <p className="text-slate-300 mt-3">You don’t have permission to access this page.</p>
           <p className="mt-4 text-sm text-slate-400">
-            Your role: <span className="text-pink-400">{role ?? 'unknown'}</span>
+            Your role: <span className="text-pink-400">{prettyRole(role)}</span>
             <br />
-            Required role: <span className="text-purple-400">super_admin or admin</span>
+            Required role: <span className="text-purple-400">Superadmin or Admin</span>
           </p>
           <button
             onClick={() => router.push('/overview')}
@@ -304,10 +325,13 @@ function PIIPageContent(): JSX.Element {
     0
   );
 
+  const [selectedType, setSelectedType] = useState<string>('all');
   const filteredEvents =
     selectedType === 'all'
       ? piiEvents
       : piiEvents.filter((e) => e.detections.some((d) => d === `pii.${selectedType}`));
+
+  const [showSensitive, setShowSensitive] = useState<boolean>(false);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -412,7 +436,7 @@ function PIIPageContent(): JSX.Element {
           {/* PII type buttons */}
           <div className="bg-black/30 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-white">PII Types Detected</h3>
+              <h3 className="text-lg font-bold text.white">PII Types Detected</h3>
               <button
                 onClick={fetchPIIEvents}
                 className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded-lg text-sm font-medium transition-all border border-blue-500/30"
@@ -426,7 +450,7 @@ function PIIPageContent(): JSX.Element {
                 className={`px-4 py-3 rounded-lg border transition-all ${
                   selectedType === 'all'
                     ? 'bg-blue-500 text-white border-blue-400 shadow-lg shadow-blue-500/30'
-                    : 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/10'
+                    : 'bg.white/5 text-slate-300 border-white/10 hover:bg-white/10'
                 }`}
               >
                 <div className="text-xs uppercase tracking-wide mb-1">All Types</div>
@@ -547,7 +571,7 @@ function PIIPageContent(): JSX.Element {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                            <span className="text-sm text-slate-300 font-medium">
+                            <span className="text-sm text-slate-300 font.medium">
                               {event.llm_provider || 'Unknown'}
                             </span>
                           </div>
@@ -602,7 +626,7 @@ function PIIPageContent(): JSX.Element {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-500/10 to-cyan-600/10 border border-blue-500/20 rounded-xl p-6">
+            <div className="bg-gradient-to-br from.blue-500/10 to-cyan-600/10 border border-blue-500/20 rounded-xl p-6">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-6 h-6 text-blue-400 flex-shrink-0 mt-0.5" />
                 <div>
@@ -645,7 +669,9 @@ export default function PIIPage() {
     );
   }
 
-  if (!role || !['super_admin', 'admin'].includes(role)) {
+  const nrole = normalizeRole(role);
+  const allowed = new Set(['superadmin', 'admin']); // accepts demo "superadmin" and real "admin"
+  if (!allowed.has(nrole)) {
     return <AccessDenied role={role} />;
   }
 
