@@ -1,10 +1,19 @@
 import { useState, useEffect } from "react";
 import { Shield, Lock, Mail } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
+import { setDemoSession, isDemoEnabled, getDemoSession } from "../lib/authClient";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Demo accounts (used only when NEXT_PUBLIC_ENABLE_DEMO = true)
+const demoCredentials = [
+  { email: "superadmin@test.com",  password: "DefendML@2025", role: "superadmin" },
+  { email: "admin@defendml.com",   password: "demo123",       role: "admin" },
+  { email: "analyst@defendml.com", password: "demo123",       role: "analyst" },
+  { email: "viewer@defendml.com",  password: "demo123",       role: "viewer" },
+];
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -12,10 +21,16 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
+  // ✅ Auto-redirect if user already has a Supabase or demo session
   useEffect(() => {
     (async () => {
       const { data } = await supabase.auth.getSession();
       if (data.session) {
+        const params = new URLSearchParams(window.location.search);
+        window.location.replace(params.get("next") || "/overview");
+        return;
+      }
+      if (getDemoSession()) {
         const params = new URLSearchParams(window.location.search);
         window.location.replace(params.get("next") || "/overview");
       }
@@ -28,43 +43,29 @@ export default function Login() {
     setBusy(true);
 
     try {
-      // === PRIMARY PATH: Supabase Authentication ===
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      // ✅ DEMO AUTH: only runs if env flag is true
+      if (isDemoEnabled()) {
+        const match = demoCredentials.find(
+          (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+        );
+        if (match) {
+          setDemoSession({ email: match.email, role: match.role, ts: Date.now() });
+          const params = new URLSearchParams(window.location.search);
+          window.location.replace(params.get("next") || "/overview");
+          return;
+        }
+      }
+
+      // ✅ PRIMARY PATH: Supabase Authentication
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
       if (signInError) throw signInError;
 
-      // Optional: fallback redirect
       const params = new URLSearchParams(window.location.search);
       window.location.replace(params.get("next") || "/overview");
     } catch (err: any) {
-      // === FALLBACK PATH: Local demo credentials (admin/analyst/viewer) ===
-      const validCredentials = [
-        { email: "admin@defendml.com", password: "demo123", role: "admin" },
-        { email: "analyst@defendml.com", password: "demo123", role: "analyst" },
-        { email: "viewer@defendml.com", password: "demo123", role: "viewer" },
-      ];
-      const user = validCredentials.find(
-        (cred) => cred.email === email && cred.password === password
-      );
-      if (!user) {
-        setError(err?.message || "Invalid login credentials");
-        setBusy(false);
-        return;
-      }
-
-      const mockToken = btoa(JSON.stringify({
-        email: user.email,
-        role: user.role,
-        exp: Date.now() + 7 * 24 * 60 * 60 * 1000,
-      }));
-      localStorage.setItem("defendml_token", mockToken);
-      (globalThis as any)._defendmlToken = mockToken;
-
-      await new Promise((r) => setTimeout(r, 500));
-      const params = new URLSearchParams(window.location.search);
-      window.location.replace(params.get("next") || "/overview");
+      setError(err?.message || "Invalid login credentials");
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -125,6 +126,12 @@ export default function Login() {
             {busy ? "Signing in..." : "Sign in"}
           </button>
         </form>
+
+        {isDemoEnabled() && (
+          <div className="mt-6 text-center text-xs text-purple-300/80">
+            <p>Demo mode enabled — try <b>superadmin@test.com / DefendML@2025</b></p>
+          </div>
+        )}
       </div>
     </div>
   );
