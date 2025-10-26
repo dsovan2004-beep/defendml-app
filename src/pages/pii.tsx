@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import Navigation from '../components/Navigation';
-import Footer from '../components/Footer';
-import { Lock, Eye, EyeOff, AlertCircle, Shield, TrendingDown, DollarSign, FileCheck } from 'lucide-react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { Lock, Eye, EyeOff, AlertCircle, Shield, TrendingDown, DollarSign, FileCheck } from 'lucide-react';
 
-/* ---------- Types ---------- */
+/* =========================
+   Types
+========================= */
 type Detection = string | { type?: string };
 
 type ApiLog =
@@ -35,11 +35,56 @@ type PiiEvent = {
   cost_of_breach_prevented?: number;
 };
 
-/* ---------- Role Guard (admin OR super_admin) ---------- */
+/* =========================
+   Local UI: Navigation & Footer
+========================= */
+function Navigation() {
+  const router = useRouter();
+  return (
+    <header className="sticky top-0 z-20 bg-black/30 backdrop-blur-xl border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-purple-600/30 border border-purple-500/40 grid place-items-center">
+            <Shield className="w-4 h-4 text-purple-300" />
+          </div>
+          <span className="font-semibold text-white">DefendML</span>
+        </div>
+        <nav className="hidden md:flex items-center gap-6 text-sm">
+          <button onClick={() => router.push('/overview')} className="text-slate-300 hover:text-white">
+            Overview
+          </button>
+          <button onClick={() => router.push('/security')} className="text-slate-300 hover:text-white">
+            Security
+          </button>
+          <span className="text-white font-semibold">PII</span>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="border-t border-white/10 bg-black/30">
+      <div className="max-w-7xl mx-auto px-6 py-6 text-sm text-slate-400">
+        © {new Date().getFullYear()} DefendML — Secure your AI infrastructure
+      </div>
+    </footer>
+  );
+}
+
+/* =========================
+   Auth / Role Guard (admin OR super_admin)
+========================= */
 function useResolvedRole() {
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createClientComponentClient();
+
+  const supabase: SupabaseClient = useMemo(() => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    return createClient(url, anon);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -49,10 +94,9 @@ function useResolvedRole() {
           supabase.auth.getUser(),
         ]);
 
-        // Try decoding JWT payload first
         let jwtRole: string | undefined;
         const token = sessionData?.session?.access_token;
-        if (token) {
+        if (token && typeof window !== 'undefined') {
           try {
             const payload = JSON.parse(atob(token.split('.')[1] || ''));
             jwtRole =
@@ -60,16 +104,15 @@ function useResolvedRole() {
               payload?.app_metadata?.role ??
               payload?.user_metadata?.role;
           } catch {
-            // ignore decode errors
+            /* ignore malformed token */
           }
         }
 
         const metaRole =
-          userData?.user?.app_metadata?.role ??
-          userData?.user?.user_metadata?.role;
+          (userData?.user?.app_metadata as any)?.role ??
+          (userData?.user?.user_metadata as any)?.role;
 
-        const resolved = jwtRole ?? metaRole ?? 'viewer';
-        setRole(resolved);
+        setRole((jwtRole ?? metaRole ?? 'viewer') as string);
       } finally {
         setLoading(false);
       }
@@ -107,7 +150,9 @@ function AccessDenied({ role }: { role: string | null }) {
   );
 }
 
-/* ---------- PII Page Content ---------- */
+/* =========================
+   PII Page Content
+========================= */
 const piiTypeColors: Record<string, string> = {
   email: 'bg-blue-500/20 text-blue-300 border-blue-400/30',
   phone: 'bg-purple-500/20 text-purple-300 border-purple-400/30',
@@ -124,7 +169,6 @@ function PIIPageContent(): JSX.Element {
 
   useEffect(() => {
     fetchPIIEvents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function fetchPIIEvents() {
@@ -406,7 +450,7 @@ function PIIPageContent(): JSX.Element {
               ))}
               {Object.keys(piiTypeCounts).length === 0 && (
                 <div className="text-slate-400 text-sm py-3">
-                  No PII types detected yet - your data is secure! 🎉
+                  No PII types detected yet — your data is secure! 🎉
                 </div>
               )}
             </div>
@@ -577,13 +621,15 @@ function PIIPageContent(): JSX.Element {
             </div>
           </div>
         </div>
-      </div>      
+      </div>
       <Footer />
     </div>
   );
 }
 
-/* ---------- Default Export: Guard + Content ---------- */
+/* =========================
+   Page Export (Guard + Content)
+========================= */
 export default function PIIPage() {
   const { role, loading } = useResolvedRole();
 
@@ -591,7 +637,7 @@ export default function PIIPage() {
     return (
       <div className="min-h-screen flex flex-col">
         <Navigation />
-        <div className="flex-1 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 flex items-center justify-center">
+        <div className="flex-1 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 grid place-items-center">
           <div className="text-slate-400">Checking access…</div>
         </div>
         <Footer />
