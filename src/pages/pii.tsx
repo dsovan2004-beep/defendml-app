@@ -1,7 +1,7 @@
 // src/pages/pii.tsx
 import React, { useEffect, useMemo, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { Shield, Lock, AlertCircle, DollarSign, FileCheck } from 'lucide-react';
+import { Shield, Lock, AlertCircle, DollarSign, FileCheck, TrendingDown } from 'lucide-react';
 import { useRouter } from 'next/router';
 
 /* ------------------------- Types ------------------------- */
