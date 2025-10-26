@@ -1,9 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Shield, Eye, Clock, AlertTriangle, Database } from 'lucide-react';
-
-// ============================================
-// TypeScript Interfaces (MUST BE FIRST)
-// ============================================
 
 interface PIIDetection {
   id: string;
@@ -33,10 +29,6 @@ interface PIIType {
   percentage: number;
 }
 
-// ============================================
-// Demo Data (AFTER Interfaces)
-// ============================================
-
 const demoPIIDetections: PIIDetection[] = [
   {
     id: 'pii-2025-1847',
@@ -48,7 +40,7 @@ const demoPIIDetections: PIIDetection[] = [
     user_id: 'user@example.com',
     provider: 'Claude 3.5 Sonnet',
     severity: 'CRITICAL',
-    original_text_hash: 'a8f3bc9e2d1...'
+    original_text_hash: 'a8f3bc9e2d1'
   },
   {
     id: 'pii-2025-1846',
@@ -60,7 +52,7 @@ const demoPIIDetections: PIIDetection[] = [
     user_id: 'developer@company.com',
     provider: 'GPT-4',
     severity: 'CRITICAL',
-    original_text_hash: 'b7d2ea4f1c8...'
+    original_text_hash: 'b7d2ea4f1c8'
   },
   {
     id: 'pii-2025-1845',
@@ -72,7 +64,7 @@ const demoPIIDetections: PIIDetection[] = [
     user_id: 'analyst@company.com',
     provider: 'Claude 3.5 Sonnet',
     severity: 'MEDIUM',
-    original_text_hash: 'c6e1fb3a9d4...'
+    original_text_hash: 'c6e1fb3a9d4'
   },
   {
     id: 'pii-2025-1844',
@@ -84,7 +76,7 @@ const demoPIIDetections: PIIDetection[] = [
     user_id: 'sales@company.com',
     provider: 'Gemini Pro',
     severity: 'HIGH',
-    original_text_hash: 'd5f2gc4b8e5...'
+    original_text_hash: 'd5f2gc4b8e5'
   },
   {
     id: 'pii-2025-1843',
@@ -96,7 +88,7 @@ const demoPIIDetections: PIIDetection[] = [
     user_id: 'finance@company.com',
     provider: 'Claude 3.5 Sonnet',
     severity: 'CRITICAL',
-    original_text_hash: 'e4g3hd5c9f6...'
+    original_text_hash: 'e4g3hd5c9f6'
   }
 ];
 
@@ -113,12 +105,8 @@ const demoPIITypes: PIIType[] = [
   { type: 'Other', count: 74, percentage: 4.0 }
 ];
 
-// ============================================
-// Main Component
-// ============================================
-
 export default function PIIProtectionPage() {
-  const [detections, setDetections] = useState<PIIDetection[]>(demoPIIDetections);
+  const [detections] = useState<PIIDetection[]>(demoPIIDetections);
   const [piiTypes] = useState<PIIType[]>(demoPIITypes);
   const [metrics] = useState<ClassifierMetrics>({
     status: 'ACTIVE',
@@ -132,7 +120,6 @@ export default function PIIProtectionPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-6">
-      {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <Shield className="w-8 h-8 text-purple-400" />
@@ -143,7 +130,6 @@ export default function PIIProtectionPage() {
         </p>
       </div>
 
-      {/* Top Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <MetricCard
           icon={<Database className="w-6 h-6" />}
@@ -156,7 +142,7 @@ export default function PIIProtectionPage() {
           icon={<Shield className="w-6 h-6" />}
           label="Detection Accuracy"
           value="99.6%"
-          change="Above 99% target ✓"
+          change="Above 99% target"
           color="green"
         />
         <MetricCard
@@ -170,12 +156,11 @@ export default function PIIProtectionPage() {
           icon={<AlertTriangle className="w-6 h-6" />}
           label="False Positive Rate"
           value="0.3%"
-          change="Below 1% target ✓"
+          change="Below 1% target"
           color="yellow"
         />
       </div>
 
-      {/* Constitutional Classifier Performance Widget */}
       <div className="bg-gradient-to-br from-purple-900/30 to-purple-800/20 border border-purple-500/30 rounded-lg p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
@@ -206,7 +191,6 @@ export default function PIIProtectionPage() {
           </div>
         </div>
 
-        {/* Defense Layers */}
         <div className="mt-6 pt-6 border-t border-purple-500/30">
           <p className="text-sm text-gray-400 mb-3">Defense Layers Active</p>
           <div className="flex gap-3">
@@ -238,7 +222,6 @@ export default function PIIProtectionPage() {
         </div>
       </div>
 
-      {/* PII Types Detected */}
       <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 mb-6">
         <h2 className="text-xl font-semibold mb-4">PII Types Detected (Last 24h)</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -253,7 +236,6 @@ export default function PIIProtectionPage() {
         </div>
       </div>
 
-      {/* Recent PII Detections Table */}
       <div className="bg-gray-800/50 border border-gray-700 rounded-lg overflow-hidden">
         <div className="p-6 border-b border-gray-700 flex justify-between items-center">
           <h2 className="text-xl font-semibold">Recent PII Detections</h2>
@@ -299,10 +281,6 @@ export default function PIIProtectionPage() {
     </div>
   );
 }
-
-// ============================================
-// Child Components
-// ============================================
 
 interface MetricCardProps {
   icon: React.ReactNode;
@@ -418,29 +396,3 @@ function PIIDetectionRow({ detection }: PIIDetectionRowProps) {
     </tr>
   );
 }
-```
-
----
-
-## 🔧 WHAT I FIXED
-
-1. ✅ **Moved all TypeScript interfaces to the TOP of the file** (before any usage)
-2. ✅ **Defined all required interfaces:**
-   - `PIIDetection`
-   - `ClassifierMetrics`
-   - `PIIType`
-3. ✅ **Properly typed all demo data arrays**
-4. ✅ **Added proper TypeScript types to all component props**
-5. ✅ **Fixed color classes to avoid dynamic Tailwind issues**
-6. ✅ **Simplified icon rendering (removed dynamic color classes)**
-
----
-
-## 📁 FILE STRUCTURE
-
-Make sure your file is in the correct location:
-```
-defendml-app/
-├── src/
-│   └── pages/
-│       └── pii.tsx  ← THIS FILE
