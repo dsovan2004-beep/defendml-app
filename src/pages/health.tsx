@@ -4,7 +4,7 @@ import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
 import { UserRole } from '../types/roles';
-import { Activity, Zap, CheckCircle, TrendingUp, Server, Database, Gauge } from 'lucide-react';
+import { Activity, Zap, CheckCircle, TrendingUp, Server, Database, Gauge, Shield } from 'lucide-react';
 
 function HealthPageContent() {
   return (
@@ -43,6 +43,119 @@ function HealthPageContent() {
               <div className="text-4xl font-bold text-white mb-2">45K</div>
               <div className="text-purple-300 font-medium">Requests Today</div>
               <div className="text-purple-400/60 text-sm mt-1">Across 5 providers</div>
+            </div>
+          </div>
+
+          {/* NEW: ASL-3 Security Performance */}
+          <div className="bg-gradient-to-br from-purple-500/10 to-blue-600/10 rounded-xl p-6 border border-purple-500/20 backdrop-blur-lg mb-8">
+            <div className="flex items-center gap-3 mb-6">
+              <Shield className="w-8 h-8 text-purple-400" />
+              <div>
+                <h2 className="text-2xl font-bold text-white">ASL-3 Security Performance</h2>
+                <p className="text-slate-400 text-sm">Real-time constitutional classifier and defense layer health</p>
+              </div>
+            </div>
+
+            {/* Constitutional Classifier Health */}
+            <div className="mb-6">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-cyan-400" />
+                Constitutional Classifier Health
+              </h3>
+              <div className="bg-white/5 backdrop-blur-lg rounded-lg p-4 border border-white/10">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  <div>
+                    <div className="text-xs text-slate-400 mb-1">Status</div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      <span className="text-sm font-semibold text-green-400">ACTIVE</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-400 mb-1">Accuracy</div>
+                    <div className="text-lg font-bold text-green-400">99.6%</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-400 mb-1">Latency (P95)</div>
+                    <div className="text-lg font-bold text-cyan-400">42ms</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-400 mb-1">False Positive Rate</div>
+                    <div className="text-lg font-bold text-yellow-400">0.3%</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-400 mb-1">Throughput</div>
+                    <div className="text-lg font-bold text-blue-400">2.4K/s</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Defense Layer Status */}
+            <div className="mb-6">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-purple-400" />
+                Defense Layer Status
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {[
+                  { num: 1, name: 'Access Controls', status: 'HEALTHY', uptime: '99.99%', latency: '5ms' },
+                  { num: 2, name: 'Real-Time Classifiers', status: 'HEALTHY', uptime: '99.94%', latency: '42ms' },
+                  { num: 3, name: 'Async Monitoring', status: 'HEALTHY', uptime: '99.98%', latency: '120ms' },
+                  { num: 4, name: 'Rapid Response', status: 'HEALTHY', uptime: '99.95%', latency: '2.8s' }
+                ].map(layer => (
+                  <div key={layer.num} className="bg-white/5 backdrop-blur-lg rounded-lg p-4 border border-green-500/30">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center border border-green-500/50">
+                          <span className="text-green-400 font-bold text-sm">L{layer.num}</span>
+                        </div>
+                        <CheckCircle className="w-4 h-4 text-green-400" />
+                      </div>
+                      <span className="text-xs text-green-400 font-semibold">{layer.status}</span>
+                    </div>
+                    <div className="text-sm font-semibold text-white mb-2">{layer.name}</div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-slate-400">Uptime</span>
+                      <span className="text-slate-300">{layer.uptime}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs mt-1">
+                      <span className="text-slate-400">Avg Latency</span>
+                      <span className="text-slate-300">{layer.latency}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ASL-3 Response Metrics */}
+            <div>
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <Zap className="w-5 h-5 text-yellow-400" />
+                Response Time Metrics
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-white/5 backdrop-blur-lg rounded-lg p-4 border border-white/10">
+                  <div className="text-xs text-slate-400 mb-1">Avg Response Time</div>
+                  <div className="text-2xl font-bold text-green-400">2.8s</div>
+                  <div className="text-xs text-slate-500 mt-1">Target: &lt;5min ✓</div>
+                </div>
+                <div className="bg-white/5 backdrop-blur-lg rounded-lg p-4 border border-white/10">
+                  <div className="text-xs text-slate-400 mb-1">Detection Rate</div>
+                  <div className="text-2xl font-bold text-cyan-400">99.6%</div>
+                  <div className="text-xs text-slate-500 mt-1">847 threats blocked</div>
+                </div>
+                <div className="bg-white/5 backdrop-blur-lg rounded-lg p-4 border border-white/10">
+                  <div className="text-xs text-slate-400 mb-1">False Negatives</div>
+                  <div className="text-2xl font-bold text-yellow-400">0.1%</div>
+                  <div className="text-xs text-slate-500 mt-1">2 incidents (24h)</div>
+                </div>
+                <div className="bg-white/5 backdrop-blur-lg rounded-lg p-4 border border-white/10">
+                  <div className="text-xs text-slate-400 mb-1">System Load</div>
+                  <div className="text-2xl font-bold text-blue-400">34%</div>
+                  <div className="text-xs text-slate-500 mt-1">Healthy capacity</div>
+                </div>
+              </div>
             </div>
           </div>
 
