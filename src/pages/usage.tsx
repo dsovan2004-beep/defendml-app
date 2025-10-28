@@ -24,8 +24,8 @@ function UsagePageContent() {
 
         <div className="max-w-7xl mx-auto px-8 py-8 space-y-8">
           {/* ASL-3 Cost & Usage Analysis */}
-          <div className="bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-indigo-500/5 rounded-2xl p-8 border border-indigo-500/30 shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 rounded-2xl animate-pulse"></div>
+          <div className="relative bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-indigo-500/5 rounded-2xl p-8 border border-indigo-500/30 shadow-2xl">
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 rounded-2xl animate-pulse pointer-events-none"></div>
             
             <div className="relative">
               {/* Header */}
