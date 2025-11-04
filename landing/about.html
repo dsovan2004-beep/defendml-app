@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="About DefendML - The only ASL-3 certified AI security platform">
+    <meta name="description" content="About DefendML - The only ASL-3 certified AI security platform. From startups to Fortune 500.">
     <title>About DefendML - AI Security Platform</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%237c3aed'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='system-ui'%3ED%3C/text%3E%3C/svg%3E">
     <style>
@@ -84,6 +84,20 @@
 
         nav a:hover {
             opacity: 0.8;
+        }
+
+        .nav-cta {
+            background: #10b981;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .nav-cta:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            opacity: 1 !important;
         }
 
         .hero {
@@ -204,6 +218,58 @@
             margin: 0;
         }
 
+        .value-props {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .value-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+
+        .value-card:hover {
+            border-color: #7c3aed;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
+        }
+
+        .value-card h3 {
+            font-size: 1.3rem;
+            color: #7c3aed;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .value-card p {
+            font-size: 1rem;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
         .footer {
             background: #1a1a2e;
             color: #e5e7eb;
@@ -305,16 +371,15 @@
         <nav>
             <a href="/#asl3">ASL-3</a>
             <a href="/#comparison">Compare</a>
-            <a href="/#solution">Solution</a>
             <a href="/#pricing">Pricing</a>
             <a href="/#faq">FAQ</a>
-            <a href="/#certification" style="color: #10b981;">Certification Details</a>
+            <a href="/" class="nav-cta">Get Started Free</a>
         </nav>
     </header>
 
     <section class="hero">
         <h1>About DefendML</h1>
-        <p>We're building the future of AI security with Anthropic-level standards</p>
+        <p>Making Anthropic-level AI security accessible from startups to Fortune 500</p>
     </section>
 
     <section class="section">
@@ -325,7 +390,7 @@
                     DefendML is the <span class="highlight">only ASL-3 certified AI security platform</span>. We protect your LLM applications from threats, data leaks, and compliance violations in real-time—using the same security framework that protects Claude Opus 4.
                 </p>
                 <p>
-                    <span class="highlight">10x cheaper, 5x faster, 100% transparent.</span> Deploy secure AI in 28 minutes, not 28 days.
+                    <span class="highlight">From FREE to $1,499/mo. 90%+ cheaper, 6x faster, 100% transparent.</span> Deploy secure AI in 28 minutes, not 28 days.
                 </p>
             </div>
         </div>
@@ -336,13 +401,13 @@
             <div class="content">
                 <h2>Why We Built This</h2>
                 <p>
-                    AI security shouldn't cost $60K and take weeks to deploy. Every company building with LLMs deserves Anthropic-level protection—accessible, affordable, and transparent.
+                    AI security shouldn't cost $60K/year and take weeks to deploy. Every company building with LLMs—from early-stage startups to Fortune 500 enterprises—deserves Anthropic-level protection that's accessible, affordable, and transparent.
                 </p>
 
                 <div class="mission-box">
                     <h3>Our Mission</h3>
                     <p>
-                        Make Anthropic-level AI security accessible to every company building with LLMs—from startups to enterprises—with full transparency and zero compromise.
+                        Make Anthropic-level AI security accessible to every company building with LLMs—from FREE for startups to enterprise-grade for Fortune 500—with full transparency and zero compromise.
                     </p>
                 </div>
             </div>
@@ -353,35 +418,55 @@
         <div class="container">
             <div class="content">
                 <h2>What Makes Us Different</h2>
-                <p>
-                    <strong>ASL-3 Certified:</strong> First and only platform aligned with Anthropic's advanced security standard.
-                </p>
-                <p>
-                    <strong>Fully Transparent:</strong> See exactly how your AI is protected—real-time metrics, confidence scores, 99.6% accuracy.
-                </p>
-                <p>
-                    <strong>Self-Serve:</strong> Deploy in 30 minutes. No sales calls, no enterprise contracts.
-                </p>
-                <p>
-                    <strong>10x Cheaper:</strong> $499/month vs $4K-5K/month for competitors.
-                </p>
+                
+                <div class="value-props">
+                    <div class="value-card">
+                        <h3>🛡️ ASL-3 Certified</h3>
+                        <p>First and only platform aligned with Anthropic's advanced security standard—the same framework protecting Claude Opus 4.</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <h3>👁️ Fully Transparent</h3>
+                        <p>See exactly how your AI is protected—real-time metrics, confidence scores, 99.6% accuracy. No black boxes.</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <h3>⚡ Self-Serve</h3>
+                        <p>Deploy in 30 minutes. No sales calls, no enterprise contracts. Start FREE and scale to $1,499/mo as you grow.</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <h3>💰 90%+ Cheaper</h3>
+                        <p>From FREE to $1,499/month vs $50K-60K/year for Lakera and CalypsoAI. Same ASL-3 security, fraction of the cost.</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <h3>🚀 Startup to Fortune 500</h3>
+                        <p>Start with FREE tier (50K requests). Grow to Growth plan (1M requests). Scale to Enterprise (unlimited). We grow with you.</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <h3>🔒 Multi-LLM Support</h3>
+                        <p>Works with OpenAI, Anthropic, Google, Cohere, and custom models. No vendor lock-in. Switch providers anytime.</p>
+                    </div>
+                </div>
 
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-value">99.6%</div>
-                        <div class="stat-label">Accuracy</div>
+                        <div class="stat-label">Detection Accuracy</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value">42ms</div>
-                        <div class="stat-label">Latency</div>
+                        <div class="stat-label">P95 Latency</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value">28min</div>
                         <div class="stat-label">Deploy Time</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">$48K</div>
-                        <div class="stat-label">Saved/Year</div>
+                        <div class="stat-value">FREE</div>
+                        <div class="stat-label">Starting Price</div>
                     </div>
                 </div>
             </div>
@@ -390,14 +475,51 @@
 
     <section class="section section-light">
         <div class="container">
+            <div class="content">
+                <h2>Who We Serve</h2>
+                <p>
+                    <strong>Startups:</strong> Start FREE with 50K requests/month. No credit card required. Upgrade to $1,499/mo when you're ready to scale.
+                </p>
+                <p>
+                    <strong>Growing Companies:</strong> Growth plan at $1,499/mo gives you 1M requests, full ASL-3 certification, breach cost tracking, and priority support. Save $32K-48K/year vs competitors.
+                </p>
+                <p>
+                    <strong>Fortune 500:</strong> Enterprise plan starts at $9,999/mo with unlimited requests, dedicated infrastructure, 24/7 support, and custom SLAs. Still 80%+ cheaper than Lakera/CalypsoAI.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="content">
+                <h2>Our Commitment</h2>
+                <p>
+                    We're committed to making AI security <span class="highlight">accessible, transparent, and affordable</span> for every company deploying LLMs. Whether you're a solo founder building your first AI feature or a Fortune 500 protecting millions of requests, you deserve Anthropic-level security.
+                </p>
+                <p>
+                    That's why we're the only platform offering <span class="highlight">ASL-3 certification from FREE to Enterprise</span>—with full transparency on how we protect your AI.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-light">
+        <div class="container">
             <div class="content" style="text-align: center;">
                 <h2>Ready to Protect Your AI?</h2>
-                <p style="font-size: 1.2rem; margin-bottom: 2rem;">
-                    Join 200+ teams building safe, compliant AI applications with DefendML
+                <p style="font-size: 1.2rem; margin-bottom: 2.5rem;">
+                    Join 200+ startups and enterprises building safe, compliant AI applications with DefendML
                 </p>
-                <a href="/#pricing" style="display: inline-block; padding: 1rem 2.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3); transition: all 0.3s;">
-                    Start Free Trial
-                </a>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="/" class="cta-button">Start Free (50K Requests)</a>
+                    <a href="/#pricing" class="cta-button" style="background: white; color: #7c3aed; border: 2px solid #7c3aed;">
+                        See Pricing
+                    </a>
+                </div>
+                <p style="font-size: 0.9rem; color: #6b7280; margin-top: 1.5rem;">
+                    🚀 No credit card required • 14-day trial for paid plans • Cancel anytime
+                </p>
             </div>
         </div>
     </section>
@@ -408,26 +530,19 @@
                 <div class="footer-copyright">© 2025 DefendML. All rights reserved.</div>
                 <div class="footer-links">
                     <a href="/about">About</a>
-                    <a href="/team">Team</a>
-                    <a href="#privacy">Privacy Policy</a>
-                    <a href="#terms">Terms of Service</a>
-                    <a href="#docs">API Docs</a>
-                    <a href="#status">Status</a>
-                    <a href="#contact">Contact</a>
+                    <a href="/">Home</a>
+                    <a href="/#pricing">Pricing</a>
+                    <a href="/#faq">FAQ</a>
                 </div>
             </div>
             <div class="footer-right">
                 <div class="footer-badge">
                     <span class="footer-badge-icon">🛡️</span>
-                    <span>SOC 2 Type II Certified</span>
+                    <span>SOC 2 Certified</span>
                 </div>
                 <div class="footer-badge">
                     <span class="footer-badge-icon">✓</span>
-                    <span>ASL-3 Certified Platform</span>
-                </div>
-                <div class="footer-badge">
-                    <span class="footer-badge-icon">⚡</span>
-                    <span>Powered by Anthropic</span>
+                    <span>ASL-3 Powered by Anthropic</span>
                 </div>
             </div>
         </div>
