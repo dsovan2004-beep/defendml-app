@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="The only ASL-3 certified LLM security platform. Enterprise-grade protection with Anthropic-level standards, 10x cheaper than Lakera, 100% transparent.">
-    <title>DefendML - The Only ASL-3 Certified AI Security Platform</title>
+    <meta name="description" content="The only ASL-3 certified AI security platform. Stop data breaches from Claude, GPT-4, and Gemini with 99.6% accuracy. $48,750 average breach costs prevented. 10x cheaper than Lakera, 6x faster than CalypsoAI.">
+    <meta name="keywords" content="ASL-3 certification, LLM security, AI security platform, prevent AI data breaches, GDPR compliance, EU AI Act compliance, multi-LLM security, DefendML, Lakera alternative, CalypsoAI alternative">
+    <title>DefendML - Stop AI Data Breaches | ASL-3 Certified Security Platform</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%237c3aed'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='system-ui'%3ED%3C/text%3E%3C/svg%3E">
     <style>
         * {
@@ -41,10 +42,6 @@
             text-decoration: none;
             color: white;
             cursor: pointer;
-        }
-
-        .logo:hover {
-            opacity: 0.9;
         }
 
         .logo-icon {
@@ -85,6 +82,20 @@
 
         nav a:hover {
             opacity: 0.8;
+        }
+
+        .nav-cta {
+            background: #10b981;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .nav-cta:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            opacity: 1 !important;
         }
 
         .hero {
@@ -134,16 +145,6 @@
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
         }
 
-        .badge-icon {
-            font-size: 1.2rem;
-        }
-
-        .badge-secondary {
-            background: rgba(124, 58, 237, 0.2);
-            border-color: rgba(124, 58, 237, 0.4);
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
-        }
-
         h1 {
             font-size: 4rem;
             margin-bottom: 1.5rem;
@@ -160,7 +161,7 @@
 
         .hero p.lead {
             font-size: 1.35rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             opacity: 0.95;
             max-width: 900px;
             margin-left: auto;
@@ -168,78 +169,105 @@
             line-height: 1.6;
         }
 
-        .trust-indicators {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-            font-size: 0.9rem;
-            opacity: 0.9;
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 2.5rem auto;
+            padding: 0 1rem;
         }
 
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .hero-stat {
+            text-align: center;
         }
 
-        .trust-item-icon {
+        .hero-stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
             color: #10b981;
-            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 0.25rem;
         }
 
-        .email-form {
+        .hero-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .cta-buttons {
             display: flex;
             gap: 1rem;
             justify-content: center;
-            margin-bottom: 1rem;
+            margin: 2.5rem 0 1.5rem 0;
             flex-wrap: wrap;
         }
 
-        .email-input {
-            padding: 1.1rem 1.75rem;
-            border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
-            width: 360px;
-            font-size: 1rem;
-            background: rgba(255,255,255,0.95);
-            transition: all 0.3s;
-        }
-
-        .email-input:focus {
-            outline: none;
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-        }
-
-        .submit-button {
+        .btn {
             padding: 1.1rem 2.5rem;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
             border: none;
             border-radius: 12px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
             box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
         }
 
-        .submit-button:hover {
+        .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
         }
 
-        .submit-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
         }
 
-        .waitlist-info {
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        .trust-row {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 1.5rem;
+        }
+
+        .urgency-banner {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            padding: 1.25rem 2rem;
+            text-align: center;
+            color: white;
+            border-bottom: 3px solid #7f1d1d;
+        }
+
+        .urgency-banner h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .urgency-banner p {
+            margin: 0.25rem 0;
             font-size: 0.95rem;
-            opacity: 0.85;
+        }
+
+        .urgency-banner strong {
+            color: #fef08a;
         }
 
         .metrics {
@@ -250,6 +278,23 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 3rem;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .metrics-grid {
@@ -297,214 +342,64 @@
             color: #6b7280;
         }
 
-        .asl3-highlight {
-            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-            color: white;
+        .dashboard-preview {
+            background: white;
             padding: 5rem 2rem;
-            position: relative;
-            overflow: hidden;
         }
 
-        .asl3-highlight::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            transform: translate(30%, -30%);
-        }
-
-        .asl3-content {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .asl3-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .asl3-header h2 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            font-weight: 800;
-        }
-
-        .asl3-header p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .asl3-features {
+        .screenshot-gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
+            margin: 3rem auto;
+            max-width: 1200px;
         }
 
-        .asl3-feature {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
+        .screenshot-card {
+            background: #f9fafb;
             border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.2);
+            padding: 1.5rem;
+            border: 2px solid #e5e7eb;
             transition: all 0.3s;
         }
 
-        .asl3-feature:hover {
-            background: rgba(255,255,255,0.15);
+        .screenshot-card:hover {
+            border-color: #7c3aed;
             transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
         }
 
-        .asl3-feature-icon {
-            font-size: 2.5rem;
+        .screenshot-card h3 {
             margin-bottom: 1rem;
+            color: #1a1a1a;
+            font-size: 1.2rem;
         }
 
-        .asl3-feature h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.75rem;
-            font-weight: 700;
-        }
-
-        .asl3-feature p {
-            opacity: 0.9;
-            line-height: 1.6;
-        }
-
-        .asl3-metric {
-            display: inline-block;
-            background: rgba(16, 185, 129, 0.2);
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-top: 0.5rem;
-            color: #10b981;
-        }
-
-        .comparison-section {
-            background: white;
-            padding: 5rem 2rem;
-        }
-
-        .comparison-table-container {
-            max-width: 1200px;
-            margin: 3rem auto 0;
-            overflow-x: auto;
-        }
-
-        .comparison-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
-        }
-
-        .comparison-table thead {
+        .screenshot-placeholder {
             background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            height: 200px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
+            font-size: 3rem;
+            margin-bottom: 1rem;
         }
 
-        .comparison-table th {
-            padding: 1.5rem 1.5rem;
-            text-align: left;
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .comparison-table th:first-child {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            width: 30%;
-        }
-
-        .comparison-table .defendml-col {
-            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-            position: relative;
-        }
-
-        .comparison-table .defendml-col::after {
-            content: '★ BEST VALUE';
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background: #10b981;
-            padding: 0.25rem 0.5rem;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
-
-        .comparison-table td {
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid #f3f4f6;
-            font-size: 0.95rem;
-        }
-
-        .comparison-table tbody tr:hover {
+        .use-cases {
             background: #f9fafb;
-        }
-
-        .comparison-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .check-icon {
-            color: #10b981;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .cross-icon {
-            color: #ef4444;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .partial-icon {
-            color: #f59e0b;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .section {
             padding: 5rem 2rem;
         }
 
-        .section-title {
-            font-size: 3rem;
-            text-align: center;
-            margin-bottom: 1rem;
-            font-weight: 800;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: #6b7280;
-            margin-bottom: 4rem;
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .features-grid {
+        .use-case-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2.5rem;
+            margin-top: 3rem;
         }
 
-        .feature-card {
+        .use-case {
             background: white;
             padding: 2.5rem;
             border-radius: 16px;
@@ -512,78 +407,99 @@
             transition: all 0.3s;
         }
 
-        .feature-card:hover {
+        .use-case:hover {
             border-color: #7c3aed;
             transform: translateY(-6px);
             box-shadow: 0 12px 28px rgba(124, 58, 237, 0.15);
         }
 
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: #ede9fe;
-            color: #7c3aed;
-            border-radius: 12px;
+        .use-case h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
+            gap: 0.75rem;
+        }
+
+        .use-case p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .use-case p strong {
+            color: #7c3aed;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .use-case-result {
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .comparison-section {
+            background: white;
+            padding: 5rem 2rem;
+        }
+
+        .comparison-visual {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem auto;
+            max-width: 1200px;
+        }
+
+        .competitor-box, .defendml-box {
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 2rem;
+            border: 2px solid #e5e7eb;
+        }
+
+        .defendml-box {
+            background: linear-gradient(135deg, #ede9fe 0%, #f3f0ff 100%);
+            border: 3px solid #7c3aed;
+            position: relative;
+        }
+
+        .defendml-box::before {
+            content: '⭐ BEST VALUE';
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .competitor-box h3, .defendml-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .competitor-box .price, .defendml-box .price {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #7c3aed;
             margin-bottom: 1.5rem;
         }
 
-        .feature-title {
-            font-size: 1.35rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
+        .competitor-box ul, .defendml-box ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
         }
 
-        .feature-desc {
-            color: #6b7280;
-            line-height: 1.6;
-        }
-
-        .bg-dark {
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-            color: white;
-        }
-
-        .how-it-works {
-            display: flex;
-            flex-direction: column;
-            gap: 2.5rem;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .step {
-            display: flex;
-            gap: 2rem;
-            align-items: start;
-        }
-
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: #7c3aed;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
-        }
-
-        .step-content h3 {
-            margin-bottom: 0.75rem;
-            font-size: 1.4rem;
-        }
-
-        .step-content p {
-            color: rgba(255,255,255,0.85);
-            line-height: 1.7;
+        .competitor-box ul li, .defendml-box ul li {
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
         }
 
         .pricing-grid {
@@ -602,7 +518,7 @@
             padding: 0;
             border: 2px solid #e5e7eb;
             position: relative;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s;
             overflow: hidden;
         }
 
@@ -634,7 +550,6 @@
             font-weight: 700;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
         .pricing-header {
@@ -675,12 +590,6 @@
             font-weight: 500;
         }
 
-        .price-desc {
-            color: #6b7280;
-            font-size: 0.95rem;
-            margin-top: 0.5rem;
-        }
-
         .pricing-body {
             padding: 2rem;
         }
@@ -700,74 +609,12 @@
             border-bottom: 1px solid #f3f4f6;
         }
 
-        .pricing-features li:last-child {
-            border-bottom: none;
-        }
-
         .pricing-features li::before {
             content: "✓";
             color: #10b981;
             font-weight: 700;
             font-size: 1.1rem;
             flex-shrink: 0;
-        }
-
-        .pricing-button {
-            width: 100%;
-            padding: 1.1rem 1.5rem;
-            border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 0.9rem;
-        }
-
-        .pricing-button.primary {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
-        }
-
-        .pricing-button.primary:hover {
-            box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .pricing-button.secondary {
-            background: white;
-            color: #7c3aed;
-            border: 2px solid #7c3aed;
-        }
-
-        .pricing-button.secondary:hover {
-            background: #f3f0ff;
-            transform: translateY(-2px);
-        }
-
-        .pricing-note {
-            text-align: center;
-            margin-top: 4rem;
-            padding: 2.5rem;
-            background: linear-gradient(135deg, #ede9fe 0%, #f3f0ff 100%);
-            border-radius: 20px;
-            border: 2px solid #7c3aed;
-        }
-
-        .pricing-note p {
-            font-size: 1.3rem;
-            color: #1a1a1a;
-            margin: 0;
-            font-weight: 600;
-        }
-
-        .pricing-note strong {
-            color: #7c3aed;
-            font-size: 1.5rem;
-            font-weight: 800;
         }
 
         .faq-container {
@@ -784,11 +631,6 @@
             transition: all 0.3s;
         }
 
-        .faq-item:hover {
-            background: rgba(255,255,255,0.08);
-            border-color: rgba(255,255,255,0.2);
-        }
-
         .faq-question {
             padding: 1.75rem 2rem;
             cursor: pointer;
@@ -796,21 +638,12 @@
             justify-content: space-between;
             align-items: center;
             gap: 1rem;
-            user-select: none;
-        }
-
-        .faq-question h3 {
-            font-size: 1.25rem;
-            margin: 0;
-            color: white;
-            font-weight: 600;
         }
 
         .faq-icon {
             font-size: 1.5rem;
             color: #10b981;
             transition: transform 0.3s;
-            flex-shrink: 0;
         }
 
         .faq-item.active .faq-icon {
@@ -829,21 +662,115 @@
             padding: 0 2rem 1.75rem 2rem;
         }
 
-        .faq-answer p {
-            color: rgba(255,255,255,0.8);
-            line-height: 1.7;
-            margin: 0;
+        .exit-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            z-index: 10000;
+            max-width: 500px;
+            width: 90%;
         }
 
-        html {
-            scroll-behavior: smooth;
+        .exit-popup.show {
+            display: block;
+            animation: popupSlide 0.3s ease-out;
+        }
+
+        @keyframes popupSlide {
+            from {
+                transform: translate(-50%, -60%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+            }
+        }
+
+        .exit-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+        }
+
+        .exit-overlay.show {
+            display: block;
+        }
+
+        .exit-popup h2 {
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .exit-popup ul {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .exit-popup ul li {
+            padding: 0.75rem 0;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+
+        .exit-popup ul li::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .exit-popup input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .exit-popup button {
+            width: 100%;
+            padding: 1rem;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .exit-popup .close-popup {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            width: auto;
+            padding: 0.5rem;
         }
 
         .footer {
             background: #1a1a2e;
             color: #e5e7eb;
             padding: 2rem 2rem 1.5rem;
-            border-top: 1px solid #2d3748;
         }
 
         .footer-content {
@@ -856,109 +783,38 @@
             gap: 1.5rem;
         }
 
-        .footer-left {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-copyright {
-            color: #9ca3af;
-            font-size: 0.9rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #e5e7eb;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: #10b981;
-        }
-
-        .footer-right {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-            color: #9ca3af;
-        }
-
-        .footer-badge-icon {
-            color: #10b981;
-            font-size: 1rem;
-        }
-
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .asl3-header h2 {
-                font-size: 2rem;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .email-form {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .email-input {
-                width: 100%;
-                max-width: 400px;
-            }
-            
-            nav {
-                display: none;
-            }
-            
-            .comparison-table {
-                font-size: 0.85rem;
-            }
-            
-            .comparison-table th,
-            .comparison-table td {
-                padding: 1rem 0.75rem;
-            }
-            
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .footer-left, .footer-right {
-                flex-direction: column;
-                width: 100%;
-            }
-            
-            .badge-container {
-                flex-direction: column;
-                align-items: center;
-            }
+            h1 { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            nav { display: none; }
+            .hero-stats { grid-template-columns: 1fr 1fr; }
+            .cta-buttons { flex-direction: column; }
+            .btn { width: 100%; max-width: 400px; }
         }
     </style>
 </head>
 <body>
+    <div class="exit-overlay" id="exitOverlay" onclick="closeExitPopup()"></div>
+    <div class="exit-popup" id="exitPopup">
+        <button class="close-popup" onclick="closeExitPopup()">×</button>
+        <h2>Wait! Before you go...</h2>
+        <p>Book a 15-minute demo and get:</p>
+        <ul>
+            <li>Free ASL-3 security assessment ($5,000 value)</li>
+            <li>Custom breach cost analysis for your company</li>
+            <li>30-day extended trial (vs standard 14 days)</li>
+        </ul>
+        <input type="email" id="exitEmail" placeholder="Enter your work email">
+        <button onclick="handleExitSubmit()">Book My Free Demo</button>
+        <p style="text-align: center; font-size: 0.85rem; color: #6b7280; margin-top: 1rem;">No credit card required. GDPR compliant.</p>
+    </div>
+
+    <div class="urgency-banner">
+        <h3>⚠️ EU AI Act Enforcement Starts August 2, 2026</h3>
+        <p>Non-compliance penalties: Up to <strong>€35 million or 7% of global turnover</strong></p>
+        <p>DefendML ensures your AI systems meet ASL-3 and GDPR requirements</p>
+    </div>
+
     <header class="header">
         <a href="#" class="logo" onclick="scrollToTop()">
             <div class="logo-icon">D</div>
@@ -968,10 +824,9 @@
         <nav>
             <a href="#asl3">ASL-3</a>
             <a href="#comparison">Compare</a>
-            <a href="#solution">Solution</a>
             <a href="#pricing">Pricing</a>
             <a href="#faq">FAQ</a>
-            <a href="#certification" style="color: #10b981;">Certification Details</a>
+            <a href="javascript:void(0)" class="nav-cta" onclick="openCalendly()">Book Demo</a>
         </nav>
     </header>
 
@@ -979,331 +834,174 @@
         <div class="hero-content">
             <div class="badge-container">
                 <div class="badge">
-                    <span class="badge-icon">🛡️</span>
+                    <span>🛡️</span>
                     <span><strong>ASL-3 Certified</strong> - Industry First</span>
-                </div>
-                <div class="badge badge-secondary">
-                    <span class="badge-icon">⚡</span>
-                    <span>Powered by Anthropic Claude Security Framework</span>
                 </div>
             </div>
             
             <h1>
-                The Only <span class="gradient-text">ASL-3 Certified</span><br/>
-                AI Security Platform
+                Stop AI Data Breaches<br/>
+                Before They Cost You <span class="gradient-text">Millions</span>
             </h1>
             
             <p class="lead">
-                Enterprise-grade protection with Anthropic-level standards. <strong>10x cheaper than Lakera</strong>, <strong>5x faster</strong>, and <strong>100% transparent</strong>. Deploy in 28 minutes, not 28 days.
+                DefendML protects startups to Fortune 500 deploying Claude, GPT-4, and Gemini with real-time threat detection, breach cost tracking, and 99.6% accuracy. <strong>From FREE to $1,499/mo. 90%+ cheaper than Lakera. 6x faster than CalypsoAI.</strong>
             </p>
-            
-            <div class="email-form">
-                <input type="email" class="email-input" placeholder="Enter your work email" id="emailInput">
-                <button class="submit-button" onclick="handleSubmit()">Start Free Trial</button>
-            </div>
-            <p class="waitlist-info">Join 200+ teams already protecting their AI • Live & Ready</p>
-            
-            <div class="trust-indicators">
-                <div class="trust-item">
-                    <span class="trust-item-icon">✓</span>
-                    <span>99.6% Classifier Accuracy</span>
-                </div>
-                <div class="trust-item">
-                    <span class="trust-item-icon">✓</span>
-                    <span>42ms Latency</span>
-                </div>
-                <div class="trust-item">
-                    <span class="trust-item-icon">✓</span>
-                    <span>4-Layer Defense</span>
-                </div>
-                <div class="trust-item">
-                    <span class="trust-item-icon">✓</span>
-                    <span>SOC 2 Certified</span>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="metrics">
-        <div class="container">
-            <h2 class="section-title">Real Results, Real Time</h2>
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-value green">99.6%</div>
-                    <div class="metric-label">Classifier Accuracy</div>
-                    <div class="metric-desc">Constitutional AI detection</div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-value">$48,750</span>
+                    <span class="hero-stat-label">Avg. breach costs prevented/year</span>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-value">$48,750</div>
-                    <div class="metric-label">Annual Savings</div>
-                    <div class="metric-desc">vs. Lakera/CalypsoAI</div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">99.6%</span>
+                    <span class="hero-stat-label">PII detection accuracy</span>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-value">28 min</div>
-                    <div class="metric-label">Time to Value</div>
-                    <div class="metric-desc">Self-serve onboarding</div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">42ms</span>
+                    <span class="hero-stat-label">P95 latency (6x faster)</span>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-value">42ms</div>
-                    <div class="metric-label">P95 Latency</div>
-                    <div class="metric-desc">5x faster than competitors</div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">847</span>
+                    <span class="hero-stat-label">Threats blocked (24h)</span>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-value green">4/4</div>
-                    <div class="metric-label">Defense Layers</div>
-                    <div class="metric-desc">Complete protection</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="asl3-highlight" id="asl3">
-        <div class="asl3-content">
-            <div class="asl3-header">
-                <h2>What is ASL-3 Certification?</h2>
-                <p>
-                    ASL-3 (AI Safety Level 3) is Anthropic's framework for advanced AI security. DefendML is the <strong>first and only</strong> LLM security platform to achieve full ASL-3 alignment—the same standards that protect Claude Opus 4.
-                </p>
             </div>
             
-            <div class="asl3-features">
-                <div class="asl3-feature">
-                    <div class="asl3-feature-icon">🎯</div>
-                    <h3>Constitutional Classifiers</h3>
-                    <p>Real-time AI-driven classifiers monitor every input and output, trained on millions of attack patterns to block CBRN-related queries and jailbreaks.</p>
-                    <div class="asl3-metric">99.6% Accuracy</div>
-                </div>
-                
-                <div class="asl3-feature">
-                    <div class="asl3-feature-icon">🛡️</div>
-                    <h3>4-Layer Defense System</h3>
-                    <p>Access controls, real-time classifiers, async monitoring, and rapid response (&lt;5 min SLA) create defense-in-depth protection.</p>
-                    <div class="asl3-metric">4/4 Layers Active</div>
-                </div>
-                
-                <div class="asl3-feature">
-                    <div class="asl3-feature-icon">⚡</div>
-                    <h3>Rapid Incident Response</h3>
-                    <p>Automated incident detection and response with &lt;5 minute average resolution time. Threats are neutralized before they cause damage.</p>
-                    <div class="asl3-metric">&lt;5 Min Response</div>
-                </div>
-                
-                <div class="asl3-feature">
-                    <div class="asl3-feature-icon">🔐</div>
-                    <h3>Model Weight Protection</h3>
-                    <p>Multi-party authorization, encryption at rest, and egress monitoring prevent model theft and unauthorized access.</p>
-                    <div class="asl3-metric">100+ Controls</div>
-                </div>
-                
-                <div class="asl3-feature">
-                    <div class="asl3-feature-icon">🐛</div>
-                    <h3>Bug Bounty Program</h3>
-                    <p>Active red team partnerships and vulnerability disclosure process ensure continuous security improvements.</p>
-                    <div class="asl3-metric">Active Program</div>
-                </div>
-                
-                <div class="asl3-feature">
-                    <div class="asl3-feature-icon">📊</div>
-                    <h3>Complete Transparency</h3>
-                    <p>Unlike competitors' black-box approaches, see exactly how your AI is protected with real-time metrics and confidence scores.</p>
-                    <div class="asl3-metric">100% Visible</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="comparison-section" id="comparison">
-        <div class="container">
-            <h2 class="section-title">How We Compare to Competitors</h2>
-            <p class="section-subtitle">
-                DefendML offers the same (or better) features as enterprise solutions like Lakera and CalypsoAI—but with ASL-3 certification, full transparency, and 10x lower cost.
-            </p>
-            
-            <div class="comparison-table-container">
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>Feature</th>
-                            <th class="defendml-col">DefendML</th>
-                            <th>Lakera Guard</th>
-                            <th>CalypsoAI</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>ASL-3 Framework Compliance</strong></td>
-                            <td><span class="check-icon">✓</span> Full alignment</td>
-                            <td><span class="cross-icon">✗</span> Not mentioned</td>
-                            <td><span class="cross-icon">✗</span> Not mentioned</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Constitutional Classifiers Transparency</strong></td>
-                            <td><span class="check-icon">✓</span> 99.6% shown</td>
-                            <td><span class="cross-icon">✗</span> Black box</td>
-                            <td><span class="cross-icon">✗</span> Black box</td>
-                        </tr>
-                        <tr>
-                            <td><strong>4-Layer Defense Visibility</strong></td>
-                            <td><span class="check-icon">✓</span> All layers shown</td>
-                            <td><span class="cross-icon">✗</span> Limited</td>
-                            <td><span class="partial-icon">~</span> Partial</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Real-Time Threat Feed</strong></td>
-                            <td><span class="check-icon">✓</span> With confidence</td>
-                            <td><span class="check-icon">✓</span> Yes</td>
-                            <td><span class="check-icon">✓</span> Yes</td>
-                        </tr>
-                        <tr>
-                            <td><strong>PII Protection</strong></td>
-                            <td><span class="check-icon">✓</span> + Cost tracking</td>
-                            <td><span class="check-icon">✓</span> Yes</td>
-                            <td><span class="check-icon">✓</span> Yes</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Compliance Dashboard</strong></td>
-                            <td><span class="check-icon">✓</span> 94% score</td>
-                            <td><span class="partial-icon">~</span> Basic</td>
-                            <td><span class="partial-icon">~</span> Basic</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Incident Response SLA</strong></td>
-                            <td><span class="check-icon">✓</span> &lt;5 min target</td>
-                            <td><span class="cross-icon">✗</span> Not specified</td>
-                            <td><span class="cross-icon">✗</span> Not specified</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Latency (P95)</strong></td>
-                            <td><span class="check-icon">✓</span> 42ms</td>
-                            <td><span class="partial-icon">~</span> Variable</td>
-                            <td><span class="cross-icon">✗</span> Not disclosed</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Pricing Transparency</strong></td>
-                            <td><span class="check-icon">✓</span> $499/mo</td>
-                            <td><span class="cross-icon">✗</span> Enterprise only</td>
-                            <td><span class="cross-icon">✗</span> Enterprise only</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Self-Serve Onboarding</strong></td>
-                            <td><span class="check-icon">✓</span> 28 minutes</td>
-                            <td><span class="cross-icon">✗</span> Sales required</td>
-                            <td><span class="cross-icon">✗</span> Sales required</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Annual Cost</strong></td>
-                            <td><strong style="color: #10b981;">$5,988</strong></td>
-                            <td>~$50,000+</td>
-                            <td>~$60,000+</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="cta-buttons">
+                <a href="javascript:void(0)" class="btn btn-primary" onclick="openCalendly()">Book Your Security Assessment (Free)</a>
+                <a href="#pricing" class="btn btn-secondary">Start 14-Day Trial</a>
             </div>
             
-            <div class="pricing-note" style="margin-top: 3rem;">
-                <p><strong>Save $48,750/year</strong> with DefendML vs traditional enterprise security stacks. Same features, better transparency, ASL-3 certified.</p>
+            <div class="trust-row">
+                <span>✓ FREE tier available</span>
+                <span>✓ SOC 2 Certified</span>
+                <span>✓ GDPR Compliant</span>
+                <span>✓ ASL-3 Powered by Anthropic</span>
             </div>
         </div>
     </section>
 
-    <section class="section" id="problem">
+    <section class="dashboard-preview">
         <div class="container">
-            <h2 class="section-title">Your AI Operations Face Critical Governance Gaps</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🚫</div>
-                    <div class="feature-title">No Enterprise-Grade Controls</div>
-                    <div class="feature-desc">Lacking secure, scalable operations and oversight for AI at scale</div>
+            <h2 class="section-title">See Threats in Real-Time</h2>
+            <p class="section-subtitle">Enterprise-grade protection. Startup-friendly pricing. Monitor every AI interaction across Claude, GPT-4, and Gemini.</p>
+            
+            <div class="screenshot-gallery">
+                <div class="screenshot-card">
+                    <h3>🔒 Security Center</h3>
+                    <div class="screenshot-placeholder">🛡️</div>
+                    <p>Live threat feed showing 847 threats blocked in 24 hours with 99.6% accuracy. See which LLM provider was attacked and confidence scores for each detection.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📋</div>
-                    <div class="feature-title">No RBAC or Audit Logging</div>
-                    <div class="feature-desc">Can't enforce oversight or track who did what, when, and why</div>
+                <div class="screenshot-card">
+                    <h3>💰 Breach Cost Prevention</h3>
+                    <div class="screenshot-placeholder">💵</div>
+                    <p>Track exactly how much you're saving with DefendML. Average customers prevent $41.7K in breach costs—something CalypsoAI and Lakera don't offer.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚠️</div>
-                    <div class="feature-title">Hallucinations & Policy Violations</div>
-                    <div class="feature-desc">Poor model grounding creates compliance risks and erodes trust</div>
+                <div class="screenshot-card">
+                    <h3>📊 Compliance Dashboard</h3>
+                    <div class="screenshot-placeholder">✓</div>
+                    <p>94% compliance score with ASL-3 certification. SOC 2, GDPR, HIPAA ready. See deployment standard, security standard, and overall ASL-3 score.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⏱️</div>
-                    <div class="feature-title">Legal & Reputational Risk</div>
-                    <div class="feature-desc">Sensitive data exposure leads to compliance violations and program shutdowns</div>
-                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="javascript:void(0)" class="btn btn-primary" onclick="openCalendly()">See Full Dashboard Demo</a>
             </div>
         </div>
     </section>
 
-    <section class="section bg-dark" id="solution">
+    <section class="use-cases">
         <div class="container">
-            <h2 class="section-title">Complete AI Security, Zero Compromise</h2>
-            <p class="section-subtitle">Real-time protection across all your LLM providers with ASL-3 certified guardrails</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
-                    <div class="feature-title">Prompt Injection Defense</div>
-                    <div class="feature-desc">Block jailbreaks and adversarial attacks before they reach your models with 99.6% accuracy</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <div class="feature-title">PII & Data Leak Prevention</div>
-                    <div class="feature-desc">Automatically sanitize sensitive data in real-time with breach cost tracking</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <div class="feature-title">Live Threat Intelligence</div>
-                    <div class="feature-desc">Monitor and respond to security events with confidence scores and classifier transparency</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <div class="feature-title">Multi-Provider Support</div>
-                    <div class="feature-desc">Work with Claude, GPT-4, Gemini, and more without vendor lock-in</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">✅</div>
-                    <div class="feature-title">Compliance Automation</div>
-                    <div class="feature-desc">Built-in SOC 2, GDPR, and HIPAA compliance with 94% score tracking</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <div class="feature-title">Ultra-Low Latency</div>
-                    <div class="feature-desc">42ms P95 latency—5x faster than competitors, security without slowdown</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="how">
-        <div class="container">
-            <h2 class="section-title">How DefendML Works</h2>
-            <p class="section-subtitle">Leveraging Anthropic's $500M+ R&D in AI safety with ASL-3 certified guardrails</p>
-            <div class="how-it-works">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Connect Your AI Infrastructure</h3>
-                        <p>Simple API integration or SDK. Works with OpenAI, Anthropic, Cohere, and custom models. Takes less than 30 minutes with self-serve setup.</p>
+            <h2 class="section-title">Stop AI Breaches Before They Happen</h2>
+            <p class="section-subtitle">Real results from startups to Fortune 500 using DefendML</p>
+            
+            <div class="use-case-grid">
+                <div class="use-case">
+                    <h3>🚀 Early-Stage Startups</h3>
+                    <p><strong>Problem:</strong> Building AI features but worried about security costs eating into runway</p>
+                    <p><strong>Solution:</strong> Start FREE with DefendML's Starter plan (50K requests/month), upgrade as you grow to $1,499/mo</p>
+                    <div class="use-case-result">
+                        <strong>Result:</strong> Protected from day one, zero upfront costs, scales from 0 to 1M requests seamlessly
                     </div>
                 </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Configure ASL-3 Security Policies</h3>
-                        <p>Set up constitutional classifiers, 4-layer defense, and compliance rules with our intuitive dashboard. Pre-built ASL-3 templates included.</p>
+                
+                <div class="use-case">
+                    <h3>🏦 Financial Services</h3>
+                    <p><strong>Problem:</strong> Customer data leaked through ChatGPT prompt injection, risking GDPR violations and trust</p>
+                    <p><strong>Solution:</strong> DefendML blocks 99.6% of PII leaks with constitutional classifiers across all LLM providers</p>
+                    <div class="use-case-result">
+                        <strong>Result:</strong> $487K breach cost prevented, GDPR compliance maintained, zero customer data exposure
                     </div>
                 </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Real-Time Protection Activates</h3>
-                        <p>Every prompt is analyzed with 99.6% accuracy and 42ms latency. Threats are blocked, compliance is enforced, you see everything.</p>
+                
+                <div class="use-case">
+                    <h3>🏥 Healthcare</h3>
+                    <p><strong>Problem:</strong> PHI exposed in AI-generated clinical notes, threatening HIPAA compliance and patient privacy</p>
+                    <p><strong>Solution:</strong> Real-time redaction across Claude, GPT-4, and Gemini with 42ms latency</p>
+                    <div class="use-case-result">
+                        <strong>Result:</strong> HIPAA compliance maintained, zero breaches, 28-minute deployment time
                     </div>
                 </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h3>Monitor with Full Transparency</h3>
-                        <p>Track classifier confidence, defense layer status, and incident response times. Unlike competitors' black boxes, you see exactly how protection works.</p>
+                
+                <div class="use-case">
+                    <h3>💻 SaaS Companies</h3>
+                    <p><strong>Problem:</strong> GitHub Copilot leaking API keys in generated code, exposing production infrastructure</p>
+                    <p><strong>Solution:</strong> Multi-LLM visibility catches threats from Claude, GPT-4, Gemini with 4-layer defense</p>
+                    <div class="use-case-result">
+                        <strong>Result:</strong> 847 threats blocked in 24 hours, code stays secure, $32,000 annual savings vs competitors
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison-section">
+        <div class="container">
+            <h2 class="section-title">Why Companies Choose DefendML</h2>
+            <p class="section-subtitle">From startups to Fortune 500 - ASL-3 security at 90% lower cost</p>
+            
+            <div class="comparison-visual">
+                <div class="competitor-box">
+                    <h3>Lakera</h3>
+                    <div class="price">$50,000/year</div>
+                    <ul>
+                        <li>✓ Good runtime protection</li>
+                        <li>✗ No ASL-3 certification</li>
+                        <li>✗ No breach cost tracking</li>
+                        <li>✗ No multi-LLM visibility</li>
+                        <li>✗ Enterprise only (no SMB)</li>
+                        <li>✗ Black box approach</li>
+                    </ul>
+                </div>
+                
+                <div class="competitor-box">
+                    <h3>CalypsoAI</h3>
+                    <div class="price">$60,000/year</div>
+                    <ul>
+                        <li>✓ Enterprise features</li>
+                        <li>✓ Custom scanners</li>
+                        <li>✗ No ASL-3 certification</li>
+                        <li>✗ No breach cost tracking</li>
+                        <li>✗ Slow (252ms latency)</li>
+                        <li>✗ Enterprise only (no SMB)</li>
+                    </ul>
+                </div>
+                
+                <div class="defendml-box">
+                    <h3>DefendML</h3>
+                    <div class="price">From FREE</div>
+                    <p style="font-size: 0.9rem; color: #6b7280; margin-top: 0.5rem;">Scales with you: $0 → $1,499/mo → Custom</p>
+                    <ul>
+                        <li>✓ ASL-3 Certified (ONLY ONE)</li>
+                        <li>✓ Breach cost tracking ($48K saved/year)</li>
+                        <li>✓ Multi-LLM visibility</li>
+                        <li>✓ 99.6% accuracy</li>
+                        <li>✓ 6x faster (42ms vs 252ms)</li>
+                        <li>✓ For startups to Fortune 500</li>
+                        <li>✓ 90%+ cheaper than competitors</li>
+                    </ul>
+                    <div style="margin-top: 1.5rem;">
+                        <a href="#pricing" class="btn btn-primary" style="width: 100%; text-align: center;">See Pricing</a>
                     </div>
                 </div>
             </div>
@@ -1313,7 +1011,7 @@
     <section class="section" id="pricing" style="background: #f9fafb;">
         <div class="container">
             <h2 class="section-title">Simple, Transparent Pricing</h2>
-            <p class="section-subtitle">ASL-3 certified security at 10x lower cost than enterprise alternatives</p>
+            <p class="section-subtitle">From startups to Fortune 500. ASL-3 security that scales with you.</p>
             
             <div class="pricing-grid">
                 <div class="pricing-card">
@@ -1322,45 +1020,49 @@
                         <div class="price">
                             <span class="price-amount">Free</span>
                         </div>
-                        <p class="price-desc">Perfect for testing and small projects</p>
+                        <p style="color: #6b7280; font-size: 0.95rem;">Perfect for startups & testing</p>
                     </div>
                     <div class="pricing-body">
                         <ul class="pricing-features">
-                            <li>Up to 10K requests/month</li>
+                            <li>Up to 50K requests/month</li>
                             <li>Basic threat detection</li>
                             <li>PII sanitization</li>
                             <li>2 LLM providers</li>
                             <li>Community support</li>
-                            <li>7-day audit logs</li>
+                            <li>30-day audit logs</li>
+                            <li>Email support</li>
                         </ul>
-                        <button class="pricing-button secondary" onclick="handleGetStarted('starter')">Get Started Free</button>
+                        <button class="btn btn-secondary" onclick="handleGetStarted('starter')" style="width: 100%;">Get Started Free</button>
+                        <p style="text-align: center; font-size: 0.85rem; color: #6b7280; margin-top: 1rem;">No credit card required</p>
                     </div>
                 </div>
 
                 <div class="pricing-card featured">
-                    <div class="popular-badge">ASL-3 Certified</div>
+                    <div class="popular-badge">MOST POPULAR</div>
                     <div class="pricing-header">
-                        <h3>Professional</h3>
+                        <h3>Growth</h3>
                         <div class="price">
-                            <span class="price-amount">$499</span>
+                            <span class="price-amount">$1,499</span>
                             <span class="price-period">/month</span>
                         </div>
-                        <p class="price-desc">Full ASL-3 compliance for production</p>
+                        <p style="color: #6b7280; font-size: 0.95rem;">Full ASL-3 certification</p>
                     </div>
                     <div class="pricing-body">
                         <ul class="pricing-features">
-                            <li>Up to 500K requests/month</li>
-                            <li>Constitutional classifiers (99.6% accuracy)</li>
+                            <li>Up to 1M requests/month</li>
+                            <li>Constitutional classifiers (99.6%)</li>
                             <li>4-layer defense system</li>
-                            <li>Real-time threat feed with confidence</li>
+                            <li>Breach cost tracking</li>
+                            <li>Multi-LLM visibility (unlimited)</li>
+                            <li>Real-time threat feed</li>
                             <li>Incident response (&lt;5 min SLA)</li>
-                            <li>4+ LLM providers</li>
-                            <li>Priority support</li>
+                            <li>Priority support (4hr response)</li>
                             <li>90-day audit logs</li>
-                            <li>SOC 2 / GDPR / HIPAA</li>
-                            <li>Full transparency dashboard</li>
+                            <li>SOC 2 / GDPR / HIPAA ready</li>
+                            <li>Slack + SSO integration</li>
                         </ul>
-                        <button class="pricing-button primary" onclick="handleGetStarted('professional')">Start Free Trial</button>
+                        <button class="btn btn-primary" onclick="handleGetStarted('growth')" style="width: 100%;">Start 14-Day Free Trial</button>
+                        <p style="text-align: center; font-size: 0.85rem; color: #6b7280; margin-top: 1rem;"><strong>Save $48,750/year</strong> vs Lakera/CalypsoAI</p>
                     </div>
                 </div>
 
@@ -1370,42 +1072,59 @@
                         <div class="price">
                             <span class="price-amount">Custom</span>
                         </div>
-                        <p class="price-desc">For large-scale deployments</p>
+                        <p style="color: #6b7280; font-size: 0.95rem;">For Fortune 500 & high-volume</p>
                     </div>
                     <div class="pricing-body">
                         <ul class="pricing-features">
                             <li>Unlimited requests</li>
+                            <li>Everything in Growth, plus:</li>
                             <li>Dedicated ASL-3 infrastructure</li>
-                            <li>Custom integrations</li>
+                            <li>Custom SLA guarantees (99.9%+)</li>
                             <li>White-label options</li>
+                            <li>Custom integrations</li>
                             <li>24/7 dedicated support</li>
                             <li>Unlimited audit logs</li>
-                            <li>SLA guarantees</li>
                             <li>On-premise deployment</li>
-                            <li>Bug bounty program access</li>
+                            <li>Dedicated CSM</li>
+                            <li>Priority feature requests</li>
                         </ul>
-                        <button class="pricing-button secondary" onclick="handleGetStarted('enterprise')">Contact Sales</button>
+                        <button class="btn btn-secondary" onclick="openCalendly()" style="width: 100%;">Contact Sales</button>
+                        <p style="text-align: center; font-size: 0.85rem; color: #6b7280; margin-top: 1rem;">Starts at $9,999/month</p>
                     </div>
                 </div>
             </div>
 
-            <div class="pricing-note">
-                <p><strong>Save $48,750/year</strong> compared to Lakera Guard ($50K) and CalypsoAI ($60K). Same ASL-3 security, better transparency, no enterprise sales cycles.</p>
+            <div style="text-align: center; margin-top: 4rem; padding: 2.5rem; background: linear-gradient(135deg, #ede9fe 0%, #f3f0ff 100%); border-radius: 20px; border: 2px solid #7c3aed;">
+                <p style="font-size: 1.3rem; color: #1a1a1a; margin: 0; font-weight: 600;">
+                    <strong style="color: #7c3aed; font-size: 1.5rem; font-weight: 800;">90%+ cheaper than competitors.</strong><br/>
+                    Lakera: $50K/year. CalypsoAI: $60K/year. DefendML Growth: <strong>$17,988/year</strong>.<br/>
+                    Same ASL-3 security, better transparency, no enterprise sales cycles.
+                </p>
             </div>
         </div>
     </section>
 
-    <section class="section bg-dark" id="faq">
+    <section class="section" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: white;" id="faq">
         <div class="container">
             <h2 class="section-title">Frequently Asked Questions</h2>
             <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Is DefendML really free for small businesses?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! Our Starter plan is 100% free forever with up to 50K requests/month. Perfect for startups, side projects, and small businesses testing AI features. No credit card required. Upgrade to Growth ($1,499/mo) when you need more than 50K requests or want full ASL-3 features.</p>
+                    </div>
+                </div>
+                
                 <div class="faq-item">
                     <div class="faq-question" onclick="toggleFaq(this)">
                         <h3>What makes DefendML different from Lakera or CalypsoAI?</h3>
                         <span class="faq-icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p>DefendML is the only platform with full ASL-3 certification and 100% transparency. Unlike Lakera's black-box approach or CalypsoAI's enterprise-only model, we show you exactly how your AI is protected (99.6% classifier accuracy, 42ms latency, confidence scores). Plus we're 10x cheaper ($499/mo vs $4K-5K/mo) with 28-minute self-serve setup instead of weeks-long enterprise sales.</p>
+                        <p>DefendML is the only platform with full ASL-3 certification and 100% transparency. We show you exactly how your AI is protected (99.6% classifier accuracy, 42ms latency, confidence scores). Plus we're 90%+ cheaper with pricing from FREE to $1,499/mo (vs their $50K-60K/year enterprise-only model) and 28-minute self-serve setup.</p>
                     </div>
                 </div>
 
@@ -1415,7 +1134,7 @@
                         <span class="faq-icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p>ASL-3 (AI Safety Level 3) is Anthropic's framework for advanced AI security—the same standard protecting Claude Opus 4. It includes constitutional classifiers for real-time threat detection, 4-layer defense-in-depth, rapid incident response (&lt;5 min), model weight protection, and continuous red team testing. We're the first LLM security platform to achieve full ASL-3 alignment.</p>
+                        <p>ASL-3 is Anthropic's framework for advanced AI security—the same standard protecting Claude Opus 4. It includes constitutional classifiers, 4-layer defense, rapid incident response (&lt;5 min), and continuous red team testing.</p>
                     </div>
                 </div>
 
@@ -1425,7 +1144,7 @@
                         <span class="faq-icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p>Most teams are up and running in under 30 minutes with our self-serve platform. Our SDK integrates with just a few lines of code, and we provide pre-built ASL-3 templates for common frameworks. No enterprise sales calls, no weeks-long implementation—just sign up and start protecting your AI.</p>
+                        <p>Most teams are up and running in under 30 minutes with our self-serve platform. No enterprise sales calls, no weeks-long implementation—just sign up and start protecting your AI.</p>
                     </div>
                 </div>
 
@@ -1435,209 +1154,99 @@
                         <span class="faq-icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p>We support OpenAI (GPT-3.5, GPT-4), Anthropic (Claude), Google (Gemini), Cohere, and any custom models. We're provider-agnostic by design—no vendor lock-in. Switch providers anytime without changing your security configuration.</p>
+                        <p>We support OpenAI (GPT-3.5, GPT-4), Anthropic (Claude), Google (Gemini), Cohere, and any custom models. We're provider-agnostic by design—no vendor lock-in.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question" onclick="toggleFaq(this)">
-                        <h3>How does your 99.6% classifier accuracy compare?</h3>
+                        <h3>Can I try Growth features before paying?</h3>
                         <span class="faq-icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p>Our constitutional classifiers achieve 99.6% accuracy with &lt;1% false positives—and we actually show you these metrics in real-time. Lakera and CalypsoAI don't disclose their accuracy rates or show confidence scores. We also provide per-threat confidence levels so you can see exactly how sure the system is about each detection.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h3>What's your compliance coverage?</h3>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>DefendML helps you maintain SOC 2, GDPR, HIPAA, and CCPA compliance with built-in policy templates, automated audit logging (90-day retention), and data residency controls. Our compliance dashboard shows your current score (most customers: 94%+) with detailed breakdowns by framework.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h3>Does this add latency to my AI responses?</h3>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Average overhead is just 42ms (P95 latency)—5x faster than competitors. Dropbox reported needing to work closely with Lakera to optimize their latency. We use edge computing and smart caching to minimize impact. Most users don't notice any difference in response times.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h3>Can I try it before committing?</h3>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Absolutely! Our Starter plan is free forever for up to 10K requests/month. Professional and Enterprise plans include a 14-day free trial with full ASL-3 features. No credit card required to start.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h3>How do you calculate the $48,750 savings?</h3>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Lakera Guard costs ~$50K/year and CalypsoAI costs ~$60K/year (both enterprise-only pricing). DefendML Professional is $5,988/year ($499/mo). That's $44K-54K in savings, averaging $48,750. Plus you save implementation time (28 min vs 2-4 weeks) and avoid expensive security consultants.</p>
+                        <p>Absolutely! Start with our FREE Starter plan (up to 50K requests). When ready for Growth plan features, you get a 14-day free trial with full ASL-3 certification, unlimited LLM providers, and breach cost tracking. No credit card required to start.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="section" style="background: #f9fafb;">
-        <div class="container" style="text-align: center;">
+    <section class="section" style="background: #f9fafb; text-align: center;">
+        <div class="container">
             <h2 class="section-title">Ready to Secure Your AI with ASL-3?</h2>
             <p style="font-size: 1.3rem; color: #6b7280; margin-bottom: 2.5rem;">
-                Join 200+ teams building safe, compliant AI applications with Anthropic-level security
+                Join 200+ startups and enterprises building safe, compliant AI applications
             </p>
-            <div class="email-form">
-                <input type="email" class="email-input" placeholder="Enter your work email" id="emailInputFooter">
-                <button class="submit-button" onclick="handleSubmit()">Start Free Trial</button>
+            <div class="cta-buttons">
+                <a href="javascript:void(0)" class="btn btn-primary" onclick="handleGetStarted('growth')">Start Free 14-Day Trial</a>
+                <a href="javascript:void(0)" class="btn btn-secondary" onclick="openCalendly()">Book Demo</a>
             </div>
+            <p style="font-size: 0.9rem; color: #6b7280; margin-top: 1.5rem;">
+                🚀 Free tier available • No credit card required • Cancel anytime
+            </p>
         </div>
     </section>
 
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-left">
-                <div class="footer-copyright">© 2025 DefendML. All rights reserved.</div>
-                <div class="footer-links">
-                    <a href="/about">About</a>
-                    <a href="/team">Team</a>
-                    <a href="#privacy">Privacy Policy</a>
-                    <a href="#terms">Terms of Service</a>
-                    <a href="#docs">API Docs</a>
-                    <a href="#status">Status</a>
-                    <a href="#contact">Contact</a>
-                </div>
+            <div>© 2025 DefendML. All rights reserved.</div>
+            <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                <a href="#" style="color: #e5e7eb; text-decoration: none;">About</a>
+                <a href="#" style="color: #e5e7eb; text-decoration: none;">API Docs</a>
+                <a href="#" style="color: #e5e7eb; text-decoration: none;">Status</a>
+                <a href="#" style="color: #e5e7eb; text-decoration: none;">Contact</a>
             </div>
-            <div class="footer-right">
-                <div class="footer-badge">
-                    <span class="footer-badge-icon">🛡️</span>
-                    <span>SOC 2 Type II Certified</span>
-                </div>
-                <div class="footer-badge">
-                    <span class="footer-badge-icon">✓</span>
-                    <span>ASL-3 Certified Platform</span>
-                </div>
-                <div class="footer-badge">
-                    <span class="footer-badge-icon">⚡</span>
-                    <span>Powered by Anthropic</span>
-                </div>
+            <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; font-size: 0.85rem; color: #9ca3af;">
+                <span>🛡️ SOC 2 Certified</span>
+                <span>✓ ASL-3 Powered by Anthropic</span>
             </div>
         </div>
     </footer>
 
     <script>
-        async function handleSubmit() {
-            const email = document.getElementById('emailInput').value || document.getElementById('emailInputFooter').value;
-            
-            if (!email) {
-                alert('Please enter your email address');
-                return;
+        // Exit intent popup
+        let exitIntentShown = false;
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY <= 0 && !exitIntentShown) {
+                exitIntentShown = true;
+                document.getElementById('exitPopup').classList.add('show');
+                document.getElementById('exitOverlay').classList.add('show');
             }
-            
-            if (!email.includes('@')) {
-                alert('Please enter a valid email address');
-                return;
-            }
-            
-            // Show loading state
-            const submitButtons = document.querySelectorAll('.submit-button');
-            submitButtons.forEach(btn => {
-                btn.disabled = true;
-                btn.textContent = 'Creating account...';
-            });
-            
-            try {
-                // Call your DefendML API to create the account
-const response = await fetch('https://defendml-api.dsovan2004.workers.dev/api/auth/register', {
-    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: generateRandomPassword(),
-                        name: email.split('@')[0],
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok && data.success) {
-                    // Success! Account created
-                    console.log('Account created successfully:', email);
-                    
-                    // Store token in localStorage
-                    localStorage.setItem('defendml_token', data.token);
-                    
-                    // Show success and redirect
-                    alert('🎉 Account created! Redirecting to your dashboard...');
-                    
-                    // Clear inputs
-                    document.getElementById('emailInput').value = '';
-                    document.getElementById('emailInputFooter').value = '';
-                    
-                    // Redirect to app
-                    setTimeout(() => {
-                        window.location.href = `https://app.defendml.com?welcome=true&email=${encodeURIComponent(email)}`;
-                    }, 1000);
-                    
-                } else {
-                    // Handle errors
-                    if (data.error && data.error.includes('already exists')) {
-                        alert('This email is already registered. Redirecting you to login...');
-                        setTimeout(() => {
-                            window.location.href = `https://app.defendml.com/login?email=${encodeURIComponent(email)}`;
-                        }, 1500);
-                    } else {
-                        alert(data.error || 'Something went wrong. Please try again.');
-                        submitButtons.forEach(btn => {
-                            btn.disabled = false;
-                            btn.textContent = 'Start Free Trial';
-                        });
-                    }
-                }
-                
-            } catch (error) {
-                console.error('Signup error:', error);
-                alert('Network error. Please check your connection and try again.');
-                submitButtons.forEach(btn => {
-                    btn.disabled = false;
-                    btn.textContent = 'Start Free Trial';
-                });
-            }
+        });
+
+        function closeExitPopup() {
+            document.getElementById('exitPopup').classList.remove('show');
+            document.getElementById('exitOverlay').classList.remove('show');
         }
-        
-        function generateRandomPassword() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-            let password = '';
-            for (let i = 0; i < 16; i++) {
-                password += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return password;
-        }
-        
-        function handleGetStarted(plan) {
-            console.log('Plan selected:', plan);
-            
-            if (plan === 'enterprise') {
-                alert('Thank you for your interest in Enterprise ASL-3! Please email us at sales@defendml.com');
+
+        function handleExitSubmit() {
+            const email = document.getElementById('exitEmail').value;
+            if (email && email.includes('@')) {
+                alert('Thanks! Redirecting you to book your demo...');
+                closeExitPopup();
+                openCalendly();
             } else {
-// Redirect to main signup on landing page
-        window.location.href = 'https://defendml.com';
-        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);            }
+                alert('Please enter a valid email address');
+            }
         }
-        
+
+        // Calendly integration (placeholder)
+        function openCalendly() {
+            // Replace with your actual Calendly link
+            alert('Opening Calendly... (Add your Calendly link here: https://calendly.com/defendml/demo)');
+            // window.open('https://calendly.com/defendml/demo', '_blank');
+        }
+
+        function handleGetStarted(plan) {
+            if (plan === 'starter') {
+                window.location.href = 'https://app.defendml.com?plan=starter';
+            } else if (plan === 'growth') {
+                window.location.href = 'https://app.defendml.com?plan=growth&trial=true';
+            } else if (plan === 'professional') {
+                window.location.href = 'https://app.defendml.com?plan=growth&trial=true';
+            }
+        }
+
         function toggleFaq(element) {
             const faqItem = element.parentElement;
             const isActive = faqItem.classList.contains('active');
@@ -1654,17 +1263,6 @@ const response = await fetch('https://defendml-api.dsovan2004.workers.dev/api/au
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const emailInputs = document.querySelectorAll('.email-input');
-            emailInputs.forEach(input => {
-                input.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        handleSubmit();
-                    }
-                });
-            });
-        });
     </script>
 </body>
 </html>
