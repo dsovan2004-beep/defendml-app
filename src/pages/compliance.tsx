@@ -281,31 +281,35 @@ function CompliancePageContent() {
                   <Award className="w-5 h-5 text-orange-400" />
                   Red Team & Bug Bounty Program
                 </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-    <div className="text-xs text-slate-400 mb-1">Active Tests</div>
-    <div className="text-2xl font-bold text-orange-400">24</div>
-    <div className="text-xs text-slate-500 mt-1">ASL-3 Prompts</div>
-  </div>
-  
-  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-    <div className="text-xs text-slate-400 mb-1">Critical Bounties</div>
-    <div className="text-2xl font-bold text-red-400">5</div>
-    <div className="text-xs text-slate-500 mt-1">$5K-$15K payouts</div>
-  </div>
-  
-  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-    <div className="text-xs text-slate-400 mb-1">Attack Library</div>
-    <div className="text-2xl font-bold text-green-400">100</div>
-    <div className="text-xs text-slate-500 mt-1">Total prompts</div>
-  </div>
-  
-  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-    <div className="text-xs text-slate-400 mb-1">Bounties Paid</div>
-    <div className="text-2xl font-bold text-orange-400">$87.5K</div>
-    <div className="text-xs text-slate-500 mt-1">Program total</div>
-  </div>
-</div>
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+            <div className="text-xs text-slate-400 mb-1">Active Tests</div>
+            <div className="text-2xl font-bold text-orange-400">49</div>
+            <div className="text-xs text-slate-500 mt-1">ASL-3 Prompts</div>
+            <div className="text-xs text-green-400 mt-1">↑ +25 added</div>
+          </div>
+          
+          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+            <div className="text-xs text-slate-400 mb-1">Critical Bounties</div>
+            <div className="text-2xl font-bold text-red-400">18</div>
+            <div className="text-xs text-slate-500 mt-1">$5K-$15K payouts</div>
+            <div className="text-xs text-green-400 mt-1">↑ +13 new</div>
+          </div>
+          
+          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+            <div className="text-xs text-slate-400 mb-1">Attack Library</div>
+            <div className="text-2xl font-bold text-green-400">100</div>
+            <div className="text-xs text-slate-500 mt-1">Total prompts</div>
+            <div className="text-xs text-blue-400 mt-1">49% deployed</div>
+          </div>
+          
+          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+            <div className="text-xs text-slate-400 mb-1">Bounty Pool</div>
+            <div className="text-2xl font-bold text-orange-400">$270K</div>
+            <div className="text-xs text-slate-500 mt-1">Max potential</div>
+            <div className="text-xs text-orange-400 mt-1">18 critical</div>
+          </div>
+        </div>
               </div>
             </div>
           </div>
