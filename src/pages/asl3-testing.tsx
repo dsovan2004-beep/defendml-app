@@ -205,7 +205,9 @@ export default function ASL3Testing() {
                     : 'bg-green-900/20 border-green-700'
                 }`}>
                   <div className="flex items-center justify-between mb-3">
-                    <div className="text-xl font-bold">
+                    <div className={`text-xl font-bold ${
+                      result.blocked ? 'text-red-400' : 'text-green-400'
+                    }`}>
                       {result.blocked ? '🛡️ BLOCKED' : '✅ ALLOWED'}
                     </div>
                     <div className={`text-sm px-3 py-1 rounded font-medium ${
