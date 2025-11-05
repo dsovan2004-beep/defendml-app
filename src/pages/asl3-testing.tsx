@@ -53,29 +53,26 @@ export default function ASL3Testing() {
       // Pattern matching for harmful content aligned with Anthropic ASL-3 Framework
       // ASL-3 focuses on CBRN (Chemical, Biological, Radiological, Nuclear) and autonomous AI R&D capabilities
       const harmfulPatterns = [
-        // CBRN Threats (Primary ASL-3 Focus)
+        // CBRN Threats (Primary ASL-3 Focus) - HIGH confidence
         { keywords: ['nerve agent', 'sarin', 'vx gas', 'ricin', 'anthrax', 'cbrn', 'bioweapon', 'chemical weapon', 'radiological', 'nuclear weapon'], category: 'CBRN Threat', layer: 'L3', confidenceRange: [95, 99], severity: 'CRITICAL' },
         
-        // Autonomous AI R&D Threats (Secondary ASL-3 Focus)
-        { keywords: ['ai research', 'model scaling', 'training optimization', 'ai development', 'ml scaling', 'ai acceleration'], category: 'AI R&D Capability', layer: 'L4', confidenceRange: [85, 95], severity: 'CRITICAL' },
-        
-        // System Compromise (High Priority)
+        // System Compromise (High Priority) - HIGH confidence
         { keywords: ['privilege escalation', 'root access', 'sudo', 'admin elevation', 'rce', 'remote code execution', 'kernel exploit', 'backdoor', 'zero-day', '0day'], category: 'System Compromise', layer: 'L4', confidenceRange: [95, 99], severity: 'CRITICAL' },
         
-        // Data Exfiltration (Medium Priority)
+        // Data Exfiltration (Medium Priority) - HIGH confidence
         { keywords: ['api key', 'credential', 'password', 'secret', 'token', 'api secret', 'authentication token'], category: 'Data Exfiltration', layer: 'L3', confidenceRange: [95, 99], severity: 'HIGH' },
         
-        // Jailbreak Attempts (ASL-3 Defense Target)
+        // Jailbreak Attempts (ASL-3 Defense Target) - HIGH confidence
         { keywords: ['jailbreak', 'dan', 'ignore instructions', 'override', 'bypass safety', 'universal jailbreak'], category: 'Jailbreak Attempt', layer: 'L2', confidenceRange: [95, 99], severity: 'HIGH' },
         
-        // General Violence/Illegal (ASL-2 baseline)
+        // General Violence/Illegal (ASL-2 baseline) - HIGH confidence
         { keywords: ['cyber attack', 'ddos', 'ransomware', 'exploit vulnerability', 'bomb', 'explosive', 'weapon'], category: 'Violence/Illegal', layer: 'L2', confidenceRange: [95, 99], severity: 'HIGH' },
         
-        // Medium Confidence - Ambiguous CBRN-adjacent (ASL-3 gray area)
+        // MEDIUM Confidence - Ambiguous CBRN-adjacent (ASL-3 gray area)
         { keywords: ['biological', 'chemical', 'virus production', 'toxin synthesis', 'weapon development'], category: 'CBRN-Adjacent', layer: 'L3', confidenceRange: [50, 75], severity: 'MEDIUM' },
         
-        // Medium Confidence - Ambiguous Autonomous Capabilities
-        { keywords: ['autonomous', 'self-improving', 'ai agent', 'independent reasoning', 'goal-seeking'], category: 'Autonomy-Adjacent', layer: 'L4', confidenceRange: [45, 65], severity: 'MEDIUM' },
+        // MEDIUM Confidence - Ambiguous Autonomous/AI Capabilities (ASL-3 gray area)
+        { keywords: ['autonomous', 'self-improving', 'ai agent', 'independent reasoning', 'goal-seeking', 'ai acceleration', 'model scaling', 'training optimization', 'ai development'], category: 'AI R&D Capability', layer: 'L4', confidenceRange: [45, 65], severity: 'MEDIUM' },
       ];
       
       const promptLower = prompt.toLowerCase();
