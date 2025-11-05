@@ -108,8 +108,14 @@ export default function ASL3Testing() {
         }
       }
       
+      // Determine if blocked or flagged based on confidence thresholds
+      // BLOCKED: High confidence (75%+) - automatic block
+      // FLAGGED: Medium confidence (40-74%) - manual review needed
+      // ALLOWED: Low confidence (<40%) - permitted
+      const blocked = matched && confidence >= 75;
+      
       const newResult: TestResult = {
-        blocked: matched && layer !== 'L1' && (layer === 'L4' || layer === 'L3' || category !== 'Potential Threat'),
+        blocked,
         confidence,
         responseTime: Math.floor(Math.random() * 30) + 25,
         category,
@@ -223,13 +229,19 @@ export default function ASL3Testing() {
                 <div className={`p-4 rounded-lg border-2 ${
                   result.blocked 
                     ? 'bg-red-900/20 border-red-700' 
+                    : result.confidence >= 40 && result.confidence < 75
+                    ? 'bg-yellow-900/20 border-yellow-700'
                     : 'bg-green-900/20 border-green-700'
                 }`}>
                   <div className="flex items-center justify-between mb-3">
                     <div className={`text-xl font-bold ${
-                      result.blocked ? 'text-red-400' : 'text-green-400'
+                      result.blocked 
+                        ? 'text-red-400' 
+                        : result.confidence >= 40 && result.confidence < 75
+                        ? 'text-yellow-400'
+                        : 'text-green-400'
                     }`}>
-                      {result.blocked ? '🛡️ BLOCKED' : '✅ ALLOWED'}
+                      {result.blocked ? '🛡️ BLOCKED' : result.confidence >= 40 && result.confidence < 75 ? '⚠️ FLAGGED' : '✅ ALLOWED'}
                     </div>
                     <div className={`text-sm px-3 py-1 rounded font-medium ${
                       result.blocked ? 'bg-red-700 text-red-100' : 'bg-green-700 text-green-100'
@@ -317,9 +329,9 @@ export default function ASL3Testing() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <span className={`text-sm font-medium ${
-                        test.blocked ? 'text-red-400' : 'text-green-400'
+                        test.blocked ? 'text-red-400' : test.confidence >= 40 && test.confidence < 75 ? 'text-yellow-400' : 'text-green-400'
                       }`}>
-                        {test.blocked ? '🛡️ BLOCKED' : '✅ ALLOWED'}
+                        {test.blocked ? '🛡️ BLOCKED' : test.confidence >= 40 && test.confidence < 75 ? '⚠️ FLAGGED' : '✅ ALLOWED'}
                       </span>
                       <span className="text-xs text-slate-500">•</span>
                       <span className="text-xs text-slate-400">{test.category}</span>
