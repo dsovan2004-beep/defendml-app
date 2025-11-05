@@ -27,7 +27,18 @@ import {
   clearDemoSession,
   getEffectiveRole,
 } from "../lib/authClient";
-
+// Add this NEW import after line 29:
+import {
+  HomeIcon,
+  ShieldCheckIcon, 
+  LockClosedIcon,
+  ClipboardDocumentCheckIcon,
+  HeartIcon,
+  ChartBarIcon,
+  DocumentTextIcon,
+  CogIcon,
+  BeakerIcon,
+} from '@heroicons/react/24/outline';
 // Normalize roles like "superadmin" -> "SuperAdmin"
 function prettyRole(r: string | null | undefined) {
   if (!r) return "Viewer";
@@ -90,6 +101,7 @@ export default function Navigation() {
     { name: "Health", href: "/health", icon: Activity },
     { name: "Usage", href: "/usage", icon: BarChart3 },
     { name: "Audit", href: "/audit", icon: ScrollText },
+    { name: "ASL-3 Testing", href: "/asl3-testing", icon: BeakerIcon },
     { name: "Settings", href: "/settings", icon: Settings },
 
     // 🔐 Feature-flagged links (role-aware). Demo superadmin can see all.
