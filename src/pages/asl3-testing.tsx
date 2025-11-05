@@ -50,20 +50,39 @@ export default function ASL3Testing() {
       // Simulate API call with realistic delay
       await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
       
-      // Pattern matching for harmful content (replace with real API call later)
+      // Pattern matching for harmful content aligned with Anthropic ASL-3 Framework
+      // ASL-3 focuses on CBRN (Chemical, Biological, Radiological, Nuclear) and autonomous AI R&D capabilities
       const harmfulPatterns = [
-        { keywords: ['nerve agent', 'sarin', 'vx gas', 'ricin', 'anthrax'], category: 'CBRN Threat', layer: 'L2' },
-        { keywords: ['api key', 'credential', 'password', 'secret', 'token'], category: 'Data Exfiltration', layer: 'L3' },
-        { keywords: ['cyber attack', 'ddos', 'ransomware', 'exploit', 'vulnerability'], category: 'Violence/Illegal', layer: 'L2' },
-        { keywords: ['bomb', 'explosive', 'weapon', '3d print gun'], category: 'Violence/Illegal', layer: 'L2' },
-        { keywords: ['jailbreak', 'dan', 'ignore instructions', 'override'], category: 'Jailbreak Attempt', layer: 'L2' },
-        { keywords: ['privilege escalation', 'root access', 'sudo', 'admin elevation', 'rce', 'remote code execution', 'kernel exploit', 'backdoor', 'zero-day', '0day'], category: 'System Compromise', layer: 'L4' },
+        // CBRN Threats (Primary ASL-3 Focus)
+        { keywords: ['nerve agent', 'sarin', 'vx gas', 'ricin', 'anthrax', 'cbrn', 'bioweapon', 'chemical weapon', 'radiological', 'nuclear weapon'], category: 'CBRN Threat', layer: 'L3', confidenceRange: [95, 99], severity: 'CRITICAL' },
+        
+        // Autonomous AI R&D Threats (Secondary ASL-3 Focus)
+        { keywords: ['ai research', 'model scaling', 'training optimization', 'ai development', 'ml scaling', 'ai acceleration'], category: 'AI R&D Capability', layer: 'L4', confidenceRange: [85, 95], severity: 'CRITICAL' },
+        
+        // System Compromise (High Priority)
+        { keywords: ['privilege escalation', 'root access', 'sudo', 'admin elevation', 'rce', 'remote code execution', 'kernel exploit', 'backdoor', 'zero-day', '0day'], category: 'System Compromise', layer: 'L4', confidenceRange: [95, 99], severity: 'CRITICAL' },
+        
+        // Data Exfiltration (Medium Priority)
+        { keywords: ['api key', 'credential', 'password', 'secret', 'token', 'api secret', 'authentication token'], category: 'Data Exfiltration', layer: 'L3', confidenceRange: [95, 99], severity: 'HIGH' },
+        
+        // Jailbreak Attempts (ASL-3 Defense Target)
+        { keywords: ['jailbreak', 'dan', 'ignore instructions', 'override', 'bypass safety', 'universal jailbreak'], category: 'Jailbreak Attempt', layer: 'L2', confidenceRange: [95, 99], severity: 'HIGH' },
+        
+        // General Violence/Illegal (ASL-2 baseline)
+        { keywords: ['cyber attack', 'ddos', 'ransomware', 'exploit vulnerability', 'bomb', 'explosive', 'weapon'], category: 'Violence/Illegal', layer: 'L2', confidenceRange: [95, 99], severity: 'HIGH' },
+        
+        // Medium Confidence - Ambiguous CBRN-adjacent (ASL-3 gray area)
+        { keywords: ['biological', 'chemical', 'virus production', 'toxin synthesis', 'weapon development'], category: 'CBRN-Adjacent', layer: 'L3', confidenceRange: [50, 75], severity: 'MEDIUM' },
+        
+        // Medium Confidence - Ambiguous Autonomous Capabilities
+        { keywords: ['autonomous', 'self-improving', 'ai agent', 'independent reasoning', 'goal-seeking'], category: 'Autonomy-Adjacent', layer: 'L4', confidenceRange: [45, 65], severity: 'MEDIUM' },
       ];
       
       const promptLower = prompt.toLowerCase();
       let matched = false;
       let category = 'Benign';
       let layer = 'L1';
+      let confidence = Math.floor(Math.random() * 20) + 10; // Default 10-30% for benign
       
       // Check L4 first (highest priority)
       for (const pattern of harmfulPatterns.filter(p => p.layer === 'L4')) {
@@ -71,25 +90,27 @@ export default function ASL3Testing() {
           matched = true;
           category = pattern.category;
           layer = pattern.layer;
+          confidence = Math.floor(Math.random() * (pattern.confidenceRange[1] - pattern.confidenceRange[0] + 1)) + pattern.confidenceRange[0];
           break;
         }
       }
       
-      // If no L4 match, check other layers
+      // If no L4 match, check other layers (L2, L3, Medium)
       if (!matched) {
         for (const pattern of harmfulPatterns.filter(p => p.layer !== 'L4')) {
           if (pattern.keywords.some(keyword => promptLower.includes(keyword))) {
             matched = true;
             category = pattern.category;
             layer = pattern.layer;
+            confidence = Math.floor(Math.random() * (pattern.confidenceRange[1] - pattern.confidenceRange[0] + 1)) + pattern.confidenceRange[0];
             break;
           }
         }
       }
       
       const newResult: TestResult = {
-        blocked: matched,
-        confidence: matched ? 95 + Math.floor(Math.random() * 5) : 10 + Math.floor(Math.random() * 20),
+        blocked: matched && layer !== 'L1' && (layer === 'L4' || layer === 'L3' || category !== 'Potential Threat'),
+        confidence,
         responseTime: Math.floor(Math.random() * 30) + 25,
         category,
         layer,
