@@ -65,12 +65,25 @@ export default function ASL3Testing() {
       let category = 'Benign';
       let layer = 'L1';
       
-      for (const pattern of harmfulPatterns) {
+      // Check L4 first (highest priority)
+      for (const pattern of harmfulPatterns.filter(p => p.layer === 'L4')) {
         if (pattern.keywords.some(keyword => promptLower.includes(keyword))) {
           matched = true;
           category = pattern.category;
           layer = pattern.layer;
           break;
+        }
+      }
+      
+      // If no L4 match, check other layers
+      if (!matched) {
+        for (const pattern of harmfulPatterns.filter(p => p.layer !== 'L4')) {
+          if (pattern.keywords.some(keyword => promptLower.includes(keyword))) {
+            matched = true;
+            category = pattern.category;
+            layer = pattern.layer;
+            break;
+          }
         }
       }
       
