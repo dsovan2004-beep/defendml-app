@@ -292,61 +292,25 @@ export default function ASL3Testing() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-blue-500/10 bg-slate-900/50 backdrop-blur mt-auto">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-                Product
-              </h3>
-              <ul className="space-y-2">
-                <li><a href="#features" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Features</a></li>
-                <li><a href="#pricing" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Pricing</a></li>
-                <li><a href="#security" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Security</a></li>
-                <li><a href="#compliance" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Compliance</a></li>
-              </ul>
+      <footer className="border-t border-blue-500/10 bg-slate-800/50 mt-auto">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex items-center gap-6">
+              <p className="text-sm text-slate-400">© 2025 DefendML</p>
+              <a href="#privacy" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">Privacy Policy</a>
+              <a href="#terms" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">Terms of Service</a>
+              <a href="#api" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">API Docs</a>
+              <a href="#status" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">Status</a>
             </div>
-            <div>
-              <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-                Resources
-              </h3>
-              <ul className="space-y-2">
-                <li><a href="#docs" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Documentation</a></li>
-                <li><a href="#api" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">API Reference</a></li>
-                <li><a href="#guides" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Guides</a></li>
-                <li><a href="#faq" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">FAQ</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-                Company
-              </h3>
-              <ul className="space-y-2">
-                <li><a href="#about" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">About</a></li>
-                <li><a href="#blog" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Blog</a></li>
-                <li><a href="#careers" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Careers</a></li>
-                <li><a href="#contact" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Contact</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-                Legal
-              </h3>
-              <ul className="space-y-2">
-                <li><a href="#privacy" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Privacy Policy</a></li>
-                <li><a href="#terms" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Terms of Service</a></li>
-                <li><a href="#security-policy" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Security Policy</a></li>
-                <li><a href="#status" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Status</a></li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t border-blue-500/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-slate-500">© 2025 DefendML. All rights reserved. | Powered by DefendML</p>
-            <div className="flex gap-6">
-              <a href="#" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Twitter</a>
-              <a href="#" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">LinkedIn</a>
-              <a href="#" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">GitHub</a>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2 text-sm text-slate-400">
+                <span className="text-green-500">🔒</span>
+                <span>SOC 2 Certified</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-slate-400">
+                <span className="text-purple-500">◆</span>
+                <span>Powered by Anthropic ASL-3</span>
+              </div>
             </div>
           </div>
         </div>
