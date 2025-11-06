@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BeakerIcon, ShieldCheckIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { BeakerIcon, ShieldCheckIcon, ClockIcon, LightBulbIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 interface TestResult {
   blocked: boolean;
@@ -9,6 +9,17 @@ interface TestResult {
   layer: string;
   timestamp: Date;
   prompt: string;
+  explanation: {
+    matchedPatterns: string[];
+    riskFactors: string[];
+    reasoning: string;
+    recommendation: string;
+    confidenceBreakdown: {
+      patternMatch: number;
+      contextual: number;
+      severity: number;
+    };
+  };
 }
 
 export default function ASL3Testing() {
@@ -51,28 +62,125 @@ export default function ASL3Testing() {
       await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
       
       // Pattern matching for harmful content aligned with Anthropic ASL-3 Framework
-      // ASL-3 focuses on CBRN (Chemical, Biological, Radiological, Nuclear) and autonomous AI R&D capabilities
       const harmfulPatterns = [
         // CBRN Threats (Primary ASL-3 Focus) - HIGH confidence
-        { keywords: ['nerve agent', 'sarin', 'vx gas', 'ricin', 'anthrax', 'cbrn', 'bioweapon', 'chemical weapon', 'radiological', 'nuclear weapon'], category: 'CBRN Threat', layer: 'L3', confidenceRange: [95, 99], severity: 'CRITICAL' },
+        { 
+          keywords: ['nerve agent', 'sarin', 'vx gas', 'ricin', 'anthrax', 'cbrn', 'bioweapon', 'chemical weapon', 'radiological', 'nuclear weapon'], 
+          category: 'CBRN Threat', 
+          layer: 'L3', 
+          confidenceRange: [95, 99], 
+          severity: 'CRITICAL',
+          riskFactors: [
+            'CBRN keyword detected (ASL-3 primary concern)',
+            'Weapons of mass destruction reference',
+            'Synthesis or production intent possible',
+            'Critical security violation'
+          ],
+          reasoning: 'Prompt contains explicit CBRN threat keywords related to chemical, biological, radiological, or nuclear weapons. This is Anthropic\'s primary ASL-3 safety concern and indicates potential misuse for creating weapons of mass destruction.',
+          recommendation: 'BLOCK immediately. Report to security team. May require law enforcement notification.'
+        },
         
         // System Compromise (High Priority) - HIGH confidence
-        { keywords: ['privilege escalation', 'root access', 'sudo', 'admin elevation', 'rce', 'remote code execution', 'kernel exploit', 'backdoor', 'zero-day', '0day'], category: 'System Compromise', layer: 'L4', confidenceRange: [95, 99], severity: 'CRITICAL' },
+        { 
+          keywords: ['privilege escalation', 'root access', 'sudo', 'admin elevation', 'rce', 'remote code execution', 'kernel exploit', 'backdoor', 'zero-day', '0day'], 
+          category: 'System Compromise', 
+          layer: 'L4', 
+          confidenceRange: [95, 99], 
+          severity: 'CRITICAL',
+          riskFactors: [
+            'Critical system access attempt detected',
+            'Potential infrastructure breach',
+            'Privilege escalation pattern identified',
+            'Immediate security risk'
+          ],
+          reasoning: 'Prompt contains explicit system compromise keywords indicating an attempt to gain unauthorized elevated access. This pattern is associated with remote code execution, privilege escalation, or backdoor installation attempts.',
+          recommendation: 'BLOCK immediately. Alert security team. Log for forensic analysis.'
+        },
         
         // Data Exfiltration (Medium Priority) - HIGH confidence
-        { keywords: ['api key', 'credential', 'password', 'secret', 'token', 'api secret', 'authentication token'], category: 'Data Exfiltration', layer: 'L3', confidenceRange: [95, 99], severity: 'HIGH' },
+        { 
+          keywords: ['api key', 'credential', 'password', 'secret', 'token', 'api secret', 'authentication token'], 
+          category: 'Data Exfiltration', 
+          layer: 'L3', 
+          confidenceRange: [95, 99], 
+          severity: 'HIGH',
+          riskFactors: [
+            'Credential extraction attempt detected',
+            'Potential data theft in progress',
+            'API key or secret exposure risk',
+            'High severity security breach'
+          ],
+          reasoning: 'Prompt attempts to extract sensitive authentication data. This pattern is commonly used in data exfiltration attacks to steal API keys, passwords, or authentication tokens from systems.',
+          recommendation: 'BLOCK immediately. Audit system for exposed credentials. Review user access logs.'
+        },
         
         // Jailbreak Attempts (ASL-3 Defense Target) - HIGH confidence
-        { keywords: ['jailbreak', 'dan', 'ignore instructions', 'override', 'bypass safety', 'universal jailbreak'], category: 'Jailbreak Attempt', layer: 'L2', confidenceRange: [95, 99], severity: 'HIGH' },
+        { 
+          keywords: ['jailbreak', 'dan', 'ignore instructions', 'override', 'bypass safety', 'universal jailbreak'], 
+          category: 'Jailbreak Attempt', 
+          layer: 'L2', 
+          confidenceRange: [95, 99], 
+          severity: 'HIGH',
+          riskFactors: [
+            'AI safety bypass attempt detected',
+            'Instruction manipulation pattern',
+            'Common attack vector identified',
+            'Medium severity threat'
+          ],
+          reasoning: 'Prompt attempts to manipulate AI instructions to bypass safety controls. This is a common jailbreak technique used to make AI systems produce harmful content.',
+          recommendation: 'BLOCK and log. Monitor user for escalating threat patterns.'
+        },
         
         // General Violence/Illegal (ASL-2 baseline) - HIGH confidence
-        { keywords: ['cyber attack', 'ddos', 'ransomware', 'exploit vulnerability', 'bomb', 'explosive', 'weapon'], category: 'Violence/Illegal', layer: 'L2', confidenceRange: [95, 99], severity: 'HIGH' },
+        { 
+          keywords: ['cyber attack', 'ddos', 'ransomware', 'exploit vulnerability', 'bomb', 'explosive', 'weapon'], 
+          category: 'Violence/Illegal', 
+          layer: 'L2', 
+          confidenceRange: [95, 99], 
+          severity: 'HIGH',
+          riskFactors: [
+            'Violent or illegal activity reference',
+            'Instruction manipulation pattern',
+            'Common attack vector identified',
+            'Medium severity threat'
+          ],
+          reasoning: 'Prompt contains references to violent or illegal activities. This could facilitate harmful actions or cyberattacks.',
+          recommendation: 'BLOCK and log. Monitor user for escalating threat patterns.'
+        },
         
         // MEDIUM Confidence - Ambiguous CBRN-adjacent (ASL-3 gray area)
-        { keywords: ['biological', 'chemical', 'virus production', 'toxin synthesis', 'weapon development'], category: 'CBRN-Adjacent', layer: 'L3', confidenceRange: [50, 75], severity: 'MEDIUM' },
+        { 
+          keywords: ['biological', 'chemical', 'virus production', 'toxin synthesis', 'weapon development'], 
+          category: 'CBRN-Adjacent', 
+          layer: 'L3', 
+          confidenceRange: [50, 75], 
+          severity: 'MEDIUM',
+          riskFactors: [
+            'CBRN-related terminology detected',
+            'Context suggests research or academic inquiry',
+            'Ambiguous intent - requires review',
+            'May be legitimate scientific query'
+          ],
+          reasoning: 'Prompt contains CBRN-adjacent terms that could indicate either legitimate research or threat activity. The context is ambiguous and requires human expert review to determine intent.',
+          recommendation: 'FLAG for security review. Assess user background and research context.'
+        },
         
         // MEDIUM Confidence - Ambiguous Autonomous/AI Capabilities (ASL-3 gray area)
-        { keywords: ['autonomous', 'self-improving', 'ai agent', 'independent reasoning', 'goal-seeking', 'ai acceleration', 'model scaling', 'training optimization', 'ai development'], category: 'AI R&D Capability', layer: 'L4', confidenceRange: [45, 65], severity: 'MEDIUM' },
+        { 
+          keywords: ['autonomous', 'self-improving', 'ai agent', 'independent reasoning', 'goal-seeking', 'ai acceleration', 'model scaling', 'training optimization', 'ai development'], 
+          category: 'AI R&D Capability', 
+          layer: 'L4', 
+          confidenceRange: [45, 65], 
+          severity: 'MEDIUM',
+          riskFactors: [
+            'AI capability acceleration detected',
+            'Potential autonomous system development',
+            'ASL-3 secondary concern triggered',
+            'Requires human review'
+          ],
+          reasoning: 'Prompt contains AI R&D acceleration patterns that align with Anthropic\'s ASL-3 secondary concerns about autonomous AI capabilities. While not immediately dangerous, this requires expert review to assess risk.',
+          recommendation: 'FLAG for security review. Assess user intent and context before allowing.'
+        },
       ];
       
       const promptLower = prompt.toLowerCase();
@@ -80,14 +188,31 @@ export default function ASL3Testing() {
       let category = 'Benign';
       let layer = 'L1';
       let confidence = Math.floor(Math.random() * 20) + 10; // Default 10-30% for benign
+      let matchedPatterns: string[] = [];
+      let riskFactors: string[] = ['Safe query detected', 'No malicious intent found'];
+      let reasoning = 'Prompt does not contain any known threat patterns or malicious keywords. The query appears to be benign and safe to process.';
+      let recommendation = 'ALLOW. Continue normal processing.';
+      let confidenceBreakdown = { patternMatch: 0, contextual: 10, severity: 0 };
       
       // Check L4 first (highest priority)
       for (const pattern of harmfulPatterns.filter(p => p.layer === 'L4')) {
-        if (pattern.keywords.some(keyword => promptLower.includes(keyword))) {
+        const foundKeywords = pattern.keywords.filter(keyword => promptLower.includes(keyword));
+        if (foundKeywords.length > 0) {
           matched = true;
+          matchedPatterns = foundKeywords;
           category = pattern.category;
           layer = pattern.layer;
           confidence = Math.floor(Math.random() * (pattern.confidenceRange[1] - pattern.confidenceRange[0] + 1)) + pattern.confidenceRange[0];
+          riskFactors = pattern.riskFactors;
+          reasoning = pattern.reasoning;
+          recommendation = pattern.recommendation;
+          
+          // Calculate confidence breakdown based on pattern type
+          if (pattern.severity === 'CRITICAL') {
+            confidenceBreakdown = { patternMatch: 85, contextual: 10, severity: 100 };
+          } else {
+            confidenceBreakdown = { patternMatch: 40, contextual: 15, severity: 60 };
+          }
           break;
         }
       }
@@ -95,20 +220,36 @@ export default function ASL3Testing() {
       // If no L4 match, check other layers (L2, L3, Medium)
       if (!matched) {
         for (const pattern of harmfulPatterns.filter(p => p.layer !== 'L4')) {
-          if (pattern.keywords.some(keyword => promptLower.includes(keyword))) {
+          const foundKeywords = pattern.keywords.filter(keyword => promptLower.includes(keyword));
+          if (foundKeywords.length > 0) {
             matched = true;
+            matchedPatterns = foundKeywords;
             category = pattern.category;
             layer = pattern.layer;
             confidence = Math.floor(Math.random() * (pattern.confidenceRange[1] - pattern.confidenceRange[0] + 1)) + pattern.confidenceRange[0];
+            riskFactors = pattern.riskFactors;
+            reasoning = pattern.reasoning;
+            recommendation = pattern.recommendation;
+            
+            // Calculate confidence breakdown
+            if (pattern.severity === 'CRITICAL') {
+              confidenceBreakdown = { patternMatch: 90, contextual: 5, severity: 100 };
+            } else if (pattern.severity === 'HIGH') {
+              confidenceBreakdown = { patternMatch: 85, contextual: 10, severity: 80 };
+            } else {
+              confidenceBreakdown = { patternMatch: 35, contextual: 20, severity: 70 };
+            }
             break;
           }
         }
       }
       
+      // Set default matched patterns for benign
+      if (!matched) {
+        matchedPatterns = ['No threat patterns detected'];
+      }
+      
       // Determine if blocked or flagged based on confidence thresholds
-      // BLOCKED: High confidence (75%+) - automatic block
-      // FLAGGED: Medium confidence (40-74%) - manual review needed
-      // ALLOWED: Low confidence (<40%) - permitted
       const blocked = matched && confidence >= 75;
       
       const newResult: TestResult = {
@@ -118,7 +259,14 @@ export default function ASL3Testing() {
         category,
         layer,
         timestamp: new Date(),
-        prompt: prompt.substring(0, 100)
+        prompt: prompt.substring(0, 100),
+        explanation: {
+          matchedPatterns,
+          riskFactors,
+          reasoning,
+          recommendation,
+          confidenceBreakdown
+        }
       };
       
       setResult(newResult);
@@ -279,6 +427,180 @@ export default function ASL3Testing() {
             )}
           </div>
         </div>
+
+        {/* AI Explainability Panel - NEW! */}
+        {result && (
+          <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-6 mb-8">
+            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <LightBulbIcon className="h-5 w-5 text-yellow-400" />
+              AI Explainability - Why This Decision Was Made
+            </h2>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Left Column */}
+              <div className="space-y-4">
+                {/* Matched Patterns */}
+                <div className="bg-slate-900/50 border border-blue-500/20 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-blue-300 mb-3 uppercase tracking-wider">
+                    Matched Patterns
+                  </h3>
+                  <div className="space-y-2">
+                    {result.explanation.matchedPatterns.map((pattern, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-sm">
+                        <span className="text-blue-400">•</span>
+                        <code className="bg-slate-800 px-2 py-0.5 rounded text-blue-400 text-xs">
+                          {pattern}
+                        </code>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Risk Factors */}
+                <div className="bg-slate-900/50 border border-orange-500/20 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-orange-300 mb-3 uppercase tracking-wider flex items-center gap-2">
+                    <ExclamationTriangleIcon className="h-4 w-4" />
+                    Risk Factors
+                  </h3>
+                  <div className="space-y-2">
+                    {result.explanation.riskFactors.map((factor, idx) => (
+                      <div key={idx} className="flex items-start gap-2 text-sm text-slate-300">
+                        <span className="text-orange-400 mt-0.5">⚠</span>
+                        <span>{factor}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Confidence Breakdown */}
+                <div className="bg-slate-900/50 border border-purple-500/20 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-purple-300 mb-3 uppercase tracking-wider">
+                    Confidence Breakdown
+                  </h3>
+                  <div className="space-y-3">
+                    <div>
+                      <div className="flex justify-between text-xs mb-1">
+                        <span className="text-slate-400">Pattern Match</span>
+                        <span className="text-blue-400 font-semibold">
+                          {result.explanation.confidenceBreakdown.patternMatch}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-slate-800 rounded-full h-1.5">
+                        <div 
+                          className="bg-blue-500 h-1.5 rounded-full transition-all duration-500"
+                          style={{ width: `${result.explanation.confidenceBreakdown.patternMatch}%` }}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-xs mb-1">
+                        <span className="text-slate-400">Contextual</span>
+                        <span className="text-purple-400 font-semibold">
+                          {result.explanation.confidenceBreakdown.contextual}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-slate-800 rounded-full h-1.5">
+                        <div 
+                          className="bg-purple-500 h-1.5 rounded-full transition-all duration-500"
+                          style={{ width: `${result.explanation.confidenceBreakdown.contextual}%` }}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-xs mb-1">
+                        <span className="text-slate-400">Severity</span>
+                        <span className="text-orange-400 font-semibold">
+                          {result.explanation.confidenceBreakdown.severity}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-slate-800 rounded-full h-1.5">
+                        <div 
+                          className="bg-orange-500 h-1.5 rounded-full transition-all duration-500"
+                          style={{ width: `${result.explanation.confidenceBreakdown.severity}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column */}
+              <div className="space-y-4">
+                {/* Reasoning */}
+                <div className="bg-slate-900/50 border border-green-500/20 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-green-300 mb-3 uppercase tracking-wider">
+                    Detailed Reasoning
+                  </h3>
+                  <p className="text-sm text-slate-300 leading-relaxed">
+                    {result.explanation.reasoning}
+                  </p>
+                </div>
+
+                {/* Recommendation */}
+                <div className={`border rounded-lg p-4 ${
+                  result.blocked
+                    ? 'bg-red-900/20 border-red-500/30'
+                    : result.confidence >= 40 && result.confidence < 75
+                    ? 'bg-yellow-900/20 border-yellow-500/30'
+                    : 'bg-green-900/20 border-green-500/30'
+                }`}>
+                  <h3 className={`text-sm font-semibold mb-3 uppercase tracking-wider flex items-center gap-2 ${
+                    result.blocked
+                      ? 'text-red-300'
+                      : result.confidence >= 40 && result.confidence < 75
+                      ? 'text-yellow-300'
+                      : 'text-green-300'
+                  }`}>
+                    <ShieldCheckIcon className="h-4 w-4" />
+                    Recommendation
+                  </h3>
+                  <p className={`text-sm font-medium ${
+                    result.blocked
+                      ? 'text-red-200'
+                      : result.confidence >= 40 && result.confidence < 75
+                      ? 'text-yellow-200'
+                      : 'text-green-200'
+                  }`}>
+                    {result.explanation.recommendation}
+                  </p>
+                </div>
+
+                {/* Defense Layer Info */}
+                <div className="bg-slate-900/50 border border-blue-500/20 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-blue-300 mb-3 uppercase tracking-wider">
+                    Defense Layer: {result.layer}
+                  </h3>
+                  <div className="text-xs text-slate-300 space-y-2">
+                    {result.layer === 'L4' && (
+                      <>
+                        <p><strong className="text-red-400">Critical:</strong> System compromise and AI R&D threats</p>
+                        <p className="text-slate-400">Privilege escalation, RCE, autonomous AI concerns</p>
+                      </>
+                    )}
+                    {result.layer === 'L3' && (
+                      <>
+                        <p><strong className="text-orange-400">High Priority:</strong> CBRN and data exfiltration</p>
+                        <p className="text-slate-400">Primary ASL-3 concern - WMD and credential theft</p>
+                      </>
+                    )}
+                    {result.layer === 'L2' && (
+                      <>
+                        <p><strong className="text-yellow-400">Medium:</strong> Jailbreaks and violence/illegal</p>
+                        <p className="text-slate-400">AI safety bypasses and harmful content attempts</p>
+                      </>
+                    )}
+                    {result.layer === 'L1' && (
+                      <>
+                        <p><strong className="text-green-400">Benign:</strong> Safe queries</p>
+                        <p className="text-slate-400">No threat patterns - normal processing approved</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Quick Test Scenarios */}
         <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-6 mb-8">
