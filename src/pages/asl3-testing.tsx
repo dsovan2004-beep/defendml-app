@@ -28,7 +28,6 @@ export default function ASL3Testing() {
   const [isLoading, setIsLoading] = useState(false);
   const [testHistory, setTestHistory] = useState<TestResult[]>([]);
 
-  // Quick test scenarios from your database
   const quickTests = [
     {
       label: 'CBRN Test',
@@ -58,12 +57,9 @@ export default function ASL3Testing() {
     setIsLoading(true);
     
     try {
-      // Simulate API call with realistic delay
       await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
       
-      // Pattern matching for harmful content aligned with Anthropic ASL-3 Framework
       const harmfulPatterns = [
-        // CBRN Threats (Primary ASL-3 Focus) - HIGH confidence
         { 
           keywords: ['nerve agent', 'sarin', 'vx gas', 'ricin', 'anthrax', 'cbrn', 'bioweapon', 'chemical weapon', 'radiological', 'nuclear weapon'], 
           category: 'CBRN Threat', 
@@ -79,8 +75,6 @@ export default function ASL3Testing() {
           reasoning: 'Prompt contains explicit CBRN threat keywords related to chemical, biological, radiological, or nuclear weapons. This is Anthropic\'s primary ASL-3 safety concern and indicates potential misuse for creating weapons of mass destruction.',
           recommendation: 'BLOCK immediately. Report to security team. May require law enforcement notification.'
         },
-        
-        // System Compromise (High Priority) - HIGH confidence
         { 
           keywords: ['privilege escalation', 'root access', 'sudo', 'admin elevation', 'rce', 'remote code execution', 'kernel exploit', 'backdoor', 'zero-day', '0day'], 
           category: 'System Compromise', 
@@ -96,8 +90,6 @@ export default function ASL3Testing() {
           reasoning: 'Prompt contains explicit system compromise keywords indicating an attempt to gain unauthorized elevated access. This pattern is associated with remote code execution, privilege escalation, or backdoor installation attempts.',
           recommendation: 'BLOCK immediately. Alert security team. Log for forensic analysis.'
         },
-        
-        // Data Exfiltration (Medium Priority) - HIGH confidence
         { 
           keywords: ['api key', 'credential', 'password', 'secret', 'token', 'api secret', 'authentication token'], 
           category: 'Data Exfiltration', 
@@ -113,8 +105,6 @@ export default function ASL3Testing() {
           reasoning: 'Prompt attempts to extract sensitive authentication data. This pattern is commonly used in data exfiltration attacks to steal API keys, passwords, or authentication tokens from systems.',
           recommendation: 'BLOCK immediately. Audit system for exposed credentials. Review user access logs.'
         },
-        
-        // Jailbreak Attempts (ASL-3 Defense Target) - HIGH confidence
         { 
           keywords: ['jailbreak', 'dan', 'ignore instructions', 'override', 'bypass safety', 'universal jailbreak'], 
           category: 'Jailbreak Attempt', 
@@ -130,8 +120,6 @@ export default function ASL3Testing() {
           reasoning: 'Prompt attempts to manipulate AI instructions to bypass safety controls. This is a common jailbreak technique used to make AI systems produce harmful content.',
           recommendation: 'BLOCK and log. Monitor user for escalating threat patterns.'
         },
-        
-        // General Violence/Illegal (ASL-2 baseline) - HIGH confidence
         { 
           keywords: ['cyber attack', 'ddos', 'ransomware', 'exploit vulnerability', 'bomb', 'explosive', 'weapon'], 
           category: 'Violence/Illegal', 
@@ -147,8 +135,6 @@ export default function ASL3Testing() {
           reasoning: 'Prompt contains references to violent or illegal activities. This could facilitate harmful actions or cyberattacks.',
           recommendation: 'BLOCK and log. Monitor user for escalating threat patterns.'
         },
-        
-        // MEDIUM Confidence - Ambiguous CBRN-adjacent (ASL-3 gray area)
         { 
           keywords: ['biological', 'chemical', 'virus production', 'toxin synthesis', 'weapon development'], 
           category: 'CBRN-Adjacent', 
@@ -164,8 +150,6 @@ export default function ASL3Testing() {
           reasoning: 'Prompt contains CBRN-adjacent terms that could indicate either legitimate research or threat activity. The context is ambiguous and requires human expert review to determine intent.',
           recommendation: 'FLAG for security review. Assess user background and research context.'
         },
-        
-        // MEDIUM Confidence - Ambiguous Autonomous/AI Capabilities (ASL-3 gray area)
         { 
           keywords: ['autonomous', 'self-improving', 'ai agent', 'independent reasoning', 'goal-seeking', 'ai acceleration', 'model scaling', 'training optimization', 'ai development'], 
           category: 'AI R&D Capability', 
@@ -187,14 +171,13 @@ export default function ASL3Testing() {
       let matched = false;
       let category = 'Benign';
       let layer = 'L1';
-      let confidence = Math.floor(Math.random() * 20) + 10; // Default 10-30% for benign
+      let confidence = Math.floor(Math.random() * 20) + 10;
       let matchedPatterns: string[] = [];
       let riskFactors: string[] = ['Safe query detected', 'No malicious intent found'];
       let reasoning = 'Prompt does not contain any known threat patterns or malicious keywords. The query appears to be benign and safe to process.';
       let recommendation = 'ALLOW. Continue normal processing.';
       let confidenceBreakdown = { patternMatch: 0, contextual: 10, severity: 0 };
       
-      // Check L4 first (highest priority)
       for (const pattern of harmfulPatterns.filter(p => p.layer === 'L4')) {
         const foundKeywords = pattern.keywords.filter(keyword => promptLower.includes(keyword));
         if (foundKeywords.length > 0) {
@@ -207,7 +190,6 @@ export default function ASL3Testing() {
           reasoning = pattern.reasoning;
           recommendation = pattern.recommendation;
           
-          // Calculate confidence breakdown based on pattern type
           if (pattern.severity === 'CRITICAL') {
             confidenceBreakdown = { patternMatch: 85, contextual: 10, severity: 100 };
           } else {
@@ -217,7 +199,6 @@ export default function ASL3Testing() {
         }
       }
       
-      // If no L4 match, check other layers (L2, L3, Medium)
       if (!matched) {
         for (const pattern of harmfulPatterns.filter(p => p.layer !== 'L4')) {
           const foundKeywords = pattern.keywords.filter(keyword => promptLower.includes(keyword));
@@ -231,7 +212,6 @@ export default function ASL3Testing() {
             reasoning = pattern.reasoning;
             recommendation = pattern.recommendation;
             
-            // Calculate confidence breakdown
             if (pattern.severity === 'CRITICAL') {
               confidenceBreakdown = { patternMatch: 90, contextual: 5, severity: 100 };
             } else if (pattern.severity === 'HIGH') {
@@ -244,12 +224,10 @@ export default function ASL3Testing() {
         }
       }
       
-      // Set default matched patterns for benign
       if (!matched) {
         matchedPatterns = ['No threat patterns detected'];
       }
       
-      // Determine if blocked or flagged based on confidence thresholds
       const blocked = matched && confidence >= 75;
       
       const newResult: TestResult = {
@@ -282,7 +260,6 @@ export default function ASL3Testing() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col">
       <main className="flex-1 p-6 max-w-7xl mx-auto w-full">
-        {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <div className="h-10 w-10 rounded-lg bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center text-lg">
@@ -295,7 +272,6 @@ export default function ASL3Testing() {
           </p>
         </div>
 
-        {/* Stats Overview - Enhanced theme colors */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-4 hover:border-blue-500/40 hover:bg-slate-800/80 transition-all">
             <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Total Prompts</div>
@@ -319,9 +295,7 @@ export default function ASL3Testing() {
           </div>
         </div>
 
-        {/* Main Testing Interface */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Left Column: Test Interface */}
           <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-6">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <BeakerIcon className="h-5 w-5 text-blue-400" />
@@ -364,13 +338,11 @@ export default function ASL3Testing() {
             </div>
           </div>
 
-          {/* Right Column: Results */}
           <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-6">
             <h2 className="text-lg font-semibold text-white mb-4">Test Results</h2>
             
             {result ? (
               <div className="space-y-4">
-                {/* Blocked/Allowed Status */}
                 <div className={`p-4 rounded-lg border-2 ${
                   result.blocked 
                     ? 'bg-red-900/20 border-red-700' 
@@ -395,7 +367,6 @@ export default function ASL3Testing() {
                     </div>
                   </div>
                   
-                  {/* Metrics Grid */}
                   <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-slate-600">
                     <div>
                       <div className="text-xs text-slate-400">Confidence</div>
@@ -412,7 +383,6 @@ export default function ASL3Testing() {
                   </div>
                 </div>
                 
-                {/* Prompt Preview */}
                 <div className="p-3 bg-slate-950 rounded border border-blue-500/20">
                   <div className="text-xs text-slate-400 mb-1">Tested Prompt:</div>
                   <div className="text-sm text-slate-300 line-clamp-2">{result.prompt}</div>
@@ -428,7 +398,6 @@ export default function ASL3Testing() {
           </div>
         </div>
 
-        {/* AI Explainability Panel */}
         {result && (
           <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-6 mb-8">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
@@ -437,9 +406,7 @@ export default function ASL3Testing() {
             </h2>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Left Column */}
               <div className="space-y-4">
-                {/* Matched Patterns */}
                 <div className="bg-slate-900/50 border border-blue-500/20 rounded-lg p-4">
                   <h3 className="text-sm font-semibold text-blue-300 mb-3 uppercase tracking-wider">
                     Matched Patterns
@@ -456,7 +423,6 @@ export default function ASL3Testing() {
                   </div>
                 </div>
 
-                {/* Risk Factors */}
                 <div className="bg-slate-900/50 border border-orange-500/20 rounded-lg p-4">
                   <h3 className="text-sm font-semibold text-orange-300 mb-3 uppercase tracking-wider flex items-center gap-2">
                     <ExclamationTriangleIcon className="h-4 w-4" />
@@ -472,7 +438,6 @@ export default function ASL3Testing() {
                   </div>
                 </div>
 
-                {/* Confidence Breakdown */}
                 <div className="bg-slate-900/50 border border-purple-500/20 rounded-lg p-4">
                   <h3 className="text-sm font-semibold text-purple-300 mb-3 uppercase tracking-wider">
                     Confidence Breakdown
@@ -524,9 +489,7 @@ export default function ASL3Testing() {
                 </div>
               </div>
 
-              {/* Right Column */}
               <div className="space-y-4">
-                {/* Reasoning */}
                 <div className="bg-slate-900/50 border border-green-500/20 rounded-lg p-4">
                   <h3 className="text-sm font-semibold text-green-300 mb-3 uppercase tracking-wider">
                     Detailed Reasoning
@@ -536,7 +499,6 @@ export default function ASL3Testing() {
                   </p>
                 </div>
 
-                {/* Recommendation */}
                 <div className={`border rounded-lg p-4 ${
                   result.blocked
                     ? 'bg-red-900/20 border-red-500/30'
@@ -565,7 +527,6 @@ export default function ASL3Testing() {
                   </p>
                 </div>
 
-                {/* Defense Layer Info */}
                 <div className="bg-slate-900/50 border border-blue-500/20 rounded-lg p-4">
                   <h3 className="text-sm font-semibold text-blue-300 mb-3 uppercase tracking-wider">
                     Defense Layer: {result.layer}
@@ -602,9 +563,93 @@ export default function ASL3Testing() {
           </div>
         )}
 
-        {/* Quick Test Scenarios */}
         <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-6 mb-8">
           <h2 className="text-lg font-semibold text-white mb-4">Quick Test Scenarios</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {quickTests
+            {quickTests.map((scenario) => (
+              <button
+                key={scenario.label}
+                onClick={() => setPrompt(scenario.prompt)}
+                className="p-4 bg-slate-700/50 hover:bg-slate-700/80 border border-blue-500/20 hover:border-blue-500/40 rounded-lg text-left transition-all group"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="font-medium text-white text-sm">{scenario.label}</div>
+                  <div className={`text-xs px-2 py-1 rounded font-medium ${
+                    scenario.label === 'Privilege Escalation' 
+                      ? 'bg-red-900/40 text-red-400' 
+                      : 'bg-orange-900/40 text-orange-400'
+                  }`}>
+                    {scenario.category}
+                  </div>
+                </div>
+                <div className="text-xs text-slate-400 line-clamp-2 group-hover:text-slate-300 transition-colors">
+                  {scenario.prompt}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {testHistory.length > 0 && (
+          <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-6 mb-8">
+            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <ClockIcon className="h-5 w-5 text-blue-400" />
+              Test History
+            </h2>
+            
+            <div className="space-y-2">
+              {testHistory.map((test, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-3 bg-slate-900/50 rounded border border-blue-500/10 hover:border-blue-500/30 transition-all"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className={`text-sm font-medium ${
+                        test.blocked ? 'text-red-400' : test.confidence >= 40 && test.confidence < 75 ? 'text-yellow-400' : 'text-green-400'
+                      }`}>
+                        {test.blocked ? '🛡️ BLOCKED' : test.confidence >= 40 && test.confidence < 75 ? '⚠️ FLAGGED' : '✅ ALLOWED'}
+                      </span>
+                      <span className="text-xs text-slate-500">•</span>
+                      <span className="text-xs text-slate-400">{test.category}</span>
+                    </div>
+                    <div className="text-xs text-slate-500 truncate">{test.prompt}</div>
+                  </div>
+                  <div className="text-right ml-4">
+                    <div className="text-sm font-medium text-white">{test.confidence}%</div>
+                    <div className="text-xs text-slate-400">{test.responseTime}ms</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </main>
+
+      <footer className="border-t border-blue-500/10 bg-slate-800/50 mt-auto">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex items-center gap-6">
+              <p className="text-sm text-slate-400">© 2025 DefendML</p>
+              <a href="#privacy" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">Privacy Policy</a>
+              <a href="#terms" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">Terms of Service</a>
+              <a href="#api" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">API Docs</a>
+              <a href="#status" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">Status</a>
+            </div>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2 text-sm text-slate-400">
+                <span className="text-green-500">🔒</span>
+                <span>SOC 2 Certified</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-slate-400">
+                <span className="text-purple-500">◆</span>
+                <span>Powered by Anthropic ASL-3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
