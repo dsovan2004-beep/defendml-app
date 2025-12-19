@@ -291,7 +291,7 @@ export default function ASL3Testing() {
             <h1 className="text-3xl font-bold text-white">Validate AI Security</h1>
           </div>
           <p className="text-slate-400">
-            Validate AI security with live threat simulation across 232 attack prompts
+            Red team your AI with live attack simulation across 232 threat scenarios
           </p>
         </div>
 
@@ -352,7 +352,7 @@ export default function ASL3Testing() {
                 {isLoading ? (
                   <>
                     <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
-                    Testing...
+                    Running Red Team Test...
                   </>
                 ) : (
                   <>
@@ -428,12 +428,12 @@ export default function ASL3Testing() {
           </div>
         </div>
 
-        {/* AI Explainability Panel - NEW! */}
+        {/* AI Explainability Panel */}
         {result && (
           <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-6 mb-8">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <LightBulbIcon className="h-5 w-5 text-yellow-400" />
-              AI Explainability - Why This Decision Was Made
+              AI Red Teaming - Why This Decision Was Made
             </h2>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -607,91 +607,4 @@ export default function ASL3Testing() {
           <h2 className="text-lg font-semibold text-white mb-4">Quick Test Scenarios</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {quickTests.map((scenario) => (
-              <button
-                key={scenario.label}
-                onClick={() => setPrompt(scenario.prompt)}
-                className="p-4 bg-slate-700/50 hover:bg-slate-700/80 border border-blue-500/20 hover:border-blue-500/40 rounded-lg text-left transition-all group"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="font-medium text-white text-sm">{scenario.label}</div>
-                  <div className={`text-xs px-2 py-1 rounded font-medium ${
-                    scenario.label === 'Privilege Escalation' 
-                      ? 'bg-red-900/40 text-red-400' 
-                      : 'bg-orange-900/40 text-orange-400'
-                  }`}>
-                    {scenario.category}
-                  </div>
-                </div>
-                <div className="text-xs text-slate-400 line-clamp-2 group-hover:text-slate-300 transition-colors">
-                  {scenario.prompt}
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Test History */}
-        {testHistory.length > 0 && (
-          <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-6 mb-8">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <ClockIcon className="h-5 w-5 text-blue-400" />
-              Test History
-            </h2>
-            
-            <div className="space-y-2">
-              {testHistory.map((test, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between p-3 bg-slate-900/50 rounded border border-blue-500/10 hover:border-blue-500/30 transition-all"
-                >
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={`text-sm font-medium ${
-                        test.blocked ? 'text-red-400' : test.confidence >= 40 && test.confidence < 75 ? 'text-yellow-400' : 'text-green-400'
-                      }`}>
-                        {test.blocked ? '🛡️ BLOCKED' : test.confidence >= 40 && test.confidence < 75 ? '⚠️ FLAGGED' : '✅ ALLOWED'}
-                      </span>
-                      <span className="text-xs text-slate-500">•</span>
-                      <span className="text-xs text-slate-400">{test.category}</span>
-                    </div>
-                    <div className="text-xs text-slate-500 truncate">{test.prompt}</div>
-                  </div>
-                  <div className="text-right ml-4">
-                    <div className="text-sm font-medium text-white">{test.confidence}%</div>
-                    <div className="text-xs text-slate-400">{test.responseTime}ms</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-blue-500/10 bg-slate-800/50 mt-auto">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex items-center gap-6">
-              <p className="text-sm text-slate-400">© 2025 DefendML</p>
-              <a href="#privacy" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">Privacy Policy</a>
-              <a href="#terms" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">Terms of Service</a>
-              <a href="#api" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">API Docs</a>
-              <a href="#status" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">Status</a>
-            </div>
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2 text-sm text-slate-400">
-                <span className="text-green-500">🔒</span>
-                <span>SOC 2 Certified</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-slate-400">
-                <span className="text-purple-500">◆</span>
-                <span>Powered by Anthropic ASL-3</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
+            {quickTests
