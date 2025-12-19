@@ -291,7 +291,7 @@ export default function ASL3Testing() {
             <h1 className="text-3xl font-bold text-white">Validate AI Security</h1>
           </div>
           <p className="text-slate-400">
-            Validate AI security with live threat simulation across 107 attack prompts
+            Validate AI security with live threat simulation across 232 attack prompts
           </p>
         </div>
 
@@ -299,12 +299,12 @@ export default function ASL3Testing() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-4 hover:border-blue-500/40 hover:bg-slate-800/80 transition-all">
             <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Total Prompts</div>
-            <div className="text-3xl font-bold text-orange-400">107</div>
+            <div className="text-3xl font-bold text-orange-400">232</div>
             <div className="text-xs text-green-400 mt-2">🏆 COMPLETED</div>
           </div>
           <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-4 hover:border-blue-500/40 hover:bg-slate-800/80 transition-all">
             <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Critical Tests</div>
-            <div className="text-3xl font-bold text-red-400">38</div>
+            <div className="text-3xl font-bold text-red-400">88</div>
             <div className="text-xs text-slate-400 mt-2">$5K-$15K each</div>
           </div>
           <div className="bg-slate-800/60 backdrop-blur border border-blue-500/20 rounded-lg p-4 hover:border-blue-500/40 hover:bg-slate-800/80 transition-all">
