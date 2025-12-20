@@ -1,575 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="About DefendML - The only ASL-3 certified AI red teaming platform. Offense-first security testing with 232 attack scenarios.">
-    <title>About DefendML - AI Red Teaming Platform</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%237c3aed'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='system-ui'%3ED%3C/text%3E%3C/svg%3E">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            color: #1a1a1a;
-            line-height: 1.6;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
-            color: white;
-        }
-
-        .logo:hover {
-            opacity: 0.9;
-        }
-
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: #7c3aed;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
-
-        .header-asl3-badge {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            padding: 0.35rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            margin-left: 0.75rem;
-            text-transform: uppercase;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-        }
-
-        nav {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.2s;
-        }
-
-        nav a:hover {
-            opacity: 0.8;
-        }
-
-        .nav-cta {
-            background: #10b981;
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-
-        .nav-cta:hover {
-            background: #059669;
-            transform: translateY(-2px);
-            opacity: 1 !important;
-        }
-
-        .hero {
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            font-weight: 900;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .section {
-            padding: 4rem 2rem;
-        }
-
-        .section-light {
-            background: #f9fafb;
-        }
-
-        .content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 800;
-            color: #1e1b4b;
-        }
-
-        .section-light h2 {
-            color: #1e1b4b;
-        }
-
-        p {
-            font-size: 1.15rem;
-            line-height: 1.8;
-            color: #374151;
-            margin-bottom: 1.5rem;
-        }
-
-        .highlight {
-            color: #7c3aed;
-            font-weight: 600;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 2rem;
-            background: white;
-            border-radius: 16px;
-            border: 2px solid #e5e7eb;
-            transition: all 0.3s;
-        }
-
-        .stat-card:hover {
-            border-color: #7c3aed;
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: #7c3aed;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 0.95rem;
-            color: #6b7280;
-            font-weight: 500;
-        }
-
-        .mission-box {
-            background: linear-gradient(135deg, #ede9fe 0%, #f3f0ff 100%);
-            border: 2px solid #7c3aed;
-            border-radius: 20px;
-            padding: 3rem;
-            margin-top: 3rem;
-        }
-
-        .mission-box h3 {
-            font-size: 1.8rem;
-            color: #7c3aed;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .mission-box p {
-            font-size: 1.2rem;
-            color: #1a1a1a;
-            margin: 0;
-        }
-
-        .value-props {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .value-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            border: 2px solid #e5e7eb;
-            transition: all 0.3s;
-        }
-
-        .value-card:hover {
-            border-color: #7c3aed;
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
-        }
-
-        .value-card h3 {
-            font-size: 1.3rem;
-            color: #7c3aed;
-            margin-bottom: 0.75rem;
-            font-weight: 700;
-        }
-
-        .value-card p {
-            font-size: 1rem;
-            color: #6b7280;
-            margin: 0;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
-            transition: all 0.3s;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        .footer {
-            background: #1a1a2e;
-            color: #e5e7eb;
-            padding: 2rem 2rem 1.5rem;
-            border-top: 1px solid #2d3748;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-        }
-
-        .footer-left {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-copyright {
-            color: #9ca3af;
-            font-size: 0.9rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #e5e7eb;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: #10b981;
-        }
-
-        .footer-right {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-            color: #9ca3af;
-        }
-
-        .footer-badge-icon {
-            color: #10b981;
-            font-size: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            h2 {
-                font-size: 2rem;
-            }
-
-            nav {
-                display: none;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .footer-left, .footer-right {
-                flex-direction: column;
-                width: 100%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About DefendML - Offense-first AI red teaming. Built by security experts with 232 attack scenarios.">
+  <title>About - DefendML</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .gradient-text {
+      background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
 </head>
-<body>
-    <header class="header">
-        <a href="/" class="logo">
-            <div class="logo-icon">D</div>
-            DefendML
-            <span class="header-asl3-badge">ASL-3 Certified</span>
+<body class="bg-white">
+  <!-- Navigation -->
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <a href="/" class="flex items-center">
+            <span class="text-2xl font-bold gradient-text">DefendML</span>
+          </a>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="/#red-team" class="text-gray-700 hover:text-purple-600 transition">Red Team</a>
+          <a href="/#how-it-works" class="text-gray-700 hover:text-purple-600 transition">How It Works</a>
+          <a href="/#pricing" class="text-gray-700 hover:text-purple-600 transition">Pricing</a>
+          <a href="/#faq" class="text-gray-700 hover:text-purple-600 transition">FAQ</a>
+          <a href="/about" class="text-purple-600 font-semibold">About</a>
+          <a href="/team" class="text-gray-700 hover:text-purple-600 transition">Team</a>
+          <a href="https://app.defendml.com/asl3-testing" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition">Try Live Demo</a>
+        </div>
+        <div class="md:hidden">
+          <button id="mobile-menu-button" class="text-gray-700">
+            <i class="fas fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200">
+      <div class="px-4 py-3 space-y-3">
+        <a href="/#red-team" class="block text-gray-700 hover:text-purple-600">Red Team</a>
+        <a href="/#how-it-works" class="block text-gray-700 hover:text-purple-600">How It Works</a>
+        <a href="/#pricing" class="block text-gray-700 hover:text-purple-600">Pricing</a>
+        <a href="/#faq" class="block text-gray-700 hover:text-purple-600">FAQ</a>
+        <a href="/about" class="block text-purple-600 font-semibold">About</a>
+        <a href="/team" class="block text-gray-700 hover:text-purple-600">Team</a>
+        <a href="https://app.defendml.com/asl3-testing" class="block bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-lg font-semibold text-center">Try Live Demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-purple-50 via-blue-50 to-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+        About <span class="gradient-text">DefendML</span>
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Offense-first AI red teaming.<br/>
+        From startups to Fortune 500.
+      </p>
+    </div>
+  </section>
+
+  <!-- What We Do -->
+  <section class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-4xl font-bold text-gray-900 mb-8 text-center">
+        What We <span class="gradient-text">Do</span>
+      </h2>
+      <p class="text-xl text-gray-600 leading-relaxed mb-8">
+        DefendML is <strong>offense-first AI red teaming</strong>. We actively attack your AI systems with 232 documented scenarios to prove security - not just claim it.
+      </p>
+      <p class="text-xl text-gray-600 leading-relaxed mb-8">
+        Unlike traditional security testing that focuses on infrastructure, we specialize in <strong>offensive AI security</strong>: testing LLMs for jailbreaks, prompt injection, data extraction, and security vulnerabilities based on established threat models like Anthropic's ASL-3 categories.
+      </p>
+      <p class="text-xl text-gray-600 leading-relaxed">
+        Every attack scenario is documented and public. You see exactly how your AI is being tested - no black boxes, no hidden methodologies.
+      </p>
+    </div>
+  </section>
+
+  <!-- Our Approach -->
+  <section class="py-20 bg-gradient-to-br from-purple-50 via-blue-50 to-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-4xl font-bold text-gray-900 mb-12 text-center">
+        Our <span class="gradient-text">Approach</span>
+      </h2>
+      
+      <div class="grid md:grid-cols-2 gap-8 mb-12">
+        <div class="bg-white rounded-2xl p-8 border-2 border-purple-200">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">🧪 Red Team First</h3>
+          <p class="text-gray-600 mb-4">
+            Red teaming IS our product. Not a module in a larger platform. Not a compliance checkbox. We built DefendML to do one thing exceptionally well: offensive AI security testing.
+          </p>
+          <ul class="space-y-2 text-gray-700">
+            <li>• 232 documented attack scenarios</li>
+            <li>• Real-time PASS/FAIL verdicts</li>
+            <li>• 4-layer defense validation (L1-L4)</li>
+            <li>• Pattern matching transparency</li>
+          </ul>
+        </div>
+
+        <div class="bg-white rounded-2xl p-8 border-2 border-blue-200">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">⚡ Speed & Transparency</h3>
+          <p class="text-gray-600 mb-4">
+            Traditional security assessments take weeks to months with opaque methodologies. We deliver results in minutes with full transparency.
+          </p>
+          <ul class="space-y-2 text-gray-700">
+            <li>• Results in minutes, not months</li>
+            <li>• All attack scenarios public</li>
+            <li>• Self-service testing interface</li>
+            <li>• Downloadable audit reports</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Mission -->
+  <section class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-4xl font-bold text-gray-900 mb-6">
+        Our <span class="gradient-text">Mission</span>
+      </h2>
+      <p class="text-2xl text-gray-600 leading-relaxed mb-8">
+        Make offensive AI security testing accessible to every company deploying LLMs - from <strong>FREE</strong> to enterprise, with full transparency and zero compromise.
+      </p>
+      <p class="text-lg text-gray-600 leading-relaxed">
+        AI security shouldn't require expensive consultants, months-long assessments, or black-box trust. We believe in transparent methodologies, self-service testing, and proving security with documented evidence.
+      </p>
+    </div>
+  </section>
+
+  <!-- Why We're Different -->
+  <section class="py-20 bg-gradient-to-br from-purple-50 via-blue-50 to-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-4xl font-bold text-gray-900 mb-12 text-center">
+        Why We're <span class="gradient-text">Different</span>
+      </h2>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white rounded-xl p-6 text-center border-2 border-gray-200 hover:border-purple-600 transition">
+          <div class="text-4xl mb-4">🛡️</div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Security-First</h3>
+          <p class="text-gray-600 text-sm">Built by team with SOC 2 Type II and ISO 27001 audit experience (2022-2025)</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 text-center border-2 border-gray-200 hover:border-purple-600 transition">
+          <div class="text-4xl mb-4">👁️</div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Fully Transparent</h3>
+          <p class="text-gray-600 text-sm">All 232 attack scenarios documented and public - no hidden methodologies</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 text-center border-2 border-gray-200 hover:border-purple-600 transition">
+          <div class="text-4xl mb-4">🚀</div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Self-Service</h3>
+          <p class="text-gray-600 text-sm">Start testing in 5 minutes - no sales calls or months-long implementations</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 text-center border-2 border-gray-200 hover:border-purple-600 transition">
+          <div class="text-4xl mb-4">💰</div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">From FREE</h3>
+          <p class="text-gray-600 text-sm">Start with free tier, scale to enterprise - transparent pricing at every level</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Team -->
+  <section class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-4xl font-bold text-gray-900 mb-6">
+        The <span class="gradient-text">Team</span>
+      </h2>
+      <p class="text-xl text-gray-600 mb-4">
+        We're a team of security engineers, AI researchers, and product builders who believe AI security should be accessible, transparent, and effective.
+      </p>
+      <p class="text-lg text-gray-600 mb-8">
+        Our founders have led successful SOC 2 Type II and ISO 27001 audits (2022-2025) at enterprise technology companies.
+      </p>
+      <a href="/team" class="inline-block bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition">
+        Meet the Team
+      </a>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 bg-gradient-to-br from-purple-600 to-blue-600 text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-4xl font-bold mb-6">
+        Ready to Red Team Your AI?
+      </h2>
+      <p class="text-xl mb-8 opacity-90">
+        Start with 232 attack scenarios. Free forever for basic use.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="https://app.defendml.com/asl3-testing" class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition">
+          Run Red Team Test (Free)
         </a>
-        <nav>
-            <a href="/#red-team">Red Team</a>
-            <a href="/#comparison">Compare</a>
-            <a href="/#pricing">Pricing</a>
-            <a href="https://app.defendml.com/asl3-testing" target="_blank">Try Live Demo</a>
-            <a href="/" class="nav-cta">Get Started Free</a>
-        </nav>
-    </header>
+        <a href="/#pricing" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/10 transition">
+          View Pricing
+        </a>
+      </div>
+    </div>
+  </section>
 
-    <section class="hero">
-        <h1>About DefendML</h1>
-        <p>Offense-first AI red teaming from startups to Fortune 500</p>
-    </section>
-
-    <section class="section">
-        <div class="container">
-            <div class="content">
-                <h2>What We Do</h2>
-                <p>
-                    DefendML is the <span class="highlight">only ASL-3 certified AI red teaming platform</span>. We actively attack your AI systems with 232 documented scenarios to prove security—not just claim it.
-                </p>
-                <p>
-                    <span class="highlight">Offense-first, not platform-first.</span> Red teaming is our product, not a feature. We test your AI with transparent attack scenarios and deliver PASS/FAIL verdicts in minutes. 6x faster, 90%+ cheaper than F5 and CalypsoAI.
-                </p>
-            </div>
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-2xl font-bold mb-4 gradient-text">DefendML</h3>
+          <p class="text-gray-400">Offense-first AI red teaming from startups to Fortune 500.</p>
         </div>
-    </section>
-
-    <section class="section section-light">
-        <div class="container">
-            <div class="content">
-                <h2>Why We Built This</h2>
-                <p>
-                    AI security is stuck in platform-first thinking. F5 and CalypsoAI hide their testing methodology, charge $50K-$60K/year, and make you wait months for results.
-                </p>
-                <p>
-                    We believe <span class="highlight">offensive testing should be transparent, fast, and accessible</span>—whether you're a solo founder or Fortune 500. That's why we built the first offense-first AI red teaming platform.
-                </p>
-
-                <div class="mission-box">
-                    <h3>Our Mission</h3>
-                    <p>
-                        Make offensive AI security testing accessible to every company deploying LLMs—from FREE to enterprise—with 232 documented attack scenarios, full transparency, and zero compromise.
-                    </p>
-                </div>
-            </div>
+        <div>
+          <h4 class="font-semibold mb-4">Product</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="/#red-team" class="hover:text-white transition">Red Team</a></li>
+            <li><a href="/#how-it-works" class="hover:text-white transition">How It Works</a></li>
+            <li><a href="/#pricing" class="hover:text-white transition">Pricing</a></li>
+            <li><a href="https://app.defendml.com/asl3-testing" class="hover:text-white transition">Live Demo</a></li>
+          </ul>
         </div>
-    </section>
-
-    <section class="section">
-        <div class="container">
-            <div class="content">
-                <h2>What Makes Us Different</h2>
-                
-                <div class="value-props">
-                    <div class="value-card">
-                        <h3>🧪 Red Team First</h3>
-                        <p>Testing IS our product. 232 documented attack scenarios across CBRN, jailbreaks, prompt injection, data exfiltration, and system compromise.</p>
-                    </div>
-                    
-                    <div class="value-card">
-                        <h3>🛡️ ASL-3 Certified</h3>
-                        <p>Industry-first and only platform aligned with Anthropic's advanced security standard—the same framework protecting Claude.</p>
-                    </div>
-                    
-                    <div class="value-card">
-                        <h3>👁️ Fully Transparent</h3>
-                        <p>All 232 attack scenarios are public and documented. See exactly how we test—no black boxes, no hidden methodology.</p>
-                    </div>
-                    
-                    <div class="value-card">
-                        <h3>⚡ Offense-First</h3>
-                        <p>We attack first, prove second. 4.0ms response time (6x faster than CalypsoAI). Get PASS/FAIL verdicts in minutes, not months.</p>
-                    </div>
-                    
-                    <div class="value-card">
-                        <h3>💰 90%+ Cheaper</h3>
-                        <p>From FREE to enterprise pricing vs $50K-60K/year for F5/CalypsoAI. Same ASL-3 security, better transparency, no sales cycles.</p>
-                    </div>
-                    
-                    <div class="value-card">
-                        <h3>🚀 Self-Service</h3>
-                        <p>Start testing in minutes. No enterprise contracts, no platform adoption required. Red team your AI today at app.defendml.com/asl3-testing.</p>
-                    </div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value">232</div>
-                        <div class="stat-label">Attack Scenarios</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">99.6%</div>
-                        <div class="stat-label">Detection Accuracy</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">4.0ms</div>
-                        <div class="stat-label">Response Time</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">FREE</div>
-                        <div class="stat-label">Starting Price</div>
-                    </div>
-                </div>
-            </div>
+        <div>
+          <h4 class="font-semibold mb-4">Company</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="/about" class="hover:text-white transition">About</a></li>
+            <li><a href="/team" class="hover:text-white transition">Team</a></li>
+            <li><a href="/#faq" class="hover:text-white transition">FAQ</a></li>
+          </ul>
         </div>
-    </section>
-
-    <section class="section section-light">
-        <div class="container">
-            <div class="content">
-                <h2>Who We Serve</h2>
-                <p>
-                    <strong>Startups:</strong> Start FREE with self-service red team testing. Run 232 attack scenarios against your AI in minutes. No credit card, no platform adoption required.
-                </p>
-                <p>
-                    <strong>Growing Companies:</strong> Scale with transparent pricing and documented methodology. Get ASL-3 compliance proof without enterprise sales cycles or hidden costs.
-                </p>
-                <p>
-                    <strong>Fortune 500:</strong> Enterprise-grade red teaming with the same 232 attack scenarios, plus custom scenarios for your use case. Still 90%+ cheaper than F5/CalypsoAI.
-                </p>
-            </div>
+        <div>
+          <h4 class="font-semibold mb-4">Connect</h4>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-twitter text-2xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-linkedin text-2xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-github text-2xl"></i>
+            </a>
+          </div>
         </div>
-    </section>
+      </div>
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2025 DefendML. All rights reserved. Offense-first AI red teaming.</p>
+      </div>
+    </div>
+  </footer>
 
-    <section class="section">
-        <div class="container">
-            <div class="content">
-                <h2>Our Approach: Offense-First</h2>
-                <p>
-                    <span class="highlight">Platform-first companies</span> like F5 and CalypsoAI start with a security platform, then add AI red teaming as a module. This makes testing slow, opaque, and expensive.
-                </p>
-                <p>
-                    <span class="highlight">DefendML is offense-first.</span> We start by attacking your AI with 232 documented scenarios. Testing is the product, not a feature. This makes us:
-                </p>
-                <ul style="list-style: none; padding: 0; margin: 2rem 0;">
-                    <li style="padding: 0.75rem 0; display: flex; gap: 1rem; align-items: start;">
-                        <span style="color: #7c3aed; font-weight: 700;">→</span>
-                        <span><strong>Faster:</strong> 4.0ms response time vs 252ms (CalypsoAI)</span>
-                    </li>
-                    <li style="padding: 0.75rem 0; display: flex; gap: 1rem; align-items: start;">
-                        <span style="color: #7c3aed; font-weight: 700;">→</span>
-                        <span><strong>Transparent:</strong> All 232 scenarios public and documented</span>
-                    </li>
-                    <li style="padding: 0.75rem 0; display: flex; gap: 1rem; align-items: start;">
-                        <span style="color: #7c3aed; font-weight: 700;">→</span>
-                        <span><strong>Accessible:</strong> From FREE to enterprise, no platform required</span>
-                    </li>
-                    <li style="padding: 0.75rem 0; display: flex; gap: 1rem; align-items: start;">
-                        <span style="color: #7c3aed; font-weight: 700;">→</span>
-                        <span><strong>Cheaper:</strong> 90%+ less than platform-first competitors</span>
-                    </li>
-                </ul>
-                <p>
-                    This is our <span class="highlight">counterposition moat</span>. F5 can't copy us without breaking their platform business model.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section section-light">
-        <div class="container">
-            <div class="content" style="text-align: center;">
-                <h2>Ready to Red Team Your AI?</h2>
-                <p style="font-size: 1.2rem; margin-bottom: 2.5rem;">
-                    Join 200+ companies using DefendML for offensive AI security testing
-                </p>
-                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <a href="https://app.defendml.com/asl3-testing" target="_blank" class="cta-button">Run Red Team Test (Free)</a>
-                    <a href="/" class="cta-button" style="background: white; color: #7c3aed; border: 2px solid #7c3aed;">
-                        See Pricing
-                    </a>
-                </div>
-                <p style="font-size: 0.9rem; color: #6b7280; margin-top: 1.5rem;">
-                    🚀 No credit card required • 232 attack scenarios • Full transparency
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-left">
-                <div class="footer-copyright">© 2025 DefendML. All rights reserved.</div>
-                <div class="footer-links">
-                    <a href="/about">About</a>
-                    <a href="/">Home</a>
-                    <a href="/#pricing">Pricing</a>
-                    <a href="https://app.defendml.com/asl3-testing" target="_blank">Red Team Demo</a>
-                </div>
-            </div>
-            <div class="footer-right">
-                <div class="footer-badge">
-                    <span class="footer-badge-icon">🛡️</span>
-                    <span>SOC 2 Certified</span>
-                </div>
-                <div class="footer-badge">
-                    <span class="footer-badge-icon">✓</span>
-                    <span>ASL-3 Powered by Anthropic</span>
-                </div>
-            </div>
-        </div>
-    </footer>
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    });
+  </script>
 </body>
 </html>
