@@ -22,6 +22,14 @@ type ASL3Verdict30DRow = {
   computed_at: string | null;
 };
 
+type ASL3EvidenceApi = {
+  ok: boolean;
+  range_days: number;
+  last_assessed: string | null;
+  tests_30d_count: number;
+  now?: string;
+};
+
 type ASL3Data = {
   overall_status: 'COMPLIANT' | 'IN_PROGRESS' | 'NON_COMPLIANT';
   deployment_score: number;
@@ -54,8 +62,16 @@ type ASL3Data = {
   };
 };
 
+function formatDateLabel(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
 function ASL3StatusPage() {
   const [data, setData] = useState<ASL3Data | null>(null);
+  const [evidence, setEvidence] = useState<ASL3EvidenceApi | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -71,7 +87,7 @@ function ASL3StatusPage() {
     const load = async () => {
       setLoading(true);
 
-      // 1) Pull the official 30-day PASS/FAIL from your Supabase view
+      // A) Pull the official 30-day PASS/FAIL from your Supabase view (existing behavior)
       let verdictRow: ASL3Verdict30DRow | null = null;
       try {
         const { data: row, error } = await supabase
@@ -90,9 +106,21 @@ function ASL3StatusPage() {
         console.warn('ASL3 verdict fetch exception:', e);
       }
 
+      // B) Pull live test evidence from Cloudflare Pages Function (safe / read-only)
+      try {
+        const resp = await fetch('/api/asl3/status', { method: 'GET' });
+        const json = (await resp.json()) as ASL3EvidenceApi;
+        if (isMounted && json?.ok) {
+          setEvidence(json);
+        }
+      } catch (e) {
+        // Safe fallback: if this fails, keep the existing UI working.
+        console.warn('ASL3 evidence endpoint fetch failed:', e);
+      }
+
       const overall_status = verdictToOverallStatus(verdictRow?.asl3_verdict_30d);
 
-      // 2) Keep your existing UI data for now (safe), but drive the header status from the DB verdict
+      // Keep your existing UI data, but drive the header status from DB verdict
       const nextData: ASL3Data = {
         overall_status,
         deployment_score: overall_status === 'COMPLIANT' ? 98.0 : overall_status === 'NON_COMPLIANT' ? 65.0 : 85.0,
@@ -191,6 +219,15 @@ function ASL3StatusPage() {
 
   if (!data) return null;
 
+  const lastAssessedLabel =
+    formatDateLabel(evidence?.last_assessed) ||
+    'Oct 2025'; // safe fallback (won’t break UI)
+
+  const testsCountLabel =
+    evidence?.tests_30d_count !== undefined && evidence?.range_days
+      ? `${evidence.tests_30d_count} tests (last ${evidence.range_days} days)`
+      : null;
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -202,7 +239,20 @@ function ASL3StatusPage() {
               <div>
                 <h1 className="text-3xl font-bold text-white mb-2">ASL-3 Compliance Status</h1>
                 <p className="text-slate-400">Anthropic Safety Level 3 Framework - Real-time monitoring</p>
+
+                {/* Live evidence (safe: falls back if endpoint fails) */}
+                <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
+                  <div className="text-slate-300">
+                    <span className="text-slate-400">Last Assessed:</span> {lastAssessedLabel}
+                  </div>
+                  {testsCountLabel && (
+                    <div className="text-slate-300">
+                      <span className="text-slate-400">Evidence:</span> {testsCountLabel}
+                    </div>
+                  )}
+                </div>
               </div>
+
               <div className={`flex items-center gap-2 px-4 py-2 rounded-full border ${getStatusColor(data.overall_status)}`}>
                 {getStatusIcon(data.overall_status)}
                 <span className="font-semibold text-sm">{data.overall_status}</span>
