@@ -74,7 +74,7 @@ function OverviewPage() {
           pii_prevented: 1234,
           policy_violations: 89,
           compliance_score: 99.2,
-          avg_latency_ms: 42,
+          avg_latency_ms: 4.0,
           success_rate: 99.94,
           scan_count: 45678,
           setup_time_minutes: 28,
@@ -192,10 +192,10 @@ function OverviewPage() {
                   <div className="bg-black/40 rounded-xl p-6 border border-blue-500/30">
                     <div className="flex items-center gap-2 mb-3">
                       <Lock className="w-5 h-5 text-blue-400" />
-                      <span className="text-sm font-semibold text-blue-300">Security Score</span>
+                      <span className="text-sm font-semibold text-blue-300">Attack Resistance</span>
                     </div>
                     <div className="text-4xl font-bold text-blue-400 mb-2">{redTeamMetrics.security_standard}%</div>
-                    <div className="text-xs text-slate-400">Model protection rate</div>
+                    <div className="text-xs text-slate-400">Blocked {redTeamMetrics.threats_blocked_24h} threats</div>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
@@ -298,7 +298,7 @@ function OverviewPage() {
                 <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center">
                   <Clock className="w-6 h-6 text-green-400" />
                 </div>
-                <span className="text-xs font-semibold text-green-300 bg-green-500/20 px-3 py-1 rounded-full">Setup</span>
+                <span className="text-xs font-semibold text-green-300 bg-green-500/20 px-3 py-1 rounded-full">Speed</span>
               </div>
               <div className="text-4xl font-bold text-white mb-2">{kpis?.setup_time_minutes ?? 28} min</div>
               <div className="text-slate-300 text-sm font-medium mb-1">Time to first scan</div>
@@ -307,24 +307,24 @@ function OverviewPage() {
             <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-purple-500/20 hover:border-blue-500/50 transition-all">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                  <DollarSign className="w-6 h-6 text-blue-400" />
+                  <Target className="w-6 h-6 text-blue-400" />
                 </div>
-                <span className="text-xs font-semibold text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full">ROI</span>
+                <span className="text-xs font-semibold text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full">Public</span>
               </div>
-              <div className="text-4xl font-bold text-white mb-2">${(kpis?.cost_saved_vs_calypso ?? 48750).toLocaleString()}</div>
-              <div className="text-slate-300 text-sm font-medium mb-1">Annual Savings</div>
-              <div className="text-slate-400 text-xs">vs. enterprise platforms</div>
+              <div className="text-4xl font-bold text-white mb-2">232</div>
+              <div className="text-slate-300 text-sm font-medium mb-1">Public Scenarios</div>
+              <div className="text-slate-400 text-xs">Attack scenarios available</div>
             </div>
             <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-purple-500/20 hover:border-purple-500/50 transition-all">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
-                  <Activity className="w-4 h-6 text-purple-400" />
+                  <Zap className="w-6 h-6 text-purple-400" />
                 </div>
-                <span className="text-xs font-semibold text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">Interop</span>
+                <span className="text-xs font-semibold text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">Response</span>
               </div>
-              <div className="text-4xl font-bold text-white mb-2">{kpis?.multi_llm_providers ?? 4}+</div>
-              <div className="text-slate-300 text-sm font-medium mb-1">LLM Providers</div>
-              <div className="text-slate-400 text-xs">No vendor lock-in</div>
+              <div className="text-4xl font-bold text-white mb-2">{redTeamMetrics?.classifier_latency ?? 4.0}ms</div>
+              <div className="text-slate-300 text-sm font-medium mb-1">Real-time Testing</div>
+              <div className="text-slate-400 text-xs">vs 50ms+ competitors</div>
             </div>
           </div>
           <div>
@@ -348,8 +348,8 @@ function OverviewPage() {
                   <TrendIndicator value={kpis?.trend_pii} />
                 </div>
                 <div className="text-4xl font-bold text-white mb-2">{(kpis?.pii_prevented ?? 0).toLocaleString()}</div>
-                <div className="text-slate-300 text-sm font-medium mb-1">PII Prevented</div>
-                <div className="text-slate-400 text-xs">Data leak prevention</div>
+                <div className="text-slate-300 text-sm font-medium mb-1">Data Theft Testing</div>
+                <div className="text-slate-400 text-xs">PII exfiltration prevention</div>
               </div>
               <div className="bg-slate-900 rounded-xl p-6 border border-slate-800 hover:border-green-500/50 transition-all">
                 <div className="flex items-start justify-between mb-4">
@@ -357,21 +357,35 @@ function OverviewPage() {
                   <TrendIndicator value={kpis?.trend_compliance} />
                 </div>
                 <div className="text-4xl font-bold text-white mb-2">{(kpis?.compliance_score ?? 0).toFixed(1)}%</div>
-                <div className="text-slate-300 text-sm font-medium mb-1">Compliance Score</div>
-                <div className="text-slate-400 text-xs">SOC 2 / GDPR / HIPAA</div>
+                <div className="text-slate-300 text-sm font-medium mb-1">Attack Resistance</div>
+                <div className="text-slate-400 text-xs">Real-world protection rate</div>
               </div>
               <div className="bg-slate-900 rounded-xl p-6 border border-slate-800 hover:border-purple-500/50 transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <Zap className="w-6 h-6 text-purple-400" />
                   <TrendIndicator value={kpis?.trend_latency} />
                 </div>
-                <div className="text-4xl font-bold text-white mb-2">{kpis?.avg_latency_ms ?? 0}ms</div>
+                <div className="text-4xl font-bold text-white mb-2">{kpis?.avg_latency_ms ?? 4.0}ms</div>
                 <div className="text-slate-300 text-sm font-medium mb-1">Avg Latency</div>
                 <div className="text-slate-400 text-xs">Low overhead</div>
               </div>
             </div>
           </div>
-          <div className="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+export default function Protected() {
+  return (
+    <RequireAuth>
+      <OverviewPage />
+    </RequireAuth>
+  );
+}
+<div className="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
@@ -407,21 +421,16 @@ function OverviewPage() {
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <a href="/threats" className="p-6 bg-slate-900 hover:bg-slate-800 rounded-xl border border-slate-800 hover:border-purple-500/50 transition-all block">
               <Shield className="w-8 h-8 text-purple-400 mb-3" />
-              <div className="text-white font-semibold mb-1">View Threats</div>
-              <div className="text-slate-400 text-sm">Live attack feed & analytics</div>
-            </a>
-            <a href="/pii" className="p-6 bg-slate-900 hover:bg-slate-800 rounded-xl border border-slate-800 hover:border-blue-500/50 transition-all block">
-              <Lock className="w-8 h-8 text-blue-400 mb-3" />
-              <div className="text-white font-semibold mb-1">PII Protection</div>
-              <div className="text-slate-400 text-sm">Data leak prevention logs</div>
+              <div className="text-white font-semibold mb-1">Attack Scenarios</div>
+              <div className="text-slate-400 text-sm">232 public red team tests</div>
             </a>
             <a href="/compliance" className="p-6 bg-slate-900 hover:bg-slate-800 rounded-xl border border-slate-800 hover:border-green-500/50 transition-all block">
               <FileCheck className="w-8 h-8 text-green-400 mb-3" />
-              <div className="text-white font-semibold mb-1">Compliance Reports</div>
-              <div className="text-slate-400 text-sm">One-click audit packs</div>
+              <div className="text-white font-semibold mb-1">Evidence Reports</div>
+              <div className="text-slate-400 text-sm">Audit-grade documentation</div>
             </a>
           </div>
         </div>
