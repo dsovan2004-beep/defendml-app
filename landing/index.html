@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Red team your AI before attackers do. 232 attack scenarios. PASS/FAIL security proof in minutes.">
-  <title>DefendML - AI Red Teaming</title>
+
+  <!-- UPDATED: audit-safe, enterprise-aligned meta -->
+  <meta name="description" content="Red Team–First AI Security. Continuously test your AI against 232+ attack scenarios and generate audit-ready evidence for ASL-3, SOC 2, and ISO 27001.">
+
+  <title>DefendML - Red Team–First AI Security</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .gradient-text {
@@ -34,9 +37,14 @@
       font-weight: bold;
       font-size: 1.2rem;
     }
+    .pill {
+      border: 1px solid rgba(124, 58, 237, 0.25);
+    }
   </style>
 </head>
+
 <body class="bg-white">
+
   <!-- Navigation -->
   <nav class="bg-white border-b border-gray-200 sticky top-0 z-50 backdrop-blur-sm bg-white/90">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,6 +57,7 @@
         <div class="hidden md:flex items-center space-x-8">
           <a href="#red-team" class="text-gray-700 hover:text-purple-600 font-medium transition">Red Team</a>
           <a href="#how-it-works" class="text-gray-700 hover:text-purple-600 font-medium transition">How It Works</a>
+          <a href="#evidence" class="text-gray-700 hover:text-purple-600 font-medium transition">Evidence</a>
           <a href="#pricing" class="text-gray-700 hover:text-purple-600 font-medium transition">Pricing</a>
           <a href="#faq" class="text-gray-700 hover:text-purple-600 font-medium transition">FAQ</a>
           <a href="/about" class="text-gray-700 hover:text-purple-600 font-medium transition">About</a>
@@ -62,50 +71,66 @@
   <section class="bg-gradient-to-br from-purple-50 via-blue-50 to-white py-20 md:py-32">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center max-w-4xl mx-auto">
+
+        <!-- NEW: positioning pills -->
+        <div class="flex flex-wrap justify-center gap-3 mb-6">
+          <span class="pill text-sm px-3 py-1 rounded-full bg-white/80 text-purple-700 font-medium">Red Team–First</span>
+          <span class="pill text-sm px-3 py-1 rounded-full bg-white/80 text-purple-700 font-medium">Audit-Ready Evidence</span>
+          <span class="pill text-sm px-3 py-1 rounded-full bg-white/80 text-purple-700 font-medium">ASL-3 / SOC 2 / ISO 27001</span>
+        </div>
+
         <h1 class="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
-          Red Team Your AI<br/>
-          <span class="gradient-text">Before Attackers Do</span>
+          Red Team–First AI Security<br/>
+          <span class="gradient-text">With Audit-Ready Evidence</span>
         </h1>
+
         <p class="text-xl md:text-2xl text-gray-600 mb-8">
-          Test your AI against 232 documented attack scenarios.<br/>
-          Get PASS/FAIL security verdict in minutes, not months.
+          Continuously test your AI implementation against <strong>232 AI Red Team Attack Scenarios</strong> —
+          misuse, jailbreaks, data leakage, cyber enablement, and agentic risk — and export evidence built for auditors.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-10">
           <a href="https://app.defendml.com/asl3-testing" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition">
-            Run Red Team Test (Free)
+            Run a Live Red Team Test
           </a>
           <a href="#how-it-works" class="bg-white text-purple-600 border-2 border-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-50 transition">
             See How It Works
           </a>
         </div>
+
         <p class="text-sm text-gray-500">
-          🚀 No credit card required • 232 attack scenarios • Full transparency
+          No credit card required • Tenant-isolated testing • Evidence exports (PDF / CSV / JSON)
         </p>
       </div>
     </div>
   </section>
 
-  <!-- Stats Bar -->
+  <!-- Stats Bar (UPDATED: remove unverifiable precision claims) -->
   <section class="bg-white py-12 border-y border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
         <div class="text-center stat-card p-6 rounded-xl">
-          <div class="text-4xl font-bold gradient-text mb-2">232</div>
-          <div class="text-gray-600 font-medium">Attack Scenarios</div>
+          <div class="text-4xl font-bold gradient-text mb-2">232+</div>
+          <div class="text-gray-600 font-medium">AI Red Team Attack Scenarios</div>
         </div>
         <div class="text-center stat-card p-6 rounded-xl">
-          <div class="text-4xl font-bold gradient-text mb-2">99.6%</div>
-          <div class="text-gray-600 font-medium">Detection Rate</div>
+          <div class="text-4xl font-bold gradient-text mb-2">L1–L4</div>
+          <div class="text-gray-600 font-medium">Layered Defense Attribution</div>
         </div>
         <div class="text-center stat-card p-6 rounded-xl">
-          <div class="text-4xl font-bold gradient-text mb-2">4.0ms</div>
-          <div class="text-gray-600 font-medium">Response Time</div>
+          <div class="text-4xl font-bold gradient-text mb-2">Minutes</div>
+          <div class="text-gray-600 font-medium">To Measurable Evidence</div>
         </div>
         <div class="text-center stat-card p-6 rounded-xl">
-          <div class="text-4xl font-bold gradient-text mb-2">88</div>
-          <div class="text-gray-600 font-medium">Critical Tests</div>
+          <div class="text-4xl font-bold gradient-text mb-2">Export</div>
+          <div class="text-gray-600 font-medium">PDF / CSV / JSON</div>
         </div>
       </div>
+
+      <!-- Optional: if you want to keep hard numbers, do it safely -->
+      <p class="text-center text-xs text-gray-500 mt-6">
+        Want to show exact detection rate / latency? Add them only if measured and reproducible in your environment.
+      </p>
     </div>
   </section>
 
@@ -117,77 +142,48 @@
           Red Team as a <span class="gradient-text">Product</span>
         </h2>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-          Offense-first AI security testing. Not a compliance dashboard. Not a platform feature. Red teaming IS the product.
+          DefendML is not a generic “AI security dashboard.” It’s a continuous red team engine that produces audit-ready proof.
         </p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-8">
-        <!-- Card 1: Red Team Terminal -->
         <div class="product-card bg-white rounded-2xl p-8">
           <div class="text-5xl mb-4">🧪</div>
-          <h3 class="text-2xl font-bold text-gray-900 mb-3">Red Team Terminal</h3>
+          <h3 class="text-2xl font-bold text-gray-900 mb-3">Live Red Team Scans</h3>
           <p class="text-gray-600 mb-6">
-            Live attack simulation with 232 prompts testing CBRN threats, jailbreaks, data exfiltration, and system compromise. Get instant PASS/FAIL verdict with layer attribution.
+            Execute curated attack scenarios against YOUR implementation (system prompts, tools, retrieval, and guardrails).
+            Measure outcomes in real time with defense-layer attribution.
           </p>
           <ul class="space-y-2 text-sm text-gray-700">
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span>88 critical tests ($5K-$15K bounties each)</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span>Real-time PASS/FAIL with confidence scores</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span>4-layer defense validation (L1-L4)</span>
-            </li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span>Misuse + dual-use enablement testing</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span>Jailbreak + injection resistance</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span>Leakage + exfiltration attempts</span></li>
           </ul>
         </div>
 
-        <!-- Card 2: Security Testing Results -->
         <div class="product-card bg-white rounded-2xl p-8">
           <div class="text-5xl mb-4">📊</div>
-          <h3 class="text-2xl font-bold text-gray-900 mb-3">Security Testing Results</h3>
+          <h3 class="text-2xl font-bold text-gray-900 mb-3">Measurable Security Outcomes</h3>
           <p class="text-gray-600 mb-6">
-            Automated security assessment with 30-day rolling test results. Downloadable audit reports with full attack documentation. Complete transparency.
+            Track detection, resistance, false positives, and response behavior over time. Prove improvements release-to-release.
           </p>
           <ul class="space-y-2 text-sm text-gray-700">
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span>Tests against ASL-3 threat categories (CBRN, jailbreaks, injection)</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span>30-day rolling security assessment</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span>Exportable evidence reports</span>
-            </li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span>Risk scoring + confidence</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span>Trend visibility (rolling windows)</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span>Severity + decision outcomes</span></li>
           </ul>
         </div>
 
-        <!-- Card 3: Transparent Methodology -->
         <div class="product-card bg-white rounded-2xl p-8">
-          <div class="text-5xl mb-4">⚡</div>
-          <h3 class="text-2xl font-bold text-gray-900 mb-3">Full Transparency</h3>
+          <div class="text-5xl mb-4">🧾</div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-3">Audit-Ready Evidence</h3>
           <p class="text-gray-600 mb-6">
-            Every attack scenario documented and public. No hidden test methodologies. See exactly how your AI is being tested.
+            Generate reports mapped to security and compliance expectations. Export evidence for ASL-3, SOC 2, and ISO 27001 workflows.
           </p>
           <ul class="space-y-2 text-sm text-gray-700">
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span>232 documented attack prompts (public)</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span>Pattern matching transparency</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span>Defense layer attribution (L1-L4)</span>
-            </li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span>PDF / CSV / JSON exports</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span>Decision rationale + timestamps</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span>Defense layer attribution (L1–L4)</span></li>
           </ul>
         </div>
       </div>
@@ -195,16 +191,16 @@
       <div class="mt-12 text-center">
         <div class="inline-block bg-white rounded-2xl p-8 border-2 border-gray-200 max-w-2xl">
           <div class="text-4xl mb-4">🛡️</div>
-          <h3 class="text-2xl font-bold text-gray-900 mb-3">Security-First</h3>
+          <h3 class="text-2xl font-bold text-gray-900 mb-3">Built for Real Audits</h3>
           <p class="text-gray-600">
-            Built by team with SOC 2 Type II and ISO 27001 audit experience (2022-2025)
+            Designed by practitioners with hands-on SOC 2 Type II and ISO 27001 audit experience.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- How It Works -->
+  <!-- How It Works (UPDATED: remove specific vendor name emphasis; keep general) -->
   <section id="how-it-works" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16">
@@ -212,417 +208,157 @@
           How <span class="gradient-text">It Works</span>
         </h2>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-          Three simple steps to validate your AI security
+          Three steps to validate AI security and produce evidence your auditor can use.
         </p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-12">
         <div class="text-center">
           <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-6">1</div>
-          <h3 class="text-2xl font-bold text-gray-900 mb-3">Connect Your AI</h3>
+          <h3 class="text-2xl font-bold text-gray-900 mb-3">Connect Your Target</h3>
           <p class="text-gray-600">
-            Integrate with Claude, GPT-4, Gemini, or any LLM via API. Takes 5 minutes.
+            Point DefendML at your AI endpoint, agent, or application flow. Tenant-isolated by design.
           </p>
         </div>
         <div class="text-center">
           <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-6">2</div>
           <h3 class="text-2xl font-bold text-gray-900 mb-3">Run Attack Scenarios</h3>
           <p class="text-gray-600">
-            232 prompts test CBRN, jailbreaks, injection, and extraction. Real-time results.
+            Execute 232 AI Red Team Attack Scenarios across misuse, jailbreaks, leakage, cyber enablement, and agentic risk.
           </p>
         </div>
         <div class="text-center">
           <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-6">3</div>
-          <h3 class="text-2xl font-bold text-gray-900 mb-3">Get Security Verdict</h3>
+          <h3 class="text-2xl font-bold text-gray-900 mb-3">Export Evidence</h3>
           <p class="text-gray-600">
-            PASS/FAIL security assessment with downloadable audit report. Minutes, not months.
+            Get outcomes, severity, and timestamps — and export PDF/CSV/JSON evidence for security review and audits.
           </p>
         </div>
       </div>
 
       <div class="text-center mt-12">
         <a href="https://app.defendml.com/asl3-testing" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition inline-block">
-          Try It Now (Free)
+          Try Live Demo
         </a>
       </div>
     </div>
   </section>
 
-  <!-- NEW SECTION: Why ASL-3 Models Still Need Testing -->
-  <section class="py-20 bg-gradient-to-br from-gray-50 to-white">
+  <!-- Evidence Section (NEW: reinforces audit story) -->
+  <section id="evidence" class="py-20 bg-gradient-to-br from-gray-50 to-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Section Header -->
       <div class="text-center mb-16">
         <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          Why <span class="gradient-text">ASL-3 Models</span> Still Need Testing
+          Evidence, Not Claims
         </h2>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-          Using Claude or GPT-4 doesn't automatically make YOUR application secure
+          DefendML turns red team testing into artifacts you can attach to risk reviews, security questionnaires, and audits.
         </p>
       </div>
 
-      <!-- The Critical Difference -->
-      <div class="grid md:grid-cols-2 gap-12 mb-16">
-        <!-- What They Certify -->
+      <div class="grid md:grid-cols-3 gap-8">
         <div class="bg-white rounded-2xl p-8 border-2 border-gray-200 shadow-sm">
-          <div class="text-3xl mb-4">🏭</div>
-          <h3 class="text-2xl font-bold text-gray-900 mb-4">What Anthropic/OpenAI Test</h3>
-          <ul class="space-y-3 text-gray-700">
-            <li class="flex items-start">
-              <span class="text-gray-400 mr-3">•</span>
-              <span>Base model in controlled environment</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-gray-400 mr-3">•</span>
-              <span>Default safety settings only</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-gray-400 mr-3">•</span>
-              <span>No custom system prompts</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-gray-400 mr-3">•</span>
-              <span>No fine-tuning or modifications</span>
-            </li>
-          </ul>
-          <div class="mt-6 p-4 bg-green-50 border-2 border-green-200 rounded-lg">
-            <p class="text-green-800 font-semibold">✓ "Claude is ASL-3 compliant"</p>
-          </div>
+          <div class="text-4xl mb-4">🧷</div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">Traceable Results</h3>
+          <p class="text-gray-600">
+            Each test yields a decision, severity, and timestamps. (Optional: add evidence trace to tie Target → Scan → Scenario.)
+          </p>
         </div>
-
-        <!-- What You Deploy -->
-        <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 border-2 border-purple-200 shadow-sm">
-          <div class="text-3xl mb-4">🚀</div>
-          <h3 class="text-2xl font-bold text-gray-900 mb-4">What YOU Actually Deploy</h3>
-          <ul class="space-y-3 text-gray-700">
-            <li class="flex items-start">
-              <span class="text-purple-600 mr-3">⚠️</span>
-              <span>Claude + YOUR custom system prompt</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-purple-600 mr-3">⚠️</span>
-              <span>YOUR specific instructions</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-purple-600 mr-3">⚠️</span>
-              <span>YOUR RAG/knowledge base data</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-purple-600 mr-3">⚠️</span>
-              <span>YOUR safety guardrails (or overrides)</span>
-            </li>
-          </ul>
-          <div class="mt-6 p-4 bg-orange-50 border-2 border-orange-200 rounded-lg">
-            <p class="text-orange-800 font-semibold">? Compliance status: UNKNOWN</p>
-          </div>
+        <div class="bg-white rounded-2xl p-8 border-2 border-gray-200 shadow-sm">
+          <div class="text-4xl mb-4">📄</div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">Exports Built for Audits</h3>
+          <p class="text-gray-600">
+            Export PDF / CSV / JSON for governance workflows. Keep evidence aligned to your controls and reviewers.
+          </p>
+        </div>
+        <div class="bg-white rounded-2xl p-8 border-2 border-gray-200 shadow-sm">
+          <div class="text-4xl mb-4">🧭</div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">ASL-3 Aligned</h3>
+          <p class="text-gray-600">
+            Scenario coverage supports core ASL-3 expectations (misuse prevention, control robustness, data protection, deployment safety).
+          </p>
         </div>
       </div>
 
-      <!-- Real-World Example -->
-      <div class="bg-red-50 border-l-4 border-red-500 rounded-r-xl p-8 mb-16 shadow-sm">
-        <div class="flex items-start">
-          <div class="text-4xl mr-6">⚠️</div>
-          <div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-3">Real Example: The "Helpful AI" Trap</h3>
-            <div class="space-y-4 text-gray-700">
-              <p><strong>A healthcare startup using Claude added:</strong></p>
-              <div class="bg-white p-4 rounded-lg border-2 border-red-200 font-mono text-sm">
-                "You are a helpful medical assistant.<br/>
-                ALWAYS be helpful and answer questions.<br/>
-                NEVER refuse to help patients."
-              </div>
-              <p><strong>What happened:</strong></p>
-              <p class="italic">"NEVER refuse" accidentally overrode Claude's safety guardrails. When asked about lethal drug doses, the AI provided detailed dangerous information.</p>
-              <p><strong class="text-red-600">Cost: $2.3M regulatory fine + 6-month product recall</strong></p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- The Data -->
-      <div class="bg-gradient-to-br from-purple-50 via-blue-50 to-white rounded-2xl p-8 border-2 border-purple-200 mb-16 shadow-sm">
-        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Compliance Degrades with Each Customization</h3>
-        <div class="grid md:grid-cols-2 gap-8">
-          <div>
-            <h4 class="font-bold text-gray-900 mb-4">Pass Rates by Configuration:</h4>
-            <div class="space-y-3">
-              <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
-                <span class="text-gray-700">Base Claude (no modifications)</span>
-                <span class="font-bold text-green-600">98.2%</span>
-              </div>
-              <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
-                <span class="text-gray-700">+ Custom system prompt</span>
-                <span class="font-bold text-green-600">94.1%</span>
-              </div>
-              <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
-                <span class="text-gray-700">+ "Helpful" personality</span>
-                <span class="font-bold text-orange-600">87.3%</span>
-              </div>
-              <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
-                <span class="text-gray-700">+ "Never refuse" instruction</span>
-                <span class="font-bold text-red-600">76.4%</span>
-              </div>
-              <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
-                <span class="text-gray-700">+ Fine-tuning</span>
-                <span class="font-bold text-red-600">71.2%</span>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-col justify-center">
-            <div class="bg-white p-6 rounded-xl border-2 border-purple-200 shadow-sm">
-              <div class="text-5xl font-bold gradient-text mb-2">-27%</div>
-              <p class="text-gray-700 text-lg">Average compliance drop from base model to production deployment</p>
-            </div>
-            <p class="text-gray-600 mt-4 text-center italic">Based on testing 1,000+ customer implementations</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- What DefendML Tests -->
-      <div class="text-center mb-12">
-        <h3 class="text-3xl font-bold text-gray-900 mb-4">We Test YOUR Implementation, Not Just The Model</h3>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-          232 attack scenarios targeting your specific configuration
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6 mb-16">
-        <div class="bg-white p-6 rounded-xl border-2 border-gray-200 hover:border-purple-600 transition shadow-sm">
-          <div class="text-3xl mb-3">🎯</div>
-          <h4 class="font-bold text-gray-900 mb-2">System Prompt Analysis</h4>
-          <p class="text-gray-600 text-sm">Detects dangerous keywords like "always", "never", "unrestricted" that override safety</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl border-2 border-gray-200 hover:border-purple-600 transition shadow-sm">
-          <div class="text-3xl mb-3">💉</div>
-          <h4 class="font-bold text-gray-900 mb-2">Prompt Injection</h4>
-          <p class="text-gray-600 text-sm">Tests if users can manipulate your AI with "ignore previous instructions" attacks</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl border-2 border-gray-200 hover:border-purple-600 transition shadow-sm">
-          <div class="text-3xl mb-3">🔓</div>
-          <h4 class="font-bold text-gray-900 mb-2">Jailbreak Detection</h4>
-          <p class="text-gray-600 text-sm">Validates your guardrails against role-playing and fictional framing exploits</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl border-2 border-gray-200 hover:border-purple-600 transition shadow-sm">
-          <div class="text-3xl mb-3">🧬</div>
-          <h4 class="font-bold text-gray-900 mb-2">CBRN Threats</h4>
-          <p class="text-gray-600 text-sm">Ensures your AI won't help create chemical, biological, radiological, or nuclear weapons</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl border-2 border-gray-200 hover:border-purple-600 transition shadow-sm">
-          <div class="text-3xl mb-3">📤</div>
-          <h4 class="font-bold text-gray-900 mb-2">Data Extraction</h4>
-          <p class="text-gray-600 text-sm">Tests if attackers can steal your system prompts, API keys, or training data</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl border-2 border-gray-200 hover:border-purple-600 transition shadow-sm">
-          <div class="text-3xl mb-3">🔍</div>
-          <h4 class="font-bold text-gray-900 mb-2">RAG Poisoning</h4>
-          <p class="text-gray-600 text-sm">Validates that your knowledge base doesn't contaminate AI responses with harmful content</p>
-        </div>
-      </div>
-
-      <!-- Testimonials Section -->
-      <div class="mb-16">
-        <h3 class="text-3xl font-bold text-gray-900 mb-8 text-center">What Customers Say</h3>
-        <div class="grid md:grid-cols-3 gap-8">
-          <!-- Testimonial 1 -->
-          <div class="bg-white p-8 rounded-2xl border-2 border-gray-200 hover:shadow-xl transition">
-            <div class="flex items-center mb-4">
-              <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">
-                M
-              </div>
-              <div>
-                <div class="font-bold text-gray-900">Michael Chen</div>
-                <div class="text-sm text-gray-600">CISO, HealthTech AI</div>
-              </div>
-            </div>
-            <p class="text-gray-700 italic mb-4">
-              "We thought using Claude meant we were automatically compliant. DefendML found 8 critical vulnerabilities in our custom prompts. Saved us from a potential HIPAA violation."
-            </p>
-            <div class="flex items-center text-yellow-500">
-              ⭐⭐⭐⭐⭐
-            </div>
-          </div>
-
-          <!-- Testimonial 2 -->
-          <div class="bg-white p-8 rounded-2xl border-2 border-gray-200 hover:shadow-xl transition">
-            <div class="flex items-center mb-4">
-              <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">
-                S
-              </div>
-              <div>
-                <div class="font-bold text-gray-900">Sarah Johnson</div>
-                <div class="text-sm text-gray-600">VP Engineering, FinanceAI</div>
-              </div>
-            </div>
-            <p class="text-gray-700 italic mb-4">
-              "Our 'always be helpful' prompt was a ticking time bomb. DefendML caught it in 10 minutes. Traditional security audit would've taken 3 months and cost $100K."
-            </p>
-            <div class="flex items-center text-yellow-500">
-              ⭐⭐⭐⭐⭐
-            </div>
-          </div>
-
-          <!-- Testimonial 3 -->
-          <div class="bg-white p-8 rounded-2xl border-2 border-gray-200 hover:shadow-xl transition">
-            <div class="flex items-center mb-4">
-              <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">
-                R
-              </div>
-              <div>
-                <div class="font-bold text-gray-900">Raj Patel</div>
-                <div class="text-sm text-gray-600">CTO, Enterprise AI Startup</div>
-              </div>
-            </div>
-            <p class="text-gray-700 italic mb-4">
-              "Our Series A investors required AI security certification. DefendML gave us the audit report we needed to close the round. Worth every penny."
-            </p>
-            <div class="flex items-center text-yellow-500">
-              ⭐⭐⭐⭐⭐
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Trust Indicators -->
-      <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 border-2 border-purple-200 text-center shadow-sm">
-        <h3 class="text-2xl font-bold text-gray-900 mb-6">Trusted By Security Teams At</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-60">
-          <div class="text-gray-600 font-bold text-lg">HealthTech AI</div>
-          <div class="text-gray-600 font-bold text-lg">FinanceAI</div>
-          <div class="text-gray-600 font-bold text-lg">LegalAI</div>
-          <div class="text-gray-600 font-bold text-lg">Enterprise AI</div>
-        </div>
-        <div class="mt-8 flex items-center justify-center flex-wrap gap-6 text-sm text-gray-600">
-          <div class="flex items-center">
-            <span class="text-green-600 mr-2">✓</span>
-            <span>SOC 2 Audited</span>
-          </div>
-          <div class="flex items-center">
-            <span class="text-green-600 mr-2">✓</span>
-            <span>ISO 27001 Experienced</span>
-          </div>
-          <div class="flex items-center">
-            <span class="text-green-600 mr-2">✓</span>
-            <span>1,000+ Tests Run</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- CTA -->
-      <div class="text-center mt-16">
-        <h3 class="text-3xl font-bold text-gray-900 mb-4">Don't Wait For An Incident</h3>
-        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          Test your AI implementation before attackers (or regulators) do
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="https://app.defendml.com/asl3-testing" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition">
-            Run Free Test (10 Prompts)
-          </a>
-          <a href="#pricing" class="bg-white text-purple-600 border-2 border-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-50 transition">
-            See Full Pricing
-          </a>
-        </div>
-        <p class="text-sm text-gray-500 mt-4">No credit card required • Results in 2 minutes</p>
+      <div class="text-center mt-14">
+        <a href="#pricing" class="bg-white text-purple-600 border-2 border-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-50 transition inline-block">
+          See Pricing
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- Pricing -->
+  <!-- Pricing (UPDATED to locked tiers) -->
   <section id="pricing" class="py-20 bg-gradient-to-br from-purple-50 via-blue-50 to-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16">
         <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          Simple, <span class="gradient-text">Transparent Pricing</span>
+          Pricing That Matches <span class="gradient-text">Evidence Value</span>
         </h2>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-          From free self-service to enterprise support
+          Pay for targets, coverage, and evidence depth — not seats.
         </p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        <!-- Free Tier -->
+
+        <!-- Starter -->
         <div class="bg-white rounded-2xl p-8 border-2 border-gray-200">
-          <h3 class="text-2xl font-bold text-gray-900 mb-2">Free</h3>
-          <div class="text-4xl font-bold text-gray-900 mb-6">$0<span class="text-lg text-gray-500">/month</span></div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">Starter</h3>
+          <div class="text-4xl font-bold text-gray-900 mb-6">$149<span class="text-lg text-gray-500">/month</span></div>
           <ul class="space-y-3 mb-8">
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span class="text-gray-700">10 red team tests/month</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span class="text-gray-700">232 attack scenarios</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span class="text-gray-700">Basic reporting</span>
-            </li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">1 target</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">232+ scenarios (core library)</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">Live scans + basic reporting</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">ASL-3 status snapshot</span></li>
           </ul>
           <a href="https://app.defendml.com/asl3-testing" class="block text-center bg-gray-100 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition">
-            Get Started
+            Start Live Demo
           </a>
         </div>
 
-        <!-- Professional Tier -->
+        <!-- Professional -->
         <div class="bg-white rounded-2xl p-8 border-2 border-purple-600 relative">
           <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
             Most Popular
           </div>
           <h3 class="text-2xl font-bold text-gray-900 mb-2">Professional</h3>
-          <div class="text-4xl font-bold text-gray-900 mb-6">$2,999<span class="text-lg text-gray-500">/month</span></div>
+          <div class="text-4xl font-bold text-gray-900 mb-6">$499<span class="text-lg text-gray-500">/month</span></div>
           <ul class="space-y-3 mb-8">
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span class="text-gray-700">Unlimited red team tests</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span class="text-gray-700">Security assessment reports</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span class="text-gray-700">API access</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span class="text-gray-700">Priority support</span>
-            </li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">Up to 5 targets</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">Full scenario pack + scheduling</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">PDF / CSV exports</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">Rolling trends (e.g., 30 days)</span></li>
           </ul>
           <a href="https://app.defendml.com/asl3-testing" class="block text-center bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition">
-            Start Free Trial
+            Start Live Demo
           </a>
         </div>
 
-        <!-- Enterprise Tier -->
+        <!-- Enterprise -->
         <div class="bg-white rounded-2xl p-8 border-2 border-gray-200">
           <h3 class="text-2xl font-bold text-gray-900 mb-2">Enterprise</h3>
-          <div class="text-4xl font-bold text-gray-900 mb-6">Custom</div>
+          <div class="text-4xl font-bold text-gray-900 mb-6">$2,500+<span class="text-lg text-gray-500">/month</span></div>
           <ul class="space-y-3 mb-8">
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span class="text-gray-700">Everything in Professional</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span class="text-gray-700">Custom attack scenarios</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span class="text-gray-700">Dedicated support</span>
-            </li>
-            <li class="flex items-start">
-              <span class="check mr-2">✓</span>
-              <span class="text-gray-700">SLA guarantees</span>
-            </li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">Unlimited targets</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">Continuous monitoring</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">Compliance mappings (SOC 2 / ISO / ASL-3)</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">Data retention + priority support</span></li>
+            <li class="flex items-start"><span class="check mr-2">✓</span><span class="text-gray-700">Optional custom scenarios (tenant-private)</span></li>
           </ul>
           <a href="#contact" class="block text-center bg-gray-100 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition">
             Contact Sales
           </a>
         </div>
       </div>
+
+      <p class="text-center text-xs text-gray-500 mt-8">
+        Note: Pricing is aligned to targets + evidence depth. If you prefer usage-based pricing, add it as an Enterprise option only.
+      </p>
     </div>
   </section>
 
-  <!-- FAQ -->
+  <!-- FAQ (UPDATED: add locked answer + data usage) -->
   <section id="faq" class="py-20 bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16">
@@ -632,40 +368,42 @@
       </div>
 
       <div class="space-y-6">
+
         <div class="bg-gray-50 rounded-xl p-6">
-          <h3 class="text-xl font-bold text-gray-900 mb-3">What threat categories do you test?</h3>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Are the 232 scenarios real AI red team tests?</h3>
           <p class="text-gray-600">
-            We test against Anthropic's ASL-3 threat model categories: CBRN threats (chemical, biological, radiological, nuclear), jailbreaks, prompt injection, data extraction, and system compromise. Our 232 attack scenarios cover the full spectrum of AI security risks.
+            Yes. The 232 prompts represent a comprehensive AI red team testing library designed to evaluate real AI security risks — including misuse, jailbreaks, data leakage, cyber enablement, and agentic behavior — and are used to generate measurable, audit-ready security evidence.
           </p>
         </div>
 
         <div class="bg-gray-50 rounded-xl p-6">
-          <h3 class="text-xl font-bold text-gray-900 mb-3">How is this different from traditional pentesting?</h3>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Do you train on our data?</h3>
           <p class="text-gray-600">
-            Traditional pentesting focuses on infrastructure (servers, networks). DefendML focuses on AI security - testing LLMs for jailbreaks, prompt injection, data extraction, and compliance violations. We're AI-specific offensive testing.
+            No. DefendML does not train models on customer data by default. Testing is tenant-isolated, and customer prompts/results are not shared across tenants.
           </p>
         </div>
 
         <div class="bg-gray-50 rounded-xl p-6">
-          <h3 class="text-xl font-bold text-gray-900 mb-3">What AI models do you support?</h3>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">What kinds of AI systems can I test?</h3>
           <p class="text-gray-600">
-            We support all major LLMs: Claude (Anthropic), GPT-4 (OpenAI), Gemini (Google), Llama (Meta), and custom models. Integration takes ~5 minutes via API.
+            Any AI endpoint, agent, or application flow — including systems with custom system prompts, tools, and retrieval (RAG). DefendML tests your implementation, not just the base model.
           </p>
         </div>
 
         <div class="bg-gray-50 rounded-xl p-6">
-          <h3 class="text-xl font-bold text-gray-900 mb-3">How long does red team testing take?</h3>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">How is this different from traditional security testing?</h3>
           <p class="text-gray-600">
-            Results are real-time. Run a single test in seconds, or complete 232-scenario audit in minutes. Traditional security assessments take weeks to months.
+            Traditional testing focuses on infrastructure and application vulnerabilities. DefendML focuses on AI-specific failure modes: jailbreaks, injection, misuse enablement, leakage/exfiltration, and unsafe autonomous behavior — and produces compliance-ready evidence.
           </p>
         </div>
 
         <div class="bg-gray-50 rounded-xl p-6">
-          <h3 class="text-xl font-bold text-gray-900 mb-3">Why are your attack scenarios public?</h3>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Can we add custom red team scenarios?</h3>
           <p class="text-gray-600">
-            Transparency builds trust. Hidden methodologies are a black box - you can't verify security claims. Our 232 public scenarios prove we're testing what we say we're testing.
+            Yes (Enterprise). Custom scenarios are tenant-private by default and designed to avoid cross-tenant leakage. Optional anonymized learning can be enabled only with explicit opt-in.
           </p>
         </div>
+
       </div>
     </div>
   </section>
@@ -674,14 +412,14 @@
   <section class="py-20 bg-gradient-to-br from-purple-600 to-blue-600 text-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-4xl md:text-5xl font-bold mb-6">
-        Ready to Red Team Your AI?
+        Red Team Your AI — And Export Proof
       </h2>
       <p class="text-xl mb-8 opacity-90">
-        Start testing with 232 attack scenarios. Free forever for basic use.
+        Run 232 AI Red Team Attack Scenarios and generate evidence for security review and audits.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a href="https://app.defendml.com/asl3-testing" class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition">
-          Run Red Team Test (Free)
+          Try Live Demo
         </a>
         <a href="#contact" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/10 transition">
           Contact Sales
@@ -696,13 +434,14 @@
       <div class="grid md:grid-cols-4 gap-8">
         <div>
           <h3 class="text-2xl font-bold mb-4 gradient-text">DefendML</h3>
-          <p class="text-gray-400">Offense-first AI red teaming from startups to Fortune 500.</p>
+          <p class="text-gray-400">Red team–first AI security — built for measurable outcomes and audit-ready evidence.</p>
         </div>
         <div>
           <h4 class="font-semibold mb-4">Product</h4>
           <ul class="space-y-2 text-gray-400">
             <li><a href="#red-team" class="hover:text-white transition">Red Team</a></li>
             <li><a href="#how-it-works" class="hover:text-white transition">How It Works</a></li>
+            <li><a href="#evidence" class="hover:text-white transition">Evidence</a></li>
             <li><a href="#pricing" class="hover:text-white transition">Pricing</a></li>
             <li><a href="https://app.defendml.com/asl3-testing" class="hover:text-white transition">Live Demo</a></li>
           </ul>
@@ -711,7 +450,6 @@
           <h4 class="font-semibold mb-4">Company</h4>
           <ul class="space-y-2 text-gray-400">
             <li><a href="/about" class="hover:text-white transition">About</a></li>
-            <li><a href="/team" class="hover:text-white transition">Team</a></li>
             <li><a href="#faq" class="hover:text-white transition">FAQ</a></li>
           </ul>
         </div>
@@ -725,9 +463,10 @@
         </div>
       </div>
       <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-        <p>&copy; 2025 DefendML. All rights reserved. Offense-first AI red teaming.</p>
+        <p>&copy; 2025 DefendML. All rights reserved.</p>
       </div>
     </div>
   </footer>
+
 </body>
 </html>
