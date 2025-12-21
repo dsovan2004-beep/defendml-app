@@ -53,7 +53,7 @@ export default function Footer() {
             <span className="text-slate-700">•</span>
             <div className="flex items-center gap-2 text-slate-300">
               <Shield className="w-4 h-4 text-purple-400" />
-              <span>Red Team testing powered by AI</span>
+              <span>Red team testing powered by AI</span>
             </div>
           </div>
         </div>
