@@ -168,6 +168,43 @@ export default function ScansPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
             <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
+              <h2 className="text-lg font-semibold text-white mb-4">Live Prompt Scan</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                    Enter Red Team Prompt
+                  </label>
+                  <textarea
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    placeholder="Enter a red team prompt to scan (demo: 232 attack scenarios)..."
+                    disabled={isScanning}
+                    rows={6}
+                    className="w-full px-4 py-3 rounded-lg border border-slate-700 bg-slate-950/60 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed resize-none"
+                  />
+                </div>
+
+                <button
+                  onClick={handleManualScan}
+                  disabled={!prompt.trim() || isScanning}
+                  className="w-full px-6 py-3 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:bg-slate-700 disabled:cursor-not-allowed text-white font-medium transition-colors flex items-center justify-center gap-2"
+                >
+                  {isScanning ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                      <span>Scanning...</span>
+                    </>
+                  ) : (
+                    <>
+                      <BeakerIcon className="w-5 h-5" />
+                      <span>Run Scan</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
               <h2 className="text-lg font-semibold text-white mb-4">Quick Scan Scenarios</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {quickScenarios.map((scenario) => (
@@ -199,43 +236,6 @@ export default function ScansPage() {
                     </div>
                   </button>
                 ))}
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
-              <h2 className="text-lg font-semibold text-white mb-4">Live Prompt Scan</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    Enter Red Team Prompt
-                  </label>
-                  <textarea
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Enter a red team prompt to scan (demo: 232 attack scenarios)..."
-                    disabled={isScanning}
-                    rows={4}
-                    className="w-full px-4 py-3 rounded-lg border border-slate-700 bg-slate-950/60 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed resize-none"
-                  />
-                </div>
-
-                <button
-                  onClick={handleManualScan}
-                  disabled={!prompt.trim() || isScanning}
-                  className="w-full px-6 py-3 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:bg-slate-700 disabled:cursor-not-allowed text-white font-medium transition-colors flex items-center justify-center gap-2"
-                >
-                  {isScanning ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                      <span>Scanning...</span>
-                    </>
-                  ) : (
-                    <>
-                      <BeakerIcon className="w-5 h-5" />
-                      <span>Run Scan</span>
-                    </>
-                  )}
-                </button>
               </div>
             </div>
 
