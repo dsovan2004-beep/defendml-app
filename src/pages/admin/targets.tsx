@@ -16,8 +16,7 @@ export default function TargetsPage() {
               Targets
             </h1>
             <p className="mt-2 text-slate-300 max-w-2xl">
-              Add and manage the AI systems you want to red team. Targets are the
-              systems you run scans against.
+              Systems, models, and surfaces under test.
             </p>
           </div>
 
@@ -67,7 +66,7 @@ export default function TargetsPage() {
               <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
                 <div className="font-medium text-white">1) Add a target</div>
                 <div className="mt-1 text-slate-400">
-                  Define where your model/agent is reachable (URL, app, or integration).
+                  Define where your model or agent is reachable (URL, app, or integration).
                 </div>
               </div>
               <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
