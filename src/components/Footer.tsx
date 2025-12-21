@@ -12,21 +12,30 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row items-center gap-4 text-sm">
             <span className="text-slate-300">© 2025 DefendML</span>
             <div className="flex items-center gap-4">
-              <Link href="/privacy" className="text-slate-300 hover:text-purple-400 transition-colors">
+              <Link
+                href="/privacy"
+                className="text-slate-300 hover:text-purple-400 transition-colors"
+              >
                 Privacy Policy
               </Link>
               <span className="text-slate-700">•</span>
-              <Link href="/terms" className="text-slate-300 hover:text-purple-400 transition-colors">
+              <Link
+                href="/terms"
+                className="text-slate-300 hover:text-purple-400 transition-colors"
+              >
                 Terms of Service
               </Link>
               <span className="text-slate-700">•</span>
-              <Link href="/docs" className="text-slate-300 hover:text-purple-400 transition-colors">
+              <Link
+                href="/docs"
+                className="text-slate-300 hover:text-purple-400 transition-colors"
+              >
                 API Docs
               </Link>
               <span className="text-slate-700">•</span>
-              <a 
-                href="https://status.defendml.com" 
-                target="_blank" 
+              <a
+                href="https://status.defendml.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-300 hover:text-purple-400 transition-colors"
               >
@@ -35,7 +44,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Right: Certifications */}
+          {/* Right: Trust Signals */}
           <div className="flex items-center gap-4 text-sm">
             <div className="flex items-center gap-2 text-slate-300">
               <Lock className="w-4 h-4 text-green-400" />
@@ -44,7 +53,7 @@ export default function Footer() {
             <span className="text-slate-700">•</span>
             <div className="flex items-center gap-2 text-slate-300">
               <Shield className="w-4 h-4 text-purple-400" />
-              <span>Powered by Anthropic ASL-3</span>
+              <span>Red Team testing powered by AI</span>
             </div>
           </div>
         </div>
