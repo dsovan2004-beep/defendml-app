@@ -19,6 +19,9 @@ import {
   LayoutDashboard,
   AlertTriangle,
   ShieldCheck,
+  Target,
+  Beaker,
+  FileText,
 } from "lucide-react";
 import { supabase, clearLegacyToken } from "../lib/auth-bridge";
 import { FF_ASL3_STATUS, FF_INCIDENT_CENTER } from "../utils/featureFlags";
@@ -27,19 +30,8 @@ import {
   clearDemoSession,
   getEffectiveRole,
 } from "../lib/authClient";
-// Add this NEW import after line 29:
-import {
-  HomeIcon,
-  ShieldCheckIcon, 
-  LockClosedIcon,
-  ClipboardDocumentCheckIcon,
-  HeartIcon,
-  ChartBarIcon,
-  DocumentTextIcon,
-  CogIcon,
-  BeakerIcon,
-} from '@heroicons/react/24/outline';
-// Normalize roles like "superadmin" -> "SuperAdmin"
+
+/* ---------- helpers ---------- */
 function prettyRole(r: string | null | undefined) {
   if (!r) return "Viewer";
   return r
@@ -54,6 +46,7 @@ function isAdmin(role: string) {
   return role.toLowerCase() === "admin" || isSuperAdmin(role);
 }
 
+/* ---------- component ---------- */
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [authed, setAuthed] = useState(false);
@@ -63,7 +56,6 @@ export default function Navigation() {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      // 1) Demo session wins (for sales demos)
       const demo = getDemoSession();
       if (demo) {
         if (!mounted) return;
@@ -72,15 +64,15 @@ export default function Navigation() {
         return;
       }
 
-      // 2) Supabase session fallback
       const { data } = await supabase.auth.getSession();
       if (!mounted) return;
       if (data.session) {
         const userRes = await supabase.auth.getUser();
         const supabaseRole =
-          ((userRes.data.user?.user_metadata as any)?.role as string) || "viewer";
+          ((userRes.data.user?.user_metadata as any)?.role as string) ||
+          "viewer";
         setAuthed(true);
-        setRole(getEffectiveRole(supabaseRole)); // will just return supabaseRole here
+        setRole(getEffectiveRole(supabaseRole));
       } else {
         setAuthed(false);
         setRole("viewer");
@@ -92,21 +84,37 @@ export default function Navigation() {
     };
   }, [router.pathname]);
 
-  /** ✅ Nav Items — core + (optional) feature-flagged links */
+  /* ---------- NAV (Claude-aligned, routes unchanged) ---------- */
   const navItems = [
-    { name: "Overview", href: "/overview", icon: LayoutDashboard },
-    { name: "Security Center", href: "/security", icon: Shield },
-    { name: "PII Protection", href: "/pii", icon: Lock },
-    { name: "Compliance", href: "/compliance", icon: FileCheck },
-    { name: "Health", href: "/health", icon: Activity },
-    { name: "Usage", href: "/usage", icon: BarChart3 },
-    { name: "Audit", href: "/audit", icon: ScrollText },
-    { name: "ASL-3 Testing", href: "/asl3-testing", icon: BeakerIcon },
-    { name: "Settings", href: "/settings", icon: Settings },
+    {
+      name: "Red Team",
+      href: "/overview", // existing overview page
+      icon: Target,
+    },
+    {
+      name: "Targets",
+      href: "/admin/targets",
+      icon: LayoutDashboard,
+    },
+    {
+      name: "Scans",
+      href: "/asl3-testing", // route unchanged
+      icon: Beaker,
+    },
+    {
+      name: "Reports",
+      href: "/compliance", // route unchanged
+      icon: FileText,
+    },
+    {
+      name: "Settings",
+      href: "/settings",
+      icon: Settings,
+    },
 
-    // 🔐 Feature-flagged links (role-aware). Demo superadmin can see all.
+    // Feature-flagged (kept, but hidden behind Reports semantics)
     ...(FF_ASL3_STATUS && (isAdmin(role) || isSuperAdmin(role))
-      ? [{ name: "ASL-3 Status", href: "/asl3-status", icon: ShieldCheck }]
+      ? [{ name: "Test Results", href: "/asl3-status", icon: ShieldCheck }]
       : []),
     ...(FF_INCIDENT_CENTER && isSuperAdmin(role)
       ? [{ name: "Incident Center", href: "/incidents", icon: AlertTriangle }]
@@ -114,22 +122,27 @@ export default function Navigation() {
   ];
 
   const isActive = (href: string) => {
-    if (href === "/security") {
+    if (href === "/overview") {
       return (
-        router.pathname === "/security" ||
-        router.pathname === "/threats" ||
-        router.pathname === "/asl3-status"
+        router.pathname === "/overview" ||
+        router.pathname === "/dashboard"
+      );
+    }
+    if (href === "/compliance") {
+      return (
+        router.pathname === "/compliance" ||
+        router.pathname === "/audit" ||
+        router.pathname === "/usage"
       );
     }
     return router.pathname === href;
   };
 
-  /** ✅ Unified logout: demo + legacy + supabase */
   const handleLogout = async () => {
     try {
-      clearDemoSession(); // demo off
-      clearLegacyToken(); // old mock token off
-      await supabase.auth.signOut(); // supabase off
+      clearDemoSession();
+      clearLegacyToken();
+      await supabase.auth.signOut();
       setAuthed(false);
       setRole("viewer");
       window.location.replace("/login");
@@ -149,7 +162,7 @@ export default function Navigation() {
               <Shield className="w-8 h-8 text-purple-500 group-hover:text-purple-400 transition-colors" />
               <span className="text-xl font-bold text-white">DefendML</span>
               <span className="hidden sm:inline text-xs text-slate-400 ml-2 px-2 py-1 bg-purple-500/10 rounded border border-purple-500/20">
-                ASL-3 Powered
+                Red Team First
               </span>
             </Link>
           </div>
@@ -191,7 +204,7 @@ export default function Navigation() {
           </div>
         </div>
 
-        {/* Desktop Nav Tabs */}
+        {/* Desktop Nav */}
         {authed && (
           <div className="hidden md:flex items-center gap-2 pb-3 overflow-x-auto">
             {navItems.map((item) => {
@@ -219,30 +232,26 @@ export default function Navigation() {
       {isOpen && (
         <div className="md:hidden border-t border-slate-800">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            {authed && (
-              <>
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className={`flex items-center gap-3 px-3 py-3 rounded-lg text-base font-medium transition-all ${
-                        isActive(item.href)
-                          ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
-                          : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                      }`}
-                    >
-                      <Icon className="w-5 h-5" />
-                      {item.name}
-                    </Link>
-                  );
-                })}
-              </>
-            )}
+            {authed &&
+              navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center gap-3 px-3 py-3 rounded-lg text-base font-medium transition-all ${
+                      isActive(item.href)
+                        ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
+                        : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    {item.name}
+                  </Link>
+                );
+              })}
 
-            {/* Role (mobile) */}
             {authed && (
               <div className="px-3 py-2">
                 <span className="inline-block px-3 py-1 bg-purple-500/20 border border-purple-500/40 rounded-lg text-purple-200 text-sm font-semibold">
@@ -251,7 +260,6 @@ export default function Navigation() {
               </div>
             )}
 
-            {/* Auth (mobile) */}
             {authed ? (
               <button
                 onClick={() => {
