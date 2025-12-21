@@ -371,21 +371,7 @@ function OverviewPage() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <Footer />
-    </div>
-  );
-}
-
-export default function Protected() {
-  return (
-    <RequireAuth>
-      <OverviewPage />
-    </RequireAuth>
-  );
-}
-<div className="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
+          <div className="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
