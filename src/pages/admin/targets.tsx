@@ -64,8 +64,7 @@ function decodeJwtPayload(token: string): any | null {
     // base64url -> base64
     const base64 = part.replace(/-/g, "+").replace(/_/g, "/");
     // pad
-    const padded =
-      base64 + "===".slice((base64.length + 3) % 4);
+    const padded = base64 + "===".slice((base64.length + 3) % 4);
 
     const json = atob(padded);
     return JSON.parse(json);
@@ -287,7 +286,9 @@ export default function TargetsPage() {
   };
 
   const getStatusBadge = (status?: ScanStatus) => {
-    if (!status) return <span className="text-xs text-slate-500">Never scanned</span>;
+    if (!status) {
+      return <span className="text-xs text-slate-500">Never scanned</span>;
+    }
 
     const styles: Record<ScanStatus, string> = {
       pending: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
@@ -321,7 +322,9 @@ export default function TargetsPage() {
         <div className="flex items-start justify-between gap-6">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-white">Targets</h1>
-            <p className="mt-2 text-slate-300 max-w-2xl">Systems, models, and surfaces under test.</p>
+            <p className="mt-2 text-slate-300 max-w-2xl">
+              Systems, models, and surfaces under test.
+            </p>
           </div>
           <div className="flex gap-2">
             <button
@@ -391,7 +394,9 @@ export default function TargetsPage() {
                                 {target.environment}
                               </span>
                             )}
-                            {target.url && <span className="text-slate-400">{target.url}</span>}
+                            {target.url && (
+                              <span className="text-slate-400">{target.url}</span>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -423,7 +428,9 @@ export default function TargetsPage() {
                     <div className="flex items-center justify-between pt-3 border-t border-slate-700">
                       <div className="flex items-center gap-4 text-xs text-slate-500">
                         {target.last_scan_at && (
-                          <span>Last scan: {new Date(target.last_scan_at).toLocaleString()}</span>
+                          <span>
+                            Last scan: {new Date(target.last_scan_at).toLocaleString()}
+                          </span>
                         )}
                       </div>
                       {getStatusBadge(target.last_scan_status)}
@@ -458,7 +465,9 @@ export default function TargetsPage() {
               </div>
               <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
                 <div className="font-medium text-white mb-1">2) Run a scan</div>
-                <div className="text-slate-400">Execute red team scenarios against the selected target.</div>
+                <div className="text-slate-400">
+                  Execute red team scenarios against the selected target.
+                </div>
               </div>
               <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
                 <div className="font-medium text-white mb-1">3) Export reports</div>
@@ -537,7 +546,9 @@ export default function TargetsPage() {
                 </label>
                 <textarea
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                   className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Customer-facing chat assistant"
                   rows={2}
@@ -552,7 +563,10 @@ export default function TargetsPage() {
                   <select
                     value={formData.target_type}
                     onChange={(e) =>
-                      setFormData({ ...formData, target_type: e.target.value as TargetType })
+                      setFormData({
+                        ...formData,
+                        target_type: e.target.value as TargetType,
+                      })
                     }
                     className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
@@ -570,7 +584,10 @@ export default function TargetsPage() {
                   <select
                     value={formData.environment}
                     onChange={(e) =>
-                      setFormData({ ...formData, environment: e.target.value as Environment })
+                      setFormData({
+                        ...formData,
+                        environment: e.target.value as Environment,
+                      })
                     }
                     className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
@@ -600,7 +617,9 @@ export default function TargetsPage() {
                 <input
                   type="text"
                   value={formData.endpoint_path}
-                  onChange={(e) => setFormData({ ...formData, endpoint_path: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, endpoint_path: e.target.value })
+                  }
                   className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="/v1/chat/completions"
                 />
@@ -614,7 +633,10 @@ export default function TargetsPage() {
                   <select
                     value={formData.auth_method}
                     onChange={(e) =>
-                      setFormData({ ...formData, auth_method: e.target.value as AuthMethod })
+                      setFormData({
+                        ...formData,
+                        auth_method: e.target.value as AuthMethod,
+                      })
                     }
                     className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
@@ -650,7 +672,9 @@ export default function TargetsPage() {
                   <input
                     type="password"
                     value={formData.auth_token}
-                    onChange={(e) => setFormData({ ...formData, auth_token: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, auth_token: e.target.value })
+                    }
                     className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                     placeholder="sk-..."
                   />
@@ -742,7 +766,9 @@ export default function TargetsPage() {
             </div>
 
             <div className="p-6">
-              <p className="text-slate-400 mb-4">Upload a CSV or JSON file to import multiple targets at once.</p>
+              <p className="text-slate-400 mb-4">
+                Upload a CSV or JSON file to import multiple targets at once.
+              </p>
               <div className="border-2 border-dashed border-slate-700 rounded-lg p-8 text-center">
                 <Upload className="w-12 h-12 text-slate-600 mx-auto mb-4" />
                 <p className="text-slate-500 text-sm">Coming soon!</p>
