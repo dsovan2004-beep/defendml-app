@@ -13,6 +13,8 @@ import {
   Award,
   TrendingUp,
   FileCheck,
+  Sparkles,
+  Wrench,
 } from "lucide-react";
 
 import Navigation from "../components/Navigation";
@@ -83,7 +85,85 @@ function pillForSeverity(s: Severity) {
   return "bg-slate-500/10 text-slate-300 border border-slate-500/30";
 }
 
+function pct(n: number, d: number) {
+  if (!d) return 0;
+  return Math.round((n / d) * 100);
+}
+
+function topByCount(map: Record<string, number>) {
+  const entries = Object.entries(map).sort((a, b) => b[1] - a[1]);
+  return entries.length ? entries[0] : null;
+}
+
 function CompliancePageContent() {
+  // -----------------------------
+  // Demo “Trend framing” metrics derived from evidence
+  // (Real wiring later: scans → reports → evidence rows)
+  // -----------------------------
+  const total = demoEvidence.length;
+
+  const decisionCounts: Record<Decision, number> = { BLOCK: 0, FLAG: 0, ALLOW: 0 };
+  const severityCounts: Record<Severity, number> = { CRITICAL: 0, HIGH: 0, MEDIUM: 0, LOW: 0 };
+  const layerCounts: Record<Layer, number> = { L1: 0, L2: 0, L3: 0, L4: 0 };
+  const categoryCounts: Record<string, number> = {};
+
+  for (const r of demoEvidence) {
+    decisionCounts[r.decision] += 1;
+    severityCounts[r.severity] += 1;
+    layerCounts[r.layer] += 1;
+    categoryCounts[r.category] = (categoryCounts[r.category] ?? 0) + 1;
+  }
+
+  const topCategory = topByCount(categoryCounts);
+  const topLayer = topByCount(layerCounts as unknown as Record<string, number>);
+
+  // -----------------------------
+  // Demo “Recommendations” logic (deterministic)
+  // (Real wiring later: tie to scenario IDs + scan metadata)
+  // -----------------------------
+  const recs = [
+    {
+      icon: <Shield className="w-5 h-5 text-red-300" />,
+      title: "Block critical categories with explicit policy + enforcement",
+      why: topCategory
+        ? `Top category by volume is "${topCategory[0]}" (${topCategory[1]} of ${total}).`
+        : "No category data available yet.",
+      what: [
+        "Add explicit deny rules for the top critical categories",
+        "Route BLOCK decisions to a hardened refusal template",
+        "Log decision rationale + matched rule IDs for audit export",
+      ],
+      badge: "High impact",
+      badgeClass: "bg-red-500/10 text-red-300 border border-red-500/30",
+    },
+    {
+      icon: <Wrench className="w-5 h-5 text-yellow-300" />,
+      title: "Reduce FLAG noise with tighter thresholds + explanations",
+      why: `FLAG rate is ${pct(decisionCounts.FLAG, total)}% (${decisionCounts.FLAG}/${total}).`,
+      what: [
+        "Separate “review required” vs “policy uncertain” flags",
+        "Capture a short, structured rationale for each FLAG",
+        "Add “recommended fix” hints tied to scenario class (demo-safe)",
+      ],
+      badge: "Quick win",
+      badgeClass: "bg-yellow-500/10 text-yellow-300 border border-yellow-500/30",
+    },
+    {
+      icon: <Sparkles className="w-5 h-5 text-purple-300" />,
+      title: "Harden the most-used defense layer and prove drift over time",
+      why: topLayer
+        ? `Most-attributed layer is ${topLayer[0]} (${topLayer[1]} of ${total}).`
+        : "No layer attribution yet.",
+      what: [
+        "Track layer attribution by scenario class (jailbreak, leakage, misuse)",
+        "Add 30-day rolling trend cards (pass/fail/flag + severity mix)",
+        "Show “before vs after” improvements when configs change",
+      ],
+      badge: "Strategy-aligned",
+      badgeClass: "bg-purple-500/10 text-purple-300 border border-purple-500/30",
+    },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-950">
       <Navigation />
@@ -102,8 +182,9 @@ function CompliancePageContent() {
                   Export evidence for audits, customers, and internal reviews.
                 </p>
                 <div className="mt-2 text-xs text-slate-500">
-                  Policy pack: <span className="text-slate-300 font-semibold">ASL-3 (demo)</span>{" "}
-                  • Route: <span className="text-slate-300 font-semibold">/compliance</span>
+                  Report pack:{" "}
+                  <span className="text-slate-300 font-semibold">ASL-3 (demo)</span> • Source:{" "}
+                  <span className="text-slate-300 font-semibold">Scans → Evidence rows</span>
                 </div>
               </div>
 
@@ -134,37 +215,122 @@ function CompliancePageContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-slate-900 rounded-xl p-5 border border-slate-800">
-              <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">
-                Latest Report
-              </div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Latest Report</div>
               <div className="text-lg font-semibold text-white">RPT-2025-12-21-0007</div>
               <div className="text-xs text-slate-500 mt-1">Generated: 2025-12-21 04:35 PST</div>
             </div>
 
             <div className="bg-slate-900 rounded-xl p-5 border border-slate-800">
-              <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">
-                Scenario Pack Size
-              </div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Scenario Pack Size</div>
               <div className="text-3xl font-bold text-orange-400">232</div>
               <div className="text-xs text-slate-500 mt-1">Demo policy pack coverage</div>
             </div>
 
             <div className="bg-slate-900 rounded-xl p-5 border border-slate-800">
-              <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">
-                High-severity Findings
-              </div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">High-severity Findings</div>
               <div className="text-3xl font-bold text-red-400">88</div>
               <div className="text-xs text-slate-500 mt-1">Critical categories (demo)</div>
             </div>
 
             <div className="bg-slate-900 rounded-xl p-5 border border-slate-800">
-              <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">
-                Compliance Trend
-              </div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Risk Trend (30d)</div>
               <div className="text-3xl font-bold text-green-400">94%</div>
               <div className="text-xs text-green-400 mt-2 flex items-center gap-1">
                 <TrendingUp className="w-4 h-4" />
-                +3% this month (demo)
+                +3 pts vs prior 30d (demo)
+              </div>
+            </div>
+          </div>
+
+          {/* Trend framing (metrics + visuals) */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
+            {/* Decision mix */}
+            <div className="bg-slate-900 rounded-xl p-6 border border-slate-800">
+              <div className="flex items-center gap-2 mb-1">
+                <Activity className="w-5 h-5 text-blue-300" />
+                <h2 className="text-lg font-semibold text-white">Decision Mix</h2>
+              </div>
+              <p className="text-sm text-slate-400 mb-4">
+                Snapshot distribution (demo). Wire to 30d rolling windows later.
+              </p>
+
+              {(["BLOCK", "FLAG", "ALLOW"] as Decision[]).map((d) => (
+                <div key={d} className="mb-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-slate-300">{d}</span>
+                    <span className="text-slate-400">
+                      {decisionCounts[d]} ({pct(decisionCounts[d], total)}%)
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full bg-slate-800 mt-2 overflow-hidden">
+                    <div
+                      className="h-2 rounded-full bg-slate-500/70"
+                      style={{ width: `${pct(decisionCounts[d], total)}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Severity mix */}
+            <div className="bg-slate-900 rounded-xl p-6 border border-slate-800">
+              <div className="flex items-center gap-2 mb-1">
+                <AlertCircle className="w-5 h-5 text-yellow-300" />
+                <h2 className="text-lg font-semibold text-white">Severity Mix</h2>
+              </div>
+              <p className="text-sm text-slate-400 mb-4">
+                What’s driving risk (demo). Later: stack by scenario class + target.
+              </p>
+
+              {(["CRITICAL", "HIGH", "MEDIUM", "LOW"] as Severity[]).map((s) => (
+                <div key={s} className="mb-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-slate-300">{s}</span>
+                    <span className="text-slate-400">
+                      {severityCounts[s]} ({pct(severityCounts[s], total)}%)
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full bg-slate-800 mt-2 overflow-hidden">
+                    <div
+                      className="h-2 rounded-full bg-slate-500/70"
+                      style={{ width: `${pct(severityCounts[s], total)}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Top drivers */}
+            <div className="bg-slate-900 rounded-xl p-6 border border-slate-800">
+              <div className="flex items-center gap-2 mb-1">
+                <Shield className="w-5 h-5 text-purple-300" />
+                <h2 className="text-lg font-semibold text-white">Top Drivers</h2>
+              </div>
+              <p className="text-sm text-slate-400 mb-4">
+                “What moved the needle” (demo). Later: show deltas vs prior period.
+              </p>
+
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">Top Category</span>
+                  <span className="text-slate-400">
+                    {topCategory ? `${topCategory[0]} (${topCategory[1]})` : "—"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">Most-hit Layer</span>
+                  <span className="text-slate-400">
+                    {topLayer ? `${topLayer[0]} (${topLayer[1]})` : "—"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">FLAG Rate</span>
+                  <span className="text-slate-400">{pct(decisionCounts.FLAG, total)}%</span>
+                </div>
+              </div>
+
+              <div className="mt-4 text-xs text-slate-500">
+                Next: trend these by target + scan pack and export them in the report artifact.
               </div>
             </div>
           </div>
@@ -228,13 +394,21 @@ function CompliancePageContent() {
                       <td className="px-6 py-4">{row.target}</td>
                       <td className="px-6 py-4">{row.scan}</td>
                       <td className="px-6 py-4">
-                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${pillForDecision(row.decision)}`}>
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-xs font-semibold ${pillForDecision(
+                            row.decision
+                          )}`}
+                        >
                           {row.decision}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-slate-300">{row.category}</td>
                       <td className="px-6 py-4">
-                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${pillForSeverity(row.severity)}`}>
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-xs font-semibold ${pillForSeverity(
+                            row.severity
+                          )}`}
+                        >
                           {row.severity}
                         </span>
                       </td>
@@ -270,13 +444,57 @@ function CompliancePageContent() {
             </div>
           </div>
 
+          {/* Step 2: Recommendations (UI + logic) */}
+          <div className="bg-slate-900 rounded-xl border border-slate-800 mb-8 overflow-hidden">
+            <div className="p-6 border-b border-slate-800">
+              <h2 className="text-lg font-semibold text-white">Recommendations</h2>
+              <p className="text-sm text-slate-400 mt-1">
+                Actionable fixes derived from evidence outputs (demo logic). Wire to scenario IDs + scan metadata next.
+              </p>
+            </div>
+
+            <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+              {recs.map((r) => (
+                <div key={r.title} className="bg-slate-950/40 rounded-xl border border-slate-800 p-5">
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-2">
+                      {r.icon}
+                      <h3 className="text-white font-semibold">{r.title}</h3>
+                    </div>
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${r.badgeClass}`}>
+                      {r.badge}
+                    </span>
+                  </div>
+
+                  <div className="text-sm text-slate-300 mb-3">
+                    <span className="text-slate-400">Why:</span> {r.why}
+                  </div>
+
+                  <div className="text-sm text-slate-300">
+                    <div className="text-slate-400 mb-2">What to do:</div>
+                    <ul className="space-y-2">
+                      {r.what.map((w) => (
+                        <li key={w} className="flex items-start gap-2">
+                          <span className="mt-1 w-1.5 h-1.5 rounded-full bg-slate-400" />
+                          <span>{w}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-4 text-xs text-slate-500">
+                    Next: attach “recommended fix” to each evidence row and export it in PDF/CSV/JSON.
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Keep your “standards” view, but framed as Report Coverage */}
           <div className="bg-slate-900 rounded-xl border border-slate-800 mb-8">
             <div className="p-6 border-b border-slate-800">
               <h2 className="text-lg font-semibold text-white">Report Coverage</h2>
-              <p className="text-sm text-slate-400 mt-1">
-                Evidence mapped to common assurance frameworks (demo data).
-              </p>
+              <p className="text-sm text-slate-400 mt-1">Evidence mapped to assurance frameworks (demo mapping).</p>
             </div>
 
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -374,7 +592,7 @@ function CompliancePageContent() {
                 <div>
                   <h2 className="text-lg sm:text-xl font-bold text-white">ASL-3 Evidence Summary</h2>
                   <p className="text-sm text-slate-400">
-                    Evidence mapped to Anthropic AI Safety Level 3 controls (demo data).
+                    Evidence mapped to ASL-3 control expectations (demo mapping).
                   </p>
                 </div>
               </div>
@@ -539,7 +757,11 @@ function CompliancePageContent() {
                           : "bg-slate-500/10 text-slate-400 border border-slate-500/30"
                       }`}
                     >
-                      {item.status === "complete" ? "Complete" : item.status === "in-progress" ? "In Progress" : "Pending"}
+                      {item.status === "complete"
+                        ? "Complete"
+                        : item.status === "in-progress"
+                        ? "In Progress"
+                        : "Pending"}
                     </span>
                   </div>
                 ))}
