@@ -2,18 +2,37 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Navigation from "../../components/Navigation";
-import { createClient } from '@supabase/supabase-js';
-import { Plus, Upload, Target, Globe, MessageSquare, Cpu, Edit2, Trash2, Play, CheckCircle, XCircle, Clock, X } from 'lucide-react';
+import { createClient } from "@supabase/supabase-js";
+import {
+  Plus,
+  Upload,
+  Target,
+  Globe,
+  MessageSquare,
+  Cpu,
+  Edit2,
+  Trash2,
+  Play,
+  CheckCircle,
+  XCircle,
+  Clock,
+  X,
+} from "lucide-react";
 
 // Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-type TargetType = 'api_endpoint' | 'chat_ui' | 'internal_agent' | 'integration';
-type AuthMethod = 'api_key' | 'oauth_token' | 'session_cookie' | 'bearer_token' | 'none';
-type Environment = 'prod' | 'staging' | 'dev' | 'test';
-type ScanStatus = 'pending' | 'running' | 'completed' | 'failed';
+type TargetType = "api_endpoint" | "chat_ui" | "internal_agent" | "integration";
+type AuthMethod =
+  | "api_key"
+  | "oauth_token"
+  | "session_cookie"
+  | "bearer_token"
+  | "none";
+type Environment = "prod" | "staging" | "dev" | "test";
+type ScanStatus = "pending" | "running" | "completed" | "failed";
 
 interface Target {
   id: string;
@@ -36,6 +55,25 @@ interface Target {
   tags?: string[];
 }
 
+// Base64URL-safe JWT payload decode
+function decodeJwtPayload(token: string): any | null {
+  try {
+    const part = token.split(".")[1];
+    if (!part) return null;
+
+    // base64url -> base64
+    const base64 = part.replace(/-/g, "+").replace(/_/g, "/");
+    // pad
+    const padded =
+      base64 + "===".slice((base64.length + 3) % 4);
+
+    const json = atob(padded);
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
 export default function TargetsPage() {
   const [targets, setTargets] = useState<Target[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,15 +84,15 @@ export default function TargetsPage() {
 
   // Form state
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    target_type: 'api_endpoint' as TargetType,
-    url: '',
-    endpoint_path: '',
-    auth_method: 'api_key' as AuthMethod,
-    auth_header_name: 'Authorization',
-    auth_token: '',
-    environment: 'dev' as Environment,
+    name: "",
+    description: "",
+    target_type: "api_endpoint" as TargetType,
+    url: "",
+    endpoint_path: "",
+    auth_method: "api_key" as AuthMethod,
+    auth_header_name: "Authorization",
+    auth_token: "",
+    environment: "dev" as Environment,
     rate_limit_per_hour: 100,
     timeout_seconds: 30,
   });
@@ -66,28 +104,30 @@ export default function TargetsPage() {
   const loadTargets = async () => {
     try {
       setLoading(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       if (!user) {
-        console.log('No user found');
+        console.log("No user found");
         setTargets([]);
         return;
       }
 
       const { data, error } = await supabase
-        .from('targets')
-        .select('*')
-        .eq('created_by', user.id)
-        .order('created_at', { ascending: false });
+        .from("targets")
+        .select("*")
+        .eq("created_by", user.id)
+        .order("created_at", { ascending: false });
 
       if (error) {
-        console.error('Error loading targets:', error);
+        console.error("Error loading targets:", error);
         setTargets([]);
       } else {
-        setTargets(data || []);
+        setTargets((data as Target[]) || []);
       }
     } catch (error) {
-      console.error('Failed to load targets:', error);
+      console.error("Failed to load targets:", error);
       setTargets([]);
     } finally {
       setLoading(false);
@@ -97,33 +137,53 @@ export default function TargetsPage() {
   const handleAddTarget = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    
+
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      // TEMP DEBUG: confirm JWT role (15 seconds)
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+
+      if (token) {
+        const payload = decodeJwtPayload(token);
+        console.log(
+          "JWT role:",
+          payload?.role,
+          "sub:",
+          payload?.sub,
+          "email:",
+          payload?.email
+        );
+      } else {
+        console.log("No access token found in session");
+      }
+
       if (!user) {
-        alert('Please log in to add targets');
+        alert("Please log in to add targets");
         return;
       }
 
-      const { error } = await supabase
-        .from('targets')
-        .insert([{
+      const { error } = await supabase.from("targets").insert([
+        {
           ...formData,
           created_by: user.id,
-        }]);
+        },
+      ]);
 
       if (error) {
-        console.error('Error adding target:', error);
-        alert('Failed to add target: ' + error.message);
+        console.error("Error adding target:", error);
+        alert("Failed to add target: " + error.message);
       } else {
         await loadTargets();
         setShowAddModal(false);
         resetForm();
       }
     } catch (error) {
-      console.error('Failed to add target:', error);
-      alert('Failed to add target');
+      console.error("Failed to add target:", error);
+      alert("Failed to add target");
     } finally {
       setSaving(false);
     }
@@ -132,68 +192,65 @@ export default function TargetsPage() {
   const handleUpdateTarget = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingTarget) return;
-    
+
     setSaving(true);
-    
+
     try {
       const { error } = await supabase
-        .from('targets')
+        .from("targets")
         .update(formData)
-        .eq('id', editingTarget.id);
+        .eq("id", editingTarget.id);
 
       if (error) {
-        console.error('Error updating target:', error);
-        alert('Failed to update target: ' + error.message);
+        console.error("Error updating target:", error);
+        alert("Failed to update target: " + error.message);
       } else {
         await loadTargets();
         setEditingTarget(null);
         resetForm();
       }
     } catch (error) {
-      console.error('Failed to update target:', error);
-      alert('Failed to update target');
+      console.error("Failed to update target:", error);
+      alert("Failed to update target");
     } finally {
       setSaving(false);
     }
   };
 
   const handleDeleteTarget = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this target?')) return;
-    
+    if (!confirm("Are you sure you want to delete this target?")) return;
+
     try {
-      const { error } = await supabase
-        .from('targets')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.from("targets").delete().eq("id", id);
 
       if (error) {
-        console.error('Error deleting target:', error);
-        alert('Failed to delete target: ' + error.message);
+        console.error("Error deleting target:", error);
+        alert("Failed to delete target: " + error.message);
       } else {
         await loadTargets();
       }
     } catch (error) {
-      console.error('Failed to delete target:', error);
-      alert('Failed to delete target');
+      console.error("Failed to delete target:", error);
+      alert("Failed to delete target");
     }
   };
 
   const handleRunScan = async (targetId: string) => {
-    alert('Scan functionality coming soon! Target ID: ' + targetId);
+    alert("Scan functionality coming soon! Target ID: " + targetId);
     // TODO: Implement scan execution
   };
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      description: '',
-      target_type: 'api_endpoint',
-      url: '',
-      endpoint_path: '',
-      auth_method: 'api_key',
-      auth_header_name: 'Authorization',
-      auth_token: '',
-      environment: 'dev',
+      name: "",
+      description: "",
+      target_type: "api_endpoint",
+      url: "",
+      endpoint_path: "",
+      auth_method: "api_key",
+      auth_header_name: "Authorization",
+      auth_token: "",
+      environment: "dev",
       rate_limit_per_hour: 100,
       timeout_seconds: 30,
     });
@@ -202,14 +259,14 @@ export default function TargetsPage() {
   const openEditModal = (target: Target) => {
     setFormData({
       name: target.name,
-      description: target.description || '',
+      description: target.description || "",
       target_type: target.target_type,
-      url: target.url || '',
-      endpoint_path: target.endpoint_path || '',
-      auth_method: target.auth_method || 'api_key',
-      auth_header_name: target.auth_header_name || 'Authorization',
-      auth_token: target.auth_token || '',
-      environment: target.environment || 'dev',
+      url: target.url || "",
+      endpoint_path: target.endpoint_path || "",
+      auth_method: target.auth_method || "api_key",
+      auth_header_name: target.auth_header_name || "Authorization",
+      auth_token: target.auth_token || "",
+      environment: target.environment || "dev",
       rate_limit_per_hour: target.rate_limit_per_hour,
       timeout_seconds: target.timeout_seconds,
     });
@@ -218,32 +275,38 @@ export default function TargetsPage() {
 
   const getTargetIcon = (type: TargetType) => {
     switch (type) {
-      case 'api_endpoint': return <Globe className="w-5 h-5" />;
-      case 'chat_ui': return <MessageSquare className="w-5 h-5" />;
-      case 'internal_agent': return <Cpu className="w-5 h-5" />;
-      default: return <Target className="w-5 h-5" />;
+      case "api_endpoint":
+        return <Globe className="w-5 h-5" />;
+      case "chat_ui":
+        return <MessageSquare className="w-5 h-5" />;
+      case "internal_agent":
+        return <Cpu className="w-5 h-5" />;
+      default:
+        return <Target className="w-5 h-5" />;
     }
   };
 
   const getStatusBadge = (status?: ScanStatus) => {
     if (!status) return <span className="text-xs text-slate-500">Never scanned</span>;
-    
-    const styles = {
-      pending: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
-      running: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-      completed: 'bg-green-500/20 text-green-300 border-green-500/30',
-      failed: 'bg-red-500/20 text-red-300 border-red-500/30',
+
+    const styles: Record<ScanStatus, string> = {
+      pending: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
+      running: "bg-blue-500/20 text-blue-300 border-blue-500/30",
+      completed: "bg-green-500/20 text-green-300 border-green-500/30",
+      failed: "bg-red-500/20 text-red-300 border-red-500/30",
     };
-    
-    const icons = {
+
+    const icons: Record<ScanStatus, React.ReactNode> = {
       pending: <Clock className="w-3 h-3" />,
       running: <Play className="w-3 h-3" />,
       completed: <CheckCircle className="w-3 h-3" />,
       failed: <XCircle className="w-3 h-3" />,
     };
-    
+
     return (
-      <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${styles[status]}`}>
+      <span
+        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${styles[status]}`}
+      >
         {icons[status]}
         {status}
       </span>
@@ -253,14 +316,12 @@ export default function TargetsPage() {
   return (
     <div className="min-h-screen bg-slate-950">
       <Navigation />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex items-start justify-between gap-6">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-white">Targets</h1>
-            <p className="mt-2 text-slate-300 max-w-2xl">
-              Systems, models, and surfaces under test.
-            </p>
+            <p className="mt-2 text-slate-300 max-w-2xl">Systems, models, and surfaces under test.</p>
           </div>
           <div className="flex gap-2">
             <button
@@ -284,7 +345,7 @@ export default function TargetsPage() {
           {/* Target List */}
           <div className="lg:col-span-2 rounded-xl border border-slate-800 bg-slate-900/40 p-6">
             <h2 className="text-lg font-semibold text-white mb-4">Target List</h2>
-            
+
             {loading ? (
               <div className="text-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
@@ -293,7 +354,9 @@ export default function TargetsPage() {
             ) : targets.length === 0 ? (
               <div className="text-center py-12">
                 <Target className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-                <p className="text-slate-300 mb-4">No targets yet. Add a target to start running scans.</p>
+                <p className="text-slate-300 mb-4">
+                  No targets yet. Add a target to start running scans.
+                </p>
                 <button
                   onClick={() => setShowAddModal(true)}
                   className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500 hover:bg-purple-600 rounded-lg text-white text-sm font-medium transition-all"
@@ -320,13 +383,15 @@ export default function TargetsPage() {
                             <p className="text-slate-400 text-sm mb-2">{target.description}</p>
                           )}
                           <div className="flex items-center gap-2 text-xs text-slate-500">
-                            <span className="px-2 py-0.5 bg-slate-700 rounded">{target.target_type}</span>
+                            <span className="px-2 py-0.5 bg-slate-700 rounded">
+                              {target.target_type}
+                            </span>
                             {target.environment && (
-                              <span className="px-2 py-0.5 bg-slate-700 rounded">{target.environment}</span>
+                              <span className="px-2 py-0.5 bg-slate-700 rounded">
+                                {target.environment}
+                              </span>
                             )}
-                            {target.url && (
-                              <span className="text-slate-400">{target.url}</span>
-                            )}
+                            {target.url && <span className="text-slate-400">{target.url}</span>}
                           </div>
                         </div>
                       </div>
@@ -354,7 +419,7 @@ export default function TargetsPage() {
                         </button>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center justify-between pt-3 border-t border-slate-700">
                       <div className="flex items-center gap-4 text-xs text-slate-500">
                         {target.last_scan_at && (
@@ -393,9 +458,7 @@ export default function TargetsPage() {
               </div>
               <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
                 <div className="font-medium text-white mb-1">2) Run a scan</div>
-                <div className="text-slate-400">
-                  Execute red team scenarios against the selected target.
-                </div>
+                <div className="text-slate-400">Execute red team scenarios against the selected target.</div>
               </div>
               <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
                 <div className="font-medium text-white mb-1">3) Export reports</div>
@@ -415,13 +478,13 @@ export default function TargetsPage() {
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-400">Active</span>
                   <span className="text-green-400 font-semibold">
-                    {targets.filter(t => t.is_active).length}
+                    {targets.filter((t) => t.is_active).length}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-400">Scanned</span>
                   <span className="text-purple-400 font-semibold">
-                    {targets.filter(t => t.last_scan_at).length}
+                    {targets.filter((t) => t.last_scan_at).length}
                   </span>
                 </div>
               </div>
@@ -436,7 +499,7 @@ export default function TargetsPage() {
           <div className="bg-slate-900 rounded-xl border border-slate-800 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between sticky top-0 bg-slate-900 z-10">
               <h2 className="text-xl font-bold text-white">
-                {editingTarget ? 'Edit Target' : 'Add New Target'}
+                {editingTarget ? "Edit Target" : "Add New Target"}
               </h2>
               <button
                 onClick={() => {
@@ -449,8 +512,11 @@ export default function TargetsPage() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
-            <form onSubmit={editingTarget ? handleUpdateTarget : handleAddTarget} className="p-6 space-y-4">
+
+            <form
+              onSubmit={editingTarget ? handleUpdateTarget : handleAddTarget}
+              className="p-6 space-y-4"
+            >
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">
                   Target Name *
@@ -459,7 +525,7 @@ export default function TargetsPage() {
                   type="text"
                   required
                   value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="My Production API"
                 />
@@ -471,7 +537,7 @@ export default function TargetsPage() {
                 </label>
                 <textarea
                   value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Customer-facing chat assistant"
                   rows={2}
@@ -485,7 +551,9 @@ export default function TargetsPage() {
                   </label>
                   <select
                     value={formData.target_type}
-                    onChange={(e) => setFormData({...formData, target_type: e.target.value as TargetType})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, target_type: e.target.value as TargetType })
+                    }
                     className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
                     <option value="api_endpoint">API Endpoint</option>
@@ -501,7 +569,9 @@ export default function TargetsPage() {
                   </label>
                   <select
                     value={formData.environment}
-                    onChange={(e) => setFormData({...formData, environment: e.target.value as Environment})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, environment: e.target.value as Environment })
+                    }
                     className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
                     <option value="dev">Development</option>
@@ -513,13 +583,11 @@ export default function TargetsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  URL
-                </label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">URL</label>
                 <input
                   type="url"
                   value={formData.url}
-                  onChange={(e) => setFormData({...formData, url: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, url: e.target.value })}
                   className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="https://api.example.com"
                 />
@@ -532,7 +600,7 @@ export default function TargetsPage() {
                 <input
                   type="text"
                   value={formData.endpoint_path}
-                  onChange={(e) => setFormData({...formData, endpoint_path: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, endpoint_path: e.target.value })}
                   className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="/v1/chat/completions"
                 />
@@ -545,7 +613,9 @@ export default function TargetsPage() {
                   </label>
                   <select
                     value={formData.auth_method}
-                    onChange={(e) => setFormData({...formData, auth_method: e.target.value as AuthMethod})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, auth_method: e.target.value as AuthMethod })
+                    }
                     className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
                     <option value="api_key">API Key</option>
@@ -563,14 +633,16 @@ export default function TargetsPage() {
                   <input
                     type="text"
                     value={formData.auth_header_name}
-                    onChange={(e) => setFormData({...formData, auth_header_name: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, auth_header_name: e.target.value })
+                    }
                     className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                     placeholder="Authorization"
                   />
                 </div>
               </div>
 
-              {formData.auth_method !== 'none' && (
+              {formData.auth_method !== "none" && (
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-2">
                     Auth Token
@@ -578,7 +650,7 @@ export default function TargetsPage() {
                   <input
                     type="password"
                     value={formData.auth_token}
-                    onChange={(e) => setFormData({...formData, auth_token: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, auth_token: e.target.value })}
                     className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                     placeholder="sk-..."
                   />
@@ -593,7 +665,12 @@ export default function TargetsPage() {
                   <input
                     type="number"
                     value={formData.rate_limit_per_hour}
-                    onChange={(e) => setFormData({...formData, rate_limit_per_hour: parseInt(e.target.value)})}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        rate_limit_per_hour: parseInt(e.target.value || "0", 10),
+                      })
+                    }
                     className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                     min="1"
                   />
@@ -606,7 +683,12 @@ export default function TargetsPage() {
                   <input
                     type="number"
                     value={formData.timeout_seconds}
-                    onChange={(e) => setFormData({...formData, timeout_seconds: parseInt(e.target.value)})}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        timeout_seconds: parseInt(e.target.value || "0", 10),
+                      })
+                    }
                     className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                     min="1"
                   />
@@ -636,7 +718,7 @@ export default function TargetsPage() {
                       Saving...
                     </>
                   ) : (
-                    <>{editingTarget ? 'Update Target' : 'Add Target'}</>
+                    <>{editingTarget ? "Update Target" : "Add Target"}</>
                   )}
                 </button>
               </div>
@@ -658,11 +740,9 @@ export default function TargetsPage() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             <div className="p-6">
-              <p className="text-slate-400 mb-4">
-                Upload a CSV or JSON file to import multiple targets at once.
-              </p>
+              <p className="text-slate-400 mb-4">Upload a CSV or JSON file to import multiple targets at once.</p>
               <div className="border-2 border-dashed border-slate-700 rounded-lg p-8 text-center">
                 <Upload className="w-12 h-12 text-slate-600 mx-auto mb-4" />
                 <p className="text-slate-500 text-sm">Coming soon!</p>
