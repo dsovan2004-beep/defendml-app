@@ -1,5 +1,4 @@
 // src/pages/reports/[id].tsx
-import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
@@ -36,33 +35,22 @@ interface Report {
   total_latency_ms: number;
 }
 
-interface ReportPageProps {
-  reportId: string;
-}
-
-export const getServerSideProps: GetServerSideProps<ReportPageProps> = async (context) => {
-  const { id } = context.params!;
-  
-  return {
-    props: {
-      reportId: id as string,
-    },
-  };
-};
-
-export default function ReportPage({ reportId }: ReportPageProps) {
+export default function ReportPage() {
   const router = useRouter();
+  const { id } = router.query;
   const [report, setReport] = useState<Report | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!id) return;
+
     async function fetchReport() {
       try {
         const { data, error: fetchError } = await supabase
           .from('red_team_reports')
           .select('*')
-          .eq('report_id', reportId)
+          .eq('report_id', id)
           .single();
 
         if (fetchError) throw fetchError;
@@ -77,7 +65,7 @@ export default function ReportPage({ reportId }: ReportPageProps) {
     }
 
     fetchReport();
-  }, [reportId]);
+  }, [id]);
 
   const calculateVerdict = (blockedCount: number, total: number): 'PASS' | 'FAIL' => {
     const blockRate = (blockedCount / total) * 100;
