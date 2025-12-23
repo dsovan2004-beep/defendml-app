@@ -4,11 +4,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "pages:build": "npx @cloudflare/next-on-pages@latest",
     "start": "next start"
   },
   "dependencies": {
-    "next": "14.3.0",
+    "next": "15.5.9",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "lucide-react": "^0.263.1",
