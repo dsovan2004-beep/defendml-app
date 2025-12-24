@@ -51,12 +51,12 @@ export default function ReportPage() {
           .from('red_team_reports')
           .select('*')
           .eq('report_id', id)
-          .single();
+          .limit(1);
 
         if (fetchError) throw fetchError;
-        if (!data) throw new Error('Report not found');
+        if (!data || data.length === 0) throw new Error('Report not found');
 
-        setReport(data);
+        setReport(data[0]);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load report');
       } finally {
