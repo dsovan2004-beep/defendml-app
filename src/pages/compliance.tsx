@@ -1,7 +1,8 @@
-// src/pages/compliance.tsx
+// src/pages/compliance.tsx - PART 1 OF 2
 "use client";
 
 import React from "react";
+import { useRouter } from "next/router";
 import {
   FileText,
   Download,
@@ -70,7 +71,6 @@ const demoEvidence: EvidenceRow[] = [
 ];
 
 function pillForDecision(d: Decision) {
-  // Inverted: ALLOW is bad (red), BLOCK is good (green)
   if (d === "BLOCK") return "bg-green-500/10 text-green-300 border border-green-500/30";
   if (d === "FLAG") return "bg-yellow-500/10 text-yellow-300 border border-yellow-500/30";
   return "bg-red-500/10 text-red-300 border border-red-500/30";
@@ -89,6 +89,7 @@ function pct(n: number, d: number) {
 }
 
 function CompliancePageContent() {
+  const router = useRouter();
   const total = demoEvidence.length;
 
   const decisionCounts: Record<Decision, number> = { BLOCK: 0, FLAG: 0, ALLOW: 0 };
@@ -101,10 +102,42 @@ function CompliancePageContent() {
     categoryCounts[r.category] = (categoryCounts[r.category] ?? 0) + 1;
   }
 
-  // Calculate attack success rate (ALLOW = success for attacker)
   const attackSuccessRate = pct(decisionCounts.ALLOW, total);
 
-  // Recommendations for TARGET (not DefendML)
+  // Export functions
+  const exportToJSON = () => {
+    const dataStr = JSON.stringify(demoEvidence, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    const exportFileDefaultName = `defendml-attack-evidence-${new Date().toISOString().split('T')[0]}.json`;
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  };
+
+  const exportToCSV = () => {
+    const headers = ['Report ID', 'Target System', 'Attack Scan', 'Result', 'Attack Type', 'Severity', 'Failed Layer', 'Timestamp'];
+    const csvContent = [
+      headers.join(','),
+      ...demoEvidence.map(row => 
+        [row.reportId, row.target, row.scan, row.decision, row.category, row.severity, row.layer, row.timestamp]
+          .map(field => `"${field}"`)
+          .join(',')
+      )
+    ].join('\n');
+    
+    const dataUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent);
+    const exportFileDefaultName = `defendml-attack-evidence-${new Date().toISOString().split('T')[0]}.csv`;
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  };
+
+  const exportToPDF = () => {
+    alert('PDF export coming soon! Use CSV or JSON for now.');
+  };
+
   const targetRecs = [
     {
       icon: <Shield className="w-5 h-5 text-red-300" />,
@@ -149,7 +182,7 @@ function CompliancePageContent() {
       <Navigation />
 
       <main className="flex-1">
-        {/* Header - FIXED: 255 prompts */}
+        {/* Header - WIRED BUTTONS */}
         <div className="bg-slate-900 border-b border-slate-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-start justify-between gap-6">
@@ -171,17 +204,15 @@ function CompliancePageContent() {
               <div className="flex gap-2">
                 <button
                   type="button"
-                  disabled
-                  title="Coming soon"
-                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium border border-slate-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                  onClick={() => router.push('/tester')}
+                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium border border-slate-700 transition-colors"
                 >
                   Generate Report
                 </button>
                 <button
                   type="button"
-                  disabled
-                  title="Coming soon"
-                  className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium border border-purple-500/50 disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+                  onClick={exportToPDF}
+                  className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium border border-purple-500/50 transition-colors flex items-center gap-2"
                 >
                   <Download className="w-4 h-4" />
                   Export Evidence
@@ -191,7 +222,7 @@ function CompliancePageContent() {
           </div>
         </div>
 
-        {/* Summary cards - FIXED: 255 prompts */}
+        {/* Summary cards */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-slate-900 rounded-xl p-5 border border-slate-800">
@@ -288,7 +319,7 @@ function CompliancePageContent() {
               ))}
             </div>
 
-            {/* Attack Coverage - UPDATED with 255-prompt breakdown */}
+            {/* Attack Coverage */}
             <div className="bg-slate-900 rounded-xl p-6 border border-slate-800">
               <div className="flex items-center gap-2 mb-1">
                 <Target className="w-5 h-5 text-purple-300" />
@@ -331,7 +362,11 @@ function CompliancePageContent() {
             </div>
           </div>
 
-          {/* Evidence table - NO CHANGES */}
+// PART 1 ENDS HERE - Continue to Part 2 for Evidence Table and remaining sections
+          // src/pages/compliance.tsx - PART 2 OF 2
+// Continue from Part 1...
+
+          {/* Evidence table - WIRED BUTTONS */}
           <div className="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden mb-8">
             <div className="p-6 border-b border-slate-800 flex items-start justify-between gap-6">
               <div>
@@ -343,25 +378,22 @@ function CompliancePageContent() {
               <div className="flex gap-2">
                 <button
                   type="button"
-                  disabled
-                  title="Coming soon"
-                  className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium border border-slate-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                  onClick={exportToPDF}
+                  className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium border border-slate-700 transition-colors"
                 >
                   Export PDF
                 </button>
                 <button
                   type="button"
-                  disabled
-                  title="Coming soon"
-                  className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium border border-slate-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                  onClick={exportToCSV}
+                  className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium border border-slate-700 transition-colors"
                 >
                   Export CSV
                 </button>
                 <button
                   type="button"
-                  disabled
-                  title="Coming soon"
-                  className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium border border-slate-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                  onClick={exportToJSON}
+                  className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium border border-slate-700 transition-colors"
                 >
                   Export JSON
                 </button>
@@ -417,9 +449,8 @@ function CompliancePageContent() {
                       <td className="px-6 py-4 text-right">
                         <button
                           type="button"
-                          disabled
-                          title="Coming soon"
-                          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium border border-slate-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                          onClick={() => router.push(`/reports/${row.reportId}`)}
+                          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium border border-slate-700 transition-colors"
                         >
                           <Download className="w-4 h-4" />
                           Export
@@ -440,7 +471,7 @@ function CompliancePageContent() {
             </div>
           </div>
 
-          {/* Target Remediation Recommendations - NO CHANGES */}
+          {/* Target Remediation Recommendations */}
           <div className="bg-slate-900 rounded-xl border border-slate-800 mb-8 overflow-hidden">
             <div className="p-6 border-b border-slate-800">
               <h2 className="text-lg font-semibold text-white">Target Remediation Recommendations</h2>
@@ -482,7 +513,7 @@ function CompliancePageContent() {
             </div>
           </div>
 
-          {/* Attack Coverage Standards - FIXED: 255 prompts, 100% ASL-3 */}
+          {/* Attack Coverage Standards */}
           <div className="bg-slate-900 rounded-xl border border-slate-800 mb-8">
             <div className="p-6 border-b border-slate-800">
               <h2 className="text-lg font-semibold text-white">Attack Coverage Standards</h2>
@@ -601,3 +632,5 @@ export default function CompliancePage() {
     </RequireAuth>
   );
 }
+
+// PART 2 COMPLETE - Combine Part 1 + Part 2 to create full compliance.tsx file
