@@ -123,7 +123,7 @@ export default function ScansPage() {
             </div>
           </div>
           <p className="text-slate-500 text-sm mt-2">
-            232 Attack Scenarios Available
+            255 Attack Scenarios Available
           </p>
         </div>
 
@@ -133,16 +133,16 @@ export default function ScansPage() {
               <BeakerIcon className="w-5 h-5 text-purple-400" />
               <span className="text-sm font-semibold text-slate-400">Total Scenarios</span>
             </div>
-            <div className="text-3xl font-bold text-white">232</div>
+            <div className="text-3xl font-bold text-white">255</div>
             <div className="text-xs text-slate-500 mt-1">Attack patterns</div>
           </div>
 
           <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
             <div className="flex items-center gap-3 mb-2">
               <ExclamationTriangleIcon className="w-5 h-5 text-red-400" />
-              <span className="text-sm font-semibold text-slate-400">High Severity</span>
+              <span className="text-sm font-semibold text-slate-400">Critical Severity</span>
             </div>
-            <div className="text-3xl font-bold text-white">88</div>
+            <div className="text-3xl font-bold text-white">130</div>
             <div className="text-xs text-slate-500 mt-1">Critical threats</div>
           </div>
 
@@ -177,7 +177,7 @@ export default function ScansPage() {
                   <textarea
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Enter a red team prompt to scan (demo: 232 attack scenarios)..."
+                    placeholder="Enter a red team prompt to scan (demo: 255 attack scenarios)..."
                     disabled={isScanning}
                     rows={6}
                     className="w-full px-4 py-3 rounded-lg border border-slate-700 bg-slate-950/60 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed resize-none"
@@ -339,7 +339,7 @@ export default function ScansPage() {
                 <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
                   <div className="font-medium text-white mb-1">1. Pattern Matching</div>
                   <div className="text-sm text-slate-400">
-                    Compares prompt against 232 known attack scenarios
+                    Compares prompt against 255 known attack scenarios
                   </div>
                 </div>
                 <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
@@ -443,7 +443,9 @@ export default function ScansPage() {
               <span>Red team testing powered by AI</span>
             </div>
             <div className="flex items-center gap-4 text-sm text-slate-400">
-              <span>232 scenarios</span>
+              <span>255 scenarios</span>
+              <span className="text-slate-700">•</span>
+              <span>100% EU AI Act</span>
               <span className="text-slate-700">•</span>
               <span>99.6% detection</span>
               <span className="text-slate-700">•</span>
