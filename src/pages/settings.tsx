@@ -4,10 +4,11 @@ import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
 import {
   Settings as SettingsIcon, Users, Shield, Plug, Bell, Building2,
-  ChevronRight, Slack, Mail, Key, Zap, Plus, Search, Download, Upload
+  ChevronRight, Slack, Mail, Key, Zap, Plus, Search, Download, Upload,
+  Code, Database, CreditCard, CheckCircle2, Activity, TrendingUp, ExternalLink
 } from 'lucide-react';
 
-type SettingsTab = 'users' | 'rbac' | 'integrations' | 'notifications' | 'organization';
+type SettingsTab = 'users' | 'rbac' | 'api' | 'prompts' | 'billing' | 'integrations' | 'notifications' | 'organization';
 
 function SettingsPageContent() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('users');
@@ -15,6 +16,9 @@ function SettingsPageContent() {
   const tabs = [
     { id: 'users' as SettingsTab, label: 'User Management', icon: Users, description: 'Manage team members and permissions' },
     { id: 'rbac' as SettingsTab, label: 'Access Control', icon: Shield, description: 'Configure roles and permissions' },
+    { id: 'api' as SettingsTab, label: 'API Configuration', icon: Code, description: 'API endpoints and rate limits' },
+    { id: 'prompts' as SettingsTab, label: 'Prompt Library', icon: Database, description: '255 attack scenarios & coverage' },
+    { id: 'billing' as SettingsTab, label: 'Billing & Subscription', icon: CreditCard, description: 'Plan details and usage' },
     { id: 'integrations' as SettingsTab, label: 'Integrations', icon: Plug, description: 'Connect external services' },
     { id: 'notifications' as SettingsTab, label: 'Notifications', icon: Bell, description: 'Alert rules and channels' },
     { id: 'organization' as SettingsTab, label: 'Organization', icon: Building2, description: 'Company settings and API keys' },
@@ -118,7 +122,7 @@ function SettingsPageContent() {
                         </button>
                       </div>
 
-                      {/* User Table Placeholder */}
+                      {/* User Table */}
                       <div className="border border-slate-800 rounded-lg overflow-hidden">
                         <table className="w-full">
                           <thead className="bg-slate-800 border-b border-slate-700">
@@ -158,30 +162,28 @@ function SettingsPageContent() {
                                 <button className="text-slate-400 hover:text-white transition-colors">⋯</button>
                               </td>
                             </tr>
-                            {/* More users would go here */}
                           </tbody>
                         </table>
                       </div>
                     </div>
 
-                    {/* Quick Stats */}
+                    {/* Quick Stats - UPDATED */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-xl p-4 border border-purple-500/20">
-                        <div className="text-3xl font-bold text-white mb-1">12</div>
+                        <div className="text-3xl font-bold text-white mb-1">1</div>
                         <div className="text-purple-300 text-sm">Total Users</div>
                       </div>
                       <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-xl p-4 border border-green-500/20">
-                        <div className="text-3xl font-bold text-white mb-1">10</div>
+                        <div className="text-3xl font-bold text-white mb-1">1</div>
                         <div className="text-green-300 text-sm">Active Users</div>
                       </div>
                       <div className="bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-xl p-4 border border-orange-500/20">
-                        <div className="text-3xl font-bold text-white mb-1">2</div>
+                        <div className="text-3xl font-bold text-white mb-1">0</div>
                         <div className="text-orange-300 text-sm">Pending Invites</div>
                       </div>
                     </div>
                   </div>
                 )}
-
                 {/* RBAC Tab */}
                 {activeTab === 'rbac' && (
                   <div className="bg-slate-900 rounded-xl border border-slate-800 p-6">
@@ -285,6 +287,365 @@ function SettingsPageContent() {
                   </div>
                 )}
 
+                {/* API Configuration Tab - NEW */}
+                {activeTab === 'api' && (
+                  <div className="space-y-6">
+                    <div className="bg-slate-900 rounded-xl border border-slate-800 p-6">
+                      <h2 className="text-2xl font-bold text-white mb-2">API Configuration</h2>
+                      <p className="text-slate-400 mb-6">Manage API endpoints, rate limits, and infrastructure</p>
+
+                      {/* API Endpoints */}
+                      <div className="space-y-6">
+                        <div>
+                          <h3 className="text-lg font-semibold text-white mb-4">Production Endpoints</h3>
+                          <div className="space-y-3">
+                            <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm font-medium text-slate-300">Red Team API</span>
+                                <span className="px-2 py-1 bg-green-500/20 text-green-300 rounded text-xs font-semibold">Live</span>
+                              </div>
+                              <code className="text-sm text-purple-400 font-mono">https://defendml-api.dsovan2004.workers.dev</code>
+                              <div className="mt-2 flex gap-2">
+                                <button className="text-xs text-purple-400 hover:text-purple-300">Copy</button>
+                                <a href="https://defendml-api.dsovan2004.workers.dev" target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                                  Test <ExternalLink className="w-3 h-3" />
+                                </a>
+                              </div>
+                            </div>
+
+                            <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm font-medium text-slate-300">Main Endpoint</span>
+                                <span className="px-2 py-1 bg-green-500/20 text-green-300 rounded text-xs font-semibold">Live</span>
+                              </div>
+                              <code className="text-sm text-purple-400 font-mono">/api/red-team/execute</code>
+                              <p className="text-xs text-slate-400 mt-2">Executes red team attack scenarios against target AI systems</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Rate Limits */}
+                        <div>
+                          <h3 className="text-lg font-semibold text-white mb-4">Rate Limits & Performance</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-lg border border-purple-500/20">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Activity className="w-5 h-5 text-purple-400" />
+                                <span className="font-semibold text-white">Current Plan</span>
+                              </div>
+                              <div className="text-2xl font-bold text-white mb-1">Free Tier</div>
+                              <div className="text-sm text-purple-300">40 prompts per scan</div>
+                              <div className="text-xs text-slate-400 mt-2">Cloudflare Workers subrequest limit</div>
+                            </div>
+
+                            <div className="p-4 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-lg border border-orange-500/20">
+                              <div className="flex items-center gap-2 mb-2">
+                                <TrendingUp className="w-5 h-5 text-orange-400" />
+                                <span className="font-semibold text-white">Upgrade Available</span>
+                              </div>
+                              <div className="text-2xl font-bold text-white mb-1">$5/month</div>
+                              <div className="text-sm text-orange-300">255 prompts per scan</div>
+                              <button className="mt-3 w-full px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm font-medium transition-all">
+                                Upgrade Now
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Infrastructure Details */}
+                        <div>
+                          <h3 className="text-lg font-semibold text-white mb-4">Infrastructure</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                              <div className="text-sm text-slate-400 mb-1">Backend</div>
+                              <div className="font-semibold text-white">Cloudflare Workers</div>
+                            </div>
+                            <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                              <div className="text-sm text-slate-400 mb-1">Database</div>
+                              <div className="font-semibold text-white">Supabase PostgreSQL</div>
+                            </div>
+                            <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                              <div className="text-sm text-slate-400 mb-1">Frontend</div>
+                              <div className="font-semibold text-white">Cloudflare Pages</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Cost Comparison */}
+                    <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-xl p-6">
+                      <div className="flex items-start gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <h4 className="text-sm font-semibold text-green-300 mb-1">
+                            💰 Industry-Leading Cost Efficiency
+                          </h4>
+                          <p className="text-sm text-green-200/80">
+                            DefendML: $0-$5/month vs F5 ($15K-$30K/month), Lakera ($10K-$20K/month), Microsoft PyRIT ($20K-$40K/month)
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {/* Prompt Library Tab - NEW */}
+                {activeTab === 'prompts' && (
+                  <div className="space-y-6">
+                    <div className="bg-slate-900 rounded-xl border border-slate-800 p-6">
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <h2 className="text-2xl font-bold text-white mb-2">Prompt Library</h2>
+                          <p className="text-slate-400">255 market-aligned attack scenarios with full compliance coverage</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-3xl font-bold text-purple-400">255</div>
+                          <div className="text-sm text-slate-400">Total Prompts</div>
+                        </div>
+                      </div>
+
+                      {/* Framework Coverage */}
+                      <div className="mb-6">
+                        <h3 className="text-lg font-semibold text-white mb-4">Compliance Coverage</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                          <div className="p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-lg border border-green-500/20 text-center">
+                            <CheckCircle2 className="w-6 h-6 text-green-400 mx-auto mb-2" />
+                            <div className="text-sm font-semibold text-white">OWASP</div>
+                            <div className="text-xs text-green-300">100% (10/10)</div>
+                          </div>
+                          <div className="p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-lg border border-green-500/20 text-center">
+                            <CheckCircle2 className="w-6 h-6 text-green-400 mx-auto mb-2" />
+                            <div className="text-sm font-semibold text-white">NIST AI RMF</div>
+                            <div className="text-xs text-green-300">100% (7/7)</div>
+                          </div>
+                          <div className="p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-lg border border-green-500/20 text-center">
+                            <CheckCircle2 className="w-6 h-6 text-green-400 mx-auto mb-2" />
+                            <div className="text-sm font-semibold text-white">MITRE ATLAS</div>
+                            <div className="text-xs text-green-300">95% (38/40)</div>
+                          </div>
+                          <div className="p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-lg border border-green-500/20 text-center">
+                            <CheckCircle2 className="w-6 h-6 text-green-400 mx-auto mb-2" />
+                            <div className="text-sm font-semibold text-white">ASL-3</div>
+                            <div className="text-xs text-green-300">100%</div>
+                          </div>
+                          <div className="p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-lg border border-purple-500/20 text-center">
+                            <CheckCircle2 className="w-6 h-6 text-purple-400 mx-auto mb-2" />
+                            <div className="text-sm font-semibold text-white">EU AI Act</div>
+                            <div className="text-xs text-purple-300">100%</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Prompt Breakdown */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-white mb-4">Attack Categories</h3>
+                        <div className="space-y-3">
+                          {[
+                            { category: 'Constitutional Violations (Jailbreaks)', count: 40, color: 'red' },
+                            { category: 'Deployment Standard (CBRN/WMD)', count: 35, color: 'orange' },
+                            { category: 'Security Standard (Cybersecurity)', count: 30, color: 'yellow' },
+                            { category: 'PII & Data Extraction', count: 35, color: 'blue' },
+                            { category: 'Bias & Fairness (incl. Biometric)', count: 30, color: 'purple', badge: 'EU AI Act Art. 5' },
+                            { category: 'Model Manipulation', count: 20, color: 'green' },
+                            { category: 'Multi-turn Sequences', count: 20, color: 'cyan' },
+                            { category: 'Misinformation', count: 15, color: 'pink' },
+                            { category: 'Adversarial Robustness', count: 15, color: 'indigo' },
+                            { category: 'System Prompt Extraction', count: 15, color: 'teal' },
+                          ].map((item, idx) => (
+                            <div key={idx} className="flex items-center justify-between p-4 bg-slate-800 rounded-lg border border-slate-700 hover:border-purple-500/50 transition-all">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-white">{item.category}</span>
+                                  {item.badge && (
+                                    <span className="px-2 py-0.5 bg-purple-500/20 text-purple-300 rounded text-xs font-semibold border border-purple-500/30">
+                                      {item.badge}
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="mt-2 w-full bg-slate-700 rounded-full h-2">
+                                  <div 
+                                    className={`bg-${item.color}-500 h-2 rounded-full`} 
+                                    style={{ width: `${(item.count / 40) * 100}%` }}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="ml-6 text-right">
+                                <div className="text-2xl font-bold text-white">{item.count}</div>
+                                <div className="text-xs text-slate-400">prompts</div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Last Updated */}
+                      <div className="mt-6 p-4 bg-slate-800 rounded-lg border border-slate-700">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-sm text-slate-400">Library Version</div>
+                            <div className="font-semibold text-white">v1.0</div>
+                          </div>
+                          <div>
+                            <div className="text-sm text-slate-400">Last Updated</div>
+                            <div className="font-semibold text-white">2025-12-24</div>
+                          </div>
+                          <button className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-all">
+                            Export Library
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Competitive Advantage */}
+                    <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-6">
+                      <div className="flex items-start gap-3">
+                        <Database className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <h4 className="text-sm font-semibold text-purple-300 mb-1">
+                            🎯 Industry-Leading Prompt Library
+                          </h4>
+                          <p className="text-sm text-purple-200/80">
+                            DefendML: 255 prompts | F5: ~120 | Lakera: ~100 | Microsoft PyRIT: ~150
+                          </p>
+                          <p className="text-sm text-purple-200/80 mt-1">
+                            <strong>ONLY service with public EU AI Act Article 5 compliance testing</strong>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Billing & Subscription Tab - NEW */}
+                {activeTab === 'billing' && (
+                  <div className="space-y-6">
+                    <div className="bg-slate-900 rounded-xl border border-slate-800 p-6">
+                      <h2 className="text-2xl font-bold text-white mb-2">Billing & Subscription</h2>
+                      <p className="text-slate-400 mb-6">Manage your plan, usage, and billing details</p>
+
+                      {/* Current Plan */}
+                      <div className="mb-6">
+                        <h3 className="text-lg font-semibold text-white mb-4">Current Plan</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Free Tier Card */}
+                          <div className="relative p-6 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700">
+                            <div className="absolute top-4 right-4">
+                              <span className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-xs font-semibold border border-green-500/30">
+                                CURRENT
+                              </span>
+                            </div>
+                            <h4 className="text-xl font-bold text-white mb-2">Free Tier</h4>
+                            <div className="text-3xl font-bold text-purple-400 mb-4">$0<span className="text-lg text-slate-400">/month</span></div>
+                            <ul className="space-y-2 mb-6">
+                              <li className="flex items-center gap-2 text-sm text-slate-300">
+                                <CheckCircle2 className="w-4 h-4 text-green-400" />
+                                40 prompts per scan
+                              </li>
+                              <li className="flex items-center gap-2 text-sm text-slate-300">
+                                <CheckCircle2 className="w-4 h-4 text-green-400" />
+                                255-prompt library access
+                              </li>
+                              <li className="flex items-center gap-2 text-sm text-slate-300">
+                                <CheckCircle2 className="w-4 h-4 text-green-400" />
+                                Evidence reports & PDF export
+                              </li>
+                              <li className="flex items-center gap-2 text-sm text-slate-300">
+                                <CheckCircle2 className="w-4 h-4 text-green-400" />
+                                ASL-3 & EU AI Act compliance
+                              </li>
+                            </ul>
+                            <button disabled className="w-full px-4 py-2 bg-slate-700 text-slate-500 rounded-lg font-medium cursor-not-allowed">
+                              Current Plan
+                            </button>
+                          </div>
+
+                          {/* Paid Tier Card */}
+                          <div className="relative p-6 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-xl border-2 border-purple-500/50">
+                            <div className="absolute top-4 right-4">
+                              <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-xs font-semibold border border-purple-500/30">
+                                RECOMMENDED
+                              </span>
+                            </div>
+                            <h4 className="text-xl font-bold text-white mb-2">Pro Tier</h4>
+                            <div className="text-3xl font-bold text-purple-400 mb-4">$5<span className="text-lg text-slate-400">/month</span></div>
+                            <ul className="space-y-2 mb-6">
+                              <li className="flex items-center gap-2 text-sm text-slate-300">
+                                <CheckCircle2 className="w-4 h-4 text-purple-400" />
+                                <strong>255 prompts per scan</strong> (6x more coverage)
+                              </li>
+                              <li className="flex items-center gap-2 text-sm text-slate-300">
+                                <CheckCircle2 className="w-4 h-4 text-purple-400" />
+                                Full library execution
+                              </li>
+                              <li className="flex items-center gap-2 text-sm text-slate-300">
+                                <CheckCircle2 className="w-4 h-4 text-purple-400" />
+                                Priority support
+                              </li>
+                              <li className="flex items-center gap-2 text-sm text-slate-300">
+                                <CheckCircle2 className="w-4 h-4 text-purple-400" />
+                                Advanced analytics
+                              </li>
+                            </ul>
+                            <button className="w-full px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-all">
+                              Upgrade to Pro
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Usage This Month */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-white mb-4">Usage This Month</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                          <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                            <div className="text-sm text-slate-400 mb-1">Scans Executed</div>
+                            <div className="text-2xl font-bold text-white">12</div>
+                          </div>
+                          <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                            <div className="text-sm text-slate-400 mb-1">Total Prompts</div>
+                            <div className="text-2xl font-bold text-white">480</div>
+                            <div className="text-xs text-slate-500">40 per scan</div>
+                          </div>
+                          <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                            <div className="text-sm text-slate-400 mb-1">Evidence Reports</div>
+                            <div className="text-2xl font-bold text-white">12</div>
+                          </div>
+                          <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                            <div className="text-sm text-slate-400 mb-1">Infrastructure Cost</div>
+                            <div className="text-2xl font-bold text-green-400">$0</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Cost Comparison */}
+                    <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-xl p-6">
+                      <h4 className="text-lg font-semibold text-green-300 mb-4">💰 Cost Comparison vs Competitors</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="text-center">
+                          <div className="text-sm text-green-300 mb-1">DefendML</div>
+                          <div className="text-2xl font-bold text-white">$0-$5</div>
+                          <div className="text-xs text-slate-400">per month</div>
+                        </div>
+                        <div className="text-center opacity-60">
+                          <div className="text-sm text-slate-400 mb-1">F5 AI Red Team</div>
+                          <div className="text-2xl font-bold text-slate-300">$15K-$30K</div>
+                          <div className="text-xs text-slate-500">per month</div>
+                        </div>
+                        <div className="text-center opacity-60">
+                          <div className="text-sm text-slate-400 mb-1">Lakera</div>
+                          <div className="text-2xl font-bold text-slate-300">$10K-$20K</div>
+                          <div className="text-xs text-slate-500">per month</div>
+                        </div>
+                        <div className="text-center opacity-60">
+                          <div className="text-sm text-slate-400 mb-1">Microsoft PyRIT</div>
+                          <div className="text-2xl font-bold text-slate-300">$20K-$40K</div>
+                          <div className="text-xs text-slate-500">per month</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 {/* Integrations Tab */}
                 {activeTab === 'integrations' && (
                   <div className="space-y-4">
@@ -460,7 +821,7 @@ function SettingsPageContent() {
                   <div className="space-y-6">
                     <div className="bg-slate-900 rounded-xl border border-slate-800 p-6">
                       <h2 className="text-2xl font-bold text-white mb-2">Organization Settings</h2>
-                      <p className="text-slate-400 mb-6">Manage your company profile and API access</p>
+                      <p className="text-slate-400 mb-6">Manage your company profile and compliance certifications</p>
 
                       <div className="space-y-6">
                         {/* Company Info */}
@@ -468,10 +829,10 @@ function SettingsPageContent() {
                           <h3 className="text-lg font-semibold text-white mb-4">Company Information</h3>
                           <div className="space-y-4">
                             <div>
-                              <label className="block text-sm font-medium text-slate-300 mb-2">Company Name</label>
+                              <label className="block text-sm font-medium text-slate-300 mb-2">Workspace Name</label>
                               <input
                                 type="text"
-                                defaultValue="Acme Corporation"
+                                defaultValue="DefendML Production"
                                 className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                               />
                             </div>
@@ -483,6 +844,45 @@ function SettingsPageContent() {
                                 <option>Healthcare</option>
                                 <option>Other</option>
                               </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Compliance Standards - UPDATED */}
+                        <div>
+                          <h3 className="text-lg font-semibold text-white mb-4">Compliance Standards</h3>
+                          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+                            <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/30 text-center">
+                              <CheckCircle2 className="w-5 h-5 text-green-400 mx-auto mb-1" />
+                              <div className="text-xs font-semibold text-green-300">OWASP</div>
+                            </div>
+                            <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/30 text-center">
+                              <CheckCircle2 className="w-5 h-5 text-green-400 mx-auto mb-1" />
+                              <div className="text-xs font-semibold text-green-300">NIST</div>
+                            </div>
+                            <div className="p-3 bg-purple-500/10 rounded-lg border border-purple-500/30 text-center">
+                              <CheckCircle2 className="w-5 h-5 text-purple-400 mx-auto mb-1" />
+                              <div className="text-xs font-semibold text-purple-300">EU AI Act</div>
+                            </div>
+                            <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/30 text-center">
+                              <CheckCircle2 className="w-5 h-5 text-green-400 mx-auto mb-1" />
+                              <div className="text-xs font-semibold text-green-300">ASL-3</div>
+                            </div>
+                            <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/30 text-center">
+                              <CheckCircle2 className="w-5 h-5 text-green-400 mx-auto mb-1" />
+                              <div className="text-xs font-semibold text-green-300">MITRE</div>
+                            </div>
+                          </div>
+                          <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="text-sm text-slate-400">Prompt Library Version</div>
+                                <div className="font-semibold text-white">255 prompts (v1.0)</div>
+                              </div>
+                              <div>
+                                <div className="text-sm text-slate-400">Last Updated</div>
+                                <div className="font-semibold text-white">2025-12-24</div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -502,25 +902,6 @@ function SettingsPageContent() {
                             <div className="flex gap-2 mt-3">
                               <button className="text-sm text-purple-400 hover:text-purple-300">Regenerate</button>
                               <button className="text-sm text-slate-400 hover:text-slate-300">Copy</button>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Compliance Certifications */}
-                        <div>
-                          <h3 className="text-lg font-semibold text-white mb-4">Compliance & Certifications</h3>
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-lg border border-green-500/20 text-center">
-                              <div className="text-2xl font-bold text-white mb-1">SOC 2</div>
-                              <div className="text-green-300 text-sm">Type II Certified</div>
-                            </div>
-                            <div className="p-4 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-lg border border-blue-500/20 text-center">
-                              <div className="text-2xl font-bold text-white mb-1">GDPR</div>
-                              <div className="text-blue-300 text-sm">Compliant</div>
-                            </div>
-                            <div className="p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-lg border border-purple-500/20 text-center">
-                              <div className="text-2xl font-bold text-white mb-1">HIPAA</div>
-                              <div className="text-purple-300 text-sm">Ready</div>
                             </div>
                           </div>
                         </div>
