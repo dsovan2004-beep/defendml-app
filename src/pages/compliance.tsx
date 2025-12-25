@@ -149,7 +149,7 @@ function CompliancePageContent() {
       <Navigation />
 
       <main className="flex-1">
-        {/* Header */}
+        {/* Header - FIXED: 255 prompts */}
         <div className="bg-slate-900 border-b border-slate-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-start justify-between gap-6">
@@ -163,7 +163,7 @@ function CompliancePageContent() {
                 </p>
                 <div className="mt-2 text-xs text-slate-500">
                   Attack Library:{" "}
-                  <span className="text-slate-300 font-semibold">250 scenarios</span> • Currently Testing:{" "}
+                  <span className="text-slate-300 font-semibold">255 scenarios</span> • Currently Testing:{" "}
                   <span className="text-slate-300 font-semibold">40 prompts per scan</span>
                 </div>
               </div>
@@ -191,7 +191,7 @@ function CompliancePageContent() {
           </div>
         </div>
 
-        {/* Summary cards */}
+        {/* Summary cards - FIXED: 255 prompts */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-slate-900 rounded-xl p-5 border border-slate-800">
@@ -202,7 +202,7 @@ function CompliancePageContent() {
 
             <div className="bg-slate-900 rounded-xl p-5 border border-slate-800">
               <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Attack Library Size</div>
-              <div className="text-3xl font-bold text-purple-400">250</div>
+              <div className="text-3xl font-bold text-purple-400">255</div>
               <div className="text-xs text-slate-500 mt-1">Total attack scenarios</div>
             </div>
 
@@ -288,7 +288,7 @@ function CompliancePageContent() {
               ))}
             </div>
 
-            {/* Attack Coverage */}
+            {/* Attack Coverage - UPDATED with 255-prompt breakdown */}
             <div className="bg-slate-900 rounded-xl p-6 border border-slate-800">
               <div className="flex items-center gap-2 mb-1">
                 <Target className="w-5 h-5 text-purple-300" />
@@ -300,12 +300,12 @@ function CompliancePageContent() {
 
               <div className="space-y-3 text-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">CBRN/WMD</span>
-                  <span className="text-purple-400">35 prompts</span>
-                </div>
-                <div className="flex items-center justify-between">
                   <span className="text-slate-300">Jailbreaks</span>
                   <span className="text-purple-400">40 prompts</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">CBRN/WMD</span>
+                  <span className="text-purple-400">35 prompts</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">PII Extraction</span>
@@ -316,18 +316,22 @@ function CompliancePageContent() {
                   <span className="text-purple-400">30 prompts</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Model Manipulation</span>
-                  <span className="text-purple-400">20 prompts</span>
+                  <span className="text-slate-300">Bias & Fairness</span>
+                  <span className="text-purple-400">30 prompts</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">+5 more categories</span>
+                  <span className="text-purple-400">85 prompts</span>
                 </div>
               </div>
 
               <div className="mt-4 text-xs text-slate-500">
-                Full 250-prompt library available for comprehensive testing.
+                Full 255-prompt library available for comprehensive testing.
               </div>
             </div>
           </div>
 
-          {/* Evidence table */}
+          {/* Evidence table - NO CHANGES */}
           <div className="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden mb-8">
             <div className="p-6 border-b border-slate-800 flex items-start justify-between gap-6">
               <div>
@@ -436,7 +440,7 @@ function CompliancePageContent() {
             </div>
           </div>
 
-          {/* Target Remediation Recommendations */}
+          {/* Target Remediation Recommendations - NO CHANGES */}
           <div className="bg-slate-900 rounded-xl border border-slate-800 mb-8 overflow-hidden">
             <div className="p-6 border-b border-slate-800">
               <h2 className="text-lg font-semibold text-white">Target Remediation Recommendations</h2>
@@ -478,11 +482,11 @@ function CompliancePageContent() {
             </div>
           </div>
 
-          {/* NIST AI RMF Coverage */}
+          {/* Attack Coverage Standards - FIXED: 255 prompts, 100% ASL-3 */}
           <div className="bg-slate-900 rounded-xl border border-slate-800 mb-8">
             <div className="p-6 border-b border-slate-800">
               <h2 className="text-lg font-semibold text-white">Attack Coverage Standards</h2>
-              <p className="text-sm text-slate-400 mt-1">DefendML's 250-prompt library mapped to security frameworks.</p>
+              <p className="text-sm text-slate-400 mt-1">DefendML's 255-prompt library mapped to security frameworks.</p>
             </div>
 
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -502,7 +506,7 @@ function CompliancePageContent() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-400">Prompts</span>
-                    <span className="text-slate-300">250</span>
+                    <span className="text-slate-300">255</span>
                   </div>
                 </div>
               </div>
@@ -552,7 +556,7 @@ function CompliancePageContent() {
               <div className="bg-slate-950/40 rounded-lg p-5 border border-purple-500/30">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-base font-semibold text-white">ASL-3</h3>
-                  <Shield className="w-5 h-5 text-purple-400" />
+                  <CheckCircle2 className="w-5 h-5 text-green-400" />
                 </div>
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center justify-between">
@@ -561,7 +565,7 @@ function CompliancePageContent() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-400">Compliance</span>
-                    <span className="text-slate-300">96.5%</span>
+                    <span className="text-green-400 font-medium">100%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-400">CBRN Tests</span>
