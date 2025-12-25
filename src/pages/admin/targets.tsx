@@ -2,6 +2,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Navigation from "../../components/Navigation";
+import Footer from "../../components/Footer";
 import { createClient } from "@supabase/supabase-js";
 import {
   Plus,
@@ -217,7 +218,7 @@ export default function TargetsPage() {
   };
 
   const handleDeleteTarget = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this target?")) return;
+    if (!confirm("Are you sure you want to delete this attack target?")) return;
 
     try {
       const { error } = await supabase.from("targets").delete().eq("id", id);
@@ -235,7 +236,7 @@ export default function TargetsPage() {
   };
 
   const handleRunScan = async (targetId: string) => {
-    alert("Scan functionality coming soon! Target ID: " + targetId);
+    alert("Red team attack execution coming soon! Target ID: " + targetId);
     // TODO: Implement scan execution
   };
 
@@ -287,7 +288,7 @@ export default function TargetsPage() {
 
   const getStatusBadge = (status?: ScanStatus) => {
     if (!status) {
-      return <span className="text-xs text-slate-500">Never scanned</span>;
+      return <span className="text-xs text-slate-500">Never tested</span>;
     }
 
     const styles: Record<ScanStatus, string> = {
@@ -315,15 +316,15 @@ export default function TargetsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-slate-950 flex flex-col">
       <Navigation />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex items-start justify-between gap-6">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white">Targets</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">Attack Targets</h1>
             <p className="mt-2 text-slate-300 max-w-2xl">
-              Systems, models, and surfaces under test.
+              Customer AI systems targeted for red team testing. Execute attacks to generate compliance evidence.
             </p>
           </div>
           <div className="flex gap-2">
@@ -347,7 +348,7 @@ export default function TargetsPage() {
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Target List */}
           <div className="lg:col-span-2 rounded-xl border border-slate-800 bg-slate-900/40 p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">Target List</h2>
+            <h2 className="text-lg font-semibold text-white mb-4">Attack Target List</h2>
 
             {loading ? (
               <div className="text-center py-12">
@@ -358,7 +359,7 @@ export default function TargetsPage() {
               <div className="text-center py-12">
                 <Target className="w-16 h-16 text-slate-700 mx-auto mb-4" />
                 <p className="text-slate-300 mb-4">
-                  No targets yet. Add a target to start running scans.
+                  No attack targets yet. Add a target to execute red team tests.
                 </p>
                 <button
                   onClick={() => setShowAddModal(true)}
@@ -404,7 +405,7 @@ export default function TargetsPage() {
                         <button
                           onClick={() => handleRunScan(target.id)}
                           className="p-2 hover:bg-green-500/10 rounded text-green-400 transition-all"
-                          title="Run scan"
+                          title="Execute attack"
                         >
                           <Play className="w-4 h-4" />
                         </button>
@@ -429,7 +430,7 @@ export default function TargetsPage() {
                       <div className="flex items-center gap-4 text-xs text-slate-500">
                         {target.last_scan_at && (
                           <span>
-                            Last scan: {new Date(target.last_scan_at).toLocaleString()}
+                            Last attack: {new Date(target.last_scan_at).toLocaleString()}
                           </span>
                         )}
                       </div>
@@ -439,40 +440,28 @@ export default function TargetsPage() {
                 ))}
               </div>
             )}
-
-            <div className="mt-6 rounded-lg border border-dashed border-slate-700 p-6">
-              <div className="text-sm text-slate-300">
-                Coming soon:
-                <ul className="mt-2 list-disc pl-5 space-y-1 text-slate-400">
-                  <li>Target types: API endpoint, chat UI, internal agent</li>
-                  <li>Auth methods: key header, OAuth token, session cookie</li>
-                  <li>Environment tags: prod, staging, dev</li>
-                  <li>Rate limits + scan scheduling</li>
-                </ul>
-              </div>
-            </div>
           </div>
 
-          {/* How Targets Work */}
+          {/* Red Team Attack Process */}
           <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">How Targets Work</h2>
+            <h2 className="text-lg font-semibold text-white mb-4">Red Team Attack Process</h2>
             <div className="space-y-3 text-sm text-slate-300">
               <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
-                <div className="font-medium text-white mb-1">1) Add a target</div>
+                <div className="font-medium text-white mb-1">1) Add attack target</div>
                 <div className="text-slate-400">
-                  Define where your model or agent is reachable (URL, app, or integration).
+                  Define the customer AI system to test (API, chat UI, or agent endpoint).
                 </div>
               </div>
               <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
-                <div className="font-medium text-white mb-1">2) Run a scan</div>
+                <div className="font-medium text-white mb-1">2) Execute red team attack</div>
                 <div className="text-slate-400">
-                  Execute red team scenarios against the selected target.
+                  Launch 255+ attack scenarios against the target system.
                 </div>
               </div>
               <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
-                <div className="font-medium text-white mb-1">3) Export reports</div>
+                <div className="font-medium text-white mb-1">3) Export attack evidence</div>
                 <div className="text-slate-400">
-                  Generate evidence for audits, customers, and internal reviews.
+                  Generate compliance reports for OWASP, NIST, MITRE ATLAS, ASL-3, and EU AI Act.
                 </div>
               </div>
             </div>
@@ -491,7 +480,7 @@ export default function TargetsPage() {
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-400">Scanned</span>
+                  <span className="text-slate-400">Tested</span>
                   <span className="text-purple-400 font-semibold">
                     {targets.filter((t) => t.last_scan_at).length}
                   </span>
@@ -502,13 +491,15 @@ export default function TargetsPage() {
         </div>
       </main>
 
+      <Footer />
+
       {/* Add/Edit Target Modal */}
       {(showAddModal || editingTarget) && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-slate-900 rounded-xl border border-slate-800 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between sticky top-0 bg-slate-900 z-10">
               <h2 className="text-xl font-bold text-white">
-                {editingTarget ? "Edit Target" : "Add New Target"}
+                {editingTarget ? "Edit Attack Target" : "Add Attack Target"}
               </h2>
               <button
                 onClick={() => {
@@ -536,7 +527,7 @@ export default function TargetsPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  placeholder="My Production API"
+                  placeholder="Customer Production API"
                 />
               </div>
 
@@ -550,7 +541,7 @@ export default function TargetsPage() {
                     setFormData({ ...formData, description: e.target.value })
                   }
                   className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  placeholder="Customer-facing chat assistant"
+                  placeholder="Customer-facing AI chat assistant"
                   rows={2}
                 />
               </div>
@@ -606,7 +597,7 @@ export default function TargetsPage() {
                   value={formData.url}
                   onChange={(e) => setFormData({ ...formData, url: e.target.value })}
                   className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  placeholder="https://api.example.com"
+                  placeholder="https://api.customer.com"
                 />
               </div>
 
@@ -756,7 +747,7 @@ export default function TargetsPage() {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-slate-900 rounded-xl border border-slate-800 max-w-md w-full">
             <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white">Import Targets</h2>
+              <h2 className="text-xl font-bold text-white">Import Attack Targets</h2>
               <button
                 onClick={() => setShowImportModal(false)}
                 className="text-slate-400 hover:text-white transition-colors"
@@ -767,24 +758,4 @@ export default function TargetsPage() {
 
             <div className="p-6">
               <p className="text-slate-400 mb-4">
-                Upload a CSV or JSON file to import multiple targets at once.
-              </p>
-              <div className="border-2 border-dashed border-slate-700 rounded-lg p-8 text-center">
-                <Upload className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-                <p className="text-slate-500 text-sm">Coming soon!</p>
-              </div>
-              <div className="flex justify-end gap-3 mt-6">
-                <button
-                  onClick={() => setShowImportModal(false)}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-white text-sm font-medium transition-colors"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+                Upload a CSV or JSON file to import multiple attack targets at once.
