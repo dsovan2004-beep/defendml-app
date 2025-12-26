@@ -8,12 +8,13 @@ import { Target, Send, Shield, AlertTriangle, CheckCircle2, Zap } from 'lucide-r
 const API = "https://defendml-api.dsovan2004.workers.dev";
 
 function TesterPageContent() {
+  const [targetUrl, setTargetUrl] = useState("https://httpbin.org/post"); // NEW: Target URL state
   const [input, setInput] = useState("");
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   async function run() {
-    if (!input.trim()) return;
+    if (!input.trim() || !targetUrl.trim()) return; // UPDATED: Check both fields
 
     setLoading(true);
     try {
@@ -23,9 +24,20 @@ function TesterPageContent() {
           "Content-Type": "application/json",
           "Origin": "https://app.defendml.com"
         },
-        body: JSON.stringify({ text: input })
+        body: JSON.stringify({ 
+          target: targetUrl,  // NEW: Send target URL to API
+          text: input 
+        })
       });
-      setResult(await r.json());
+      const data = await r.json();
+      setResult(data);
+      
+      // NEW: Redirect to report if successful
+      if (data.success && data.report_id) {
+        setTimeout(() => {
+          window.location.href = `/reports/${data.report_id}`;
+        }, 2000);
+      }
     } catch {
       setResult({ error: "Failed to reach API" });
     } finally {
@@ -56,6 +68,24 @@ function TesterPageContent() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Input Section */}
             <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10">
+              {/* NEW: Target URL Input */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <Target className="w-5 h-5 text-purple-400" />
+                  Target System URL
+                </h3>
+                <input
+                  type="text"
+                  value={targetUrl}
+                  onChange={(e) => setTargetUrl(e.target.value)}
+                  placeholder="https://customer-api.example.com/v1/chat"
+                  className="w-full px-4 py-3 bg-slate-900 border border-purple-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm"
+                />
+                <p className="text-xs text-slate-400 mt-2">
+                  Enter the API endpoint of the customer AI system you want to attack
+                </p>
+              </div>
+
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <Send className="w-5 h-5 text-purple-400" />
                 Attack Prompt
@@ -68,7 +98,7 @@ function TesterPageContent() {
               />
               <button
                 onClick={run}
-                disabled={loading || !input.trim()}
+                disabled={loading || !input.trim() || !targetUrl.trim()} // UPDATED: Check both fields
                 className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 bg-purple-500 hover:bg-purple-600 disabled:bg-slate-700 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all shadow-lg shadow-purple-500/30"
               >
                 {loading ? (
@@ -137,6 +167,20 @@ function TesterPageContent() {
 
               {result && !loading && (
                 <div className="space-y-4">
+                  {/* NEW: Success message with redirect */}
+                  {result.success && result.report_id && (
+                    <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/30">
+                      <div className="flex items-center gap-3">
+                        <CheckCircle2 className="w-6 h-6 text-green-400" />
+                        <div>
+                          <div className="font-semibold text-green-400">Attack Executed Successfully</div>
+                          <div className="text-sm text-green-300">Report ID: {result.report_id}</div>
+                          <div className="text-xs text-green-400 mt-1">Redirecting to evidence report...</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Status Badge */}
                   {result.error ? (
                     <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30">
