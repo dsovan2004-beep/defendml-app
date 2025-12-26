@@ -50,19 +50,6 @@ interface Target {
   tags?: string[];
 }
 
-function decodeJwtPayload(token: string): any | null {
-  try {
-    const part = token.split(".")[1];
-    if (!part) return null;
-    const base64 = part.replace(/-/g, "+").replace(/_/g, "/");
-    const padded = base64 + "===".slice((base64.length + 3) % 4);
-    const json = atob(padded);
-    return JSON.parse(json);
-  } catch {
-    return null;
-  }
-}
-
 export default function TargetsPage() {
   const [targets, setTargets] = useState<Target[]>([]);
   const [loading, setLoading] = useState(true);
@@ -121,31 +108,36 @@ export default function TargetsPage() {
     e.preventDefault();
     setSaving(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      // Get session for authentication
       const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData.session?.access_token;
-      if (token) {
-        const payload = decodeJwtPayload(token);
-        console.log("JWT role:", payload?.role, "sub:", payload?.sub, "email:", payload?.email);
-      } else {
-        console.log("No access token found in session");
-      }
-      if (!user) {
+      const accessToken = sessionData.session?.access_token;
+
+      if (!accessToken) {
         alert("Please log in to add targets");
         return;
       }
-      const { error } = await supabase.from("targets").insert([{ ...formData, created_by: user.id }]);
-      if (error) {
-        console.error("Error adding target:", error);
-        alert("Failed to add target: " + error.message);
-      } else {
-        await loadTargets();
-        setShowAddModal(false);
-        resetForm();
+
+      // Call Cloudflare Function instead of direct Supabase
+      const response = await fetch('/api/targets', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to add target');
       }
-    } catch (error) {
+
+      await loadTargets();
+      setShowAddModal(false);
+      resetForm();
+    } catch (error: any) {
       console.error("Failed to add target:", error);
-      alert("Failed to add target");
+      alert("Failed to add target: " + error.message);
     } finally {
       setSaving(false);
     }
