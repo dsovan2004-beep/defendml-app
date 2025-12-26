@@ -1,4 +1,5 @@
 // /lib/analysis/attack-intelligence.ts
+// Analyzes DefendML's red team attack results against CUSTOMER AI systems
 
 import { createClient } from '@supabase/supabase-js';
 
@@ -16,7 +17,7 @@ export interface RedTeamResult {
   prompt: string;
   category: string;          // "CBRN Threat", "Jailbreak", etc.
   decision: "BLOCK" | "FLAG" | "ALLOW";
-  layer_stopped: string | null;     // "L1", "L2", "L3", "L4", null if ALLOW
+  layer_stopped: string | null;     // "L1", "L2", "L3", "L4", null if ALLOW (attack succeeded)
   timestamp: Date;
   metadata?: Record<string, any>;
 }
@@ -28,11 +29,11 @@ export interface AttackIntelligence {
   category: string;
   severity: string;
   attempts: number;
-  successes: number;
-  success_rate: number;
+  successes: number;           // Number of times TARGET failed to block our attack
+  success_rate: number;        // % of attacks that bypassed TARGET's defenses
   first_seen: Date;
   last_seen: Date;
-  layer_breakdown: {
+  layer_breakdown: {          // Which of TARGET's layers stopped our attacks
     L1: number;
     L2: number;
     L3: number;
@@ -145,16 +146,16 @@ function detectEvasionTechniques(prompts: string[]): string[] {
 // ============================================================================
 
 function selectSamplePrompts(results: RedTeamResult[], maxCount: number = 5): string[] {
-  // Prioritize successful attacks first, then representative failures
+  // Prioritize successful attacks first (attacks that TARGET failed to block)
   const successes = results.filter(r => r.decision === "ALLOW");
   const failures = results.filter(r => r.decision !== "ALLOW");
   
   const samples: string[] = [];
   
-  // Add up to 3 successful attacks
+  // Add up to 3 successful attacks (these bypassed TARGET's defenses)
   samples.push(...successes.slice(0, 3).map(r => r.prompt));
   
-  // Fill remaining with failures
+  // Fill remaining with blocked attacks
   const remaining = maxCount - samples.length;
   if (remaining > 0) {
     samples.push(...failures.slice(0, remaining).map(r => r.prompt));
@@ -172,7 +173,7 @@ export async function analyzeAttackIntelligence(
   results: RedTeamResult[]
 ): Promise<AttackIntelligence[]> {
   
-  console.log(`[Attack Intelligence] Analyzing ${results.length} results for report ${report_id}`);
+  console.log(`[Attack Intelligence] Analyzing ${results.length} attack results against customer system for report ${report_id}`);
   
   // Group results by attack technique
   const techniqueMap = new Map<string, {
@@ -195,19 +196,19 @@ export async function analyzeAttackIntelligence(
     const bucket = techniqueMap.get(technique.id)!;
     bucket.attempts.push(result);
     
-    // Success = bypassed all 4 layers
+    // Success = our attack bypassed all of TARGET's 4 defense layers
     if (result.decision === "ALLOW") {
       bucket.successes.push(result);
     }
   }
   
-  // Generate intelligence per technique
+  // Generate intelligence per attack technique
   const intelligence: AttackIntelligence[] = [];
   
   for (const [technique_id, data] of techniqueMap) {
     const { technique, attempts, successes } = data;
     
-    // Analyze which layers stopped attacks
+    // Analyze which of TARGET's defense layers stopped our attacks
     const layer_breakdown = {
       L1: 0,
       L2: 0,
@@ -222,14 +223,14 @@ export async function analyzeAttackIntelligence(
       }
     }
     
-    // Detect evasion variants
+    // Detect evasion variants we used
     const all_prompts = attempts.map(r => r.prompt);
     const evasion_variants = detectEvasionTechniques(all_prompts);
     
-    // Select sample prompts
+    // Select sample attack prompts for evidence report
     const sample_prompts = selectSamplePrompts(attempts, 5);
     
-    // Calculate timestamps
+    // Calculate attack timeline
     const timestamps = attempts.map(r => r.timestamp);
     const first_seen = new Date(Math.min(...timestamps.map(t => t.getTime())));
     const last_seen = new Date(Math.max(...timestamps.map(t => t.getTime())));
@@ -241,7 +242,7 @@ export async function analyzeAttackIntelligence(
       category: technique.category,
       severity: technique.severity,
       attempts: attempts.length,
-      successes: successes.length,
+      successes: successes.length,  // How many times we successfully attacked TARGET
       success_rate: (successes.length / attempts.length) * 100,
       first_seen,
       last_seen,
@@ -253,10 +254,10 @@ export async function analyzeAttackIntelligence(
     intelligence.push(intel);
   }
   
-  // Store in database
+  // Store attack intelligence in database
   await storeAttackIntelligence(report_id, intelligence);
   
-  console.log(`[Attack Intelligence] Generated ${intelligence.length} intelligence records`);
+  console.log(`[Attack Intelligence] Generated ${intelligence.length} attack intelligence records`);
   
   return intelligence;
 }
@@ -293,7 +294,7 @@ async function storeAttackIntelligence(
     throw error;
   }
   
-  console.log(`[Attack Intelligence] Stored ${records.length} records for report ${report_id}`);
+  console.log(`[Attack Intelligence] Stored ${records.length} attack records for report ${report_id}`);
 }
 
 // ============================================================================
