@@ -1,6 +1,5 @@
 // src/pages/reports/[id].tsx
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
 import { createClient } from '@supabase/supabase-js';
 import Navigation from '../../components/Navigation';
 import {
@@ -11,31 +10,6 @@ import {
   ExclamationTriangleIcon,
   SparklesIcon,
 } from '@heroicons/react/24/outline';
-
-/* ------------------------------------------------------------------
-   Supabase helpers
-------------------------------------------------------------------- */
-
-// Base client (auth only)
-const supabaseAuth = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
-// Auth-bound client (used ONLY after session is confirmed)
-function getAuthedSupabase(accessToken: string) {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      global: {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-    }
-  );
-}
 
 /* ------------------------------------------------------------------
    Types
@@ -63,109 +37,97 @@ interface Report {
   analysis_completed_at?: string;
 }
 
+interface ReportPageProps {
+  report: Report;
+  error?: string;
+}
+
 /* ------------------------------------------------------------------
-   Page
+   Server-Side Data Fetching (SSR)
 ------------------------------------------------------------------- */
 
-export default function ReportPage() {
-  const router = useRouter();
-  const { id } = router.query;
+export const getServerSideProps: GetServerSideProps<ReportPageProps> = async (context) => {
+  const { id } = context.params!;
 
-  const [report, setReport] = useState<Report | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Create auth client to check session
+  const supabaseAuth = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
-  useEffect(() => {
-    if (!id) return;
+  // Get session from cookies
+  const accessToken = context.req.cookies['sb-access-token'];
+  const refreshToken = context.req.cookies['sb-refresh-token'];
 
-    let pollInterval: NodeJS.Timeout | null = null;
+  if (!accessToken) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
 
-    async function loadReport() {
-      try {
-        setLoading(true);
+  // Verify session
+  const { data: { user }, error: authError } = await supabaseAuth.auth.getUser(accessToken);
 
-        // 1️⃣ Ensure session exists
-        const { data: sessionData, error: sessionError } =
-          await supabaseAuth.auth.getSession();
+  if (authError || !user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
 
-        if (sessionError || !sessionData.session) {
-          throw new Error('Authentication required');
-        }
+  // Use SERVICE ROLE to fetch data (bypasses RLS)
+  const supabaseService = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      auth: {
+        persistSession: false,
+      },
+    }
+  );
 
-        const accessToken = sessionData.session.access_token;
-        const supabase = getAuthedSupabase(accessToken);
+  try {
+    const { data: report, error } = await supabaseService
+      .from('red_team_reports')
+      .select('*')
+      .eq('report_id', id)
+      .single();
 
-        // 2️⃣ Initial fetch
-        const { data, error } = await supabase
-          .from('red_team_reports')
-          .select('*')
-          .eq('report_id', id)
-          .single();
-
-        if (error) throw error;
-        setReport(data);
-
-        // 3️⃣ Poll for AI analysis completion
-        pollInterval = setInterval(async () => {
-          if (data.analysis_completed_at) {
-            if (pollInterval) clearInterval(pollInterval);
-            return;
-          }
-
-          const { data: pollData } = await supabase
-            .from('red_team_reports')
-            .select('analysis_completed_at, attack_intelligence, remediation_playbook')
-            .eq('report_id', id)
-            .single();
-
-          if (pollData?.analysis_completed_at) {
-            setReport((prev) =>
-              prev
-                ? {
-                    ...prev,
-                    analysis_completed_at: pollData.analysis_completed_at,
-                    attack_intelligence: pollData.attack_intelligence,
-                    remediation_playbook: pollData.remediation_playbook,
-                  }
-                : prev
-            );
-            if (pollInterval) clearInterval(pollInterval);
-          }
-        }, 3000);
-      } catch (err: any) {
-        setError(err?.message ?? 'Failed to load report');
-      } finally {
-        setLoading(false);
-      }
+    if (error) {
+      console.error('Error fetching report:', error);
+      return {
+        notFound: true,
+      };
     }
 
-    loadReport();
-
-    return () => {
-      if (pollInterval) clearInterval(pollInterval);
+    return {
+      props: {
+        report,
+      },
     };
-  }, [id]);
+  } catch (err: any) {
+    console.error('Server error:', err);
+    return {
+      notFound: true,
+    };
+  }
+};
 
+/* ------------------------------------------------------------------
+   Page Component
+------------------------------------------------------------------- */
+
+export default function ReportPage({ report, error }: ReportPageProps) {
   const calculateVerdict = (blocked: number, total: number): 'PASS' | 'FAIL' => {
     return (blocked / total) * 100 >= 90 ? 'PASS' : 'FAIL';
   };
 
   const exportToPDF = () => window.print();
-
-  /* ------------------------------------------------------------------
-     UI states
-  ------------------------------------------------------------------- */
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950">
-        <Navigation />
-        <div className="flex items-center justify-center h-screen">
-          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
-        </div>
-      </div>
-    );
-  }
 
   if (error || !report) {
     return (
@@ -176,31 +138,17 @@ export default function ReportPage() {
             <ExclamationTriangleIcon className="w-16 h-16 text-red-400 mx-auto mb-4" />
             <div className="text-red-400 text-xl mb-4">Failed to load report</div>
             <div className="text-slate-400 mb-6">{error || 'Report not found'}</div>
-            <button
-              onClick={() => router.push('/compliance')}
-              className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg"
-            >
-              Back to Reports Dashboard
-            </button>
           </div>
         </div>
       </div>
     );
   }
 
-  /* ------------------------------------------------------------------
-     Derived values
-  ------------------------------------------------------------------- */
-
   const verdict = calculateVerdict(report.blocked_count, report.total_prompts);
   const blockRate = ((report.blocked_count / report.total_prompts) * 100).toFixed(1);
   const analysisReady = !!report.analysis_completed_at;
   const intelligence = report.attack_intelligence;
   const playbook = report.remediation_playbook;
-
-  /* ------------------------------------------------------------------
-     Render (put your full UI here)
-  ------------------------------------------------------------------- */
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -232,7 +180,7 @@ export default function ReportPage() {
               <div>
                 <div className="text-blue-400 font-semibold">AI-powered analysis in progress...</div>
                 <div className="text-blue-300 text-sm">
-                  Claude Sonnet 4.5 is generating remediation playbook. This page will auto-update.
+                  Claude Sonnet 4.5 is generating remediation playbook. Refresh page to check status.
                 </div>
               </div>
             </div>
