@@ -12,6 +12,13 @@ import {
   SparklesIcon,
 } from '@heroicons/react/24/outline';
 
+// 🔍 DEBUG: Log environment variables
+console.log('=== SUPABASE CONFIG DEBUG ===');
+console.log('URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+console.log('ANON KEY (first 30 chars):', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.substring(0, 30));
+console.log('ANON KEY exists?:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+console.log('===========================');
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -51,18 +58,21 @@ export default function ReportPage() {
 
     async function fetchReport() {
       try {
+        console.log('🔍 Attempting to fetch report:', id);
         const { data, error: fetchError } = await supabase
           .from('red_team_reports')
           .select('*')
           .eq('report_id', id)
           .limit(1);
 
+        console.log('📊 Supabase response:', { data, error: fetchError });
+
         if (fetchError) throw fetchError;
         if (!data || data.length === 0) throw new Error('Report not found');
 
         setReport(data[0]);
       } catch (err) {
-        console.error('Fetch error:', err);
+        console.error('❌ Fetch error:', err);
         setError(err instanceof Error ? err.message : 'Failed to load report');
       } finally {
         setLoading(false);
@@ -89,6 +99,7 @@ export default function ReportPage() {
           .limit(1);
 
         if (data && data[0]?.analysis_completed_at) {
+          console.log('✅ AI analysis completed!');
           setReport((prev) => prev ? {
             ...prev,
             analysis_completed_at: data[0].analysis_completed_at,
