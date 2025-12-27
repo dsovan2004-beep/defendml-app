@@ -1,5 +1,6 @@
-// src/pages/admin/targets.tsx
+// src/pages/admin/targets.tsx - PART 1
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
@@ -10,64 +11,60 @@ import {
   Target,
   Globe,
   MessageSquare,
-  Cpu,
-  Edit2,
-  Trash2,
+  Shield,
   Play,
+  Trash2,
+  Edit,
+  X,
   CheckCircle,
   XCircle,
-  Clock,
-  X,
+  AlertCircle,
+  Zap,
+  Activity,
 } from "lucide-react";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-type TargetType = "api_endpoint" | "chat_ui" | "internal_agent" | "integration";
-type AuthMethod = "api_key" | "oauth_token" | "session_cookie" | "bearer_token" | "none";
-type Environment = "prod" | "staging" | "dev" | "test";
-type ScanStatus = "pending" | "running" | "completed" | "failed";
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 interface Target {
   id: string;
-  created_at: string;
-  updated_at: string;
   name: string;
-  description?: string;
-  target_type: TargetType;
-  url?: string;
-  endpoint_path?: string;
-  auth_method?: AuthMethod;
-  auth_header_name?: string;
-  auth_token?: string;
-  environment?: Environment;
-  rate_limit_per_hour: number;
-  timeout_seconds: number;
-  is_active: boolean;
-  last_scan_at?: string;
-  last_scan_status?: ScanStatus;
-  tags?: string[];
+  description: string | null;
+  target_type: "api" | "chatbot" | "website";
+  url: string;
+  endpoint_path: string | null;
+  auth_method: "none" | "bearer" | "api_key" | "basic" | null;
+  auth_header_name: string | null;
+  auth_token: string | null;
+  environment: "production" | "staging" | "development";
+  rate_limit_per_hour: number | null;
+  timeout_seconds: number | null;
+  created_at: string;
+  created_by: string;
+  last_scan_at: string | null;
+  total_scans: number;
+  last_scan_result: "pass" | "fail" | "error" | null;
 }
 
-export default function TargetsPage() {
+export default function AttackTargets() {
   const [targets, setTargets] = useState<Target[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
-  const [editingTarget, setEditingTarget] = useState<Target | null>(null);
-  const [saving, setSaving] = useState(false);
-
+  const [executing, setExecuting] = useState<string | null>(null);
+  
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    target_type: "api_endpoint" as TargetType,
+    target_type: "api" as "api" | "chatbot" | "website",
     url: "",
     endpoint_path: "",
-    auth_method: "api_key" as AuthMethod,
-    auth_header_name: "Authorization",
+    auth_method: "none" as "none" | "bearer" | "api_key" | "basic",
+    auth_header_name: "",
     auth_token: "",
-    environment: "dev" as Environment,
+    environment: "staging" as "production" | "staging" | "development",
     rate_limit_per_hour: 100,
     timeout_seconds: 30,
   });
@@ -78,416 +75,615 @@ export default function TargetsPage() {
 
   const loadTargets = async () => {
     try {
-      setLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        console.log("No user found");
-        setTargets([]);
+        console.error("No user found");
+        setLoading(false);
         return;
       }
+
       const { data, error } = await supabase
         .from("targets")
         .select("*")
         .eq("created_by", user.id)
         .order("created_at", { ascending: false });
-      if (error) {
-        console.error("Error loading targets:", error);
-        setTargets([]);
-      } else {
-        setTargets((data as Target[]) || []);
-      }
+
+      if (error) throw error;
+      setTargets(data || []);
     } catch (error) {
-      console.error("Failed to load targets:", error);
-      setTargets([]);
+      console.error("Error loading targets:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAddTarget = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaving(true);
-    try {
-      // Get session for authentication
-      const { data: sessionData } = await supabase.auth.getSession();
-      const accessToken = sessionData.session?.access_token;
 
-      if (!accessToken) {
-        alert("Please log in to add targets");
-        return;
+    try {
+      const session = await supabase.auth.getSession();
+      if (!session.data.session) {
+        throw new Error("No active session");
       }
 
-      // Call Cloudflare Function instead of direct Supabase
-      const response = await fetch('/api/targets', {
-        method: 'POST',
+      const response = await fetch("/api/targets", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.data.session.access_token}`,
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Failed to add target');
+        throw new Error(error.error || "Failed to add target");
       }
 
       await loadTargets();
       setShowAddModal(false);
       resetForm();
     } catch (error: any) {
-      console.error("Failed to add target:", error);
-      alert("Failed to add target: " + error.message);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleUpdateTarget = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editingTarget) return;
-    setSaving(true);
-    try {
-      const { error } = await supabase.from("targets").update(formData).eq("id", editingTarget.id);
-      if (error) {
-        console.error("Error updating target:", error);
-        alert("Failed to update target: " + error.message);
-      } else {
-        await loadTargets();
-        setEditingTarget(null);
-        resetForm();
-      }
-    } catch (error) {
-      console.error("Failed to update target:", error);
-      alert("Failed to update target");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleDeleteTarget = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this attack target?")) return;
-    try {
-      const { error } = await supabase.from("targets").delete().eq("id", id);
-      if (error) {
-        console.error("Error deleting target:", error);
-        alert("Failed to delete target: " + error.message);
-      } else {
-        await loadTargets();
-      }
-    } catch (error) {
-      console.error("Failed to delete target:", error);
-      alert("Failed to delete target");
+      console.error("Error adding target:", error);
+      alert(`Failed to add target: ${error.message}`);
     }
   };
 
   const handleRunScan = async (targetId: string) => {
-    alert("Red team attack execution coming soon! Target ID: " + targetId);
+    setExecuting(targetId);
+    
+    try {
+      // Get the target details
+      const target = targets.find(t => t.id === targetId);
+      if (!target) {
+        throw new Error("Target not found");
+      }
+
+      // Construct the full URL
+      const targetUrl = target.endpoint_path 
+        ? `${target.url}${target.endpoint_path}`
+        : target.url;
+
+      // Call the red team execution endpoint
+      const response = await fetch(
+        "https://defendml-api.dsovan2004.workers.dev/api/red-team/execute",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            target: targetUrl,
+            auth_token: target.auth_token || undefined,
+            auth_method: target.auth_method !== "none" ? target.auth_method : undefined,
+            auth_header_name: target.auth_header_name || undefined,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to execute attack");
+      }
+
+      const data = await response.json();
+
+      // Redirect to the report page
+      window.location.href = `/reports/${data.report_id}`;
+    } catch (error: any) {
+      console.error("Error executing attack:", error);
+      alert(`Failed to execute attack: ${error.message}`);
+    } finally {
+      setExecuting(null);
+    }
+  };
+
+  const handleDelete = async (targetId: string) => {
+    if (!confirm("Are you sure you want to delete this attack target?")) return;
+
+    try {
+      const { error } = await supabase
+        .from("targets")
+        .delete()
+        .eq("id", targetId);
+
+      if (error) throw error;
+      await loadTargets();
+    } catch (error) {
+      console.error("Error deleting target:", error);
+      alert("Failed to delete target");
+    }
   };
 
   const resetForm = () => {
     setFormData({
       name: "",
       description: "",
-      target_type: "api_endpoint",
+      target_type: "api",
       url: "",
       endpoint_path: "",
-      auth_method: "api_key",
-      auth_header_name: "Authorization",
+      auth_method: "none",
+      auth_header_name: "",
       auth_token: "",
-      environment: "dev",
+      environment: "staging",
       rate_limit_per_hour: 100,
       timeout_seconds: 30,
     });
   };
 
-  const openEditModal = (target: Target) => {
-    setFormData({
-      name: target.name,
-      description: target.description || "",
-      target_type: target.target_type,
-      url: target.url || "",
-      endpoint_path: target.endpoint_path || "",
-      auth_method: target.auth_method || "api_key",
-      auth_header_name: target.auth_header_name || "Authorization",
-      auth_token: target.auth_token || "",
-      environment: target.environment || "dev",
-      rate_limit_per_hour: target.rate_limit_per_hour,
-      timeout_seconds: target.timeout_seconds,
-    });
-    setEditingTarget(target);
-  };
-
-  const getTargetIcon = (type: TargetType) => {
+  const getTypeIcon = (type: string) => {
     switch (type) {
-      case "api_endpoint": return <Globe className="w-5 h-5" />;
-      case "chat_ui": return <MessageSquare className="w-5 h-5" />;
-      case "internal_agent": return <Cpu className="w-5 h-5" />;
-      default: return <Target className="w-5 h-5" />;
+      case "api":
+        return <Globe className="w-4 h-4" />;
+      case "chatbot":
+        return <MessageSquare className="w-4 h-4" />;
+      case "website":
+        return <Shield className="w-4 h-4" />;
+      default:
+        return <Target className="w-4 h-4" />;
     }
   };
 
-  const getStatusBadge = (status?: ScanStatus) => {
-    if (!status) return <span className="text-xs text-slate-500">Never tested</span>;
-    const styles: Record<ScanStatus, string> = {
-      pending: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
-      running: "bg-blue-500/20 text-blue-300 border-blue-500/30",
-      completed: "bg-green-500/20 text-green-300 border-green-500/30",
-      failed: "bg-red-500/20 text-red-300 border-red-500/30",
+  const getStatusBadge = (result: string | null) => {
+    if (!result) {
+      return (
+        <span className="px-2 py-1 text-xs rounded-full bg-gray-700 text-gray-300 flex items-center gap-1">
+          <AlertCircle className="w-3 h-3" />
+          Never tested
+        </span>
+      );
+    }
+
+    const configs = {
+      pass: { color: "bg-green-900/30 text-green-400", icon: CheckCircle, text: "Pass" },
+      fail: { color: "bg-red-900/30 text-red-400", icon: XCircle, text: "Fail" },
+      error: { color: "bg-yellow-900/30 text-yellow-400", icon: AlertCircle, text: "Error" },
     };
-    const icons: Record<ScanStatus, React.ReactNode> = {
-      pending: <Clock className="w-3 h-3" />,
-      running: <Play className="w-3 h-3" />,
-      completed: <CheckCircle className="w-3 h-3" />,
-      failed: <XCircle className="w-3 h-3" />,
-    };
+
+    const config = configs[result as keyof typeof configs];
+    if (!config) return null;
+
+    const Icon = config.icon;
     return (
-      <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${styles[status]}`}>
-        {icons[status]}
-        {status}
+      <span className={`px-2 py-1 text-xs rounded-full ${config.color} flex items-center gap-1`}>
+        <Icon className="w-3 h-3" />
+        {config.text}
       </span>
     );
   };
+  // src/pages/admin/targets.tsx - PART 2 (CONTINUE FROM PART 1)
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col">
+    <div className="min-h-screen bg-gray-900">
       <Navigation />
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="flex items-start justify-between gap-6">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white">Attack Targets</h1>
-            <p className="mt-2 text-slate-300 max-w-2xl">
-              Customer AI systems targeted for red team testing. Execute attacks to generate compliance evidence.
-            </p>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">Attack Targets</h1>
+              <p className="text-gray-400">
+                Customer AI systems targeted for red team testing
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowImportModal(true)}
+                className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
+              >
+                <Upload className="w-4 h-4" />
+                Import
+              </button>
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                Add Target
+              </button>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <button onClick={() => setShowImportModal(true)} className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium border border-slate-700 transition-colors flex items-center gap-2">
-              <Upload className="w-4 h-4" />
-              Import Targets
-            </button>
-            <button onClick={() => setShowAddModal(true)} className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium border border-purple-500/50 transition-colors flex items-center gap-2">
-              <Plus className="w-4 h-4" />
+        </div>
+
+        {/* Targets Grid */}
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p className="mt-4 text-gray-400">Loading attack targets...</p>
+          </div>
+        ) : targets.length === 0 ? (
+          <div className="bg-gray-800 rounded-lg p-12 text-center">
+            <Target className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-white mb-2">
+              No attack targets configured
+            </h3>
+            <p className="text-gray-400 mb-6">
+              Add your first customer AI system to begin red team testing
+            </p>
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2"
+            >
+              <Plus className="w-5 h-5" />
               Add Target
             </button>
           </div>
-        </div>
-
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 rounded-xl border border-slate-800 bg-slate-900/40 p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">Attack Target List</h2>
-            {loading ? (
-              <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
-                <p className="text-slate-400">Loading targets...</p>
-              </div>
-            ) : targets.length === 0 ? (
-              <div className="text-center py-12">
-                <Target className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-                <p className="text-slate-300 mb-4">No attack targets yet. Add a target to execute red team tests.</p>
-                <button onClick={() => setShowAddModal(true)} className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500 hover:bg-purple-600 rounded-lg text-white text-sm font-medium transition-all">
-                  <Plus className="w-4 h-4" />
-                  Add Your First Target
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {targets.map((target) => (
-                  <div key={target.id} className="p-4 bg-slate-800/50 rounded-lg border border-slate-700 hover:border-purple-500/50 transition-all">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400 mt-0.5">
-                          {getTargetIcon(target.target_type)}
-                        </div>
-                        <div>
-                          <h3 className="text-white font-semibold mb-1">{target.name}</h3>
-                          {target.description && <p className="text-slate-400 text-sm mb-2">{target.description}</p>}
-                          <div className="flex items-center gap-2 text-xs text-slate-500">
-                            <span className="px-2 py-0.5 bg-slate-700 rounded">{target.target_type}</span>
-                            {target.environment && <span className="px-2 py-0.5 bg-slate-700 rounded">{target.environment}</span>}
-                            {target.url && <span className="text-slate-400">{target.url}</span>}
-                          </div>
-                        </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6">
+            {targets.map((target) => (
+              <div
+                key={target.id}
+                className="bg-gray-800 rounded-lg p-6 hover:bg-gray-750 transition-colors"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 bg-gray-700 rounded-lg">
+                        {getTypeIcon(target.target_type)}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <button onClick={() => handleRunScan(target.id)} className="p-2 hover:bg-green-500/10 rounded text-green-400 transition-all" title="Execute attack">
-                          <Play className="w-4 h-4" />
-                        </button>
-                        <button onClick={() => openEditModal(target)} className="p-2 hover:bg-blue-500/10 rounded text-blue-400 transition-all" title="Edit">
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button onClick={() => handleDeleteTarget(target.id)} className="p-2 hover:bg-red-500/10 rounded text-red-400 transition-all" title="Delete">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                      <div>
+                        <h3 className="text-lg font-semibold text-white">
+                          {target.name}
+                        </h3>
+                        <p className="text-sm text-gray-400">{target.url}</p>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between pt-3 border-t border-slate-700">
-                      <div className="flex items-center gap-4 text-xs text-slate-500">
-                        {target.last_scan_at && <span>Last attack: {new Date(target.last_scan_at).toLocaleString()}</span>}
+
+                    {target.description && (
+                      <p className="text-gray-400 text-sm mb-4 ml-14">
+                        {target.description}
+                      </p>
+                    )}
+
+                    <div className="flex flex-wrap gap-4 ml-14">
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-gray-500">Type:</span>
+                        <span className="text-gray-300 capitalize">
+                          {target.target_type}
+                        </span>
                       </div>
-                      {getStatusBadge(target.last_scan_status)}
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-gray-500">Environment:</span>
+                        <span
+                          className={`px-2 py-0.5 rounded text-xs ${
+                            target.environment === "production"
+                              ? "bg-red-900/30 text-red-400"
+                              : target.environment === "staging"
+                              ? "bg-yellow-900/30 text-yellow-400"
+                              : "bg-blue-900/30 text-blue-400"
+                          }`}
+                        >
+                          {target.environment}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-gray-500">Auth:</span>
+                        <span className="text-gray-300 capitalize">
+                          {target.auth_method}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-gray-500">Attacks:</span>
+                        <span className="text-gray-300">{target.total_scans}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-gray-500">Status:</span>
+                        {getStatusBadge(target.last_scan_result)}
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
 
-          <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">Red Team Attack Process</h2>
-            <div className="space-y-3 text-sm text-slate-300">
-              <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
-                <div className="font-medium text-white mb-1">1) Add attack target</div>
-                <div className="text-slate-400">Define the customer AI system to test (API, chat UI, or agent endpoint).</div>
-              </div>
-              <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
-                <div className="font-medium text-white mb-1">2) Execute red team attack</div>
-                <div className="text-slate-400">Launch 255+ attack scenarios against the target system.</div>
-              </div>
-              <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
-                <div className="font-medium text-white mb-1">3) Export attack evidence</div>
-                <div className="text-slate-400">Generate compliance reports for OWASP, NIST, MITRE ATLAS, ASL-3, and EU AI Act.</div>
-              </div>
-            </div>
-            <div className="mt-6 pt-6 border-t border-slate-800">
-              <h3 className="text-white font-semibold text-sm mb-3">Quick Stats</h3>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-400">Total Targets</span>
-                  <span className="text-white font-semibold">{targets.length}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-400">Active</span>
-                  <span className="text-green-400 font-semibold">{targets.filter((t) => t.is_active).length}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-400">Tested</span>
-                  <span className="text-purple-400 font-semibold">{targets.filter((t) => t.last_scan_at).length}</span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleRunScan(target.id)}
+                      disabled={executing === target.id}
+                      className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Execute attack"
+                    >
+                      {executing === target.id ? (
+                        <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                      ) : (
+                        <Play className="w-4 h-4" />
+                      )}
+                    </button>
+                    <button
+                      onClick={() => handleDelete(target.id)}
+                      className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                      title="Delete target"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
-        </div>
-      </main>
-      <Footer />
+        )}
 
-      {(showAddModal || editingTarget) && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-900 rounded-xl border border-slate-800 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between sticky top-0 bg-slate-900 z-10">
-              <h2 className="text-xl font-bold text-white">{editingTarget ? "Edit Attack Target" : "Add Attack Target"}</h2>
-              <button onClick={() => { setShowAddModal(false); setEditingTarget(null); resetForm(); }} className="text-slate-400 hover:text-white transition-colors">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <form onSubmit={editingTarget ? handleUpdateTarget : handleAddTarget} className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Target Name *</label>
-                <input type="text" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Customer Production API" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Description</label>
-                <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Customer-facing AI chat assistant" rows={2} />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Target Type *</label>
-                  <select value={formData.target_type} onChange={(e) => setFormData({ ...formData, target_type: e.target.value as TargetType })} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
-                    <option value="api_endpoint">API Endpoint</option>
-                    <option value="chat_ui">Chat UI</option>
-                    <option value="internal_agent">Internal Agent</option>
-                    <option value="integration">Integration</option>
-                  </select>
+        {/* Add Target Modal */}
+        {showAddModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-white">Add Attack Target</h2>
+                  <button
+                    onClick={() => {
+                      setShowAddModal(false);
+                      resetForm();
+                    }}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Environment *</label>
-                  <select value={formData.environment} onChange={(e) => setFormData({ ...formData, environment: e.target.value as Environment })} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
-                    <option value="dev">Development</option>
-                    <option value="staging">Staging</option>
-                    <option value="prod">Production</option>
-                    <option value="test">Test</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">URL</label>
-                <input type="url" value={formData.url} onChange={(e) => setFormData({ ...formData, url: e.target.value })} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="https://api.customer.com" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Endpoint Path</label>
-                <input type="text" value={formData.endpoint_path} onChange={(e) => setFormData({ ...formData, endpoint_path: e.target.value })} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="/v1/chat/completions" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Auth Method</label>
-                  <select value={formData.auth_method} onChange={(e) => setFormData({ ...formData, auth_method: e.target.value as AuthMethod })} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
-                    <option value="api_key">API Key</option>
-                    <option value="bearer_token">Bearer Token</option>
-                    <option value="oauth_token">OAuth Token</option>
-                    <option value="session_cookie">Session Cookie</option>
-                    <option value="none">None</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Auth Header Name</label>
-                  <input type="text" value={formData.auth_header_name} onChange={(e) => setFormData({ ...formData, auth_header_name: e.target.value })} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Authorization" />
-                </div>
-              </div>
-              {formData.auth_method !== "none" && (
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Auth Token</label>
-                  <input type="password" value={formData.auth_token} onChange={(e) => setFormData({ ...formData, auth_token: e.target.value })} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="sk-..." />
-                </div>
-              )}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Rate Limit (per hour)</label>
-                  <input type="number" value={formData.rate_limit_per_hour} onChange={(e) => setFormData({ ...formData, rate_limit_per_hour: parseInt(e.target.value || "0", 10) })} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500" min="1" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Timeout (seconds)</label>
-                  <input type="number" value={formData.timeout_seconds} onChange={(e) => setFormData({ ...formData, timeout_seconds: parseInt(e.target.value || "0", 10) })} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500" min="1" />
-                </div>
-              </div>
-              <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
-                <button type="button" onClick={() => { setShowAddModal(false); setEditingTarget(null); resetForm(); }} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-white text-sm font-medium transition-colors">Cancel</button>
-                <button type="submit" disabled={saving} className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-800 disabled:cursor-not-allowed rounded-lg text-white text-sm font-medium transition-colors flex items-center gap-2">
-                  {saving ? (
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Target Name
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      placeholder="Production AI Chat API"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Description (Optional)
+                    </label>
+                    <textarea
+                      value={formData.description}
+                      onChange={(e) =>
+                        setFormData({ ...formData, description: e.target.value })
+                      }
+                      className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      rows={3}
+                      placeholder="Customer-facing chatbot for support inquiries"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Type
+                      </label>
+                      <select
+                        value={formData.target_type}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            target_type: e.target.value as any,
+                          })
+                        }
+                        className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      >
+                        <option value="api">API</option>
+                        <option value="chatbot">Chatbot</option>
+                        <option value="website">Website</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Environment
+                      </label>
+                      <select
+                        value={formData.environment}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            environment: e.target.value as any,
+                          })
+                        }
+                        className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      >
+                        <option value="development">Development</option>
+                        <option value="staging">Staging</option>
+                        <option value="production">Production</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Base URL
+                    </label>
+                    <input
+                      type="url"
+                      required
+                      value={formData.url}
+                      onChange={(e) =>
+                        setFormData({ ...formData, url: e.target.value })
+                      }
+                      className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      placeholder="https://api.example.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Endpoint Path (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.endpoint_path}
+                      onChange={(e) =>
+                        setFormData({ ...formData, endpoint_path: e.target.value })
+                      }
+                      className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      placeholder="/v1/chat/completions"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Authentication Method
+                    </label>
+                    <select
+                      value={formData.auth_method}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          auth_method: e.target.value as any,
+                        })
+                      }
+                      className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                    >
+                      <option value="none">None</option>
+                      <option value="bearer">Bearer Token</option>
+                      <option value="api_key">API Key</option>
+                      <option value="basic">Basic Auth</option>
+                    </select>
+                  </div>
+
+                  {formData.auth_method !== "none" && (
                     <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
-                      Saving...
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                          Auth Header Name
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.auth_header_name}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              auth_header_name: e.target.value,
+                            })
+                          }
+                          className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                          placeholder="Authorization"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                          Auth Token
+                        </label>
+                        <input
+                          type="password"
+                          value={formData.auth_token}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              auth_token: e.target.value,
+                            })
+                          }
+                          className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                          placeholder="sk-..."
+                        />
+                      </div>
                     </>
-                  ) : (
-                    <>{editingTarget ? "Update Target" : "Add Target"}</>
                   )}
+
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      type="submit"
+                      className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    >
+                      Add Target
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowAddModal(false);
+                        resetForm();
+                      }}
+                      className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Import Modal Placeholder */}
+        {showImportModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-800 rounded-lg max-w-md w-full p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-white">Import Targets</h2>
+                <button
+                  onClick={() => setShowImportModal(false)}
+                  className="text-gray-400 hover:text-white"
+                >
+                  <X className="w-6 h-6" />
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {showImportModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-900 rounded-xl border border-slate-800 max-w-md w-full">
-            <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white">Import Attack Targets</h2>
-              <button onClick={() => setShowImportModal(false)} className="text-slate-400 hover:text-white transition-colors">
-                <X className="w-5 h-5" />
+              <p className="text-gray-400 mb-6">
+                Import attack targets from CSV or JSON format
+              </p>
+              <div className="border-2 border-dashed border-gray-600 rounded-lg p-12 text-center">
+                <Upload className="w-12 h-12 text-gray-500 mx-auto mb-4" />
+                <p className="text-gray-400 mb-2">Drop files here or click to browse</p>
+                <p className="text-gray-500 text-sm">Supports CSV and JSON formats</p>
+              </div>
+              <button
+                onClick={() => setShowImportModal(false)}
+                className="w-full mt-6 px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium"
+              >
+                Close
               </button>
             </div>
-            <div className="p-6">
-              <p className="text-slate-400 mb-4">Upload a CSV or JSON file to import multiple attack targets at once.</p>
-              <div className="border-2 border-dashed border-slate-700 rounded-lg p-8 text-center">
-                <Upload className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-                <p className="text-slate-500 text-sm">Coming soon!</p>
+          </div>
+        )}
+
+        {/* Sidebar */}
+        <div className="mt-12 bg-gray-800 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <Activity className="w-5 h-5" />
+            Red Team Attack Process
+          </h3>
+          <div className="space-y-4 text-sm text-gray-300">
+            <div className="flex gap-3">
+              <div className="flex-shrink-0 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                1
               </div>
-              <div className="flex justify-end gap-3 mt-6">
-                <button onClick={() => setShowImportModal(false)} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-white text-sm font-medium transition-colors">Close</button>
+              <div>
+                <p className="font-medium text-white">Configure Attack Target</p>
+                <p className="text-gray-400">
+                  Add customer AI system URL, authentication, and environment details
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <div className="flex-shrink-0 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                2
+              </div>
+              <div>
+                <p className="font-medium text-white">Execute Attack</p>
+                <p className="text-gray-400">
+                  Click Play to send 40 attack prompts to the target system
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <div className="flex-shrink-0 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                3
+              </div>
+              <div>
+                <p className="font-medium text-white">Review Evidence Report</p>
+                <p className="text-gray-400">
+                  Analyze which attacks succeeded, failed, and get AI-powered remediation playbooks
+                </p>
               </div>
             </div>
           </div>
         </div>
-      )}
+      </div>
+
+      <Footer />
     </div>
   );
 }
