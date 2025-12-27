@@ -276,7 +276,7 @@ function OverviewPage() {
                   </div>
                 </div>
 
-                {/* FIXED: Tagline and CTAs */}
+                {/* FIXED: Tagline and CTAs - Attack Intelligence now points to /intelligence */}
                 <div className="flex items-center justify-between pt-6 border-t border-purple-500/20">
                   <p className="text-sm text-slate-400">
                     <span className="font-semibold text-white">Offense-first AI red team service</span> delivering compliance-ready evidence in hours, not quarters
@@ -292,7 +292,7 @@ function OverviewPage() {
                       Execute Scan
                       <ExternalLink className="w-3 h-3" />
                     </a>
-                    <a href="/settings" className="flex items-center gap-2 px-4 py-2 bg-green-500/20 hover:bg-green-500/30 border border-green-500/40 rounded-lg text-green-300 text-sm font-medium transition-all">
+                    <a href="/intelligence" className="flex items-center gap-2 px-4 py-2 bg-green-500/20 hover:bg-green-500/30 border border-green-500/40 rounded-lg text-green-300 text-sm font-medium transition-all">
                       <Activity className="w-4 h-4" />
                       Attack Intelligence
                       <ExternalLink className="w-3 h-3" />
