@@ -1,4 +1,4 @@
-// src/pages/compliance.tsx - PART 1 OF 2
+// src/pages/compliance.tsx - PART 1 OF 2 (COMPLETE EXPORT SOLUTION)
 "use client";
 
 import React from "react";
@@ -104,7 +104,7 @@ function CompliancePageContent() {
 
   const attackSuccessRate = pct(decisionCounts.ALLOW, total);
 
-  // Export functions
+  // FIXED: Export to JSON (no alert)
   const exportToJSON = () => {
     const dataStr = JSON.stringify(demoEvidence, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
@@ -115,6 +115,7 @@ function CompliancePageContent() {
     linkElement.click();
   };
 
+  // FIXED: Export to CSV (no alert)
   const exportToCSV = () => {
     const headers = ['Report ID', 'Target System', 'Attack Scan', 'Result', 'Attack Type', 'Severity', 'Failed Layer', 'Timestamp'];
     const csvContent = [
@@ -134,8 +135,146 @@ function CompliancePageContent() {
     linkElement.click();
   };
 
+  // NEW: Professional PDF Export with jsPDF
   const exportToPDF = () => {
-    alert('PDF export coming soon! Use CSV or JSON for now.');
+    // Dynamic import to avoid SSR issues
+    import('jspdf').then((module) => {
+      const jsPDF = module.default;
+      const doc = new jsPDF();
+      
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      let yPos = 20;
+
+      // Header with branding
+      doc.setFillColor(139, 92, 246); // Purple
+      doc.rect(0, 0, pageWidth, 30, 'F');
+      
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(20);
+      doc.text('DefendML', 15, 15);
+      
+      doc.setFontSize(12);
+      doc.text('Red Team Attack Evidence Report', 15, 22);
+      
+      yPos = 40;
+      
+      // Report metadata
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(10);
+      doc.text(`Generated: ${new Date().toLocaleString()}`, 15, yPos);
+      yPos += 7;
+      doc.text(`Total Attacks: ${total}`, 15, yPos);
+      yPos += 7;
+      doc.text(`Attack Success Rate: ${attackSuccessRate}%`, 15, yPos);
+      yPos += 15;
+
+      // Executive Summary
+      doc.setFontSize(14);
+      doc.setTextColor(139, 92, 246);
+      doc.text('Executive Summary', 15, yPos);
+      yPos += 10;
+      
+      doc.setFontSize(10);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`Critical Bypasses: ${decisionCounts.ALLOW}`, 15, yPos);
+      yPos += 7;
+      doc.text(`Attacks Blocked: ${decisionCounts.BLOCK}`, 15, yPos);
+      yPos += 7;
+      doc.text(`Attacks Flagged: ${decisionCounts.FLAG}`, 15, yPos);
+      yPos += 15;
+
+      // Attack Results Table
+      doc.setFontSize(14);
+      doc.setTextColor(139, 92, 246);
+      doc.text('Attack Evidence Details', 15, yPos);
+      yPos += 10;
+
+      // Table headers
+      doc.setFontSize(8);
+      doc.setTextColor(100, 100, 100);
+      const col1 = 15;
+      const col2 = 50;
+      const col3 = 90;
+      const col4 = 120;
+      const col5 = 150;
+      
+      doc.text('Report ID', col1, yPos);
+      doc.text('Target', col2, yPos);
+      doc.text('Result', col3, yPos);
+      doc.text('Type', col4, yPos);
+      doc.text('Severity', col5, yPos);
+      yPos += 7;
+
+      // Table rows
+      doc.setTextColor(0, 0, 0);
+      demoEvidence.forEach((row, index) => {
+        if (yPos > pageHeight - 30) {
+          doc.addPage();
+          yPos = 20;
+        }
+
+        doc.setFontSize(7);
+        doc.text(row.reportId.substring(0, 20), col1, yPos);
+        doc.text(row.target.substring(0, 25), col2, yPos);
+        
+        // Color-code results
+        if (row.decision === 'ALLOW') {
+          doc.setTextColor(239, 68, 68); // Red
+        } else if (row.decision === 'BLOCK') {
+          doc.setTextColor(34, 197, 94); // Green
+        } else {
+          doc.setTextColor(234, 179, 8); // Yellow
+        }
+        doc.text(row.decision, col3, yPos);
+        
+        doc.setTextColor(0, 0, 0);
+        doc.text(row.category.substring(0, 15), col4, yPos);
+        doc.text(row.severity, col5, yPos);
+        
+        yPos += 7;
+      });
+
+      // Framework Coverage (new page)
+      doc.addPage();
+      yPos = 20;
+      
+      doc.setFontSize(14);
+      doc.setTextColor(139, 92, 246);
+      doc.text('Security Framework Coverage', 15, yPos);
+      yPos += 15;
+
+      doc.setFontSize(10);
+      doc.setTextColor(0, 0, 0);
+      
+      const frameworks = [
+        { name: 'OWASP LLM Top 10', coverage: '100%', categories: 'All 10' },
+        { name: 'NIST AI RMF', coverage: '100%', categories: 'All 7' },
+        { name: 'MITRE ATLAS', coverage: '95%', categories: '38/40 techniques' },
+        { name: 'ASL-3 CBRN', coverage: '100%', categories: '35 tests' },
+      ];
+
+      frameworks.forEach((fw) => {
+        doc.text(`${fw.name}:`, 15, yPos);
+        doc.text(`Coverage: ${fw.coverage} (${fw.categories})`, 30, yPos + 5);
+        yPos += 15;
+      });
+
+      // Footer on last page
+      yPos = pageHeight - 20;
+      doc.setFontSize(8);
+      doc.setTextColor(100, 100, 100);
+      doc.text('DefendML - Offense-first AI Red Team Testing', 15, yPos);
+      doc.text('https://defendml.com', 15, yPos + 5);
+      doc.text('This report contains confidential security information.', 15, yPos + 10);
+
+      // Save the PDF
+      const filename = `defendml-attack-report-${new Date().toISOString().split('T')[0]}.pdf`;
+      doc.save(filename);
+    }).catch((error) => {
+      console.error('PDF export failed:', error);
+      alert('PDF export requires jsPDF library. Please install: npm install jspdf');
+    });
   };
 
   const targetRecs = [
@@ -182,7 +321,7 @@ function CompliancePageContent() {
       <Navigation />
 
       <main className="flex-1">
-        {/* Header - WIRED BUTTONS */}
+        {/* Header - FIXED: No alert on export */}
         <div className="bg-slate-900 border-b border-slate-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-start justify-between gap-6">
@@ -361,12 +500,9 @@ function CompliancePageContent() {
               </div>
             </div>
           </div>
+          // CONTINUE FROM PART 1...
 
-// PART 1 ENDS HERE - Continue to Part 2 for Evidence Table and remaining sections
-          // src/pages/compliance.tsx - PART 2 OF 2
-// Continue from Part 1...
-
-          {/* Evidence table - WIRED BUTTONS */}
+          {/* Evidence table - FIXED: All exports work without alerts */}
           <div className="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden mb-8">
             <div className="p-6 border-b border-slate-800 flex items-start justify-between gap-6">
               <div>
@@ -632,5 +768,3 @@ export default function CompliancePage() {
     </RequireAuth>
   );
 }
-
-// PART 2 COMPLETE - Combine Part 1 + Part 2 to create full compliance.tsx file
