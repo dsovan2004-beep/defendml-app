@@ -140,17 +140,11 @@ function CompliancePageContent() {
       const jsPDF = module.default;
       const doc = new jsPDF();
       
-      // Colors
-      const primaryPurple = [147, 51, 234];
-      const darkBg = [15, 23, 42];
-      const textWhite = [255, 255, 255];
-      const textGray = [148, 163, 184];
-      
       // Page 1: Cover & Summary
-      doc.setFillColor(...primaryPurple);
+      doc.setFillColor(147, 51, 234); // Purple
       doc.rect(0, 0, 210, 60, 'F');
       
-      doc.setTextColor(...textWhite);
+      doc.setTextColor(255, 255, 255); // White
       doc.setFontSize(28);
       doc.text('DefendML', 20, 25);
       doc.setFontSize(16);
@@ -241,9 +235,9 @@ function CompliancePageContent() {
       doc.addPage();
       yPos = 20;
       
-      doc.setFillColor(...primaryPurple);
+      doc.setFillColor(147, 51, 234); // Purple
       doc.rect(0, 0, 210, 30, 'F');
-      doc.setTextColor(...textWhite);
+      doc.setTextColor(255, 255, 255); // White
       doc.setFontSize(16);
       doc.text('AI-Powered Remediation Recommendations', 20, 18);
       
@@ -518,6 +512,8 @@ function CompliancePageContent() {
               </div>
             </div>
           </div>
+
+// PART 1 ENDS HERE - Continue to Part 2
 
 // PART 1 ENDS HERE - Continue to Part 2
           // src/pages/compliance.tsx - PART 2 OF 2
