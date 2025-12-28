@@ -1,4 +1,4 @@
-// src/pages/admin/targets.tsx - PART 1
+// src/pages/admin/targets.tsx - PART 1 (FIXED)
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -21,6 +21,7 @@ import {
   AlertCircle,
   Zap,
   Activity,
+  Clock,
 } from "lucide-react";
 
 const supabase = createClient(
@@ -46,6 +47,7 @@ interface Target {
   last_scan_at: string | null;
   total_scans: number;
   last_scan_result: "pass" | "fail" | "error" | null;
+  last_report_id: string | null;
 }
 
 export default function AttackTargets() {
@@ -167,6 +169,23 @@ export default function AttackTargets() {
 
       const data = await response.json();
 
+      // FIXED: Update target with last_scan_at and last_report_id
+      const { error: updateError } = await supabase
+        .from("targets")
+        .update({
+          last_scan_at: new Date().toISOString(),
+          last_report_id: data.report_id,
+          total_scans: (target.total_scans || 0) + 1,
+        })
+        .eq("id", targetId);
+
+      if (updateError) {
+        console.error("Failed to update target status:", updateError);
+      }
+
+      // Reload targets to show updated status
+      await loadTargets();
+
       // Redirect to the report page
       window.location.href = `/reports/${data.report_id}`;
     } catch (error: any) {
@@ -223,34 +242,49 @@ export default function AttackTargets() {
     }
   };
 
-  const getStatusBadge = (result: string | null) => {
-    if (!result) {
+  // FIXED: New function to get relative time
+  const getRelativeTime = (dateString: string | null): string => {
+    if (!dateString) return "Never";
+    
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? 's' : ''} ago`;
+    return date.toLocaleDateString();
+  };
+
+  // FIXED: Updated status badge to show last tested time
+  const getStatusBadge = (lastScanAt: string | null, lastReportId: string | null) => {
+    if (!lastScanAt) {
       return (
         <span className="px-2 py-1 text-xs rounded-full bg-gray-700 text-gray-300 flex items-center gap-1">
-          <AlertCircle className="w-3 h-3" />
+          <Clock className="w-3 h-3" />
           Never tested
         </span>
       );
     }
 
-    const configs = {
-      pass: { color: "bg-green-900/30 text-green-400", icon: CheckCircle, text: "Pass" },
-      fail: { color: "bg-red-900/30 text-red-400", icon: XCircle, text: "Fail" },
-      error: { color: "bg-yellow-900/30 text-yellow-400", icon: AlertCircle, text: "Error" },
-    };
-
-    const config = configs[result as keyof typeof configs];
-    if (!config) return null;
-
-    const Icon = config.icon;
     return (
-      <span className={`px-2 py-1 text-xs rounded-full ${config.color} flex items-center gap-1`}>
-        <Icon className="w-3 h-3" />
-        {config.text}
-      </span>
+      <a
+        href={lastReportId ? `/reports/${lastReportId}` : '#'}
+        className="px-2 py-1 text-xs rounded-full bg-green-900/30 text-green-400 flex items-center gap-1 hover:bg-green-900/50 transition-colors"
+        title="Click to view last report"
+      >
+        <CheckCircle className="w-3 h-3" />
+        Tested {getRelativeTime(lastScanAt)}
+      </a>
     );
   };
-  // src/pages/admin/targets.tsx - PART 2 (CONTINUE FROM PART 1)
+  // PART 2 CONTINUES FROM PART 1
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -368,7 +402,8 @@ export default function AttackTargets() {
                       </div>
                       <div className="flex items-center gap-2 text-sm">
                         <span className="text-gray-500">Status:</span>
-                        {getStatusBadge(target.last_scan_result)}
+                        {/* FIXED: Now shows "Tested X time ago" with link to report */}
+                        {getStatusBadge(target.last_scan_at, target.last_report_id)}
                       </div>
                     </div>
                   </div>
