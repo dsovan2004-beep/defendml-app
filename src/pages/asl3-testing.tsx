@@ -1,4 +1,4 @@
-// src/pages/asl3-testing.tsx - PART 1 OF 2
+// src/pages/asl3-testing.tsx - PART 1 OF 2 (IMPROVED LAYOUT)
 import { useState } from "react";
 import Navigation from "../components/Navigation";
 import {
@@ -127,7 +127,7 @@ export default function ScansPage() {
           </p>
         </div>
 
-        {/* FIXED: Stats Cards with Offensive Metrics */}
+        {/* Stats Cards with Offensive Metrics */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
           <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
             <div className="flex items-center gap-3 mb-2">
@@ -147,7 +147,6 @@ export default function ScansPage() {
             <div className="text-xs text-slate-500 mt-1">Critical threats</div>
           </div>
 
-          {/* FIXED: Changed "Detection Rate" to "Target Block Rate" (Offensive) */}
           <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
             <div className="flex items-center gap-3 mb-2">
               <ShieldCheckIcon className="w-5 h-5 text-green-400" />
@@ -157,7 +156,6 @@ export default function ScansPage() {
             <div className="text-xs text-slate-500 mt-1">How often targets defended</div>
           </div>
 
-          {/* FIXED: Changed "Response Time" to "Scan Latency" (Clarified) */}
           <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
             <div className="flex items-center gap-3 mb-2">
               <ClockIcon className="w-5 h-5 text-blue-400" />
@@ -337,68 +335,72 @@ export default function ScansPage() {
           </div>
 
 // PART 1 ENDS HERE - Continue to Part 2
-          // src/pages/asl3-testing.tsx - PART 2 OF 2
+          // src/pages/asl3-testing.tsx - PART 2 OF 2 (IMPROVED LAYOUT)
 // Continue from Part 1...
 
           <div className="space-y-6">
-            {/* FIXED: "How Scanning Works" with Offensive Positioning */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
-              <h2 className="text-lg font-semibold text-white mb-4">How Scanning Works</h2>
-              <div className="space-y-3">
-                <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
-                  <div className="font-medium text-white mb-1">1. Pattern Matching</div>
-                  <div className="text-sm text-slate-400">
-                    Compares prompt against 255 known attack scenarios
+            {/* NEW LAYOUT: 2-Column Grid for "How Scanning Works" + "Threat Categories" */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* How Scanning Works */}
+              <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
+                <h2 className="text-lg font-semibold text-white mb-4">How Scanning Works</h2>
+                <div className="space-y-3">
+                  <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
+                    <div className="font-medium text-white mb-1">1. Pattern Matching</div>
+                    <div className="text-sm text-slate-400">
+                      Compares prompt against 255 known attack scenarios
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
+                    <div className="font-medium text-white mb-1">2. Context Analysis</div>
+                    <div className="text-sm text-slate-400">
+                      Evaluates semantic meaning and intent
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
+                    <div className="font-medium text-white mb-1">3. Risk Scoring</div>
+                    <div className="text-sm text-slate-400">
+                      Calculates threat level and confidence
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
+                    <div className="font-medium text-white mb-1">4. Target Analysis</div>
+                    <div className="text-sm text-slate-400">
+                      Analyzes which layer of target's defenses failed
+                    </div>
                   </div>
                 </div>
-                <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
-                  <div className="font-medium text-white mb-1">2. Context Analysis</div>
-                  <div className="text-sm text-slate-400">
-                    Evaluates semantic meaning and intent
+              </div>
+
+              {/* Threat Categories */}
+              <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
+                <h2 className="text-lg font-semibold text-white mb-4">Threat Categories</h2>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/40 border border-slate-800">
+                    <span className="text-sm text-slate-300">CBRN</span>
+                    <span className="text-xs px-2 py-1 rounded bg-red-500/10 text-red-400">HIGH</span>
                   </div>
-                </div>
-                <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
-                  <div className="font-medium text-white mb-1">3. Risk Scoring</div>
-                  <div className="text-sm text-slate-400">
-                    Calculates threat level and confidence
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/40 border border-slate-800">
+                    <span className="text-sm text-slate-300">Cyber Operations</span>
+                    <span className="text-xs px-2 py-1 rounded bg-red-500/10 text-red-400">HIGH</span>
                   </div>
-                </div>
-                {/* FIXED: Changed from "Defense Layer" to "Target Analysis" */}
-                <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
-                  <div className="font-medium text-white mb-1">4. Target Analysis</div>
-                  <div className="text-sm text-slate-400">
-                    Analyzes which layer of target's defenses failed
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/40 border border-slate-800">
+                    <span className="text-sm text-slate-300">Deception</span>
+                    <span className="text-xs px-2 py-1 rounded bg-orange-500/10 text-orange-400">MEDIUM</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/40 border border-slate-800">
+                    <span className="text-sm text-slate-300">Autonomous Replication</span>
+                    <span className="text-xs px-2 py-1 rounded bg-red-500/10 text-red-400">HIGH</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/40 border border-slate-800">
+                    <span className="text-sm text-slate-300">Data Theft</span>
+                    <span className="text-xs px-2 py-1 rounded bg-orange-500/10 text-orange-400">MEDIUM</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
-              <h2 className="text-lg font-semibold text-white mb-4">Threat Categories</h2>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/40 border border-slate-800">
-                  <span className="text-sm text-slate-300">CBRN</span>
-                  <span className="text-xs px-2 py-1 rounded bg-red-500/10 text-red-400">HIGH</span>
-                </div>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/40 border border-slate-800">
-                  <span className="text-sm text-slate-300">Cyber Operations</span>
-                  <span className="text-xs px-2 py-1 rounded bg-red-500/10 text-red-400">HIGH</span>
-                </div>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/40 border border-slate-800">
-                  <span className="text-sm text-slate-300">Deception</span>
-                  <span className="text-xs px-2 py-1 rounded bg-orange-500/10 text-orange-400">MEDIUM</span>
-                </div>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/40 border border-slate-800">
-                  <span className="text-sm text-slate-300">Autonomous Replication</span>
-                  <span className="text-xs px-2 py-1 rounded bg-red-500/10 text-red-400">HIGH</span>
-                </div>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/40 border border-slate-800">
-                  <span className="text-sm text-slate-300">Data Theft</span>
-                  <span className="text-xs px-2 py-1 rounded bg-orange-500/10 text-orange-400">MEDIUM</span>
-                </div>
-              </div>
-            </div>
-
+            {/* Testing Best Practices - Full Width Below */}
             <div className="rounded-xl border border-purple-500/20 bg-purple-500/5 p-6">
               <div className="flex items-start gap-3 mb-3">
                 <LightBulbIcon className="w-5 h-5 text-purple-400 mt-0.5" />
@@ -445,7 +447,6 @@ export default function ScansPage() {
         </div>
       </main>
 
-      {/* FIXED: Footer with offensive metrics */}
       <footer className="border-t border-purple-500/20 bg-slate-900/80 backdrop-blur-xl mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
