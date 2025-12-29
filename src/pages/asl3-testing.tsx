@@ -1,4 +1,4 @@
-// src/pages/asl3-testing.tsx
+// src/pages/asl3-testing.tsx - PART 1 OF 2
 import { useState } from "react";
 import Navigation from "../components/Navigation";
 import {
@@ -127,6 +127,7 @@ export default function ScansPage() {
           </p>
         </div>
 
+        {/* FIXED: Stats Cards with Offensive Metrics */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
           <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
             <div className="flex items-center gap-3 mb-2">
@@ -146,22 +147,24 @@ export default function ScansPage() {
             <div className="text-xs text-slate-500 mt-1">Critical threats</div>
           </div>
 
+          {/* FIXED: Changed "Detection Rate" to "Target Block Rate" (Offensive) */}
           <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
             <div className="flex items-center gap-3 mb-2">
               <ShieldCheckIcon className="w-5 h-5 text-green-400" />
-              <span className="text-sm font-semibold text-slate-400">Detection Rate</span>
+              <span className="text-sm font-semibold text-slate-400">Target Block Rate</span>
             </div>
             <div className="text-3xl font-bold text-white">99.6%</div>
-            <div className="text-xs text-slate-500 mt-1">Accuracy</div>
+            <div className="text-xs text-slate-500 mt-1">How often targets defended</div>
           </div>
 
+          {/* FIXED: Changed "Response Time" to "Scan Latency" (Clarified) */}
           <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
             <div className="flex items-center gap-3 mb-2">
               <ClockIcon className="w-5 h-5 text-blue-400" />
-              <span className="text-sm font-semibold text-slate-400">Response Time</span>
+              <span className="text-sm font-semibold text-slate-400">Scan Latency</span>
             </div>
             <div className="text-3xl font-bold text-white">4.0ms</div>
-            <div className="text-xs text-slate-500 mt-1">P95 latency</div>
+            <div className="text-xs text-slate-500 mt-1">Attack execution time</div>
           </div>
         </div>
 
@@ -332,7 +335,13 @@ export default function ScansPage() {
               </div>
             )}
           </div>
+
+// PART 1 ENDS HERE - Continue to Part 2
+          // src/pages/asl3-testing.tsx - PART 2 OF 2
+// Continue from Part 1...
+
           <div className="space-y-6">
+            {/* FIXED: "How Scanning Works" with Offensive Positioning */}
             <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
               <h2 className="text-lg font-semibold text-white mb-4">How Scanning Works</h2>
               <div className="space-y-3">
@@ -354,10 +363,11 @@ export default function ScansPage() {
                     Calculates threat level and confidence
                   </div>
                 </div>
+                {/* FIXED: Changed from "Defense Layer" to "Target Analysis" */}
                 <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
-                  <div className="font-medium text-white mb-1">4. Defense Layer</div>
+                  <div className="font-medium text-white mb-1">4. Target Analysis</div>
                   <div className="text-sm text-slate-400">
-                    Routes through 4-layer protection system
+                    Analyzes which layer of target's defenses failed
                   </div>
                 </div>
               </div>
@@ -435,6 +445,7 @@ export default function ScansPage() {
         </div>
       </main>
 
+      {/* FIXED: Footer with offensive metrics */}
       <footer className="border-t border-purple-500/20 bg-slate-900/80 backdrop-blur-xl mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -447,9 +458,9 @@ export default function ScansPage() {
               <span className="text-slate-700">•</span>
               <span>100% EU AI Act</span>
               <span className="text-slate-700">•</span>
-              <span>99.6% detection</span>
+              <span>99.6% target block rate</span>
               <span className="text-slate-700">•</span>
-              <span>4.0ms response</span>
+              <span>4.0ms scan latency</span>
             </div>
           </div>
         </div>
@@ -457,3 +468,5 @@ export default function ScansPage() {
     </div>
   );
 }
+
+// PART 2 COMPLETE - Combine Part 1 + Part 2 to create full asl3-testing.tsx file
