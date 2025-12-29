@@ -53,9 +53,30 @@ export async function onRequest(context: any) {
   );
 
   try {
+    // NEW: Get user's organization_id from organization_members table
+    const { data: memberships, error: membershipError } = await supabaseService
+      .from('organization_members')
+      .select('organization_id')
+      .eq('user_id', user.id)
+      .limit(1);
+
+    if (membershipError || !memberships || memberships.length === 0) {
+      console.error('Membership error:', membershipError);
+      return new Response(JSON.stringify({ 
+        error: 'No organization found. Please contact support.' 
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const organizationId = memberships[0].organization_id;
+
+    // UPDATED: Include organization_id in insert
     const dataToInsert = {
       ...targetData,
-      created_by: user.id
+      created_by: user.id,
+      organization_id: organizationId  // CRITICAL FIX
     };
 
     const { data: target, error } = await supabaseService
