@@ -186,7 +186,7 @@ export default function ReportPage() {
               <div>
                 <div className="text-blue-400 font-semibold">AI-powered analysis in progress...</div>
                 <div className="text-blue-300 text-sm">
-                  Claude Sonnet 4.5 is generating remediation playbook. This page will auto-update.
+                  Generating contextual remediation playbook. This page will auto-update.
                 </div>
               </div>
             </div>
@@ -293,7 +293,7 @@ export default function ReportPage() {
                 <SparklesIcon className="w-6 h-6 text-purple-400" />
                 <h3 className="text-xl font-semibold text-white">AI-Generated Remediation Playbook</h3>
               </div>
-              <span className="text-xs text-slate-400">Powered by Claude Sonnet 4.5</span>
+              <span className="text-xs text-slate-400">AI-Powered Remediation Analysis</span>
             </div>
 
             <div className="mb-6">
