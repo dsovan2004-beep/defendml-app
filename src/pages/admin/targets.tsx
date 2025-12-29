@@ -1,4 +1,4 @@
-// src/pages/admin/targets.tsx - PART 1 (FIXED)
+// src/pages/admin/targets.tsx - MULTI-TENANCY FIXED
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -84,10 +84,10 @@ export default function AttackTargets() {
         return;
       }
 
+      // FIXED: Removed .eq("created_by", user.id) - RLS handles org filtering
       const { data, error } = await supabase
         .from("targets")
         .select("*")
-        .eq("created_by", user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -135,18 +135,15 @@ export default function AttackTargets() {
     setExecuting(targetId);
     
     try {
-      // Get the target details
       const target = targets.find(t => t.id === targetId);
       if (!target) {
         throw new Error("Target not found");
       }
 
-      // Construct the full URL
       const targetUrl = target.endpoint_path 
         ? `${target.url}${target.endpoint_path}`
         : target.url;
 
-      // Call the red team execution endpoint
       const response = await fetch(
         "https://defendml-api.dsovan2004.workers.dev/api/red-team/execute",
         {
@@ -169,7 +166,6 @@ export default function AttackTargets() {
 
       const data = await response.json();
 
-      // FIXED: Update target with last_scan_at and last_report_id
       const { error: updateError } = await supabase
         .from("targets")
         .update({
@@ -183,10 +179,7 @@ export default function AttackTargets() {
         console.error("Failed to update target status:", updateError);
       }
 
-      // Reload targets to show updated status
       await loadTargets();
-
-      // Redirect to the report page
       window.location.href = `/reports/${data.report_id}`;
     } catch (error: any) {
       console.error("Error executing attack:", error);
@@ -242,7 +235,6 @@ export default function AttackTargets() {
     }
   };
 
-  // FIXED: New function to get relative time
   const getRelativeTime = (dateString: string | null): string => {
     if (!dateString) return "Never";
     
@@ -262,7 +254,6 @@ export default function AttackTargets() {
     return date.toLocaleDateString();
   };
 
-  // FIXED: Updated status badge to show last tested time
   const getStatusBadge = (lastScanAt: string | null, lastReportId: string | null) => {
     if (!lastScanAt) {
       return (
@@ -284,14 +275,12 @@ export default function AttackTargets() {
       </a>
     );
   };
-  // PART 2 CONTINUES FROM PART 1
 
   return (
     <div className="min-h-screen bg-gray-900">
       <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
         <div className="mb-8">
           <div className="flex justify-between items-start">
             <div>
@@ -319,7 +308,6 @@ export default function AttackTargets() {
           </div>
         </div>
 
-        {/* Targets Grid */}
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -402,7 +390,6 @@ export default function AttackTargets() {
                       </div>
                       <div className="flex items-center gap-2 text-sm">
                         <span className="text-gray-500">Status:</span>
-                        {/* FIXED: Now shows "Tested X time ago" with link to report */}
                         {getStatusBadge(target.last_scan_at, target.last_report_id)}
                       </div>
                     </div>
@@ -435,7 +422,6 @@ export default function AttackTargets() {
           </div>
         )}
 
-        {/* Add Target Modal */}
         {showAddModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -643,7 +629,6 @@ export default function AttackTargets() {
           </div>
         )}
 
-        {/* Import Modal Placeholder */}
         {showImportModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-800 rounded-lg max-w-md w-full p-6">
@@ -674,7 +659,6 @@ export default function AttackTargets() {
           </div>
         )}
 
-        {/* Sidebar */}
         <div className="mt-12 bg-gray-800 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <Activity className="w-5 h-5" />
