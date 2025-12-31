@@ -1,4 +1,4 @@
-// src/pages/compliance.tsx - FIXED PART 1 OF 2
+// src/pages/compliance.tsx - WITH PAGINATION PART 1 OF 2
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -12,6 +12,8 @@ import {
   Zap,
   CheckCircle2,
   Loader2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 import Navigation from "../components/Navigation";
@@ -80,6 +82,10 @@ function CompliancePageContent() {
   const [reports, setReports] = useState<EvidenceRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Fetch reports from Supabase on mount
   useEffect(() => {
@@ -92,7 +98,7 @@ function CompliancePageContent() {
           .from('red_team_reports')
           .select('*')
           .order('created_at', { ascending: false })
-          .limit(50);
+          .limit(100); // Increased limit to get more reports
 
         if (fetchError) {
           console.error('Supabase fetch error:', fetchError);
@@ -164,7 +170,13 @@ function CompliancePageContent() {
     fetchReports();
   }, []);
 
-  // Calculate stats from reports
+  // Pagination calculations
+  const totalPages = Math.ceil(reports.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentReports = reports.slice(startIndex, endIndex);
+
+  // Calculate stats from ALL reports (not just current page)
   const total = reports.length;
   const decisionCounts: Record<Decision, number> = { BLOCK: 0, FLAG: 0, ALLOW: 0 };
   const severityCounts: Record<Severity, number> = { CRITICAL: 0, HIGH: 0, MEDIUM: 0, LOW: 0 };
@@ -179,7 +191,24 @@ function CompliancePageContent() {
   const attackSuccessRate = pct(decisionCounts.ALLOW, total);
   const latestReport = reports[0]; // First report is latest due to ordering
 
-  // Export functions
+  // Pagination handlers
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  // Export functions (export ALL reports, not just current page)
   const exportToJSON = () => {
     const dataStr = JSON.stringify(reports, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
@@ -372,7 +401,7 @@ function CompliancePageContent() {
   ];
 
   // Continue in Part 2...
-// src/pages/compliance.tsx - FIXED PART 2 OF 2
+// src/pages/compliance.tsx - WITH PAGINATION PART 2 OF 2
 // Continue from Part 1...
 
   return (
@@ -594,7 +623,7 @@ function CompliancePageContent() {
               </div>
             </div>
 
-            {/* Evidence table */}
+            {/* Evidence table with pagination */}
             <div className="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden mb-8">
               <div className="p-6 border-b border-slate-800 flex items-start justify-between gap-6">
                 <div>
@@ -647,7 +676,7 @@ function CompliancePageContent() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800">
-                    {reports.map((row) => (
+                    {currentReports.map((row) => (
                       <tr key={row.reportId} className="text-slate-200 hover:bg-slate-950/40">
                         <td className="px-6 py-4 font-mono text-xs text-slate-300">{row.reportId}</td>
                         <td className="px-6 py-4">{row.target}</td>
@@ -700,6 +729,73 @@ function CompliancePageContent() {
                   </tbody>
                 </table>
               </div>
+
+              {/* Pagination Controls */}
+              {reports.length > 0 && (
+                <div className="px-6 py-4 border-t border-slate-800 flex items-center justify-between bg-slate-950/40">
+                  <div className="text-sm text-slate-400">
+                    Showing <span className="font-medium text-slate-300">{startIndex + 1}</span> to{" "}
+                    <span className="font-medium text-slate-300">{Math.min(endIndex, reports.length)}</span> of{" "}
+                    <span className="font-medium text-slate-300">{reports.length}</span> reports
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={goToPreviousPage}
+                      disabled={currentPage === 1}
+                      className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:bg-slate-800/50 disabled:cursor-not-allowed text-white text-sm font-medium border border-slate-700 transition-colors flex items-center gap-2"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      Previous
+                    </button>
+
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                        // Show first page, last page, current page, and pages around current
+                        const showPage =
+                          page === 1 ||
+                          page === totalPages ||
+                          (page >= currentPage - 1 && page <= currentPage + 1);
+
+                        if (!showPage) {
+                          // Show ellipsis for skipped pages
+                          if (page === currentPage - 2 || page === currentPage + 2) {
+                            return (
+                              <span key={page} className="px-2 text-slate-500">
+                                ...
+                              </span>
+                            );
+                          }
+                          return null;
+                        }
+
+                        return (
+                          <button
+                            key={page}
+                            onClick={() => goToPage(page)}
+                            className={`px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
+                              currentPage === page
+                                ? 'bg-purple-600 text-white border-purple-500'
+                                : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <button
+                      onClick={goToNextPage}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:bg-slate-800/50 disabled:cursor-not-allowed text-white text-sm font-medium border border-slate-700 transition-colors flex items-center gap-2"
+                    >
+                      Next
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Target Remediation Recommendations */}
