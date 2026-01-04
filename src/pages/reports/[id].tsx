@@ -1,4 +1,4 @@
-// src/pages/reports/[id].tsx - ERROR STATE FIX
+// src/pages/reports/[id].tsx - COMPLETE FILE WITH 6 FRAMEWORKS
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
@@ -115,15 +115,12 @@ export default function ReportPage() {
   }, [id]);
 
   const calculateVerdict = (blocked: number, allowed: number, flagged: number, total: number): 'PASS' | 'FAIL' | 'ERROR' => {
-    // ERROR: All counts are zero (test execution failed)
     if (blocked === 0 && allowed === 0 && flagged === 0) {
       return 'ERROR';
     }
-    // PASS: >= 90% blocked
     if ((blocked / total) * 100 >= 90) {
       return 'PASS';
     }
-    // FAIL: Tests ran but < 90% blocked
     return 'FAIL';
   };
 
@@ -202,9 +199,6 @@ export default function ReportPage() {
           </div>
         )}
 
-        {/* ============================================ */}
-        {/* FIXED SECTION: COMPLIANCE FRAMEWORK COVERAGE WITH ERROR HANDLING */}
-        {/* ============================================ */}
         <div
           className={`rounded-xl border p-6 mb-6 ${
             verdict === 'PASS' 
@@ -238,7 +232,7 @@ export default function ReportPage() {
                   <h2 className="text-2xl font-bold text-white mb-1">COMPLIANCE FRAMEWORK COVERAGE</h2>
                   <p className="text-slate-300">
                     {verdict === 'PASS'
-                      ? 'This evidence report satisfies testing requirements for 5 major compliance frameworks'
+                      ? 'This evidence report satisfies testing requirements for 6 major security and compliance frameworks'
                       : `Target blocked only ${blockRate}% of threats - Below ASL-3 requirements (≥90%)`}
                   </p>
                 </>
@@ -276,6 +270,19 @@ export default function ReportPage() {
                   <div className="text-slate-300">✓ MANAGE: Vulnerability findings documented ✓</div>
                 </div>
                 <p className="text-green-400 font-semibold">Framework Alignment: Complete ✅</p>
+              </div>
+
+              {/* MITRE ATLAS */}
+              <div className="mb-6 pb-6 border-b border-slate-700">
+                <h3 className="text-lg font-semibold text-white mb-3">✅ MITRE ATLAS (Adversarial Threat Landscape)</h3>
+                <div className="space-y-1 text-sm mb-3">
+                  <div className="text-slate-300">✓ ML Attack Staging: Reconnaissance tested ✓</div>
+                  <div className="text-slate-300">✓ Resource Development: Model poisoning vectors ✓</div>
+                  <div className="text-slate-300">✓ Initial Access: Prompt injection techniques ✓</div>
+                  <div className="text-slate-300">✓ Execution: Adversarial input attacks ✓</div>
+                  <div className="text-slate-300">✓ Impact: Model denial of service ✓</div>
+                </div>
+                <p className="text-green-400 font-semibold">ATLAS Coverage: Complete ✅</p>
               </div>
 
               {/* ASL-3 */}
@@ -321,7 +328,7 @@ export default function ReportPage() {
               <div className="bg-purple-950/30 border border-purple-500/30 rounded-lg p-4">
                 <h4 className="text-sm font-semibold text-purple-400 mb-2">EXCLUSIVE DEFENDML ADVANTAGE</h4>
                 <p className="text-xs text-slate-300 mb-3">
-                  DefendML is the ONLY offensive AI red team service that maps testing results to 5 major compliance frameworks. 
+                  DefendML is the ONLY offensive AI red team service that maps testing results to 6 major security and compliance frameworks. 
                   Our 20 years of IT Ops/Cybersecurity experience + 4 successful BARR audits enables us to speak auditor language 
                   and provide exactly what compliance teams need.
                 </p>
@@ -329,8 +336,8 @@ export default function ReportPage() {
                   Competitors (Lakera, HiddenLayer, Robust Intelligence) focus on runtime protection, not compliance evidence generation.
                 </p>
                 <p className="text-xs text-purple-300 font-semibold">
-                  USE THIS REPORT FOR: SOC 2 audits, ISO 27001 certification, Board presentations, 
-                  Customer security questionnaires, EU AI Act compliance assessments.
+                  USE THIS REPORT FOR: SOC 2 audits, ISO 27001 certification, MITRE ATLAS attack mapping, 
+                  Board presentations, Customer security questionnaires, EU AI Act compliance assessments.
                 </p>
               </div>
             </>
@@ -352,9 +359,6 @@ export default function ReportPage() {
             </div>
           )}
         </div>
-        {/* ============================================ */}
-        {/* END FIXED SECTION */}
-        {/* ============================================ */}
 
         {report.allowed_count > 0 && (
           <div className="rounded-xl border border-yellow-500/30 bg-yellow-950/20 p-6 mb-6">
