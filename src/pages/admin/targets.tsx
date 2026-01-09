@@ -1,280 +1,6 @@
-// src/pages/admin/targets.tsx - MULTI-TENANCY FIXED
-"use client";
-
-import React, { useState, useEffect } from "react";
-import Navigation from "../../components/Navigation";
-import Footer from "../../components/Footer";
-import { createClient } from "@supabase/supabase-js";
-import {
-  Plus,
-  Upload,
-  Target,
-  Globe,
-  MessageSquare,
-  Shield,
-  Play,
-  Trash2,
-  Edit,
-  X,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Zap,
-  Activity,
-  Clock,
-} from "lucide-react";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
-interface Target {
-  id: string;
-  name: string;
-  description: string | null;
-  target_type: "api" | "chatbot" | "website";
-  url: string;
-  endpoint_path: string | null;
-  auth_method: "none" | "bearer" | "api_key" | "basic" | null;
-  auth_header_name: string | null;
-  auth_token: string | null;
-  environment: "production" | "staging" | "development";
-  rate_limit_per_hour: number | null;
-  timeout_seconds: number | null;
-  created_at: string;
-  created_by: string;
-  last_scan_at: string | null;
-  total_scans: number;
-  last_scan_result: "pass" | "fail" | "error" | null;
-  last_report_id: string | null;
-}
-
-export default function AttackTargets() {
-  const [targets, setTargets] = useState<Target[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showImportModal, setShowImportModal] = useState(false);
-  const [executing, setExecuting] = useState<string | null>(null);
-  
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    target_type: "api" as "api" | "chatbot" | "website",
-    url: "",
-    endpoint_path: "",
-    auth_method: "none" as "none" | "bearer" | "api_key" | "basic",
-    auth_header_name: "",
-    auth_token: "",
-    environment: "staging" as "production" | "staging" | "development",
-    rate_limit_per_hour: 100,
-    timeout_seconds: 30,
-  });
-
-  useEffect(() => {
-    loadTargets();
-  }, []);
-
-  const loadTargets = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        console.error("No user found");
-        setLoading(false);
-        return;
-      }
-
-      // FIXED: Removed .eq("created_by", user.id) - RLS handles org filtering
-      const { data, error } = await supabase
-        .from("targets")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      setTargets(data || []);
-    } catch (error) {
-      console.error("Error loading targets:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const session = await supabase.auth.getSession();
-      if (!session.data.session) {
-        throw new Error("No active session");
-      }
-
-      const response = await fetch("/api/targets", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.data.session.access_token}`,
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to add target");
-      }
-
-      await loadTargets();
-      setShowAddModal(false);
-      resetForm();
-    } catch (error: any) {
-      console.error("Error adding target:", error);
-      alert(`Failed to add target: ${error.message}`);
-    }
-  };
-
-  const handleRunScan = async (targetId: string) => {
-    setExecuting(targetId);
-    
-    try {
-      const target = targets.find(t => t.id === targetId);
-      if (!target) {
-        throw new Error("Target not found");
-      }
-
-      const targetUrl = target.endpoint_path 
-        ? `${target.url}${target.endpoint_path}`
-        : target.url;
-
-      const response = await fetch(
-        "https://defendml-api.dsovan2004.workers.dev/api/red-team/execute",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            target: targetUrl,
-            auth_token: target.auth_token || undefined,
-            auth_method: target.auth_method !== "none" ? target.auth_method : undefined,
-            auth_header_name: target.auth_header_name || undefined,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to execute attack");
-      }
-
-      const data = await response.json();
-
-      const { error: updateError } = await supabase
-        .from("targets")
-        .update({
-          last_scan_at: new Date().toISOString(),
-          last_report_id: data.report_id,
-          total_scans: (target.total_scans || 0) + 1,
-        })
-        .eq("id", targetId);
-
-      if (updateError) {
-        console.error("Failed to update target status:", updateError);
-      }
-
-      await loadTargets();
-      window.location.href = `/reports/${data.report_id}`;
-    } catch (error: any) {
-      console.error("Error executing attack:", error);
-      alert(`Failed to execute attack: ${error.message}`);
-    } finally {
-      setExecuting(null);
-    }
-  };
-
-  const handleDelete = async (targetId: string) => {
-    if (!confirm("Are you sure you want to delete this attack target?")) return;
-
-    try {
-      const { error } = await supabase
-        .from("targets")
-        .delete()
-        .eq("id", targetId);
-
-      if (error) throw error;
-      await loadTargets();
-    } catch (error) {
-      console.error("Error deleting target:", error);
-      alert("Failed to delete target");
-    }
-  };
-
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      description: "",
-      target_type: "api",
-      url: "",
-      endpoint_path: "",
-      auth_method: "none",
-      auth_header_name: "",
-      auth_token: "",
-      environment: "staging",
-      rate_limit_per_hour: 100,
-      timeout_seconds: 30,
-    });
-  };
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case "api":
-        return <Globe className="w-4 h-4" />;
-      case "chatbot":
-        return <MessageSquare className="w-4 h-4" />;
-      case "website":
-        return <Shield className="w-4 h-4" />;
-      default:
-        return <Target className="w-4 h-4" />;
-    }
-  };
-
-  const getRelativeTime = (dateString: string | null): string => {
-    if (!dateString) return "Never";
-    
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
-
-    if (diffMins < 1) return "Just now";
-    if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
-    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-    if (diffDays === 1) return "Yesterday";
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? 's' : ''} ago`;
-    return date.toLocaleDateString();
-  };
-
-  const getStatusBadge = (lastScanAt: string | null, lastReportId: string | null) => {
-    if (!lastScanAt) {
-      return (
-        <span className="px-2 py-1 text-xs rounded-full bg-gray-700 text-gray-300 flex items-center gap-1">
-          <Clock className="w-3 h-3" />
-          Never tested
-        </span>
-      );
-    }
-
-    return (
-      <a
-        href={lastReportId ? `/reports/${lastReportId}` : '#'}
-        className="px-2 py-1 text-xs rounded-full bg-green-900/30 text-green-400 flex items-center gap-1 hover:bg-green-900/50 transition-colors"
-        title="Click to view last report"
-      >
-        <CheckCircle className="w-3 h-3" />
-        Tested {getRelativeTime(lastScanAt)}
-      </a>
-    );
-  };
+// ========================================
+  // PART 2: JSX RETURN - CONTINUED FROM PART 1
+  // ========================================
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -422,6 +148,9 @@ export default function AttackTargets() {
           </div>
         )}
 
+        {/* ========================================
+            ADD TARGET MODAL WITH CUSTOM HEADERS
+            ======================================== */}
         {showAddModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -604,6 +333,59 @@ export default function AttackTargets() {
                       </div>
                     </>
                   )}
+
+                  {/* ========================================
+                      NEW: CUSTOM HEADERS FIELD
+                      ======================================== */}
+                  <div className="pt-4 border-t border-gray-700">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Custom Headers (Optional)
+                      <span className="text-gray-500 text-xs ml-2">JSON format</span>
+                    </label>
+                    <textarea
+                      value={customHeaders}
+                      onChange={(e) => {
+                        setCustomHeaders(e.target.value);
+                        validateJSON(e.target.value);
+                      }}
+                      onBlur={() => validateJSON(customHeaders)}
+                      placeholder='{"anthropic-version": "2023-06-01"}'
+                      rows={4}
+                      className={`w-full px-4 py-2 bg-gray-700 border ${
+                        headersError ? 'border-red-500' : 'border-gray-600'
+                      } rounded-lg text-white focus:ring-2 focus:ring-blue-600 focus:border-transparent font-mono text-sm`}
+                    />
+                    {headersError && (
+                      <p className="mt-1 text-sm text-red-500">{headersError}</p>
+                    )}
+                    {!headersError && customHeaders !== '{}' && (
+                      <p className="mt-1 text-sm text-green-500">✓ Valid JSON</p>
+                    )}
+                    
+                    <div className="mt-3 space-y-2">
+                      <p className="text-xs text-gray-400">
+                        <strong>Common Examples:</strong>
+                      </p>
+                      <div className="bg-gray-900 p-3 rounded border border-gray-700 space-y-2">
+                        <div>
+                          <p className="text-xs text-gray-300 font-semibold">Anthropic Claude:</p>
+                          <code className="text-xs text-green-400">{`{"anthropic-version": "2023-06-01"}`}</code>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-300 font-semibold">Azure OpenAI:</p>
+                          <code className="text-xs text-green-400">{`{"api-version": "2024-02-15-preview"}`}</code>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-300 font-semibold">Hugging Face:</p>
+                          <code className="text-xs text-green-400">{`{"x-use-cache": "false"}`}</code>
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-2">
+                        💡 <strong>Note:</strong> These headers are merged with Content-Type. 
+                        If you specify an Authorization header here, it will override the Auth Token field above.
+                      </p>
+                    </div>
+                  </div>
 
                   <div className="flex gap-3 pt-4">
                     <button
