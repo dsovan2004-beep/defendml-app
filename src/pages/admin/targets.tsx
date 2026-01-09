@@ -1,7 +1,7 @@
 // ============================================================================
-// src/pages/admin/targets.tsx - PART 1 OF 2
-// WITH CUSTOM HEADERS SUPPORT
-// January 9, 2026, 12:50 PM PST
+// src/pages/admin/targets.tsx - PART 1 OF 2 - FIXED
+// FIXED: Removed auth field overrides in handleRunScan
+// January 9, 2026, 2:35 PM PST
 // ============================================================================
 "use client";
 
@@ -46,7 +46,7 @@ interface Target {
   environment: "production" | "staging" | "development";
   rate_limit_per_hour: number | null;
   timeout_seconds: number | null;
-  custom_headers: Record<string, string> | null; // NEW
+  custom_headers: Record<string, string> | null;
   created_at: string;
   created_by: string;
   last_scan_at: string | null;
@@ -62,7 +62,6 @@ export default function AttackTargets() {
   const [showImportModal, setShowImportModal] = useState(false);
   const [executing, setExecuting] = useState<string | null>(null);
   
-  // NEW: Custom headers state
   const [customHeaders, setCustomHeaders] = useState("{}");
   const [headersError, setHeadersError] = useState("");
   
@@ -84,7 +83,6 @@ export default function AttackTargets() {
     loadTargets();
   }, []);
 
-  // NEW: JSON validation function
   const validateJSON = (jsonString: string): boolean => {
     try {
       JSON.parse(jsonString);
@@ -122,7 +120,6 @@ export default function AttackTargets() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // NEW: Validate custom headers before submission
     if (!validateJSON(customHeaders)) {
       alert("Please fix the JSON format in Custom Headers field");
       return;
@@ -134,7 +131,6 @@ export default function AttackTargets() {
         throw new Error("No active session");
       }
 
-      // NEW: Parse custom headers and include in submission
       const parsedHeaders = JSON.parse(customHeaders);
 
       const response = await fetch("/api/targets", {
@@ -145,7 +141,7 @@ export default function AttackTargets() {
         },
         body: JSON.stringify({
           ...formData,
-          custom_headers: parsedHeaders, // NEW: Include custom headers
+          custom_headers: parsedHeaders,
         }),
       });
 
@@ -163,6 +159,10 @@ export default function AttackTargets() {
     }
   };
 
+  // ============================================================================
+  // FIXED: handleRunScan - Removed auth field overrides
+  // Worker will fetch ALL config from database using targetId
+  // ============================================================================
   const handleRunScan = async (targetId: string) => {
     setExecuting(targetId);
     
@@ -184,11 +184,10 @@ export default function AttackTargets() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            targetId: target.id, // NEW: Send targetId to enable custom headers
-            target: targetUrl,
-            auth_token: target.auth_token || undefined,
-            auth_method: target.auth_method !== "none" ? target.auth_method : undefined,
-            auth_header_name: target.auth_header_name || undefined,
+            targetId: target.id,  // ✅ Worker fetches ALL config from database
+            target: targetUrl,    // ✅ Fallback URL only
+            // ❌ REMOVED: auth_token, auth_method, auth_header_name
+            // These are now fetched from database via targetId
           }),
         }
       );
@@ -253,7 +252,6 @@ export default function AttackTargets() {
       rate_limit_per_hour: 100,
       timeout_seconds: 30,
     });
-    // NEW: Reset custom headers
     setCustomHeaders("{}");
     setHeadersError("");
   };
@@ -312,12 +310,12 @@ export default function AttackTargets() {
     );
   };
 
-  // ========================================
-  // CONTINUED IN PART 2
-  // ========================================
-// ========================================
-  // PART 2: JSX RETURN - CONTINUED FROM PART 1
-  // ========================================
+// ============================================================================
+// CONTINUED IN PART 2 - JSX RETURN
+// ============================================================================
+// ============================================================================
+// PART 2: JSX RETURN - Continues from Part 1
+// ============================================================================
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -465,9 +463,6 @@ export default function AttackTargets() {
           </div>
         )}
 
-        {/* ========================================
-            ADD TARGET MODAL WITH CUSTOM HEADERS
-            ======================================== */}
         {showAddModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -651,9 +646,6 @@ export default function AttackTargets() {
                     </>
                   )}
 
-                  {/* ========================================
-                      NEW: CUSTOM HEADERS FIELD
-                      ======================================== */}
                   <div className="pt-4 border-t border-gray-700">
                     <label className="block text-sm font-medium text-gray-300 mb-2">
                       Custom Headers (Optional)
