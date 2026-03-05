@@ -15,6 +15,43 @@ const demoCredentials = [
   { email: "viewer@defendml.com",  password: "demo123",       role: "viewer" },
 ];
 
+// ── Google "G" SVG logo ────────────────────────────────────────────────────────
+function GoogleLogo() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+      <path
+        d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"
+        fill="#4285F4"
+      />
+      <path
+        d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"
+        fill="#34A853"
+      />
+      <path
+        d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"
+        fill="#FBBC05"
+      />
+      <path
+        d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z"
+        fill="#EA4335"
+      />
+    </svg>
+  );
+}
+
+// ── Divider ────────────────────────────────────────────────────────────────────
+function OrDivider() {
+  return (
+    <div className="flex items-center gap-3 my-5">
+      <div className="flex-1 h-px bg-slate-700/60" />
+      <span className="text-xs text-slate-500 font-medium tracking-wide uppercase">
+        or continue with email
+      </span>
+      <div className="flex-1 h-px bg-slate-700/60" />
+    </div>
+  );
+}
+
 export default function Login() {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
@@ -23,28 +60,43 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [googleBusy, setGoogleBusy] = useState(false);
 
   // ✅ Check if we should auto-switch to signup mode based on URL params
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const plan = params.get("plan");
     const trial = params.get("trial");
-    
+
     // If coming from "Start Free Trial" or "Get Started", switch to signup mode
     if (trial === "true" || plan === "starter" || plan === "growth") {
       setMode("signup");
     }
   }, []);
 
-  // ✅ Auto-redirect if user already has a Supabase or demo session
+  // ✅ Auto-redirect if user already has a Supabase or demo session.
+  //    Also handles the Google OAuth callback — Supabase processes the token
+  //    from the URL hash automatically before getSession() resolves.
+  //    First-time users (account created within the last 60 s) go to /onboarding;
+  //    returning users go to /overview (or ?next=).
   useEffect(() => {
     (async () => {
       const { data } = await supabase.auth.getSession();
       if (data.session) {
         const params = new URLSearchParams(window.location.search);
-        window.location.replace(params.get("next") || "/overview");
+        const next = params.get("next");
+        if (next) {
+          window.location.replace(next);
+          return;
+        }
+
+        // Detect brand-new account (OAuth signup lands back here within seconds)
+        const createdAt = new Date(data.session.user.created_at).getTime();
+        const isNewUser = Date.now() - createdAt < 60_000;
+        window.location.replace(isNewUser ? "/onboarding" : "/overview");
         return;
       }
+
       if (getDemoSession()) {
         const params = new URLSearchParams(window.location.search);
         window.location.replace(params.get("next") || "/overview");
@@ -52,6 +104,28 @@ export default function Login() {
     })();
   }, []);
 
+  // ── Google OAuth ─────────────────────────────────────────────────────────────
+  async function onGoogleSignIn() {
+    setError(null);
+    setGoogleBusy(true);
+    try {
+      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          // Supabase redirects back here after Google auth; the session check
+          // useEffect above handles the first-time vs returning routing.
+          redirectTo: `${window.location.origin}/login`,
+        },
+      });
+      if (oauthError) throw oauthError;
+      // Browser navigates away to Google — no further code runs in this function.
+    } catch (err: any) {
+      setError(err?.message || "Google sign-in failed. Please try again.");
+      setGoogleBusy(false);
+    }
+  }
+
+  // ── Email / password sign-in ─────────────────────────────────────────────────
   async function onSignIn(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
@@ -85,6 +159,7 @@ export default function Login() {
     }
   }
 
+  // ── Email / password sign-up ─────────────────────────────────────────────────
   async function onSignUp(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
@@ -142,9 +217,8 @@ export default function Login() {
         setPassword("");
         setFullName("");
       } else {
-        // Auto sign-in if email confirmation is disabled
-        const params = new URLSearchParams(window.location.search);
-        window.location.replace(params.get("next") || "/overview");
+        // Auto sign-in if email confirmation is disabled → send to onboarding
+        window.location.replace("/onboarding");
       }
     } catch (err: any) {
       setError(err?.message || "Failed to create account");
@@ -156,6 +230,8 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-slate-900 to-purple-950 p-4">
       <div className="w-full max-w-md bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-purple-500/20 p-8 shadow-2xl">
+
+        {/* ── Logo + heading ─────────────────────────────────────────────────── */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl mb-4 shadow-lg shadow-purple-500/50">
             <Shield className="w-10 h-10 text-white" />
@@ -164,13 +240,13 @@ export default function Login() {
             {mode === "signin" ? "Welcome Back" : "Start Your Free Trial"}
           </h1>
           <p className="text-slate-400">
-            {mode === "signin" 
-              ? "Secure your AI infrastructure" 
+            {mode === "signin"
+              ? "Secure your AI infrastructure"
               : "Create your account in seconds"}
           </p>
         </div>
 
-        {/* Toggle between Sign In and Sign Up */}
+        {/* ── Sign In / Sign Up toggle ───────────────────────────────────────── */}
         <div className="flex gap-2 mb-6 bg-slate-800/50 p-1 rounded-lg">
           <button
             type="button"
@@ -204,7 +280,43 @@ export default function Login() {
           </button>
         </div>
 
-        {/* Sign In Form */}
+        {/* ── Continue with Google ───────────────────────────────────────────── */}
+        <button
+          type="button"
+          onClick={onGoogleSignIn}
+          disabled={googleBusy || busy}
+          className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-slate-800/80 hover:bg-slate-700/80 disabled:opacity-50 border border-slate-600/50 hover:border-slate-500/70 text-white font-medium rounded-lg transition-all duration-200"
+        >
+          {googleBusy ? (
+            <svg
+              className="w-5 h-5 animate-spin text-slate-400"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              />
+            </svg>
+          ) : (
+            <GoogleLogo />
+          )}
+          {googleBusy ? "Redirecting to Google…" : "Continue with Google"}
+        </button>
+
+        {/* ── "or continue with email" divider ──────────────────────────────── */}
+        <OrDivider />
+
+        {/* ── Sign In Form ──────────────────────────────────────────────────── */}
         {mode === "signin" && (
           <form onSubmit={onSignIn} className="space-y-6">
             <div>
@@ -250,7 +362,7 @@ export default function Login() {
 
             <button
               type="submit"
-              disabled={busy}
+              disabled={busy || googleBusy}
               className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 disabled:opacity-50 text-white font-semibold rounded-lg transition-all duration-200"
             >
               {busy ? "Signing in..." : "Sign in"}
@@ -258,7 +370,7 @@ export default function Login() {
           </form>
         )}
 
-        {/* Sign Up Form */}
+        {/* ── Sign Up Form ──────────────────────────────────────────────────── */}
         {mode === "signup" && (
           <form onSubmit={onSignUp} className="space-y-6">
             <div>
@@ -329,7 +441,7 @@ export default function Login() {
 
             <button
               type="submit"
-              disabled={busy}
+              disabled={busy || googleBusy}
               className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 disabled:opacity-50 text-white font-semibold rounded-lg transition-all duration-200"
             >
               {busy ? "Creating account..." : "Start Free Trial"}
@@ -341,6 +453,7 @@ export default function Login() {
           </form>
         )}
 
+        {/* ── Demo mode hint ─────────────────────────────────────────────────── */}
         {mode === "signin" && isDemoEnabled() && (
           <div className="mt-6 text-center text-xs text-purple-300/80">
             <p>Demo mode enabled — try <b>superadmin@test.com / DefendML@2025</b></p>
