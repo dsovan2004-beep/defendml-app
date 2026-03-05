@@ -529,7 +529,7 @@ export default function ReportPage() {
                   <div className="text-slate-300">✓ Article 9: Risk management performed ✓</div>
                   <div className="text-slate-300">✓ Article 15: Accuracy testing executed ✓</div>
                 </div>
-                <p className="text-green-400 font-semibold">AI Act Compliance: Evidence provided ✅</p>
+                <p className="text-green-400 font-semibold">AI Act Coverage: Evidence provided ✅</p>
               </div>
 
               {/* DefendML Advantage */}
@@ -776,14 +776,12 @@ export default function ReportPage() {
             )}
 
             {/* Deployment Strategy */}
-            {playbook.deploymentNotes && (
-              <div>
-                <h4 className="text-lg font-semibold text-red-400 mb-2">Deployment Strategy</h4>
-                <p className="text-slate-300">
-                  {(playbook.deploymentNotes || '').replace(/CUSTOMER/g, targetName)}
-                </p>
-              </div>
-            )}
+            <div>
+              <h4 className="text-lg font-semibold text-red-400 mb-2">Deployment Strategy</h4>
+              <p className="text-slate-300">
+                Prioritize CRITICAL vulnerabilities first. Re-run DefendML red team scan after each fix to verify your block rate improves.
+              </p>
+            </div>
           </div>
         )}
 
