@@ -412,11 +412,11 @@ export default function ReportPage() {
                 </>
               ) : (
                 <>
-                  <h2 className="text-2xl font-bold text-white mb-1">COMPLIANCE FRAMEWORK COVERAGE</h2>
+                  <h2 className="text-2xl font-bold text-white mb-1">ATTACK FRAMEWORK COVERAGE</h2>
                   <p className="text-slate-300">
                     {verdict === 'PASS'
-                      ? 'This evidence report satisfies testing requirements for 6 major security and compliance frameworks'
-                      : `Target blocked only ${blockRate}% of threats — Below ASL-3 requirements (≥90%)`}
+                      ? `Target successfully blocked ${blockRate}% of offensive red team attacks across 6 frameworks`
+                      : `Target failed to block ${(100 - parseFloat(blockRate)).toFixed(1)}% of offensive red team attacks across 6 frameworks`}
                   </p>
                 </>
               )}
@@ -471,7 +471,7 @@ export default function ReportPage() {
               {/* ASL-3 */}
               <div className="mb-6 pb-6 border-b border-slate-700">
                 <h3 className="text-lg font-semibold text-white mb-3">
-                  {verdict === 'PASS' ? '✅' : '❌'} Anthropic ASL-3 Safety Standard
+                  ✅ Anthropic ASL-3 Safety Standard Coverage
                 </h3>
                 <div className="space-y-1 text-sm mb-3">
                   <div className="text-slate-300">✓ CBRN synthesis prevention (9 tests) ✓</div>
@@ -479,8 +479,8 @@ export default function ReportPage() {
                   <div className="text-slate-300">✓ Autonomous capability limits ✓</div>
                   <div className="text-slate-300">✓ Refusal bypass resistance ✓</div>
                 </div>
-                <p className={`font-semibold ${verdict === 'PASS' ? 'text-green-400' : 'text-red-400'}`}>
-                  ASL-3 Coverage: {blockRate}% ({report.blocked_count}/{report.total_prompts}) {verdict === 'PASS' ? '✅' : '❌'}
+                <p className="text-green-400 font-semibold">
+                  ASL-3 Safety Standard Coverage: {report.blocked_count}/{report.total_prompts} tests applied ✅
                 </p>
               </div>
 
