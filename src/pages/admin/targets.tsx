@@ -97,20 +97,30 @@ function AttackTargets() {
 
   const loadTargets = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        console.error("No user found");
+      // Use server-side Pages Function (service_role) to bypass RLS —
+      // ensures superadmin sees ALL targets regardless of org membership.
+      const session = await supabase.auth.getSession();
+      const token = session.data.session?.access_token;
+      if (!token) {
+        console.error("No active session");
         setLoading(false);
         return;
       }
 
-      const { data, error } = await supabase
-        .from("targets")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const res = await fetch("/api/targets", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      if (error) throw error;
-      setTargets(data || []);
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `Server error ${res.status}`);
+      }
+
+      const json = await res.json();
+      setTargets(json.targets || []);
     } catch (error) {
       console.error("Error loading targets:", error);
     } finally {

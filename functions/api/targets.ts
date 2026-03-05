@@ -1,4 +1,6 @@
 // functions/api/targets.ts
+// Cloudflare Pages Function: GET /api/targets (list) + POST /api/targets (create)
+// Uses service_role key → bypasses RLS → superadmin sees all targets
 import { createClient } from '@supabase/supabase-js';
 
 interface Env {
@@ -10,16 +12,10 @@ interface Env {
 export async function onRequest(context: any) {
   const { request, env } = context;
 
-  if (request.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
-  }
-
+  // ── Auth: verify JWT for ALL methods ─────────────────────────────────────────
   const authHeader = request.headers.get('Authorization');
   if (!authHeader) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return jsonRes({ error: 'Unauthorized' }, 401);
   }
 
   const supabaseAuth = createClient(
@@ -31,77 +27,94 @@ export async function onRequest(context: any) {
   const { data: { user }, error: authError } = await supabaseAuth.auth.getUser(token);
 
   if (authError || !user) {
-    return new Response(JSON.stringify({ error: 'Invalid token' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return jsonRes({ error: 'Invalid token' }, 401);
   }
 
-  let targetData;
-  try {
-    targetData = await request.json();
-  } catch (err) {
-    return new Response(JSON.stringify({ error: 'Invalid JSON' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-
+  // Service-role client — bypasses RLS so superadmin can see all targets
   const supabaseService = createClient(
     env.NEXT_PUBLIC_SUPABASE_URL,
     env.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  try {
-    // NEW: Get user's organization_id from organization_members table
-    const { data: memberships, error: membershipError } = await supabaseService
-      .from('organization_members')
-      .select('organization_id')
-      .eq('user_id', user.id)
-      .limit(1);
+  // ── GET /api/targets ──────────────────────────────────────────────────────────
+  if (request.method === 'GET') {
+    try {
+      const { data, error } = await supabaseService
+        .from('targets')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    if (membershipError || !memberships || memberships.length === 0) {
-      console.error('Membership error:', membershipError);
-      return new Response(JSON.stringify({ 
-        error: 'No organization found. Please contact support.' 
-      }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      if (error) {
+        console.error('Error fetching targets:', error);
+        return jsonRes({ error: 'Failed to fetch targets' }, 500);
+      }
+
+      return jsonRes({ targets: data || [] }, 200);
+    } catch (err: any) {
+      console.error('Server error on GET /api/targets:', err);
+      return jsonRes({ error: 'Internal server error' }, 500);
     }
-
-    const organizationId = memberships[0].organization_id;
-
-    // UPDATED: Include organization_id in insert
-    const dataToInsert = {
-      ...targetData,
-      created_by: user.id,
-      organization_id: organizationId  // CRITICAL FIX
-    };
-
-    const { data: target, error } = await supabaseService
-      .from('targets')
-      .insert(dataToInsert)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error creating target:', error);
-      return new Response(JSON.stringify({ error: 'Failed to create target' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    return new Response(JSON.stringify(target), {
-      status: 201,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  } catch (err: any) {
-    console.error('Server error:', err);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
   }
+
+  // ── POST /api/targets ─────────────────────────────────────────────────────────
+  if (request.method === 'POST') {
+    let targetData;
+    try {
+      targetData = await request.json();
+    } catch (err) {
+      return jsonRes({ error: 'Invalid JSON' }, 400);
+    }
+
+    try {
+      // Get user's organization_id from organization_members table
+      const { data: memberships, error: membershipError } = await supabaseService
+        .from('organization_members')
+        .select('organization_id')
+        .eq('user_id', user.id)
+        .limit(1);
+
+      if (membershipError || !memberships || memberships.length === 0) {
+        console.error('Membership error:', membershipError);
+        return jsonRes({
+          error: 'No organization found. Please contact support.'
+        }, 400);
+      }
+
+      const organizationId = memberships[0].organization_id;
+
+      const dataToInsert = {
+        ...targetData,
+        created_by: user.id,
+        organization_id: organizationId,
+      };
+
+      const { data: target, error } = await supabaseService
+        .from('targets')
+        .insert(dataToInsert)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error creating target:', error);
+        return jsonRes({ error: 'Failed to create target' }, 500);
+      }
+
+      return jsonRes(target, 201);
+    } catch (err: any) {
+      console.error('Server error on POST /api/targets:', err);
+      return jsonRes({ error: 'Internal server error' }, 500);
+    }
+  }
+
+  return jsonRes({ error: 'Method not allowed' }, 405);
+}
+
+function jsonRes(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-store',
+    },
+  });
 }

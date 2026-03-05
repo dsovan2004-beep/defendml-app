@@ -241,7 +241,7 @@ export default function Login() {
           </h1>
           <p className="text-slate-400">
             {mode === "signin"
-              ? "Secure your AI infrastructure"
+              ? "Attack Before They Do"
               : "Create your account in seconds"}
           </p>
         </div>
