@@ -114,11 +114,11 @@ function SettingsPageContent() {
           role: u.role ?? 'viewer',
           last_sign_in_at:
             authUser?.id === (u.auth_user_id ?? u.id)
-              ? (authUser.last_sign_in_at ?? null)
+              ? (authUser?.last_sign_in_at ?? null)
               : null,
           created_at: u.created_at,
           provider: authUser?.id === (u.auth_user_id ?? u.id)
-            ? (authUser.app_metadata?.provider ?? 'email')
+            ? (authUser?.app_metadata?.provider ?? 'email')
             : 'email',
         }));
 
