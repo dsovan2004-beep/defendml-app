@@ -8,6 +8,7 @@
 import React, { useState, useEffect } from "react";
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
+import RequireAuth from "../../components/RequireAuth";
 import { createClient } from "@supabase/supabase-js";
 import {
   Plus,
@@ -55,7 +56,7 @@ interface Target {
   last_report_id: string | null;
 }
 
-export default function AttackTargets() {
+function AttackTargets() {
   const [targets, setTargets] = useState<Target[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -795,5 +796,13 @@ export default function AttackTargets() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function AttackTargetsPage() {
+  return (
+    <RequireAuth>
+      <AttackTargets />
+    </RequireAuth>
   );
 }
