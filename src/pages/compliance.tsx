@@ -96,7 +96,7 @@ function CompliancePageContent() {
 
         const { data, error: fetchError } = await supabase
           .from('red_team_reports')
-          .select('*')
+          .select('*, targets(name, url)')
           .order('created_at', { ascending: false })
           .limit(100); // Increased limit to get more reports
 
@@ -148,7 +148,7 @@ function CompliancePageContent() {
 
           return {
             reportId: report.report_id,
-            target: report.target_url || "Unknown Target",
+            target: (report.targets as any)?.name || report.target_url || "Unknown Target",
             scan: `ASL-3 Pack (${totalTests})`,
             decision,
             category,
