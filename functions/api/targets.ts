@@ -106,6 +106,48 @@ export async function onRequest(context: any) {
     }
   }
 
+  // ── PATCH /api/targets — update post-scan status fields ──────────────────────
+  // Body: { id, last_scan_at, last_report_id, total_scans }
+  if (request.method === 'PATCH') {
+    let body: any;
+    try {
+      body = await request.json();
+    } catch {
+      return jsonRes({ error: 'Invalid JSON' }, 400);
+    }
+
+    const { id, ...fields } = body;
+    if (!id) return jsonRes({ error: 'Missing target id' }, 400);
+
+    // Only allow safe status fields — never let client overwrite sensitive columns
+    const allowed = ['last_scan_at', 'last_report_id', 'total_scans'];
+    const update: Record<string, unknown> = {};
+    for (const key of allowed) {
+      if (key in fields) update[key] = fields[key];
+    }
+
+    if (Object.keys(update).length === 0) {
+      return jsonRes({ error: 'No valid fields to update' }, 400);
+    }
+
+    try {
+      const { error } = await supabaseService
+        .from('targets')
+        .update(update)
+        .eq('id', id);
+
+      if (error) {
+        console.error('Error updating target status:', error);
+        return jsonRes({ error: 'Failed to update target' }, 500);
+      }
+
+      return jsonRes({ ok: true }, 200);
+    } catch (err: any) {
+      console.error('Server error on PATCH /api/targets:', err);
+      return jsonRes({ error: 'Internal server error' }, 500);
+    }
+  }
+
   return jsonRes({ error: 'Method not allowed' }, 405);
 }
 

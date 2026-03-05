@@ -209,17 +209,22 @@ function AttackTargets() {
 
       const data = await response.json();
 
-      const { error: updateError } = await supabase
-        .from("targets")
-        .update({
+      // Use server-side PATCH (service_role) to bypass RLS for status update
+      const statusRes = await fetch("/api/targets", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        },
+        body: JSON.stringify({
+          id: targetId,
           last_scan_at: new Date().toISOString(),
           last_report_id: data.report_id,
           total_scans: (target.total_scans || 0) + 1,
-        })
-        .eq("id", targetId);
-
-      if (updateError) {
-        console.error("Failed to update target status:", updateError);
+        }),
+      });
+      if (!statusRes.ok) {
+        console.error("Failed to update target status:", await statusRes.text());
       }
 
       await loadTargets();
