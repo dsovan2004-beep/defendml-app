@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Left: Copyright & Links */}
           <div className="flex flex-col md:flex-row items-center gap-4 text-sm">
-            <span className="text-slate-300">© 2025 DefendML</span>
+            <span className="text-slate-300">© 2026 DefendML</span>
             <div className="flex items-center gap-4">
               <Link
                 href="/privacy"
