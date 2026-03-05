@@ -96,9 +96,9 @@ function CompliancePageContent() {
 
         const { data, error: fetchError } = await supabase
           .from('red_team_reports')
-          .select('*, targets(name, url)')
+          .select('*')
           .order('created_at', { ascending: false })
-          .limit(100); // Increased limit to get more reports
+          .limit(100);
 
         if (fetchError) {
           console.error('Supabase fetch error:', fetchError);
@@ -109,6 +109,21 @@ function CompliancePageContent() {
         if (!data || data.length === 0) {
           setReports([]);
           return;
+        }
+
+        // Step 2: fetch target names for any target_ids in reports
+        const targetIds = [...new Set(data.map((r: any) => r.target_id).filter(Boolean))];
+        const targetsMap: Record<string, string> = {};
+        if (targetIds.length > 0) {
+          const { data: targetRows } = await supabase
+            .from('targets')
+            .select('id, name')
+            .in('id', targetIds);
+          if (targetRows) {
+            for (const t of targetRows) {
+              targetsMap[t.id] = t.name;
+            }
+          }
         }
 
         // Transform Supabase data to EvidenceRow format
@@ -146,9 +161,12 @@ function CompliancePageContent() {
             severity = "MEDIUM";
           }
 
+          // Resolve target name: lookup map → fallback to url field → Unknown Target
+          const targetName = targetsMap[report.target_id] || report.target_url || "Unknown Target";
+
           return {
             reportId: report.report_id,
-            target: (report.targets as any)?.name || report.target_url || "Unknown Target",
+            target: targetName,
             scan: `ASL-3 Pack (${totalTests})`,
             decision,
             category,
