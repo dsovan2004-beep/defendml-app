@@ -39,10 +39,24 @@ export async function onRequest(context: any) {
   // ── GET /api/targets ──────────────────────────────────────────────────────────
   if (request.method === 'GET') {
     try {
-      // FIX #4: scope results to the caller's org — prevents cross-org data leakage.
-      // Superadmin (dsovan2004@gmail.com) sees all via service_role but still scoped
-      // to orgs they belong to. Adjust to `.select('*')` with no filter only if you
-      // intentionally want a global view (e.g. a separate /admin/targets endpoint).
+      const SUPERADMIN_EMAIL = 'dsovan2004@gmail.com';
+
+      // Superadmin bypass — return ALL targets unfiltered, consistent with tier logic
+      if (user.email === SUPERADMIN_EMAIL) {
+        const { data, error } = await supabaseService
+          .from('targets')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error fetching targets (superadmin):', error);
+          return jsonRes({ error: 'Failed to fetch targets' }, 500);
+        }
+
+        return jsonRes({ targets: data || [] }, 200);
+      }
+
+      // Standard users: scope results to the caller's org — prevents cross-org data leakage.
       const { data: memberships, error: membershipError } = await supabaseService
         .from('organization_members')
         .select('organization_id')
