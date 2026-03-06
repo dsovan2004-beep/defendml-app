@@ -423,10 +423,10 @@ function SettingsPageContent() {
                           <div className="text-3xl font-bold text-red-400 mb-4">$0<span className="text-lg text-[#A0A0A0]">/month</span></div>
                           <ul className="space-y-2 mb-6">
                             {[
-                              '40 prompts per scan',
-                              '255-prompt library access',
+                              '100 prompts per scan',
+                              '295-prompt library access',
                               'Evidence reports & PDF export',
-                              'ASL-3 & EU AI Act compliance',
+                              'ASL-3 & EU AI Act coverage',
                             ].map(f => (
                               <li key={f} className="flex items-center gap-2 text-sm text-[#F5F5F5]">
                                 <CheckCircle2 className="w-4 h-4 text-green-400" />{f}
@@ -439,12 +439,123 @@ function SettingsPageContent() {
                         </div>
                       </div>
 
+                      {/* Pricing Tiers */}
+                      <div className="mb-6">
+                        <h3 className="text-lg font-semibold text-white mb-4">Available Plans</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                          {/* Pilot */}
+                          <div className="relative p-6 bg-[#1A1A1A] rounded-xl border border-red-500/30 hover:border-red-500/60 transition-all">
+                            <h4 className="text-xl font-bold text-white mb-1">Pilot</h4>
+                            <div className="text-3xl font-bold text-red-400 mb-1">$2,500<span className="text-base text-[#A0A0A0] font-normal"> one-time</span></div>
+                            <p className="text-xs text-zinc-500 mb-4">24hr delivery · 1 target</p>
+                            <ul className="space-y-2 mb-6">
+                              {[
+                                '100 prompts per scan',
+                                '1 target',
+                                '24hr PDF report delivery',
+                                '8/10 OWASP 2025 LLM coverage',
+                                'Evidence reports & PDF export',
+                                'ASL-3 & EU AI Act coverage',
+                              ].map(f => (
+                                <li key={f} className="flex items-center gap-2 text-sm text-[#F5F5F5]">
+                                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />{f}
+                                </li>
+                              ))}
+                            </ul>
+                            <button className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-all">
+                              Get Started
+                            </button>
+                          </div>
+
+                          {/* Standard */}
+                          <div className="relative p-6 bg-[#1A1A1A] rounded-xl border border-orange-500/30 hover:border-orange-500/60 transition-all">
+                            <div className="absolute top-4 right-4">
+                              <span className="px-2 py-0.5 bg-orange-500/20 text-orange-300 rounded-full text-xs font-semibold border border-orange-500/30">POPULAR</span>
+                            </div>
+                            <h4 className="text-xl font-bold text-white mb-1">Standard</h4>
+                            <div className="text-3xl font-bold text-orange-400 mb-1">$4,999<span className="text-base text-[#A0A0A0] font-normal"> one-time</span></div>
+                            <p className="text-xs text-zinc-500 mb-4">24hr delivery · 1 target · full library</p>
+                            <ul className="space-y-2 mb-6">
+                              {[
+                                '295 prompts per scan',
+                                '1 target',
+                                '24hr full report delivery',
+                                '10/10 OWASP 2025 LLM coverage',
+                                'Evidence reports & PDF export',
+                                'ASL-3 & EU AI Act coverage',
+                                'Vector & embedding attack coverage',
+                                'Unbounded consumption testing',
+                              ].map(f => (
+                                <li key={f} className="flex items-center gap-2 text-sm text-[#F5F5F5]">
+                                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />{f}
+                                </li>
+                              ))}
+                            </ul>
+                            <button className="w-full px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition-all">
+                              Get Started
+                            </button>
+                          </div>
+
+                          {/* Growth */}
+                          <div className="relative p-6 bg-[#1A1A1A] rounded-xl border border-zinc-700 hover:border-zinc-500 transition-all">
+                            <h4 className="text-xl font-bold text-white mb-1">Growth</h4>
+                            <div className="text-3xl font-bold text-white mb-1">$9,999<span className="text-base text-[#A0A0A0] font-normal">/month</span></div>
+                            <p className="text-xs text-zinc-500 mb-4">Continuous testing · 3 targets</p>
+                            <ul className="space-y-2 mb-6">
+                              {[
+                                '295 prompts × 3 targets',
+                                'Monthly continuous testing',
+                                '10/10 OWASP 2025 LLM coverage',
+                                'CI/CD integration ready',
+                                'Dedicated report per target',
+                                'Priority delivery',
+                              ].map(f => (
+                                <li key={f} className="flex items-center gap-2 text-sm text-[#F5F5F5]">
+                                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />{f}
+                                </li>
+                              ))}
+                            </ul>
+                            <button className="w-full px-4 py-2 bg-[#222222] hover:bg-[#2A2A2A] text-white rounded-lg font-medium border border-zinc-700 transition-all">
+                              Contact Sales
+                            </button>
+                          </div>
+
+                          {/* Enterprise */}
+                          <div className="relative p-6 bg-[#111111] rounded-xl border border-zinc-700 hover:border-zinc-500 transition-all">
+                            <div className="absolute top-4 right-4">
+                              <span className="px-2 py-0.5 bg-zinc-700 text-zinc-300 rounded-full text-xs font-semibold">ENTERPRISE</span>
+                            </div>
+                            <h4 className="text-xl font-bold text-white mb-1">Enterprise</h4>
+                            <div className="text-3xl font-bold text-white mb-1">Custom<span className="text-base text-[#A0A0A0] font-normal"> pricing</span></div>
+                            <p className="text-xs text-zinc-500 mb-4">Unlimited · CI/CD · SLA-backed</p>
+                            <ul className="space-y-2 mb-6">
+                              {[
+                                'Unlimited prompts & targets',
+                                'CI/CD pipeline integration',
+                                'Custom attack categories',
+                                'SLA-backed delivery',
+                                'Dedicated red team support',
+                              ].map(f => (
+                                <li key={f} className="flex items-center gap-2 text-sm text-[#F5F5F5]">
+                                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />{f}
+                                </li>
+                              ))}
+                            </ul>
+                            <button className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-all">
+                              Contact Us
+                            </button>
+                          </div>
+
+                        </div>
+                      </div>
+
                       <div>
                         <h3 className="text-lg font-semibold text-white mb-4">Usage This Month</h3>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                           {[
                             { label: 'Scans Executed', value: '12' },
-                            { label: 'Total Prompts', value: '480', sub: '40 per scan' },
+                            { label: 'Total Prompts', value: '1200', sub: '100 per scan' },
                             { label: 'Evidence Reports', value: '12' },
                             { label: 'Infrastructure Cost', value: '$0', green: true },
                           ].map(({ label, value, sub, green }) => (
@@ -462,15 +573,15 @@ function SettingsPageContent() {
                       <h4 className="text-lg font-semibold text-green-300 mb-4">💰 Cost Comparison vs Competitors</h4>
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         {[
-                          { label: 'DefendML', value: '$0-$5', highlight: true },
-                          { label: 'F5 AI Red Team', value: '$15K-$30K' },
-                          { label: 'Lakera', value: '$10K-$20K' },
-                          { label: 'Microsoft PyRIT', value: '$20K-$40K' },
-                        ].map(({ label, value, highlight }) => (
+                          { label: 'DefendML', value: 'from $2,500', sub: 'pilot', highlight: true },
+                          { label: 'F5 AI Red Team', value: '$15K-$30K', sub: 'per month' },
+                          { label: 'Lakera', value: '$10K-$20K', sub: 'per month' },
+                          { label: 'Microsoft PyRIT', value: '$20K-$40K', sub: 'per month' },
+                        ].map(({ label, value, sub, highlight }) => (
                           <div key={label} className={`text-center ${!highlight ? 'opacity-60' : ''}`}>
                             <div className={`text-sm mb-1 ${highlight ? 'text-green-300' : 'text-[#A0A0A0]'}`}>{label}</div>
                             <div className={`text-2xl font-bold ${highlight ? 'text-white' : 'text-[#F5F5F5]'}`}>{value}</div>
-                            <div className="text-xs text-zinc-500">per month</div>
+                            <div className="text-xs text-zinc-500">{sub}</div>
                           </div>
                         ))}
                       </div>
