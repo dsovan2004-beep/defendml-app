@@ -43,11 +43,11 @@ function GoogleLogo() {
 function OrDivider() {
   return (
     <div className="flex items-center gap-3 my-5">
-      <div className="flex-1 h-px bg-slate-700/60" />
-      <span className="text-xs text-slate-500 font-medium tracking-wide uppercase">
+      <div className="flex-1 h-px bg-zinc-700/60" />
+      <span className="text-xs text-zinc-500 font-medium tracking-wide uppercase">
         or continue with email
       </span>
-      <div className="flex-1 h-px bg-slate-700/60" />
+      <div className="flex-1 h-px bg-zinc-700/60" />
     </div>
   );
 }
@@ -228,18 +228,18 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-slate-900 to-purple-950 p-4">
-      <div className="w-full max-w-md bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-purple-500/20 p-8 shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-[#0A0A0A] p-4">
+      <div className="w-full max-w-md bg-[#111111] backdrop-blur-xl rounded-2xl border border-red-500/20 p-8 shadow-2xl">
 
         {/* ── Logo + heading ─────────────────────────────────────────────────── */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl mb-4 shadow-lg shadow-purple-500/50">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-red-600 rounded-2xl mb-4 shadow-lg shadow-red-600/50">
             <Shield className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
             {mode === "signin" ? "Welcome Back" : "Start Your Free Trial"}
           </h1>
-          <p className="text-slate-400">
+          <p className="text-[#A0A0A0]">
             {mode === "signin"
               ? "Attack Before They Do"
               : "Create your account in seconds"}
@@ -247,7 +247,7 @@ export default function Login() {
         </div>
 
         {/* ── Sign In / Sign Up toggle ───────────────────────────────────────── */}
-        <div className="flex gap-2 mb-6 bg-slate-800/50 p-1 rounded-lg">
+        <div className="flex gap-2 mb-6 bg-[#1A1A1A]/50 p-1 rounded-lg">
           <button
             type="button"
             onClick={() => {
@@ -257,8 +257,8 @@ export default function Login() {
             }}
             className={`flex-1 py-2 px-4 rounded-md font-medium transition-all ${
               mode === "signin"
-                ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white"
-                : "text-slate-400 hover:text-white"
+                ? "bg-red-600 text-white"
+                : "text-[#A0A0A0] hover:text-white"
             }`}
           >
             Sign In
@@ -272,8 +272,8 @@ export default function Login() {
             }}
             className={`flex-1 py-2 px-4 rounded-md font-medium transition-all ${
               mode === "signup"
-                ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white"
-                : "text-slate-400 hover:text-white"
+                ? "bg-red-600 text-white"
+                : "text-[#A0A0A0] hover:text-white"
             }`}
           >
             Sign Up
@@ -285,11 +285,11 @@ export default function Login() {
           type="button"
           onClick={onGoogleSignIn}
           disabled={googleBusy || busy}
-          className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-slate-800/80 hover:bg-slate-700/80 disabled:opacity-50 border border-slate-600/50 hover:border-slate-500/70 text-white font-medium rounded-lg transition-all duration-200"
+          className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-[#1A1A1A]/80 hover:bg-[#222222]/80 disabled:opacity-50 border border-zinc-700/50 hover:border-zinc-600/70 text-white font-medium rounded-lg transition-all duration-200"
         >
           {googleBusy ? (
             <svg
-              className="w-5 h-5 animate-spin text-slate-400"
+              className="w-5 h-5 animate-spin text-[#A0A0A0]"
               fill="none"
               viewBox="0 0 24 24"
             >
@@ -324,14 +324,14 @@ export default function Login() {
                 Email
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 text-slate-400 w-5 h-5" />
+                <Mail className="absolute left-3 top-3 text-[#A0A0A0] w-5 h-5" />
                 <input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-purple-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full pl-10 pr-4 py-3 bg-[#1A1A1A]/50 border border-red-500/30 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="you@company.com"
                 />
               </div>
@@ -341,14 +341,14 @@ export default function Login() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 text-slate-400 w-5 h-5" />
+                <Lock className="absolute left-3 top-3 text-[#A0A0A0] w-5 h-5" />
                 <input
                   id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-purple-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full pl-10 pr-4 py-3 bg-[#1A1A1A]/50 border border-red-500/30 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="Enter your password"
                 />
               </div>
@@ -363,7 +363,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={busy || googleBusy}
-              className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 disabled:opacity-50 text-white font-semibold rounded-lg transition-all duration-200"
+              className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-semibold rounded-lg transition-all duration-200"
             >
               {busy ? "Signing in..." : "Sign in"}
             </button>
@@ -378,14 +378,14 @@ export default function Login() {
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-3 text-slate-400 w-5 h-5" />
+                <User className="absolute left-3 top-3 text-[#A0A0A0] w-5 h-5" />
                 <input
                   id="fullName"
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required
-                  className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-purple-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full pl-10 pr-4 py-3 bg-[#1A1A1A]/50 border border-red-500/30 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="John Doe"
                 />
               </div>
@@ -395,14 +395,14 @@ export default function Login() {
                 Email
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 text-slate-400 w-5 h-5" />
+                <Mail className="absolute left-3 top-3 text-[#A0A0A0] w-5 h-5" />
                 <input
                   id="signup-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-purple-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full pl-10 pr-4 py-3 bg-[#1A1A1A]/50 border border-red-500/30 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="you@company.com"
                 />
               </div>
@@ -412,7 +412,7 @@ export default function Login() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 text-slate-400 w-5 h-5" />
+                <Lock className="absolute left-3 top-3 text-[#A0A0A0] w-5 h-5" />
                 <input
                   id="signup-password"
                   type="password"
@@ -420,11 +420,11 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-purple-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full pl-10 pr-4 py-3 bg-[#1A1A1A]/50 border border-red-500/30 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="At least 6 characters"
                 />
               </div>
-              <p className="mt-1 text-xs text-slate-400">Must be at least 6 characters</p>
+              <p className="mt-1 text-xs text-[#A0A0A0]">Must be at least 6 characters</p>
             </div>
 
             {error && (
@@ -442,12 +442,12 @@ export default function Login() {
             <button
               type="submit"
               disabled={busy || googleBusy}
-              className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 disabled:opacity-50 text-white font-semibold rounded-lg transition-all duration-200"
+              className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-semibold rounded-lg transition-all duration-200"
             >
               {busy ? "Creating account..." : "Start Free Trial"}
             </button>
 
-            <p className="text-xs text-slate-400 text-center">
+            <p className="text-xs text-[#A0A0A0] text-center">
               By signing up, you agree to our Terms of Service and Privacy Policy
             </p>
           </form>
@@ -455,7 +455,7 @@ export default function Login() {
 
         {/* ── Demo mode hint ─────────────────────────────────────────────────── */}
         {mode === "signin" && isDemoEnabled() && (
-          <div className="mt-6 text-center text-xs text-purple-300/80">
+          <div className="mt-6 text-center text-xs text-red-300/80">
             <p>Demo mode enabled — try <b>superadmin@test.com / DefendML@2025</b></p>
           </div>
         )}
