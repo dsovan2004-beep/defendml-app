@@ -207,7 +207,15 @@ function AttackTargets() {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to execute attack");
+        // Surface the real worker error so we can debug it
+        let workerMsg = `HTTP ${response.status}`;
+        try {
+          const errBody = await response.json();
+          workerMsg = errBody.error || errBody.message || JSON.stringify(errBody);
+        } catch {
+          try { workerMsg = await response.text(); } catch {}
+        }
+        throw new Error(`Worker error: ${workerMsg}`);
       }
 
       const data = await response.json();
