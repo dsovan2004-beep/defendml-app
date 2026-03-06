@@ -660,15 +660,21 @@ function CompliancePageContent() {
                 ))}
               </div>
 
-              {/* Attack Coverage */}
+              {/* Executed Test Coverage */}
               <div className="bg-[#111111] rounded-xl p-6 border border-[#1A1A1A]">
                 <div className="flex items-center gap-2 mb-1">
                   <Target className="w-5 h-5 text-red-300" />
-                  <h2 className="text-lg font-semibold text-white">Attack Coverage</h2>
+                  <h2 className="text-lg font-semibold text-white">Executed Test Coverage</h2>
                 </div>
                 <p className="text-sm text-[#A0A0A0] mb-4">
-                  Threat categories tested against target system.
+                  Breakdown of attack categories executed during this test run.
                 </p>
+
+                {/* Library size — constant, not derived from query */}
+                <div className="flex items-center justify-between mb-4 px-3 py-2 bg-[#0A0A0A]/60 rounded-lg border border-[#1A1A1A]">
+                  <span className="text-xs text-[#A0A0A0]">Attack Library</span>
+                  <span className="text-xs font-semibold text-white">295 scenarios available</span>
+                </div>
 
                 <div className="space-y-3 text-sm">
                   {libLoading ? (
@@ -697,7 +703,7 @@ function CompliancePageContent() {
                       )}
                     </>
                   ) : (
-                    <div className="text-[#A0A0A0] text-xs">No library data available</div>
+                    <div className="text-[#A0A0A0] text-xs">No executed tests yet. Run a scan to generate attack coverage results.</div>
                   )}
                 </div>
 
