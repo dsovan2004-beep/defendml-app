@@ -106,6 +106,8 @@ export default function Onboarding() {
   const phaseTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // ── Auth gate: redirect to /login if no session ──────────────────────────────
+  // Also upserts a public.users row (role: 'free') for Google OAuth signups
+  // that land here without login.tsx having run the email/password insert path.
   useEffect(() => {
     (async () => {
       const { data } = await supabase.auth.getSession();
@@ -114,6 +116,29 @@ export default function Onboarding() {
         return;
       }
       setUser(data.session.user);
+
+      // Ensure public.users row exists — covers Google OAuth first-time signups
+      try {
+        const { data: existing } = await supabase
+          .from("users")
+          .select("id")
+          .eq("auth_user_id", data.session.user.id)
+          .maybeSingle();
+
+        if (!existing) {
+          await supabase.from("users").insert({
+            auth_user_id: data.session.user.id,
+            email: data.session.user.email || "",
+            full_name:
+              data.session.user.user_metadata?.full_name ||
+              data.session.user.user_metadata?.name ||
+              "",
+            role: "free",
+          });
+        }
+      } catch {
+        // Non-fatal — user can still proceed through onboarding
+      }
     })();
   }, []);
 
