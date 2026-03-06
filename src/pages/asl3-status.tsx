@@ -182,7 +182,7 @@ function ASL3StatusPage() {
       case 'DOWN':
         return 'text-red-400 bg-red-500/20 border-red-500/50';
       default:
-        return 'text-gray-400 bg-gray-500/20 border-gray-500/50';
+        return 'text-[#A0A0A0] bg-gray-500/20 border-zinc-600/50';
     }
   };
 
@@ -206,10 +206,10 @@ function ASL3StatusPage() {
     return (
       <div className="min-h-screen flex flex-col">
         <Navigation />
-        <div className="flex-1 bg-slate-950 flex items-center justify-center">
+        <div className="flex-1 bg-[#0A0A0A] flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
-            <p className="text-slate-400">Loading ASL-3 Status...</p>
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-500 mx-auto mb-4"></div>
+            <p className="text-[#A0A0A0]">Loading ASL-3 Status...</p>
           </div>
         </div>
         <Footer />
@@ -232,22 +232,22 @@ function ASL3StatusPage() {
     <div className="min-h-screen flex flex-col">
       <Navigation />
 
-      <div className="flex-1 bg-slate-950">
-        <div className="border-b border-slate-800 bg-slate-900">
+      <div className="flex-1 bg-[#0A0A0A]">
+        <div className="border-b border-[#1A1A1A] bg-[#111111]">
           <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-white mb-2">ASL-3 Compliance Status</h1>
-                <p className="text-slate-400">Anthropic Safety Level 3 Framework - Real-time monitoring</p>
+                <p className="text-[#A0A0A0]">Anthropic Safety Level 3 Framework - Real-time monitoring</p>
 
                 {/* Live evidence (safe: falls back if endpoint fails) */}
                 <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
-                  <div className="text-slate-300">
-                    <span className="text-slate-400">Last Assessed:</span> {lastAssessedLabel}
+                  <div className="text-[#F5F5F5]">
+                    <span className="text-[#A0A0A0]">Last Assessed:</span> {lastAssessedLabel}
                   </div>
                   {testsCountLabel && (
-                    <div className="text-slate-300">
-                      <span className="text-slate-400">Evidence:</span> {testsCountLabel}
+                    <div className="text-[#F5F5F5]">
+                      <span className="text-[#A0A0A0]">Evidence:</span> {testsCountLabel}
                     </div>
                   )}
                 </div>
@@ -265,41 +265,41 @@ function ASL3StatusPage() {
 
           {/* Overall Compliance Scorecard */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 border border-purple-500/30">
+            <div className="bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-2xl p-6 border border-red-500/30">
               <div className="flex items-center gap-3 mb-4">
-                <Shield className="w-8 h-8 text-purple-400" />
+                <Shield className="w-8 h-8 text-red-400" />
                 <div>
                   <h2 className="text-xl font-bold text-white">Deployment Standard</h2>
-                  <p className="text-sm text-slate-400">Prevent misuse & harm</p>
+                  <p className="text-sm text-[#A0A0A0]">Prevent misuse & harm</p>
                 </div>
               </div>
-              <div className="text-5xl font-bold text-purple-400 mb-2">{data.deployment_score}%</div>
-              <div className="text-slate-300 text-sm">Constitutional classifiers, 4-layer defense, rapid response</div>
+              <div className="text-5xl font-bold text-red-400 mb-2">{data.deployment_score}%</div>
+              <div className="text-[#F5F5F5] text-sm">Constitutional classifiers, 4-layer defense, rapid response</div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl p-6 border border-blue-500/30">
+            <div className="bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-2xl p-6 border border-red-500/30">
               <div className="flex items-center gap-3 mb-4">
-                <Lock className="w-8 h-8 text-blue-400" />
+                <Lock className="w-8 h-8 text-orange-400" />
                 <div>
                   <h2 className="text-xl font-bold text-white">Security Standard</h2>
-                  <p className="text-sm text-slate-400">Protect model weights</p>
+                  <p className="text-sm text-[#A0A0A0]">Protect model weights</p>
                 </div>
               </div>
-              <div className="text-5xl font-bold text-blue-400 mb-2">{data.security_score}%</div>
-              <div className="text-slate-300 text-sm">Multi-party auth, encryption, egress monitoring, insider threat detection</div>
+              <div className="text-5xl font-bold text-orange-400 mb-2">{data.security_score}%</div>
+              <div className="text-[#F5F5F5] text-sm">Multi-party auth, encryption, egress monitoring, insider threat detection</div>
             </div>
           </div>
 
           {/* Constitutional Classifiers Section */}
-          <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+          <div className="bg-[#111111] rounded-2xl border border-[#1A1A1A] p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center">
-                  <Eye className="w-6 h-6 text-purple-400" />
+                <div className="w-12 h-12 bg-red-500/10 rounded-xl flex items-center justify-center">
+                  <Eye className="w-6 h-6 text-red-400" />
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">Constitutional Classifiers</h2>
-                  <p className="text-sm text-slate-400">Real-time input/output monitoring</p>
+                  <p className="text-sm text-[#A0A0A0]">Real-time input/output monitoring</p>
                 </div>
               </div>
               <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(data.classifier.status)}`}>
@@ -309,31 +309,31 @@ function ASL3StatusPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              <div className="bg-black/40 rounded-lg p-4 border border-slate-700">
-                <div className="text-2xl font-bold text-purple-400 mb-1">{data.classifier.accuracy}%</div>
-                <div className="text-xs text-slate-400">Accuracy</div>
+              <div className="bg-black/40 rounded-lg p-4 border border-zinc-800">
+                <div className="text-2xl font-bold text-red-400 mb-1">{data.classifier.accuracy}%</div>
+                <div className="text-xs text-[#A0A0A0]">Accuracy</div>
               </div>
-              <div className="bg-black/40 rounded-lg p-4 border border-slate-700">
-                <div className="text-2xl font-bold text-purple-400 mb-1">{data.classifier.latency_p95}ms</div>
-                <div className="text-xs text-slate-400">Latency (P95)</div>
+              <div className="bg-black/40 rounded-lg p-4 border border-zinc-800">
+                <div className="text-2xl font-bold text-red-400 mb-1">{data.classifier.latency_p95}ms</div>
+                <div className="text-xs text-[#A0A0A0]">Latency (P95)</div>
               </div>
-              <div className="bg-black/40 rounded-lg p-4 border border-slate-700">
-                <div className="text-2xl font-bold text-purple-400 mb-1">{data.classifier.false_positive_rate}%</div>
-                <div className="text-xs text-slate-400">False Positive Rate</div>
+              <div className="bg-black/40 rounded-lg p-4 border border-zinc-800">
+                <div className="text-2xl font-bold text-red-400 mb-1">{data.classifier.false_positive_rate}%</div>
+                <div className="text-xs text-[#A0A0A0]">False Positive Rate</div>
               </div>
-              <div className="bg-black/40 rounded-lg p-4 border border-slate-700">
-                <div className="text-2xl font-bold text-purple-400 mb-1">{data.classifier.blocks_24h}</div>
-                <div className="text-xs text-slate-400">Blocked (24h)</div>
+              <div className="bg-black/40 rounded-lg p-4 border border-zinc-800">
+                <div className="text-2xl font-bold text-red-400 mb-1">{data.classifier.blocks_24h}</div>
+                <div className="text-xs text-[#A0A0A0]">Blocked (24h)</div>
               </div>
             </div>
 
-            <div className="border-t border-slate-800 pt-4">
-              <h3 className="text-sm font-semibold text-slate-300 mb-3">Top Triggered Rules:</h3>
+            <div className="border-t border-[#1A1A1A] pt-4">
+              <h3 className="text-sm font-semibold text-[#F5F5F5] mb-3">Top Triggered Rules:</h3>
               <div className="space-y-2">
                 {data.classifier.top_rules.map((rule, idx) => (
                   <div key={idx} className="flex items-center justify-between">
-                    <span className="text-sm text-slate-400">• {rule.rule}</span>
-                    <span className="text-sm font-semibold text-purple-400">{rule.percentage}%</span>
+                    <span className="text-sm text-[#A0A0A0]">• {rule.rule}</span>
+                    <span className="text-sm font-semibold text-red-400">{rule.percentage}%</span>
                   </div>
                 ))}
               </div>
@@ -341,28 +341,28 @@ function ASL3StatusPage() {
           </div>
 
           {/* 4-Layer Defense Visualization */}
-          <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+          <div className="bg-[#111111] rounded-2xl border border-[#1A1A1A] p-6">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
-                <Shield className="w-6 h-6 text-blue-400" />
+              <div className="w-12 h-12 bg-red-500/10 rounded-xl flex items-center justify-center">
+                <Shield className="w-6 h-6 text-orange-400" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white">4-Layer Defense Architecture</h2>
-                <p className="text-sm text-slate-400">Defense-in-depth security model</p>
+                <p className="text-sm text-[#A0A0A0]">Defense-in-depth security model</p>
               </div>
             </div>
 
             <div className="space-y-4">
               {data.defense_layers.map((layer) => (
-                <div key={layer.layer} className="bg-black/40 rounded-lg p-5 border border-slate-700 hover:border-purple-500/50 transition-all">
+                <div key={layer.layer} className="bg-black/40 rounded-lg p-5 border border-zinc-800 hover:border-red-500/50 transition-all">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center">
-                        <span className="text-lg font-bold text-purple-400">L{layer.layer}</span>
+                      <div className="w-10 h-10 bg-red-500/10 rounded-lg flex items-center justify-center">
+                        <span className="text-lg font-bold text-red-400">L{layer.layer}</span>
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-white">{layer.name}</h3>
-                        <p className="text-xs text-slate-400">{layer.description}</p>
+                        <p className="text-xs text-[#A0A0A0]">{layer.description}</p>
                       </div>
                     </div>
                     <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(layer.status)}`}>
@@ -376,46 +376,46 @@ function ASL3StatusPage() {
           </div>
 
           {/* Security Standard Compliance */}
-          <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+          <div className="bg-[#111111] rounded-2xl border border-[#1A1A1A] p-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center">
                 <Lock className="w-6 h-6 text-green-400" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white">Security Standard Compliance</h2>
-                <p className="text-sm text-slate-400">Model weight protection & access controls</p>
+                <p className="text-sm text-[#A0A0A0]">Model weight protection & access controls</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-slate-700">
+              <div className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-zinc-800">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-green-400" />
-                  <span className="text-sm text-slate-300">Multi-party Authorization</span>
+                  <span className="text-sm text-[#F5F5F5]">Multi-party Authorization</span>
                 </div>
                 <span className="text-xs font-semibold text-green-400">{data.security_standard.multi_party_auth ? 'ENABLED' : 'DISABLED'}</span>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-slate-700">
+              <div className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-zinc-800">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-green-400" />
-                  <span className="text-sm text-slate-300">Model Weight Encryption</span>
+                  <span className="text-sm text-[#F5F5F5]">Model Weight Encryption</span>
                 </div>
                 <span className="text-xs font-semibold text-green-400">{data.security_standard.model_encryption}</span>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-slate-700">
+              <div className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-zinc-800">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-green-400" />
-                  <span className="text-sm text-slate-300">Egress Monitoring</span>
+                  <span className="text-sm text-[#F5F5F5]">Egress Monitoring</span>
                 </div>
                 <span className="text-xs font-semibold text-green-400">{data.security_standard.egress_monitoring ? 'ACTIVE' : 'INACTIVE'}</span>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-slate-700">
+              <div className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-zinc-800">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-green-400" />
-                  <span className="text-sm text-slate-300">Insider Threat Detection</span>
+                  <span className="text-sm text-[#F5F5F5]">Insider Threat Detection</span>
                 </div>
                 <span className="text-xs font-semibold text-green-400">{data.security_standard.insider_threat_detection ? 'ACTIVE' : 'INACTIVE'}</span>
               </div>
@@ -423,58 +423,58 @@ function ASL3StatusPage() {
           </div>
 
           {/* Red Team & Bug Bounty */}
-          <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+          <div className="bg-[#111111] rounded-2xl border border-[#1A1A1A] p-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center">
                 <Users className="w-6 h-6 text-orange-400" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white">Red Team & Bug Bounty Program</h2>
-                <p className="text-sm text-slate-400">External security validation</p>
+                <p className="text-sm text-[#A0A0A0]">External security validation</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="bg-black/40 rounded-lg p-4 border border-slate-700">
+              <div className="bg-black/40 rounded-lg p-4 border border-zinc-800">
                 <div className="flex items-center gap-2 mb-2">
                   <Shield className="w-5 h-5 text-orange-400" />
                 </div>
                 <div className="text-2xl font-bold text-white mb-1">{data.red_team.active_programs}</div>
-                <div className="text-xs text-slate-400">Active Programs</div>
+                <div className="text-xs text-[#A0A0A0]">Active Programs</div>
               </div>
 
-              <div className="bg-black/40 rounded-lg p-4 border border-slate-700">
+              <div className="bg-black/40 rounded-lg p-4 border border-zinc-800">
                 <div className="flex items-center gap-2 mb-2">
                   <AlertTriangle className="w-5 h-5 text-yellow-400" />
                 </div>
                 <div className="text-2xl font-bold text-white mb-1">{data.red_team.vulnerabilities_30d}</div>
-                <div className="text-xs text-slate-400">Vulnerabilities (30d)</div>
+                <div className="text-xs text-[#A0A0A0]">Vulnerabilities (30d)</div>
               </div>
 
-              <div className="bg-black/40 rounded-lg p-4 border border-slate-700">
+              <div className="bg-black/40 rounded-lg p-4 border border-zinc-800">
                 <div className="flex items-center gap-2 mb-2">
-                  <Clock className="w-5 h-5 text-blue-400" />
+                  <Clock className="w-5 h-5 text-orange-400" />
                 </div>
                 <div className="text-2xl font-bold text-white mb-1">{data.red_team.avg_remediation_days}</div>
-                <div className="text-xs text-slate-400">Avg Remediation (days)</div>
+                <div className="text-xs text-[#A0A0A0]">Avg Remediation (days)</div>
               </div>
 
-              <div className="bg-black/40 rounded-lg p-4 border border-slate-700">
+              <div className="bg-black/40 rounded-lg p-4 border border-zinc-800">
                 <div className="flex items-center gap-2 mb-2">
                   <DollarSign className="w-5 h-5 text-green-400" />
                 </div>
                 <div className="text-2xl font-bold text-white mb-1">${(data.red_team.total_bounties_paid / 1000).toFixed(0)}K</div>
-                <div className="text-xs text-slate-400">Total Bounties Paid</div>
+                <div className="text-xs text-[#A0A0A0]">Total Bounties Paid</div>
               </div>
             </div>
           </div>
 
           {/* Info Banner */}
-          <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-blue-400 mt-0.5" />
+          <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-orange-400 mt-0.5" />
             <div>
-              <div className="text-blue-300 font-semibold text-sm mb-1">ASL-3 Certification</div>
-              <div className="text-blue-200/80 text-sm">
+              <div className="text-orange-300 font-semibold text-sm mb-1">ASL-3 Certification</div>
+              <div className="text-orange-200/80 text-sm">
                 DefendML is the first LLM security platform to achieve full ASL-3 compliance, meeting Anthropic&apos;s industry-leading safety standards for advanced AI systems.
               </div>
             </div>
