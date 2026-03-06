@@ -208,7 +208,7 @@ export default function RequireAuth({
   // Loading
   if (ok === null) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-500 mx-auto mb-4"></div>
           <p className="text-[#A0A0A0]">Verifying credentials...</p>
