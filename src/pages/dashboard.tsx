@@ -75,7 +75,7 @@ function DashboardPage() {
         <div className="space-y-3">
           {logs.map((log) => (
             <div key={log.id} className="bg-white rounded-lg shadow p-4">
-              <div className="text-sm text-gray-500">{log.ts}</div>
+              <div className="text-sm text-zinc-500">{log.ts}</div>
               {log.input_preview && (
                 <div className="font-medium text-gray-900">
                   {log.input_preview}
@@ -94,7 +94,7 @@ function DashboardPage() {
             </div>
           ))}
           {logs.length === 0 && (
-            <div className="text-gray-600">No logs yet.</div>
+            <div className="text-zinc-600">No logs yet.</div>
           )}
         </div>
       )}
