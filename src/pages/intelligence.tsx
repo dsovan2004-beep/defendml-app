@@ -206,16 +206,13 @@ function IntelligencePage() {
                   <Activity className="w-4 h-4 text-green-300" />
                   <span className="text-sm font-medium text-green-300">AI-Powered Analysis</span>
                 </div>
-                <select 
-                  value={timeRange} 
-                  onChange={(e) => setTimeRange(Number(e.target.value))} 
-                  className="px-4 py-2 bg-[#1A1A1A] border border-zinc-800 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
+                {/* Time range selector — hidden until API is wired */}
+                {/* <select value={timeRange} onChange={(e) => setTimeRange(Number(e.target.value))} className="px-4 py-2 bg-[#1A1A1A] border border-zinc-800 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
                   <option value={7}>Last 7 Days</option>
                   <option value={30}>Last 30 Days</option>
                   <option value={90}>Last 90 Days</option>
                   <option value={365}>Last Year</option>
-                </select>
+                </select> */}
               </div>
             </div>
           </div>
@@ -464,7 +461,7 @@ function IntelligencePage() {
 
           {/* Bottom CTAs */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="/tester" className="p-6 bg-[#111111] hover:bg-[#1A1A1A] rounded-xl border border-[#1A1A1A] hover:border-red-500/50 transition-all block">
+            <a href="/asl3-testing" className="p-6 bg-[#111111] hover:bg-[#1A1A1A] rounded-xl border border-[#1A1A1A] hover:border-red-500/50 transition-all block">
               <Target className="w-8 h-8 text-red-400 mb-3" />
               <div className="text-white font-semibold mb-1">Execute New Scan</div>
               <div className="text-[#A0A0A0] text-sm">Launch red team attack against new target</div>
