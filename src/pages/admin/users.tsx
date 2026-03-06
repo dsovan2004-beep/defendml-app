@@ -34,10 +34,10 @@ function UsersUploadPage() {
   return (
     <>
       <Navigation />
-      <div className="min-h-screen bg-slate-950 text-white">
+      <div className="min-h-screen bg-[#0A0A0A] text-white">
         <div className="max-w-3xl mx-auto px-6 py-10">
           <h1 className="text-2xl font-bold mb-2">Users Upload (CSV)</h1>
-          <p className="text-slate-400 mb-6">
+          <p className="text-[#A0A0A0] mb-6">
             Admin-only. Upload a CSV to bulk-create users and assign roles.
           </p>
 
@@ -49,22 +49,22 @@ function UsersUploadPage() {
                 accept=".csv"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
                 className="block w-full text-sm file:mr-4 file:rounded-lg
-                           file:border-0 file:bg-purple-600 file:px-4 file:py-2
-                           file:text-white hover:file:bg-purple-500 cursor-pointer"
+                           file:border-0 file:bg-red-600 file:px-4 file:py-2
+                           file:text-white hover:file:bg-red-500 cursor-pointer"
               />
-              <p className="text-xs text-slate-400 mt-2">
+              <p className="text-xs text-[#A0A0A0] mt-2">
                 Expected headers: <code>email,name,role</code>
               </p>
             </div>
 
             <button
               type="submit"
-              className="px-5 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 font-medium"
+              className="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-500 font-medium"
             >
               Upload CSV
             </button>
 
-            {status && <div className="text-sm text-slate-300">{status}</div>}
+            {status && <div className="text-sm text-[#F5F5F5]">{status}</div>}
           </form>
         </div>
       </div>
