@@ -303,7 +303,17 @@ function getPriorityBadge(count: number): { label: string; className: string } {
 }
 
 function getTargetDisplayName(report: Report): string {
-  return report.target_name || 'your AI system';
+  if (report.target_name) return report.target_name;
+  // Derive a readable name from the target URL
+  if (report.target) {
+    try {
+      const u = new URL(report.target);
+      return u.hostname.replace(/^www\./, '');
+    } catch {
+      return report.target.length > 40 ? report.target.slice(0, 40) + '…' : report.target;
+    }
+  }
+  return 'Target AI System';
 }
 
 function sanitizeText(text: string, targetName: string, rawTarget: string): string {
