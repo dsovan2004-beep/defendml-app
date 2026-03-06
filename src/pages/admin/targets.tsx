@@ -198,10 +198,13 @@ function AttackTargets() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            targetId: target.id,  // ✅ Worker fetches ALL config from database
-            target: targetUrl,    // ✅ Fallback URL only
-            // ❌ REMOVED: auth_token, auth_method, auth_header_name
-            // These are now fetched from database via targetId
+            targetId: target.id,
+            target: targetUrl,
+            // Send full config — worker may not have Supabase configured to look it up
+            auth_method: target.auth_method || "none",
+            auth_token: target.auth_token || null,
+            auth_header_name: target.auth_header_name || null,
+            custom_headers: target.custom_headers || {},
           }),
         }
       );
