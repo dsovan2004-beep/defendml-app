@@ -14,6 +14,7 @@ import {
   Loader2,
   ChevronLeft,
   ChevronRight,
+  Lock,
 } from "lucide-react";
 
 import Navigation from "../components/Navigation";
@@ -21,6 +22,7 @@ import Footer from "../components/Footer";
 import RequireAuth from "../components/RequireAuth";
 import { UserRole } from "../types/roles";
 import { createClient } from "@supabase/supabase-js";
+import { useUserTier, isFree } from "../lib/tierCheck";
 
 /* -----------------------------
    Types
@@ -79,6 +81,9 @@ function formatTimestamp(isoString: string) {
 
 function CompliancePageContent() {
   const router = useRouter();
+  const { tier } = useUserTier();
+  const gated = isFree(tier);
+
   const [reports, setReports] = useState<EvidenceRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -446,23 +451,45 @@ function CompliancePageContent() {
                 </div>
               </div>
 
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => router.push('/asl3-testing')}
-                  className="px-4 py-2 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] text-white text-sm font-medium border border-zinc-800 transition-colors"
-                >
-                  Generate Report
-                </button>
-                <button
-                  type="button"
-                  onClick={exportToPDF}
-                  disabled={loading || reports.length === 0}
-                  className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 disabled:bg-[#1A1A1A] disabled:cursor-not-allowed text-white text-sm font-medium border border-red-500/50 transition-colors flex items-center gap-2"
-                >
-                  <Download className="w-4 h-4" />
-                  Export Evidence
-                </button>
+              <div className="flex flex-col items-end gap-2">
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => router.push('/asl3-testing')}
+                    className="px-4 py-2 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] text-white text-sm font-medium border border-zinc-800 transition-colors"
+                  >
+                    Generate Report
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { if (!gated) exportToPDF(); }}
+                    disabled={loading || reports.length === 0 || gated}
+                    title={gated ? "Upgrade to Pilot to export evidence" : undefined}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                      gated
+                        ? "bg-[#1A1A1A] text-zinc-500 cursor-not-allowed border border-zinc-700"
+                        : "bg-red-600 hover:bg-red-700 disabled:bg-[#1A1A1A] disabled:cursor-not-allowed text-white border border-red-500/50"
+                    }`}
+                  >
+                    {gated ? <Lock className="w-4 h-4" /> : <Download className="w-4 h-4" />}
+                    Export Evidence
+                  </button>
+                </div>
+                {/* Upgrade banner — shown only for free tier */}
+                {gated && (
+                  <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2 flex items-center gap-2">
+                    <Lock className="w-3.5 h-3.5 text-red-400 flex-shrink-0" />
+                    <span className="text-xs text-red-300">
+                      Upgrade to Pilot ($2,500) to unlock real red team scans.{" "}
+                      <a
+                        href="mailto:dsovan2004@gmail.com"
+                        className="underline text-red-400 hover:text-red-300 transition-colors"
+                      >
+                        Contact us to upgrade →
+                      </a>
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
