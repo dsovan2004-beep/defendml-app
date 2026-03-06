@@ -40,51 +40,81 @@ export default function ASL3Testing() {
   const [result, setResult] = useState<TestResult | null>(null);
   const [quickScans, setQuickScans] = useState<QuickScan[]>([]);
   const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(true);
+  const [liveStats, setLiveStats] = useState<{
+    criticalCount: number | null;
+    avgBlockRate: number | null;
+    avgLatencyS: number | null;
+  }>({ criticalCount: null, avgBlockRate: null, avgLatencyS: null });
 
-  // Fetch real prompts from database for Quick Scans
+  // Fetch real prompts + live stats from database
   useEffect(() => {
-    async function fetchQuickScans() {
+    async function fetchData() {
       try {
         setLoading(true);
-        
-        // Get 4 high-severity prompts from different categories
-        const { data, error } = await supabase
-          .from('red_team_tests')
-          .select('*')
-          .eq('status', 'active')
-          .in('category', ['cbrn_wmd', 'pii_data_extraction', 'cybersecurity_exploits', 'jailbreaks_constitutional'])
-          .limit(4);
+        setStatsLoading(true);
 
-        if (error) {
-          console.error('Error fetching quick scans:', error);
-          // Fallback to hardcoded if database fails
+        // Run quick scans + stats queries in parallel
+        const [
+          { data: promptData, error: promptErr },
+          { count: criticalCount },
+          { data: blockRateData },
+          { data: latencyData },
+        ] = await Promise.all([
+          // Quick scan prompts — correct columns: category, prompt_text, severity, framework
+          supabase
+            .from('red_team_tests')
+            .select('id, category, prompt_text, severity, framework')
+            .in('category', ['cbrn_wmd', 'pii_data_extraction', 'cybersecurity_exploits', 'jailbreaks_constitutional'])
+            .limit(4),
+          // Critical/High severity count
+          supabase
+            .from('red_team_tests')
+            .select('id', { count: 'exact', head: true })
+            .in('severity', ['CRITICAL', 'HIGH']),
+          // Avg block rate across all reports
+          supabase.from('red_team_reports').select('block_rate'),
+          // Avg latency across all results
+          supabase.from('red_team_results').select('latency_ms').not('latency_ms', 'is', null),
+        ]);
+
+        // Wire quick scans
+        if (promptErr || !promptData?.length) {
           setQuickScans(fallbackQuickScans);
-          return;
-        }
-
-        if (data && data.length > 0) {
-          const formattedScans: QuickScan[] = data.map((item: any) => ({
+        } else {
+          setQuickScans(promptData.map((item: any) => ({
             name: formatCategoryName(item.category),
-            description: item.category.split('_').map((w: string) => 
+            description: item.category.split('_').map((w: string) =>
               w.charAt(0).toUpperCase() + w.slice(1)
             ).join(' '),
             severity: item.severity || 'HIGH',
-            prompt: item.test_prompt,
+            prompt: item.prompt_text,   // correct column name
             category: item.category,
-          }));
-          setQuickScans(formattedScans);
-        } else {
-          setQuickScans(fallbackQuickScans);
+          })));
         }
+
+        // Wire stats
+        const avgBlockRate = blockRateData?.length
+          ? blockRateData.reduce((s, r) => s + (r.block_rate ?? 0), 0) / blockRateData.length
+          : null;
+        const avgLatencyMs = latencyData?.length
+          ? latencyData.reduce((s, r) => s + (r.latency_ms ?? 0), 0) / latencyData.length
+          : null;
+        setLiveStats({
+          criticalCount: criticalCount ?? null,
+          avgBlockRate: avgBlockRate !== null ? parseFloat((avgBlockRate * 100).toFixed(1)) : null,
+          avgLatencyS: avgLatencyMs !== null ? parseFloat((avgLatencyMs / 1000).toFixed(2)) : null,
+        });
       } catch (err) {
-        console.error('Error:', err);
+        console.error('Error fetching scan data:', err);
         setQuickScans(fallbackQuickScans);
       } finally {
         setLoading(false);
+        setStatsLoading(false);
       }
     }
 
-    fetchQuickScans();
+    fetchData();
   }, []);
 
   const formatCategoryName = (category: string): string => {
@@ -152,7 +182,7 @@ export default function ASL3Testing() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-[#0A0A0A]">
       <Navigation />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -189,6 +219,7 @@ export default function ASL3Testing() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Total Scenarios — static product claim */}
           <div className="bg-[#111111]/50 backdrop-blur-sm border border-[#1A1A1A] rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
               <BeakerIcon className="h-8 w-8 text-red-400" />
@@ -200,35 +231,60 @@ export default function ASL3Testing() {
             </div>
           </div>
 
+          {/* Critical Severity — live from red_team_tests */}
           <div className="bg-[#111111]/50 backdrop-blur-sm border border-[#1A1A1A] rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
               <ExclamationTriangleIcon className="h-8 w-8 text-red-400" />
             </div>
             <div className="space-y-1">
               <span className="text-sm font-semibold text-[#A0A0A0]">Critical Severity</span>
-              <div className="text-3xl font-bold text-white">130</div>
-              <div className="text-xs text-zinc-500 mt-1">Severe threats</div>
+              <div className="text-3xl font-bold text-white">
+                {statsLoading ? (
+                  <div className="h-8 w-16 bg-zinc-700 rounded animate-pulse" />
+                ) : (
+                  liveStats.criticalCount !== null ? liveStats.criticalCount : '—'
+                )}
+              </div>
+              <div className="text-xs text-zinc-500 mt-1">HIGH + CRITICAL prompts</div>
             </div>
           </div>
 
+          {/* Avg Block Rate — live from red_team_reports */}
           <div className="bg-[#111111]/50 backdrop-blur-sm border border-[#1A1A1A] rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
               <ShieldCheckIcon className="h-8 w-8 text-green-400" />
             </div>
             <div className="space-y-1">
               <span className="text-sm font-semibold text-[#A0A0A0]">Avg Block Rate</span>
-              <div className="text-3xl font-bold text-white">85%</div>
-              <div className="text-xs text-zinc-500 mt-1">Typical target performance</div>
+              <div className="text-3xl font-bold text-white">
+                {statsLoading ? (
+                  <div className="h-8 w-16 bg-zinc-700 rounded animate-pulse" />
+                ) : liveStats.avgBlockRate !== null ? (
+                  `${liveStats.avgBlockRate}%`
+                ) : (
+                  <span className="text-zinc-500 text-xl">No scans</span>
+                )}
+              </div>
+              <div className="text-xs text-zinc-500 mt-1">Across all completed scans</div>
             </div>
           </div>
 
+          {/* Avg Latency — live from red_team_results */}
           <div className="bg-[#111111]/50 backdrop-blur-sm border border-[#1A1A1A] rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
               <ClockIcon className="h-8 w-8 text-orange-400" />
             </div>
             <div className="space-y-1">
               <span className="text-sm font-semibold text-[#A0A0A0]">Scan Latency</span>
-              <div className="text-3xl font-bold text-white">~1.3s</div>
+              <div className="text-3xl font-bold text-white">
+                {statsLoading ? (
+                  <div className="h-8 w-16 bg-zinc-700 rounded animate-pulse" />
+                ) : liveStats.avgLatencyS !== null ? (
+                  `~${liveStats.avgLatencyS}s`
+                ) : (
+                  <span className="text-zinc-500 text-xl">No data</span>
+                )}
+              </div>
               <div className="text-xs text-zinc-500 mt-1">Per prompt avg</div>
             </div>
           </div>
@@ -354,7 +410,7 @@ export default function ASL3Testing() {
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-2">Ready for Production Testing?</h3>
                   <p className="text-sm text-[#F5F5F5] mb-1">
-                    Run full red team scans with 40 randomized prompts from our 255-scenario library
+                    Run full red team scans with 100 prompts from our 255-scenario library
                   </p>
                   <p className="text-xs text-[#A0A0A0]">
                     ✓ Audit-grade evidence reports • ✓ AI-powered remediation • ✓ Multi-format export (PDF/CSV/JSON)
