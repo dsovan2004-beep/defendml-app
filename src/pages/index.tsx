@@ -18,7 +18,7 @@ export default function HomePage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+    <div className="min-h-screen flex items-center justify-center bg-[#0A0A0A]">
       <div className="flex flex-col items-center gap-4">
         <div className="text-white text-xl">Redirecting...</div>
         <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
