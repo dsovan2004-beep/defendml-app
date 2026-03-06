@@ -167,9 +167,9 @@ function AuditPageContent() {
       case 'medium':
         return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30';
       case 'info':
-        return 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+        return 'bg-red-500/20 text-orange-300 border-red-500/30';
       default:
-        return 'bg-slate-500/20 text-slate-300 border-slate-500/30';
+        return 'bg-slate-500/20 text-[#F5F5F5] border-slate-500/30';
     }
   };
 
@@ -184,14 +184,14 @@ function AuditPageContent() {
       case 'healthy':
         return <CheckCircle className="w-4 h-4 text-green-400" />;
       default:
-        return <CheckCircle className="w-4 h-4 text-blue-400" />;
+        return <CheckCircle className="w-4 h-4 text-orange-400" />;
     }
   };
 
   const getLayerBadge = (layer: number) => {
     const colors = [
-      'bg-purple-500/20 text-purple-300 border-purple-500/30',
-      'bg-blue-500/20 text-blue-300 border-blue-500/30',
+      'bg-red-500/20 text-red-300 border-red-500/30',
+      'bg-red-500/20 text-orange-300 border-red-500/30',
       'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
       'bg-green-500/20 text-green-300 border-green-500/30'
     ];
@@ -215,7 +215,7 @@ function AuditPageContent() {
               <ScrollText className="w-8 h-8 text-amber-400" />
               <h1 className="text-3xl font-bold text-white">Audit Logs</h1>
             </div>
-            <p className="text-slate-300">
+            <p className="text-[#F5F5F5]">
               Complete audit trail for compliance and security with ASL-3 tracking
             </p>
           </div>
@@ -236,7 +236,7 @@ function AuditPageContent() {
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-white mb-1">ASL-3 Audit Compliance</h2>
-                    <p className="text-sm text-slate-400">Complete audit trail with 90-day retention</p>
+                    <p className="text-sm text-[#A0A0A0]">Complete audit trail with 90-day retention</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -255,7 +255,7 @@ function AuditPageContent() {
                     <span className="text-sm font-semibold text-amber-300">Deployment Events</span>
                   </div>
                   <div className="text-3xl font-bold text-amber-400 mb-1">{deploymentEvents}</div>
-                  <div className="text-xs text-slate-400">Constitutional classifiers</div>
+                  <div className="text-xs text-[#A0A0A0]">Constitutional classifiers</div>
                 </div>
 
                 <div className="bg-black/40 rounded-xl p-5 border border-orange-500/30">
@@ -264,7 +264,7 @@ function AuditPageContent() {
                     <span className="text-sm font-semibold text-orange-300">Security Events</span>
                   </div>
                   <div className="text-3xl font-bold text-orange-400 mb-1">{securityEvents}</div>
-                  <div className="text-xs text-slate-400">Access controls</div>
+                  <div className="text-xs text-[#A0A0A0]">Access controls</div>
                 </div>
 
                 <div className="bg-black/40 rounded-xl p-5 border border-yellow-500/30">
@@ -273,7 +273,7 @@ function AuditPageContent() {
                     <span className="text-sm font-semibold text-yellow-300">Monitoring Events</span>
                   </div>
                   <div className="text-3xl font-bold text-yellow-400 mb-1">{monitoringEvents}</div>
-                  <div className="text-xs text-slate-400">Pattern detection</div>
+                  <div className="text-xs text-[#A0A0A0]">Pattern detection</div>
                 </div>
 
                 <div className="bg-black/40 rounded-xl p-5 border border-green-500/30">
@@ -282,7 +282,7 @@ function AuditPageContent() {
                     <span className="text-sm font-semibold text-green-300">Avg Response</span>
                   </div>
                   <div className="text-3xl font-bold text-green-400 mb-1">{avgResponseTime}ms</div>
-                  <div className="text-xs text-slate-400">Within SLA targets</div>
+                  <div className="text-xs text-[#A0A0A0]">Within SLA targets</div>
                 </div>
               </div>
 
@@ -299,7 +299,7 @@ function AuditPageContent() {
                     return (
                       <div key={layer} className="bg-amber-500/10 rounded-lg p-4 border border-amber-500/20">
                         <div className="text-lg font-bold text-amber-400 mb-1">L{layer}: {count}</div>
-                        <div className="text-xs text-slate-400">{layerNames[layer - 1]}</div>
+                        <div className="text-xs text-[#A0A0A0]">{layerNames[layer - 1]}</div>
                       </div>
                     );
                   })}
@@ -312,18 +312,18 @@ function AuditPageContent() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white/5 rounded-xl p-6 border border-white/10">
               <div className="text-4xl font-bold text-amber-400 mb-2">45,678</div>
-              <div className="text-slate-300 font-medium">Events Logged</div>
-              <div className="text-xs text-slate-500 mt-1">All ASL-3 categories tracked</div>
+              <div className="text-[#F5F5F5] font-medium">Events Logged</div>
+              <div className="text-xs text-zinc-500 mt-1">All ASL-3 categories tracked</div>
             </div>
             <div className="bg-white/5 rounded-xl p-6 border border-white/10">
               <div className="text-4xl font-bold text-amber-400 mb-2">100%</div>
-              <div className="text-slate-300 font-medium">Coverage</div>
-              <div className="text-xs text-slate-500 mt-1">All layers monitored</div>
+              <div className="text-[#F5F5F5] font-medium">Coverage</div>
+              <div className="text-xs text-zinc-500 mt-1">All layers monitored</div>
             </div>
             <div className="bg-white/5 rounded-xl p-6 border border-white/10">
               <div className="text-4xl font-bold text-amber-400 mb-2">90d</div>
-              <div className="text-slate-300 font-medium">Retention</div>
-              <div className="text-xs text-slate-500 mt-1">ASL-3 compliant storage</div>
+              <div className="text-[#F5F5F5] font-medium">Retention</div>
+              <div className="text-xs text-zinc-500 mt-1">ASL-3 compliant storage</div>
             </div>
           </div>
 
@@ -334,13 +334,13 @@ function AuditPageContent() {
               <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                 <div className="flex-1 w-full md:w-auto">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#A0A0A0]" />
                     <input
                       type="text"
                       placeholder="Search audit logs..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      className="w-full pl-11 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
                     />
                   </div>
                 </div>
@@ -356,7 +356,7 @@ function AuditPageContent() {
               {/* ASL-3 Filters Row */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-slate-300 mb-2">ASL-3 Category</label>
+                  <label className="block text-sm font-medium text-[#F5F5F5] mb-2">ASL-3 Category</label>
                   <select
                     value={filterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
@@ -369,7 +369,7 @@ function AuditPageContent() {
                   </select>
                 </div>
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Defense Layer</label>
+                  <label className="block text-sm font-medium text-[#F5F5F5] mb-2">Defense Layer</label>
                   <select
                     value={filterLayer}
                     onChange={(e) => setFilterLayer(e.target.value)}
@@ -390,7 +390,7 @@ function AuditPageContent() {
           <div className="bg-black/30 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
             <div className="px-6 py-4 border-b border-white/10 bg-white/5">
               <h3 className="text-lg font-bold text-white">ASL-3 Security Events</h3>
-              <p className="text-slate-400 text-sm">
+              <p className="text-[#A0A0A0] text-sm">
                 {filteredLogs.length} event{filteredLogs.length !== 1 ? 's' : ''} found • All events tracked for compliance
               </p>
             </div>
@@ -399,28 +399,28 @@ function AuditPageContent() {
               <table className="w-full">
                 <thead className="bg-white/5 border-b border-white/10">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">
                       Timestamp
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">
                       Event Type
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">
                       User
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">
                       Action
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">
                       Layer
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">
                       Response Time
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">
                       Details
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">
                       Severity
                     </th>
                   </tr>
@@ -428,34 +428,34 @@ function AuditPageContent() {
                 <tbody className="divide-y divide-white/5">
                   {filteredLogs.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="px-6 py-12 text-center text-slate-400">
-                        <Filter className="w-12 h-12 mx-auto mb-3 text-slate-600" />
+                      <td colSpan={8} className="px-6 py-12 text-center text-[#A0A0A0]">
+                        <Filter className="w-12 h-12 mx-auto mb-3 text-zinc-600" />
                         <div className="font-medium">No audit logs found</div>
-                        <div className="text-sm text-slate-500 mt-1">Try adjusting your filters</div>
+                        <div className="text-sm text-zinc-500 mt-1">Try adjusting your filters</div>
                       </td>
                     </tr>
                   ) : (
                     filteredLogs.map((log) => (
                       <tr key={log.id} className="hover:bg-white/5 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-slate-300">
+                          <div className="text-sm text-[#F5F5F5]">
                             {new Date(log.timestamp).toLocaleTimeString()}
                           </div>
-                          <div className="text-xs text-slate-500">
+                          <div className="text-xs text-zinc-500">
                             {new Date(log.timestamp).toLocaleDateString()}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-white">{log.event}</div>
-                          <div className="text-xs text-slate-500">{log.provider}</div>
+                          <div className="text-xs text-zinc-500">{log.provider}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm text-slate-300">{log.user}</span>
+                          <span className="text-sm text-[#F5F5F5]">{log.user}</span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-2">
                             {getActionIcon(log.action)}
-                            <span className="text-sm text-slate-300 capitalize">{log.action}</span>
+                            <span className="text-sm text-[#F5F5F5] capitalize">{log.action}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -464,10 +464,10 @@ function AuditPageContent() {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm text-slate-300">{log.responseTime}ms</span>
+                          <span className="text-sm text-[#F5F5F5]">{log.responseTime}ms</span>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="text-sm text-slate-400">{log.details}</span>
+                          <span className="text-sm text-[#A0A0A0]">{log.details}</span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`px-3 py-1 rounded-lg text-xs font-bold border ${getSeverityColor(log.severity)}`}>
