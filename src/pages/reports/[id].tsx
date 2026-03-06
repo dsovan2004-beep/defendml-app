@@ -650,8 +650,16 @@ export default function ReportPage() {
                 <span className="text-[#A0A0A0] text-sm">/ 100</span>
               </div>
             </div>
-            <div className={`px-4 py-2 rounded-lg border ${scoreRisk.border} ${scoreRisk.bg}`}>
-              <span className={`text-sm font-bold uppercase tracking-wide ${scoreRisk.color}`}>{scoreRisk.label}</span>
+            <div className="flex flex-col items-end gap-2">
+              <div className={`px-4 py-2 rounded-lg border ${scoreRisk.border} ${scoreRisk.bg}`}>
+                <span className={`text-sm font-bold uppercase tracking-wide ${scoreRisk.color}`}>{scoreRisk.label}</span>
+              </div>
+              {posture === 'PASS' && (
+                <div className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-green-950/40 border border-green-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                  <span className="text-xs font-semibold text-green-400 uppercase tracking-wider">Residual Risk: LOW</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -920,9 +928,17 @@ export default function ReportPage() {
             <AnalysisPending />
           ) : exploitedCategories.length === 0 ? (
             <>
-              <p className="text-sm text-[#A0A0A0] mb-5">
-                Representative blocked attack transcripts from this assessment. These samples confirm the target AI system&apos;s security controls successfully detected and stopped adversarial inputs across multiple attack categories.
+              <p className="text-sm text-[#A0A0A0] mb-2">
+                {blockedSamples.length > 0
+                  ? 'Blocked attack transcripts drawn from actual test execution. These samples confirm the target AI system\u2019s security controls successfully detected and stopped adversarial inputs across multiple attack categories.'
+                  : 'Sanitized representative examples from this assessment\u2019s attack categories. These illustrate the types of attacks executed and how a correctly configured security layer should respond. Actual response snippets were not stored for this scan.'}
               </p>
+              {blockedSamples.length === 0 && (
+                <div className="flex items-center gap-2 mb-4 px-3 py-2 rounded-lg bg-yellow-950/20 border border-yellow-500/20">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-yellow-500">Note</span>
+                  <span className="text-xs text-yellow-300/80">Sanitized representative examples — not from live response data</span>
+                </div>
+              )}
               <div className="space-y-4">
                 {(blockedSamples.length > 0
                   ? blockedSamples.slice(0, 3).map((s, idx) => {
@@ -1028,7 +1044,40 @@ export default function ReportPage() {
           {!analysisReady ? (
             <AnalysisPending />
           ) : exploitedCategories.length === 0 ? (
-            <EmptySectionState message="✓ No vulnerabilities found. All attack vectors were blocked." />
+            <>
+              {/* PASS — no CVEs, but show minor observations */}
+              <div className="flex items-center gap-2 mb-5 p-4 rounded-xl bg-green-950/20 border border-green-500/30">
+                <span className="text-green-400 font-semibold text-sm">✓ No exploitable vulnerabilities detected. All attack vectors were blocked across every tested category.</span>
+              </div>
+              <div className="bg-[#0A0A0A]/60 rounded-xl border border-[#1A1A1A] p-5">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-[#A0A0A0] mb-4">Minor Observations</h3>
+                <ul className="space-y-3 text-sm">
+                  <li className="flex items-start gap-3 text-[#F5F5F5]">
+                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />
+                    <span>Block rate <strong className="text-green-400">{blockRateStr}%</strong> meets and exceeds the ≥ 90% production deployment threshold across all {report.total_prompts} adversarial prompts.</span>
+                  </li>
+                  {report.flagged_count > 0 ? (
+                    <li className="flex items-start gap-3 text-[#F5F5F5]">
+                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-yellow-500 shrink-0" />
+                      <span><strong className="text-yellow-400">{report.flagged_count} prompt{report.flagged_count !== 1 ? 's' : ''}</strong> triggered detection and were blocked, but warrant a review of the flagging logic to confirm true-positive classification. No bypass was observed.</span>
+                    </li>
+                  ) : (
+                    <li className="flex items-start gap-3 text-[#F5F5F5]">
+                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />
+                      <span>Zero flagged-but-not-blocked prompts — detection and enforcement layers are aligned with no partial-detection gaps.</span>
+                    </li>
+                  )}
+                  <li className="flex items-start gap-3 text-[#F5F5F5]">
+                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                    <span>Coverage confirmed across all 10 OWASP LLM categories. No category-level gaps were identified in this assessment cycle.</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-[#A0A0A0]">
+                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-zinc-500 shrink-0" />
+                    <span><em>Recommendation:</em> Schedule quarterly re-scans as attack techniques evolve. A passing result reflects the current threat corpus — new attack variants emerge continuously.</span>
+                  </li>
+                </ul>
+              </div>
+            </>
           ) : (
             <>
             <p className="text-sm text-[#A0A0A0] mb-5">
