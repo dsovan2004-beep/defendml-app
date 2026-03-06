@@ -158,9 +158,13 @@ export default function Navigation() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/overview" className="flex items-center gap-2 group">
-              {/* DefendML custom logo mark — shield + crosshair (offensive targeting) */}
+              {/* DefendML custom logo mark — shield + crosshair + glow */}
               <svg
                 className="w-8 h-8 text-red-500 group-hover:text-red-400 transition-colors"
+                style={{
+                  filter:
+                    'drop-shadow(0 0 3px rgba(220,38,38,0.9)) drop-shadow(0 0 8px rgba(220,38,38,0.45))',
+                }}
                 viewBox="0 0 32 32"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -179,7 +183,12 @@ export default function Navigation() {
                 <line x1="16" y1="7.5" x2="16" y2="24.5" stroke="currentColor" strokeWidth="1.1" />
                 {/* Dashed targeting ring */}
                 <circle cx="16" cy="16" r="5.5" stroke="currentColor" strokeWidth="0.8" strokeDasharray="2 2.5" />
-                {/* Center lock dot */}
+                {/* Ping pulse ring — animates outward and fades */}
+                <circle cx="16" cy="16" r="2.2" fill="currentColor" opacity="0.35">
+                  <animate attributeName="r" values="2.2;5.5;2.2" dur="2.4s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.35;0;0.35" dur="2.4s" repeatCount="indefinite" />
+                </circle>
+                {/* Center lock dot — solid, always on top */}
                 <circle cx="16" cy="16" r="2.2" fill="currentColor" />
               </svg>
               <span className="text-xl font-bold text-white">DefendML</span>
