@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import {
   Menu,
   X,
-  Shield,
   Lock,
   FileCheck,
   Activity,
@@ -159,7 +158,30 @@ export default function Navigation() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/overview" className="flex items-center gap-2 group">
-              <Shield className="w-8 h-8 text-red-500 group-hover:text-red-400 transition-colors" />
+              {/* DefendML custom logo mark — shield + crosshair (offensive targeting) */}
+              <svg
+                className="w-8 h-8 text-red-500 group-hover:text-red-400 transition-colors"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Angular shield body */}
+                <path
+                  d="M16 2.5L28.5 7.5V18.5C28.5 25 22.8 29.5 16 31.5C9.2 29.5 3.5 25 3.5 18.5V7.5L16 2.5Z"
+                  fill="rgba(220,38,38,0.12)"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  strokeLinejoin="round"
+                />
+                {/* Crosshair horizontal — extends past shield edges */}
+                <line x1="5" y1="16" x2="27" y2="16" stroke="currentColor" strokeWidth="1.1" />
+                {/* Crosshair vertical */}
+                <line x1="16" y1="7.5" x2="16" y2="24.5" stroke="currentColor" strokeWidth="1.1" />
+                {/* Dashed targeting ring */}
+                <circle cx="16" cy="16" r="5.5" stroke="currentColor" strokeWidth="0.8" strokeDasharray="2 2.5" />
+                {/* Center lock dot */}
+                <circle cx="16" cy="16" r="2.2" fill="currentColor" />
+              </svg>
               <span className="text-xl font-bold text-white">DefendML</span>
               <span className="hidden sm:inline text-xs text-[#A0A0A0] ml-2 px-2 py-1 bg-red-500/10 rounded border border-red-500/20">
                 Red Team First
