@@ -183,7 +183,7 @@ export default function ResetPassword() {
   // Loading screen during bootstrap
   if (bootstrapping) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-200 grid place-items-center">
+      <div className="min-h-screen bg-[#0A0A0A] text-[#F5F5F5] grid place-items-center">
         <div className="text-center">
           <div className="animate-spin h-10 w-10 rounded-full border-t-2 border-b-2 border-emerald-400 mx-auto mb-4" />
           <p>Preparing your reset session…</p>
@@ -197,7 +197,7 @@ export default function ResetPassword() {
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mb-4">
+          <div className="mx-auto w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mb-4">
             <svg
               className="w-8 h-8 text-white"
               fill="none"
@@ -215,7 +215,7 @@ export default function ResetPassword() {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Reset Password
           </h1>
-          <p className="text-gray-600">Enter your new password below</p>
+          <p className="text-zinc-600">Enter your new password below</p>
         </div>
 
         {/* Message Display */}
@@ -274,12 +274,12 @@ export default function ResetPassword() {
                 minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all outline-none"
                 placeholder="Enter new password"
                 required
                 disabled={loading}
               />
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-zinc-500">
                 Must be at least 6 characters
               </p>
             </div>
@@ -297,7 +297,7 @@ export default function ResetPassword() {
                 minLength={6}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all outline-none"
                 placeholder="Confirm new password"
                 required
                 disabled={loading}
@@ -307,7 +307,7 @@ export default function ResetPassword() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 focus:ring-4 focus:ring-indigo-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center justify-center">
@@ -353,7 +353,7 @@ export default function ResetPassword() {
           <div className="mt-6 text-center">
             <a
               href="/login"
-              className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-all"
+              className="inline-block bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-all"
             >
               Go to Login
             </a>
