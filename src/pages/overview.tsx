@@ -215,7 +215,7 @@ function OverviewPage() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-white mb-2">Red Team Command Center</h1>
-                <p className="text-[#A0A0A0]">Offensive AI security testing - 255 attack prompts covering OWASP, NIST, MITRE, ASL-3</p>
+                <p className="text-[#A0A0A0]">Offensive AI security testing - 295 attack prompts covering OWASP, NIST, MITRE, ASL-3</p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-lg">
@@ -245,7 +245,7 @@ function OverviewPage() {
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold text-white mb-1">Red Team Testing Status</h2>
-                      <p className="text-sm text-[#A0A0A0]">Offense-first AI security testing powered by 255 attack scenarios</p>
+                      <p className="text-sm text-[#A0A0A0]">Offense-first AI security testing powered by 295 attack scenarios</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
