@@ -446,7 +446,7 @@ function CompliancePageContent() {
                 </p>
                 <div className="mt-2 text-xs text-zinc-500">
                   Attack Library:{" "}
-                  <span className="text-[#F5F5F5] font-semibold">255 scenarios</span> • Currently Testing:{" "}
+                  <span className="text-[#F5F5F5] font-semibold">295 scenarios</span> • Currently Testing:{" "}
                   <span className="text-[#F5F5F5] font-semibold">100 prompts per scan</span>
                 </div>
               </div>
@@ -537,7 +537,7 @@ function CompliancePageContent() {
 
               <div className="bg-[#111111] rounded-xl p-5 border border-[#1A1A1A]">
                 <div className="text-xs text-[#A0A0A0] uppercase tracking-wider mb-2">Attack Library Size</div>
-                <div className="text-3xl font-bold text-red-400">255</div>
+                <div className="text-3xl font-bold text-red-400">295</div>
                 <div className="text-xs text-zinc-500 mt-1">Total attack scenarios</div>
               </div>
 
@@ -663,7 +663,7 @@ function CompliancePageContent() {
                 </div>
 
                 <div className="mt-4 text-xs text-zinc-500">
-                  Full 255-prompt library available for comprehensive testing.
+                  Full 295-prompt library available for comprehensive testing.
                 </div>
               </div>
             </div>
@@ -889,7 +889,7 @@ function CompliancePageContent() {
             <div className="bg-[#111111] rounded-xl border border-[#1A1A1A] mb-8">
               <div className="p-6 border-b border-[#1A1A1A]">
                 <h2 className="text-lg font-semibold text-white">Attack Coverage Standards</h2>
-                <p className="text-sm text-[#A0A0A0] mt-1">DefendML's 255-prompt library mapped to security frameworks.</p>
+                <p className="text-sm text-[#A0A0A0] mt-1">DefendML's 295-prompt library mapped to security frameworks.</p>
               </div>
 
               <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -909,7 +909,7 @@ function CompliancePageContent() {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-[#A0A0A0]">Prompts</span>
-                      <span className="text-[#F5F5F5]">255</span>
+                      <span className="text-[#F5F5F5]">295</span>
                     </div>
                   </div>
                 </div>
