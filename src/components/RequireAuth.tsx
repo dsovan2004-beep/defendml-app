@@ -210,8 +210,8 @@ export default function RequireAuth({
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
-          <p className="text-slate-400">Verifying credentials...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-500 mx-auto mb-4"></div>
+          <p className="text-[#A0A0A0]">Verifying credentials...</p>
         </div>
       </div>
     );
@@ -239,12 +239,12 @@ export default function RequireAuth({
             </svg>
           </div>
           <h1 className="text-2xl font-bold text-white mb-2">Access Denied</h1>
-          <p className="text-slate-400 mb-6">
+          <p className="text-[#A0A0A0] mb-6">
             You don&apos;t have permission to access this page.
           </p>
-          <p className="text-sm text-slate-500 mb-6">
+          <p className="text-sm text-zinc-500 mb-6">
             Your role:{" "}
-            <span className="text-purple-400 font-semibold">{userRole}</span>
+            <span className="text-red-400 font-semibold">{userRole}</span>
             <br />
             Required role:{" "}
             <span className="text-red-400 font-semibold">
@@ -253,7 +253,7 @@ export default function RequireAuth({
           </p>
           <button
             onClick={() => router.push("/overview")}
-            className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-semibold transition-all"
+            className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-all"
           >
             Go to Dashboard
           </button>
@@ -286,14 +286,14 @@ export default function RequireAuth({
           <h1 className="text-2xl font-bold text-white mb-2">
             Insufficient Permissions
           </h1>
-          <p className="text-slate-400 mb-6">
+          <p className="text-[#A0A0A0] mb-6">
             You don&apos;t have permission to {deniedAction} {deniedResource}.
           </p>
-          <p className="text-sm text-slate-500 mb-6">
+          <p className="text-sm text-zinc-500 mb-6">
             Your role:{" "}
-            <span className="text-purple-400 font-semibold">{userRole}</span>
+            <span className="text-red-400 font-semibold">{userRole}</span>
           </p>
-          <p className="text-sm text-slate-500 mb-6">
+          <p className="text-sm text-zinc-500 mb-6">
             Contact your administrator to request access.
           </p>
           <button
