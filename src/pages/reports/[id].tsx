@@ -328,6 +328,27 @@ function fmtDate(isoStr: string) {
 }
 
 /* ─────────────────────────────────────────────
+   Shared pending / empty state components
+───────────────────────────────────────────── */
+function AnalysisPending() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+      <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+      <p className="text-sm text-orange-400 font-medium">AI analysis in progress…</p>
+      <p className="text-xs text-[#A0A0A0]">This section will populate automatically when analysis completes.</p>
+    </div>
+  );
+}
+
+function EmptySectionState({ message }: { message: string }) {
+  return (
+    <div className="flex items-center justify-center py-12 text-center">
+      <p className="text-sm text-[#A0A0A0]">{message}</p>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────
    Section label component
 ───────────────────────────────────────────── */
 function SectionLabel({ num, title }: { num: string; title: string }) {
@@ -448,6 +469,11 @@ export default function ReportPage() {
   if (report.flagged_count > 0) {
     keyFindings.push(`${report.flagged_count} attack${report.flagged_count !== 1 ? 's' : ''} triggered detection but were not fully blocked — require hardening`);
   }
+  // Positive finding when all attacks were blocked
+  if (keyFindings.length === 0 && posture === 'PASS') {
+    keyFindings.push(`All ${report.total_prompts} attack prompts were blocked. Security controls are operating effectively across all 6 frameworks.`);
+    keyFindings.push('Block rate meets the ≥ 90% threshold required for production deployment clearance.');
+  }
 
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
@@ -491,7 +517,7 @@ export default function ReportPage() {
           {/* Meta grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 divide-x divide-y md:divide-y-0 divide-[#1A1A1A]">
             {[
-              { label: 'Report ID',        value: report.report_id.slice(0, 13) + '…' },
+              { label: 'Report ID',        value: report.report_id.length > 13 ? report.report_id.slice(0, 13) + '…' : report.report_id },
               { label: 'Target System',    value: targetName },
               { label: 'Assessment Date',  value: fmtDate(report.started_at) },
               { label: 'Scan Duration',    value: `${durationSec}s` },
@@ -705,103 +731,112 @@ export default function ReportPage() {
         {/* ════════════════════════════════════
             SECTION 7 — ATTACK CATEGORY BREAKDOWN
         ════════════════════════════════════ */}
-        {intelligence && analysisReady && (
-          <div className="rounded-2xl border border-[#1A1A1A] bg-[#111111] p-6 mb-6">
-            <SectionLabel num="07" title="Attack Category Breakdown" />
-            {exploitedCategories.length > 0 ? (
-              <div className="overflow-x-auto rounded-xl border border-[#1A1A1A]">
-                <table className="min-w-full text-sm">
-                  <thead className="bg-[#0A0A0A]/60">
-                    <tr className="text-left text-[#A0A0A0] text-xs uppercase tracking-wide">
-                      <th className="px-5 py-3 font-medium">Attack Category</th>
-                      <th className="px-5 py-3 font-medium text-center">Successful Attacks</th>
-                      <th className="px-5 py-3 font-medium text-center">Severity</th>
-                      <th className="px-5 py-3 font-medium">Framework Mapping</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#1A1A1A]">
-                    {exploitedCategories.map(({ category, count }) => {
-                      const meta     = CATEGORY_PLAYBOOKS[category];
-                      const priority = getPriorityBadge(count);
-                      const label    = meta?.label || category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-                      const fws      = meta?.frameworks?.map(f => f.tag).slice(0, 2).join(' · ') || '—';
-                      return (
-                        <tr key={category} className="text-[#F5F5F5] hover:bg-[#0A0A0A]/30">
-                          <td className="px-5 py-3 font-semibold text-white">{label}</td>
-                          <td className="px-5 py-3 text-center text-red-400 font-bold">{count}</td>
-                          <td className="px-5 py-3 text-center">
-                            <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${priority.className}`}>{priority.label}</span>
-                          </td>
-                          <td className="px-5 py-3 text-[#A0A0A0] text-xs">{fws}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="text-center py-10 text-[#A0A0A0]">
-                {isError ? 'No test results — execution failed. Verify API credentials and re-run.' : 'No exploited categories detected. All attacks were blocked. ✓'}
-              </div>
-            )}
-          </div>
-        )}
+        <div className="rounded-2xl border border-[#1A1A1A] bg-[#111111] p-6 mb-6">
+          <SectionLabel num="07" title="Attack Category Breakdown" />
+          {!analysisReady ? (
+            <AnalysisPending />
+          ) : !intelligence ? (
+            <EmptySectionState message="No intelligence data available for this scan." />
+          ) : exploitedCategories.length > 0 ? (
+            <div className="overflow-x-auto rounded-xl border border-[#1A1A1A]">
+              <table className="min-w-full text-sm">
+                <thead className="bg-[#0A0A0A]/60">
+                  <tr className="text-left text-[#A0A0A0] text-xs uppercase tracking-wide">
+                    <th className="px-5 py-3 font-medium">Attack Category</th>
+                    <th className="px-5 py-3 font-medium text-center">Successful Attacks</th>
+                    <th className="px-5 py-3 font-medium text-center">Severity</th>
+                    <th className="px-5 py-3 font-medium">Framework Mapping</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#1A1A1A]">
+                  {exploitedCategories.map(({ category, count }) => {
+                    const meta     = CATEGORY_PLAYBOOKS[category];
+                    const priority = getPriorityBadge(count);
+                    const label    = meta?.label || category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    const fws      = meta?.frameworks?.map(f => f.tag).slice(0, 2).join(' · ') || '—';
+                    return (
+                      <tr key={category} className="text-[#F5F5F5] hover:bg-[#0A0A0A]/30">
+                        <td className="px-5 py-3 font-semibold text-white">{label}</td>
+                        <td className="px-5 py-3 text-center text-red-400 font-bold">{count}</td>
+                        <td className="px-5 py-3 text-center">
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${priority.className}`}>{priority.label}</span>
+                        </td>
+                        <td className="px-5 py-3 text-[#A0A0A0] text-xs">{fws}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <EmptySectionState message={isError ? 'No test results — execution failed. Verify API credentials and re-run.' : '✓ No exploited categories detected. All attacks were blocked successfully.'} />
+          )}
+        </div>
 
         {/* ════════════════════════════════════
             SECTION 8 — EVIDENCE SAMPLES
         ════════════════════════════════════ */}
-        {intelligence && analysisReady && exploitedCategories.length > 0 && (
-          <div className="rounded-2xl border border-[#1A1A1A] bg-[#111111] p-6 mb-6">
-            <SectionLabel num="08" title="Evidence Samples" />
-            <p className="text-sm text-[#A0A0A0] mb-5">
-              Representative attack transcripts from this assessment. These samples demonstrate how the target AI system responded to adversarial inputs.
-            </p>
-            <div className="space-y-4">
-              {exploitedCategories.slice(0, 3).map(({ category, count }) => {
-                const meta  = CATEGORY_PLAYBOOKS[category];
-                const label = meta?.label || category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-                const result = count > 0 ? 'FAILED — ALLOWED' : 'BLOCKED';
-                const resultColor = count > 0 ? 'text-red-400 bg-red-900/40 border-red-500/40' : 'text-green-400 bg-green-900/40 border-green-500/40';
-                return (
-                  <div key={category} className="bg-[#0A0A0A]/60 rounded-xl border border-[#1A1A1A] overflow-hidden">
-                    <div className="flex items-center justify-between px-5 py-3 border-b border-[#1A1A1A] bg-[#0A0A0A]/80">
-                      <span className="text-xs font-mono text-[#A0A0A0] uppercase tracking-wider">{label}</span>
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded border ${resultColor}`}>{result}</span>
-                    </div>
-                    <div className="p-5 space-y-3 text-sm">
-                      <div>
-                        <span className="text-[10px] text-[#A0A0A0] uppercase tracking-wider block mb-1">Attack Prompt</span>
-                        <div className="font-mono text-red-300 bg-red-950/20 border border-red-500/20 rounded-lg px-3 py-2 text-xs">
-                          &quot;{meta?.testPrompt || 'Attack prompt from this category was executed against the target system.'}&quot;
-                        </div>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-[#A0A0A0] uppercase tracking-wider block mb-1">Model Response</span>
-                        <div className="font-mono text-[#F5F5F5] bg-[#0A0A0A] border border-[#1A1A1A] rounded-lg px-3 py-2 text-xs">
-                          {count > 0
-                            ? `Target AI responded without triggering security controls. Response bypassed ${label.toLowerCase()} defenses. Full response recorded in raw results.`
-                            : 'Target AI correctly refused this request. Security controls triggered at detection layer.'}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-[#A0A0A0] uppercase tracking-wider">Result:</span>
+        <div className="rounded-2xl border border-[#1A1A1A] bg-[#111111] p-6 mb-6">
+          <SectionLabel num="08" title="Evidence Samples" />
+          {!analysisReady ? (
+            <AnalysisPending />
+          ) : exploitedCategories.length === 0 ? (
+            <EmptySectionState message="✓ No exploited categories — no failure transcripts to display. All attacks were blocked." />
+          ) : (
+            <>
+              <p className="text-sm text-[#A0A0A0] mb-5">
+                Representative attack transcripts from this assessment. These samples demonstrate how the target AI system responded to adversarial inputs.
+              </p>
+              <div className="space-y-4">
+                {exploitedCategories.slice(0, 3).map(({ category, count }) => {
+                  const meta  = CATEGORY_PLAYBOOKS[category];
+                  const label = meta?.label || category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                  const result = 'FAILED — ALLOWED';
+                  const resultColor = 'text-red-400 bg-red-900/40 border-red-500/40';
+                  return (
+                    <div key={category} className="bg-[#0A0A0A]/60 rounded-xl border border-[#1A1A1A] overflow-hidden">
+                      <div className="flex items-center justify-between px-5 py-3 border-b border-[#1A1A1A] bg-[#0A0A0A]/80">
+                        <span className="text-xs font-mono text-[#A0A0A0] uppercase tracking-wider">{label}</span>
                         <span className={`text-xs font-bold px-2 py-0.5 rounded border ${resultColor}`}>{result}</span>
-                        <span className="text-xs text-[#A0A0A0]">— {count} attack{count !== 1 ? 's' : ''} in this category succeeded</span>
+                      </div>
+                      <div className="p-5 space-y-3 text-sm">
+                        <div>
+                          <span className="text-[10px] text-[#A0A0A0] uppercase tracking-wider block mb-1">Attack Prompt</span>
+                          <div className="font-mono text-red-300 bg-red-950/20 border border-red-500/20 rounded-lg px-3 py-2 text-xs break-words">
+                            &quot;{meta?.testPrompt || 'Attack prompt from this category was executed against the target system.'}&quot;
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-[#A0A0A0] uppercase tracking-wider block mb-1">Model Response</span>
+                          <div className="font-mono text-[#F5F5F5] bg-[#0A0A0A] border border-[#1A1A1A] rounded-lg px-3 py-2 text-xs break-words">
+                            Target AI responded without triggering security controls. Response bypassed {label.toLowerCase()} detection. Full response recorded in raw results.
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-[10px] text-[#A0A0A0] uppercase tracking-wider">Result:</span>
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded border ${resultColor}`}>{result}</span>
+                          <span className="text-xs text-[#A0A0A0]">— {count} attack{count !== 1 ? 's' : ''} in this category succeeded</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
+                  );
+                })}
+              </div>
+            </>
+          )}
+        </div>
 
         {/* ════════════════════════════════════
             SECTION 9 — VULNERABILITY FINDINGS
         ════════════════════════════════════ */}
-        {exploitedCategories.length > 0 && analysisReady && (
-          <div className="rounded-2xl border border-[#1A1A1A] bg-[#111111] p-6 mb-6">
-            <SectionLabel num="09" title="Vulnerability Findings" />
+        <div className="rounded-2xl border border-[#1A1A1A] bg-[#111111] p-6 mb-6">
+          <SectionLabel num="09" title="Vulnerability Findings" />
+          {!analysisReady ? (
+            <AnalysisPending />
+          ) : exploitedCategories.length === 0 ? (
+            <EmptySectionState message="✓ No vulnerabilities found. All attack vectors were blocked." />
+          ) : (
+            <>
             <p className="text-sm text-[#A0A0A0] mb-5">
               Structured vulnerability documentation for each exploited attack category. Each finding includes framework mapping, root cause, and business impact.
             </p>
@@ -846,17 +881,19 @@ export default function ReportPage() {
                 );
               })}
             </div>
-          </div>
-        )}
+            </>
+          )}
+        </div>
 
         {/* ════════════════════════════════════
             SECTION 10 — REMEDIATION PLAYBOOK
         ════════════════════════════════════ */}
         {analysisReady && (
           <div className="rounded-2xl border border-red-500/20 bg-[#111111] p-6 mb-6">
-            <div className="flex items-center gap-2 mb-2">
-              <SparklesIcon className="w-5 h-5 text-red-400" />
-              <SectionLabel num="10" title="Remediation Playbook" />
+            <SectionLabel num="10" title="Remediation Playbook" />
+            <div className="flex items-center gap-2 -mt-4 mb-5">
+              <SparklesIcon className="w-4 h-4 text-red-400" />
+              <span className="text-xs text-red-400 font-medium">AI-powered contextual remediation</span>
             </div>
 
             {/* AI playbook summary */}
@@ -924,8 +961,8 @@ export default function ReportPage() {
                       {meta?.codeHint && (
                         <div className="mb-4">
                           <p className="text-[10px] text-[#A0A0A0] uppercase tracking-wider mb-1">Implementation Example</p>
-                          <pre className="bg-[#0A0A0A] border border-red-500/20 rounded-lg p-3 overflow-x-auto">
-                            <code className="text-xs text-green-400 font-mono">{meta.codeHint}</code>
+                          <pre className="bg-[#0A0A0A] border border-red-500/20 rounded-lg p-3 overflow-x-auto max-w-full">
+                            <code className="text-xs text-green-400 font-mono whitespace-pre-wrap break-all">{meta.codeHint}</code>
                           </pre>
                         </div>
                       )}
@@ -967,9 +1004,13 @@ export default function ReportPage() {
         {/* ════════════════════════════════════
             SECTION 11 — SECURITY IMPROVEMENT ROADMAP
         ════════════════════════════════════ */}
-        {exploitedCategories.length > 0 && analysisReady && (
-          <div className="rounded-2xl border border-[#1A1A1A] bg-[#111111] p-6 mb-6">
-            <SectionLabel num="11" title="Security Improvement Roadmap" />
+        <div className="rounded-2xl border border-[#1A1A1A] bg-[#111111] p-6 mb-6">
+          <SectionLabel num="11" title="Security Improvement Roadmap" />
+          {!analysisReady ? (
+            <AnalysisPending />
+          ) : exploitedCategories.length === 0 ? (
+            <EmptySectionState message="✓ No remediation roadmap required. Block rate meets production threshold." />
+          ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Immediate */}
               <div className="bg-red-950/20 border border-red-500/30 rounded-xl p-5">
@@ -1038,8 +1079,8 @@ export default function ReportPage() {
                 </ul>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* ════════════════════════════════════
             SECTION 12 — APPENDIX
