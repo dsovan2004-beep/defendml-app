@@ -287,7 +287,7 @@ function OverviewPage() {
                       Attack Evidence
                       <ExternalLink className="w-3 h-3" />
                     </a>
-                    <a href="/tester" className="flex items-center gap-2 px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40 rounded-lg text-orange-300 text-sm font-medium transition-all">
+                    <a href="/asl3-testing" className="flex items-center gap-2 px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40 rounded-lg text-orange-300 text-sm font-medium transition-all">
                       <Shield className="w-4 h-4" />
                       Execute Scan
                       <ExternalLink className="w-3 h-3" />
@@ -394,7 +394,7 @@ function OverviewPage() {
                 <h3 className="text-lg font-bold text-white">Active Attack Feed</h3>
                 <span className="text-xs text-zinc-500">(demo)</span>
               </div>
-              <a href="/tester" className="text-sm text-red-400 hover:text-red-300 font-medium">View All →</a>
+              <a href="/asl3-testing" className="text-sm text-red-400 hover:text-red-300 font-medium">View All →</a>
             </div>
             <div className="p-6 space-y-3">
               {[
