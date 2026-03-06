@@ -66,7 +66,7 @@ if (containsPII(userInput)) { return BLOCK; }`,
     frameworks: [
       { tag: 'ASL-3 Constitutional AI', color: 'bg-red-900/40 text-red-300' },
       { tag: 'OWASP LLM08', color: 'bg-orange-900/40 text-orange-300' },
-      { tag: 'EU AI Act Art. 5', color: 'bg-indigo-900/40 text-indigo-300' },
+      { tag: 'EU AI Act Art. 5', color: 'bg-indigo-900/40 text-orange-300' },
     ],
     fix: 'Strengthen constitutional AI constraints with an explicit prohibited-content taxonomy. Add an output classification layer scoring every response against the safety policy before delivery. Retrain refusal behavior for boundary violations using adversarial fine-tuning.',
     codeHint: `// Output constitutional classifier
@@ -83,7 +83,7 @@ async function classifyOutput(text: string): Promise<"ALLOW" | "BLOCK"> {
     frameworks: [
       { tag: 'NIST RMF MANAGE', color: 'bg-green-900/40 text-green-300' },
       { tag: 'SOC 2/ISO AI.01', color: 'bg-zinc-700/60 text-zinc-300' },
-      { tag: 'EU AI Act Art. 9', color: 'bg-indigo-900/40 text-indigo-300' },
+      { tag: 'EU AI Act Art. 9', color: 'bg-indigo-900/40 text-orange-300' },
     ],
     fix: 'Enforce mandatory red team gate in CI/CD — block deploys if block rate < 90%. Harden deployment configuration: disable debug endpoints, enforce output length limits, and require explicit allowlists for sensitive operation categories.',
     codeHint: `// Pre-deploy red team gate in CI/CD
@@ -117,7 +117,7 @@ if (detectEscalation(conversationHistory)) { return BLOCK; }`,
     frameworks: [
       { tag: 'OWASP LLM09', color: 'bg-orange-900/40 text-orange-300' },
       { tag: 'NIST MAP/MEASURE', color: 'bg-green-900/40 text-green-300' },
-      { tag: 'EU AI Act Art. 5', color: 'bg-indigo-900/40 text-indigo-300' },
+      { tag: 'EU AI Act Art. 5', color: 'bg-indigo-900/40 text-orange-300' },
     ],
     fix: 'Add demographic parity checks to the inference pipeline. Implement fairness-aware output filters that flag differential treatment across protected characteristics. Run monthly counterfactual bias audits — same prompt, swapped demographics — and retrain on failures.',
     codeHint: `// Fairness guard on sensitive attributes
@@ -208,7 +208,7 @@ function isExtractionAttempt(input: string): boolean {
     label: 'Misinformation',
     frameworks: [
       { tag: 'OWASP LLM09', color: 'bg-orange-900/40 text-orange-300' },
-      { tag: 'EU AI Act Art. 13', color: 'bg-indigo-900/40 text-indigo-300' },
+      { tag: 'EU AI Act Art. 13', color: 'bg-indigo-900/40 text-orange-300' },
       { tag: 'NIST AI RMF GOVERN', color: 'bg-green-900/40 text-green-300' },
     ],
     fix: 'Deploy a factual accuracy layer that cross-references generated claims against a verified knowledge base before delivery. Implement confidence scoring — flag responses below threshold for human review. Add explicit model uncertainty signals ("I cannot verify this") and block outputs that assert false authoritative claims about real people, events, or statistics.',
