@@ -5,32 +5,32 @@ export default function SecurityCenter() {
   const [activeTab, setActiveTab] = useState<'threats' | 'incidents' | 'asl3'>('threats');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-[#0A0A0A] to-slate-900">
       <Navigation />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-purple-500/20 rounded-lg">
-              <svg className="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-2 bg-red-500/20 rounded-lg">
+              <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
             <h1 className="text-4xl font-bold text-white">Security Center</h1>
           </div>
-          <p className="text-gray-400">Unified threat monitoring, incident response, and ASL-3 compliance</p>
+          <p className="text-[#A0A0A0]">Unified threat monitoring, incident response, and ASL-3 compliance</p>
         </div>
 
         {/* Tab Navigation */}
-        <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 mb-6">
+        <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-zinc-800 mb-6">
           <div className="flex gap-1 p-1">
             <button
               onClick={() => setActiveTab('threats')}
               className={`flex-1 px-6 py-3 rounded-md font-medium transition-all ${
                 activeTab === 'threats'
-                  ? 'bg-purple-600 text-white shadow-lg'
-                  : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
+                  ? 'bg-red-600 text-white shadow-lg'
+                  : 'text-[#A0A0A0] hover:text-white hover:bg-[#222222]/50'
               }`}
             >
               <div className="flex items-center justify-center gap-2">
@@ -45,8 +45,8 @@ export default function SecurityCenter() {
               onClick={() => setActiveTab('incidents')}
               className={`flex-1 px-6 py-3 rounded-md font-medium transition-all ${
                 activeTab === 'incidents'
-                  ? 'bg-purple-600 text-white shadow-lg'
-                  : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
+                  ? 'bg-red-600 text-white shadow-lg'
+                  : 'text-[#A0A0A0] hover:text-white hover:bg-[#222222]/50'
               }`}
             >
               <div className="flex items-center justify-center gap-2">
@@ -61,8 +61,8 @@ export default function SecurityCenter() {
               onClick={() => setActiveTab('asl3')}
               className={`flex-1 px-6 py-3 rounded-md font-medium transition-all ${
                 activeTab === 'asl3'
-                  ? 'bg-purple-600 text-white shadow-lg'
-                  : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
+                  ? 'bg-red-600 text-white shadow-lg'
+                  : 'text-[#A0A0A0] hover:text-white hover:bg-[#222222]/50'
               }`}
             >
               <div className="flex items-center justify-center gap-2">
@@ -82,16 +82,16 @@ export default function SecurityCenter() {
       </main>
 
       {/* Footer - Matching Overview Page Exactly */}
-      <footer className="bg-slate-900/50 border-t border-slate-700/50 mt-16">
+      <footer className="bg-[#111111]/50 border-t border-zinc-800/50 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             {/* Left side - Copyright and links */}
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-sm text-gray-400">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-sm text-[#A0A0A0]">
               <span>© 2025 DefendML</span>
-              <a href="#" className="hover:text-purple-400 transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-purple-400 transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-purple-400 transition-colors">API Docs</a>
-              <a href="#" className="hover:text-purple-400 transition-colors">Status</a>
+              <a href="#" className="hover:text-red-400 transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-red-400 transition-colors">Terms of Service</a>
+              <a href="#" className="hover:text-red-400 transition-colors">API Docs</a>
+              <a href="#" className="hover:text-red-400 transition-colors">Status</a>
             </div>
 
             {/* Right side - Badges */}
@@ -102,11 +102,11 @@ export default function SecurityCenter() {
                 </svg>
                 <span className="text-green-400 text-xs font-medium">SOC 2 Certified</span>
               </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/10 border border-purple-500/30 rounded-lg">
-                <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-red-500/10 border border-red-500/30 rounded-lg">
+                <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
-                <span className="text-purple-400 text-xs font-medium">Powered by Anthropic ASL-3</span>
+                <span className="text-red-400 text-xs font-medium">Powered by Anthropic ASL-3</span>
               </div>
             </div>
           </div>
@@ -189,7 +189,7 @@ function ThreatsTab() {
   return (
     <div className="space-y-6">
       {/* Enhanced Classifier Performance Widget - ASL-3 ALIGNED */}
-      <div className="bg-gradient-to-r from-purple-500/10 to-purple-600/10 backdrop-blur-sm rounded-lg border border-purple-500/30 p-6">
+      <div className="bg-gradient-to-r from-red-500/10 to-red-600/10 backdrop-blur-sm rounded-lg border border-red-500/30 p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-white">Constitutional Classifier Performance</h3>
           <span className="flex items-center gap-2 px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-medium">
@@ -199,86 +199,86 @@ function ThreatsTab() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div>
-            <p className="text-gray-400 text-sm">Accuracy</p>
+            <p className="text-[#A0A0A0] text-sm">Accuracy</p>
             <p className="text-2xl font-bold text-green-400">99.6%</p>
             <p className="text-xs text-green-400 mt-1">✓ ASL-3 Target: &gt;99%</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Latency (P95)</p>
-            <p className="text-2xl font-bold text-blue-400">42ms</p>
+            <p className="text-[#A0A0A0] text-sm">Latency (P95)</p>
+            <p className="text-2xl font-bold text-orange-400">42ms</p>
             <p className="text-xs text-green-400 mt-1">✓ ASL-3 Target: &lt;50ms</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Confidence</p>
-            <p className="text-2xl font-bold text-purple-400">High</p>
-            <p className="text-xs text-gray-400 mt-1">Avg: 95.2%</p>
+            <p className="text-[#A0A0A0] text-sm">Confidence</p>
+            <p className="text-2xl font-bold text-red-400">High</p>
+            <p className="text-xs text-[#A0A0A0] mt-1">Avg: 95.2%</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">False Positives (24h)</p>
+            <p className="text-[#A0A0A0] text-sm">False Positives (24h)</p>
             <p className="text-2xl font-bold text-yellow-400">8</p>
             <p className="text-xs text-green-400 mt-1">✓ Rate: 0.3% (&lt;1%)</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Throughput</p>
+            <p className="text-[#A0A0A0] text-sm">Throughput</p>
             <p className="text-2xl font-bold text-cyan-400">2.4K/s</p>
-            <p className="text-xs text-gray-400 mt-1">Processing rate</p>
+            <p className="text-xs text-[#A0A0A0] mt-1">Processing rate</p>
           </div>
         </div>
       </div>
 
       {/* NEW: Defense Layer Status - ASL-3 4-LAYER ARCHITECTURE */}
-      <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+      <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-zinc-800 p-6">
         <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
           </svg>
           4-Layer Defense Status
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-slate-900/50 rounded-lg p-4 border border-green-500/30">
+          <div className="bg-[#111111]/50 rounded-lg p-4 border border-green-500/30">
             <div className="flex items-center justify-between mb-2">
-              <span className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs font-mono">L1</span>
+              <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs font-mono">L1</span>
               <span className="text-green-400 text-xs font-medium">✓ ACTIVE</span>
             </div>
             <p className="text-white font-medium mb-1">Access Controls</p>
-            <p className="text-xs text-gray-400">Uptime: 99.99%</p>
-            <p className="text-xs text-gray-400">Latency: 5ms</p>
+            <p className="text-xs text-[#A0A0A0]">Uptime: 99.99%</p>
+            <p className="text-xs text-[#A0A0A0]">Latency: 5ms</p>
           </div>
           
-          <div className="bg-slate-900/50 rounded-lg p-4 border border-green-500/30">
+          <div className="bg-[#111111]/50 rounded-lg p-4 border border-green-500/30">
             <div className="flex items-center justify-between mb-2">
-              <span className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs font-mono">L2</span>
+              <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs font-mono">L2</span>
               <span className="text-green-400 text-xs font-medium">✓ ACTIVE</span>
             </div>
             <p className="text-white font-medium mb-1">Real-Time Classifiers</p>
-            <p className="text-xs text-gray-400">Uptime: 99.94%</p>
-            <p className="text-xs text-gray-400">Latency: 42ms</p>
+            <p className="text-xs text-[#A0A0A0]">Uptime: 99.94%</p>
+            <p className="text-xs text-[#A0A0A0]">Latency: 42ms</p>
           </div>
           
-          <div className="bg-slate-900/50 rounded-lg p-4 border border-green-500/30">
+          <div className="bg-[#111111]/50 rounded-lg p-4 border border-green-500/30">
             <div className="flex items-center justify-between mb-2">
-              <span className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs font-mono">L3</span>
+              <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs font-mono">L3</span>
               <span className="text-green-400 text-xs font-medium">✓ ACTIVE</span>
             </div>
             <p className="text-white font-medium mb-1">Async Monitoring</p>
-            <p className="text-xs text-gray-400">Uptime: 99.98%</p>
-            <p className="text-xs text-gray-400">Latency: 120ms</p>
+            <p className="text-xs text-[#A0A0A0]">Uptime: 99.98%</p>
+            <p className="text-xs text-[#A0A0A0]">Latency: 120ms</p>
           </div>
           
-          <div className="bg-slate-900/50 rounded-lg p-4 border border-green-500/30">
+          <div className="bg-[#111111]/50 rounded-lg p-4 border border-green-500/30">
             <div className="flex items-center justify-between mb-2">
-              <span className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs font-mono">L4</span>
+              <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs font-mono">L4</span>
               <span className="text-green-400 text-xs font-medium">✓ ACTIVE</span>
             </div>
             <p className="text-white font-medium mb-1">Rapid Response</p>
-            <p className="text-xs text-gray-400">Uptime: 99.95%</p>
-            <p className="text-xs text-gray-400">Response: 2.8s</p>
+            <p className="text-xs text-[#A0A0A0]">Uptime: 99.95%</p>
+            <p className="text-xs text-[#A0A0A0]">Response: 2.8s</p>
           </div>
         </div>
       </div>
 
       {/* NEW: Top Triggered Rules - ASL-3 VISIBILITY */}
-      <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+      <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-zinc-800 p-6">
         <h3 className="text-lg font-semibold text-white mb-4">Top Triggered Rules (24h)</h3>
         <div className="space-y-3">
           <div>
@@ -286,7 +286,7 @@ function ThreatsTab() {
               <span className="text-white text-sm">CBRN-related queries</span>
               <span className="text-red-400 text-sm font-medium">45%</span>
             </div>
-            <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+            <div className="h-2 bg-[#222222] rounded-full overflow-hidden">
               <div className="h-full bg-red-500" style={{ width: '45%' }}></div>
             </div>
           </div>
@@ -295,7 +295,7 @@ function ThreatsTab() {
               <span className="text-white text-sm">Jailbreak attempts</span>
               <span className="text-orange-400 text-sm font-medium">32%</span>
             </div>
-            <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+            <div className="h-2 bg-[#222222] rounded-full overflow-hidden">
               <div className="h-full bg-orange-500" style={{ width: '32%' }}></div>
             </div>
           </div>
@@ -304,7 +304,7 @@ function ThreatsTab() {
               <span className="text-white text-sm">Policy violations</span>
               <span className="text-yellow-400 text-sm font-medium">23%</span>
             </div>
-            <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+            <div className="h-2 bg-[#222222] rounded-full overflow-hidden">
               <div className="h-full bg-yellow-500" style={{ width: '23%' }}></div>
             </div>
           </div>
@@ -312,37 +312,37 @@ function ThreatsTab() {
       </div>
 
       {/* Enhanced Live Threat Feed with ASL-3 Context */}
-      <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700">
-        <div className="p-6 border-b border-slate-700">
+      <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-zinc-800">
+        <div className="p-6 border-b border-zinc-800">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-white">Live Threat Feed</h3>
             <div className="flex items-center gap-3">
               <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-medium">
                 ● Real-time
               </span>
-              <span className="text-gray-400 text-sm">847 threats blocked (24h)</span>
+              <span className="text-[#A0A0A0] text-sm">847 threats blocked (24h)</span>
             </div>
           </div>
         </div>
         
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-slate-900/50">
+            <thead className="bg-[#111111]/50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Time</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Type</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Severity</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Layer</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Confidence</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Session Risk</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Action</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">User</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Time</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Severity</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Layer</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Confidence</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Session Risk</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Action</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">User</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-700">
+            <tbody className="divide-y divide-zinc-800">
               {threats.map((threat) => (
-                <tr key={threat.id} className="hover:bg-slate-700/30 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{threat.timestamp}</td>
+                <tr key={threat.id} className="hover:bg-[#222222]/30 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[#F5F5F5]">{threat.timestamp}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-white font-medium">{threat.type}</span>
@@ -363,7 +363,7 @@ function ThreatsTab() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs font-mono">
+                    <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs font-mono">
                       {threat.layer}
                     </span>
                   </td>
@@ -380,7 +380,7 @@ function ThreatsTab() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      <div className="w-16 h-2 bg-slate-700 rounded-full overflow-hidden">
+                      <div className="w-16 h-2 bg-[#222222] rounded-full overflow-hidden">
                         <div 
                           className={`h-full ${
                             threat.sessionRisk >= 0.8 ? 'bg-red-500' :
@@ -390,7 +390,7 @@ function ThreatsTab() {
                           style={{ width: `${threat.sessionRisk * 100}%` }}
                         ></div>
                       </div>
-                      <span className="text-xs text-gray-400">{(threat.sessionRisk * 100).toFixed(0)}%</span>
+                      <span className="text-xs text-[#A0A0A0]">{(threat.sessionRisk * 100).toFixed(0)}%</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -401,7 +401,7 @@ function ThreatsTab() {
                       {threat.action}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-mono">{threat.user}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[#A0A0A0] font-mono">{threat.user}</td>
                 </tr>
               ))}
             </tbody>
@@ -495,10 +495,10 @@ function IncidentsTab() {
     <div className="space-y-6">
       {/* Enhanced Incident Metrics with ASL-3 SLA */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+        <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-zinc-800 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm mb-1">Open Incidents</p>
+              <p className="text-[#A0A0A0] text-sm mb-1">Open Incidents</p>
               <p className="text-3xl font-bold text-white">{openIncidents}</p>
             </div>
             <div className="p-3 bg-red-500/20 rounded-lg">
@@ -509,10 +509,10 @@ function IncidentsTab() {
           </div>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+        <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-zinc-800 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm mb-1">Avg Response Time</p>
+              <p className="text-[#A0A0A0] text-sm mb-1">Avg Response Time</p>
               <p className="text-3xl font-bold text-green-400">{avgResponseTime}s</p>
             </div>
             <div className="p-3 bg-green-500/20 rounded-lg">
@@ -524,10 +524,10 @@ function IncidentsTab() {
           <p className="text-xs text-green-400 mt-2">✓ Under 5min target (ASL-3)</p>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+        <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-zinc-800 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm mb-1">SLA Compliance</p>
+              <p className="text-[#A0A0A0] text-sm mb-1">SLA Compliance</p>
               <p className="text-3xl font-bold text-green-400">{slaCompliance}%</p>
             </div>
             <div className="p-3 bg-green-500/20 rounded-lg">
@@ -536,17 +536,17 @@ function IncidentsTab() {
               </svg>
             </div>
           </div>
-          <p className="text-xs text-gray-400 mt-2">ASL-3: &lt;5min response</p>
+          <p className="text-xs text-[#A0A0A0] mt-2">ASL-3: &lt;5min response</p>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+        <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-zinc-800 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm mb-1">Total Incidents (24h)</p>
+              <p className="text-[#A0A0A0] text-sm mb-1">Total Incidents (24h)</p>
               <p className="text-3xl font-bold text-white">{incidents.length}</p>
             </div>
-            <div className="p-3 bg-blue-500/20 rounded-lg">
-              <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-3 bg-red-500/20 rounded-lg">
+              <svg className="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </div>
@@ -555,15 +555,15 @@ function IncidentsTab() {
       </div>
 
       {/* Incidents Table */}
-      <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700">
-        <div className="p-6 border-b border-slate-700">
+      <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-zinc-800">
+        <div className="p-6 border-b border-zinc-800">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-white">Incident Response Center</h3>
             <div className="flex gap-2">
-              <button className="px-3 py-1 bg-slate-700 text-gray-300 rounded text-sm hover:bg-slate-600 transition-colors">
+              <button className="px-3 py-1 bg-[#222222] text-[#F5F5F5] rounded text-sm hover:bg-slate-600 transition-colors">
                 Filter
               </button>
-              <button className="px-3 py-1 bg-purple-600 text-white rounded text-sm hover:bg-purple-700 transition-colors">
+              <button className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors">
                 Export
               </button>
             </div>
@@ -572,25 +572,25 @@ function IncidentsTab() {
 
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-slate-900/50">
+            <thead className="bg-[#111111]/50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Incident ID</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Created</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Severity</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Type</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Response Time</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Assignee</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Incident ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Created</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Severity</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Response Time</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Assignee</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#A0A0A0] uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-700">
+            <tbody className="divide-y divide-zinc-800">
               {incidents.map((incident) => (
-                <tr key={incident.id} className="hover:bg-slate-700/30 transition-colors">
+                <tr key={incident.id} className="hover:bg-[#222222]/30 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm font-mono text-purple-400">{incident.id}</span>
+                    <span className="text-sm font-mono text-red-400">{incident.id}</span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{incident.created}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[#F5F5F5]">{incident.created}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       incident.severity === 'CRITICAL' ? 'bg-red-500/20 text-red-400' :
@@ -604,7 +604,7 @@ function IncidentsTab() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       incident.status === 'OPEN' ? 'bg-red-500/20 text-red-400' :
-                      incident.status === 'IN_PROGRESS' ? 'bg-blue-500/20 text-blue-400' :
+                      incident.status === 'IN_PROGRESS' ? 'bg-red-500/20 text-orange-400' :
                       'bg-green-500/20 text-green-400'
                     }`}>
                       {incident.status}
@@ -622,9 +622,9 @@ function IncidentsTab() {
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{incident.assignee}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[#F5F5F5]">{incident.assignee}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button className="text-purple-400 hover:text-purple-300">View</button>
+                    <button className="text-red-400 hover:text-red-300">View</button>
                   </td>
                 </tr>
               ))}
@@ -665,17 +665,17 @@ function ASL3Tab() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <p className="text-gray-400 text-sm">Deployment Standard</p>
+            <p className="text-[#A0A0A0] text-sm">Deployment Standard</p>
             <p className="text-3xl font-bold text-green-400">98%</p>
             <p className="text-xs text-green-300 mt-1">Prevent Misuse</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Security Standard</p>
+            <p className="text-[#A0A0A0] text-sm">Security Standard</p>
             <p className="text-3xl font-bold text-green-400">94%</p>
             <p className="text-xs text-green-300 mt-1">Protect Model Weights</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Overall ASL-3 Score</p>
+            <p className="text-[#A0A0A0] text-sm">Overall ASL-3 Score</p>
             <p className="text-3xl font-bold text-green-400">96.5%</p>
             <p className="text-xs text-green-300 mt-1">Last Assessed: Oct 2025</p>
           </div>
@@ -683,7 +683,7 @@ function ASL3Tab() {
       </div>
 
       {/* Constitutional Classifiers - ENHANCED */}
-      <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-purple-500/30 p-6">
+      <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-red-500/30 p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-semibold text-white">Constitutional Classifiers</h3>
           <span className="flex items-center gap-2 px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-medium">
@@ -693,38 +693,38 @@ function ASL3Tab() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
           <div>
-            <p className="text-gray-400 text-sm">Accuracy</p>
+            <p className="text-[#A0A0A0] text-sm">Accuracy</p>
             <p className="text-lg font-bold text-white">99.6%</p>
             <p className="text-xs text-green-400 mt-1">✓ Target: &gt;99%</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Latency (P95)</p>
+            <p className="text-[#A0A0A0] text-sm">Latency (P95)</p>
             <p className="text-lg font-bold text-white">42ms</p>
             <p className="text-xs text-green-400 mt-1">✓ Target: &lt;50ms</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">False Positive Rate</p>
+            <p className="text-[#A0A0A0] text-sm">False Positive Rate</p>
             <p className="text-lg font-bold text-white">0.3%</p>
             <p className="text-xs text-green-400 mt-1">✓ Target: &lt;1%</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Throughput</p>
+            <p className="text-[#A0A0A0] text-sm">Throughput</p>
             <p className="text-lg font-bold text-white">2.4K/s</p>
-            <p className="text-xs text-gray-400 mt-1">Processing rate</p>
+            <p className="text-xs text-[#A0A0A0] mt-1">Processing rate</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Blocked (24h)</p>
+            <p className="text-[#A0A0A0] text-sm">Blocked (24h)</p>
             <p className="text-lg font-bold text-white">847</p>
-            <p className="text-xs text-gray-400 mt-1">Threats prevented</p>
+            <p className="text-xs text-[#A0A0A0] mt-1">Threats prevented</p>
           </div>
         </div>
         <div>
-          <p className="text-gray-400 text-sm mb-3">Top Triggered Rules (24h):</p>
+          <p className="text-[#A0A0A0] text-sm mb-3">Top Triggered Rules (24h):</p>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm text-white">• CBRN-related queries</span>
               <div className="flex items-center gap-2">
-                <div className="w-24 h-2 bg-slate-700 rounded-full overflow-hidden">
+                <div className="w-24 h-2 bg-[#222222] rounded-full overflow-hidden">
                   <div className="h-full bg-red-500" style={{ width: '45%' }}></div>
                 </div>
                 <span className="text-red-400 text-sm font-medium w-10 text-right">45%</span>
@@ -733,7 +733,7 @@ function ASL3Tab() {
             <div className="flex items-center justify-between">
               <span className="text-sm text-white">• Jailbreak attempts</span>
               <div className="flex items-center gap-2">
-                <div className="w-24 h-2 bg-slate-700 rounded-full overflow-hidden">
+                <div className="w-24 h-2 bg-[#222222] rounded-full overflow-hidden">
                   <div className="h-full bg-orange-500" style={{ width: '32%' }}></div>
                 </div>
                 <span className="text-orange-400 text-sm font-medium w-10 text-right">32%</span>
@@ -742,7 +742,7 @@ function ASL3Tab() {
             <div className="flex items-center justify-between">
               <span className="text-sm text-white">• Policy violations</span>
               <div className="flex items-center gap-2">
-                <div className="w-24 h-2 bg-slate-700 rounded-full overflow-hidden">
+                <div className="w-24 h-2 bg-[#222222] rounded-full overflow-hidden">
                   <div className="h-full bg-yellow-500" style={{ width: '23%' }}></div>
                 </div>
                 <span className="text-yellow-400 text-sm font-medium w-10 text-right">23%</span>
@@ -753,9 +753,9 @@ function ASL3Tab() {
       </div>
 
       {/* 4-Layer Defense - ENHANCED */}
-      <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+      <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-zinc-800 p-6">
         <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-          <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
           </svg>
           4-Layer Defense Architecture
@@ -795,15 +795,15 @@ function ASL3Tab() {
               latency: '2.8s'
             }
           ].map((layer) => (
-            <div key={layer.layer} className="bg-slate-900/50 rounded-lg p-4 border border-green-500/20 hover:border-green-500/40 transition-colors">
+            <div key={layer.layer} className="bg-[#111111]/50 rounded-lg p-4 border border-green-500/20 hover:border-green-500/40 transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 bg-purple-500/20 text-purple-400 rounded font-mono text-sm font-bold">
+                  <span className="px-3 py-1 bg-red-500/20 text-red-400 rounded font-mono text-sm font-bold">
                     L{layer.layer}
                   </span>
                   <div>
                     <span className="text-white font-medium">{layer.name}</span>
-                    <p className="text-xs text-gray-400 mt-0.5">{layer.description}</p>
+                    <p className="text-xs text-[#A0A0A0] mt-0.5">{layer.description}</p>
                   </div>
                 </div>
                 <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-medium flex items-center gap-1">
@@ -811,10 +811,10 @@ function ASL3Tab() {
                   {layer.status}
                 </span>
               </div>
-              <div className="flex items-center gap-4 mt-2 text-xs text-gray-400">
+              <div className="flex items-center gap-4 mt-2 text-xs text-[#A0A0A0]">
                 <span>Uptime: <span className="text-green-400 font-medium">{layer.uptime}</span></span>
                 <span>•</span>
-                <span>Response: <span className="text-blue-400 font-medium">{layer.latency}</span></span>
+                <span>Response: <span className="text-orange-400 font-medium">{layer.latency}</span></span>
               </div>
             </div>
           ))}
@@ -822,46 +822,46 @@ function ASL3Tab() {
       </div>
 
       {/* Security Standard */}
-      <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+      <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-zinc-800 p-6">
         <h3 className="text-xl font-semibold text-white mb-4">Security Standard Compliance</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex items-start gap-3 p-3 bg-slate-900/50 rounded-lg">
+          <div className="flex items-start gap-3 p-3 bg-[#111111]/50 rounded-lg">
             <svg className="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             <div>
               <span className="text-white font-medium">Multi-party Authorization</span>
-              <p className="text-sm text-gray-400 mt-0.5">2+ admins required for sensitive operations</p>
+              <p className="text-sm text-[#A0A0A0] mt-0.5">2+ admins required for sensitive operations</p>
               <span className="text-green-400 text-xs mt-1 inline-block">Enabled</span>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-3 bg-slate-900/50 rounded-lg">
+          <div className="flex items-start gap-3 p-3 bg-[#111111]/50 rounded-lg">
             <svg className="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             <div>
               <span className="text-white font-medium">Model Weight Encryption</span>
-              <p className="text-sm text-gray-400 mt-0.5">Military-grade encryption at rest</p>
+              <p className="text-sm text-[#A0A0A0] mt-0.5">Military-grade encryption at rest</p>
               <span className="text-green-400 text-xs mt-1 inline-block">AES-256</span>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-3 bg-slate-900/50 rounded-lg">
+          <div className="flex items-start gap-3 p-3 bg-[#111111]/50 rounded-lg">
             <svg className="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             <div>
               <span className="text-white font-medium">Egress Monitoring</span>
-              <p className="text-sm text-gray-400 mt-0.5">Real-time network traffic analysis</p>
+              <p className="text-sm text-[#A0A0A0] mt-0.5">Real-time network traffic analysis</p>
               <span className="text-green-400 text-xs mt-1 inline-block">Active</span>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-3 bg-slate-900/50 rounded-lg">
+          <div className="flex items-start gap-3 p-3 bg-[#111111]/50 rounded-lg">
             <svg className="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             <div>
               <span className="text-white font-medium">Insider Threat Detection</span>
-              <p className="text-sm text-gray-400 mt-0.5">Behavioral anomaly monitoring</p>
+              <p className="text-sm text-[#A0A0A0] mt-0.5">Behavioral anomaly monitoring</p>
               <span className="text-green-400 text-xs mt-1 inline-block">Active</span>
             </div>
           </div>
@@ -869,52 +869,52 @@ function ASL3Tab() {
       </div>
 
       {/* Red Team & Bug Bounty - ENHANCED */}
-      <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+      <div className="bg-[#1A1A1A]/50 backdrop-blur-sm rounded-lg border border-zinc-800 p-6">
         <h3 className="text-xl font-semibold text-white mb-4">Red Team & Bug Bounty Program</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
           <div>
-            <p className="text-gray-400 text-sm">Active Programs</p>
+            <p className="text-[#A0A0A0] text-sm">Active Programs</p>
             <p className="text-2xl font-bold text-white">3</p>
-            <p className="text-xs text-gray-400 mt-1">HackerOne, Internal, Partners</p>
+            <p className="text-xs text-[#A0A0A0] mt-1">HackerOne, Internal, Partners</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Vulnerabilities Found (30d)</p>
+            <p className="text-[#A0A0A0] text-sm">Vulnerabilities Found (30d)</p>
             <p className="text-2xl font-bold text-white">2</p>
             <p className="text-xs text-green-400 mt-1">Both resolved</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Avg Remediation Time</p>
+            <p className="text-[#A0A0A0] text-sm">Avg Remediation Time</p>
             <p className="text-2xl font-bold text-green-400">4.5 days</p>
             <p className="text-xs text-green-400 mt-1">✓ Target: &lt;7 days</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Total Bounties Paid</p>
-            <p className="text-2xl font-bold text-purple-400">$87.5K</p>
-            <p className="text-xs text-gray-400 mt-1">15 researchers</p>
+            <p className="text-[#A0A0A0] text-sm">Total Bounties Paid</p>
+            <p className="text-2xl font-bold text-red-400">$87.5K</p>
+            <p className="text-xs text-[#A0A0A0] mt-1">15 researchers</p>
           </div>
         </div>
-        <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
-          <p className="text-purple-300 text-sm">
+        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+          <p className="text-red-300 text-sm">
             <span className="font-medium">External Red Teaming:</span> Continuous adversarial testing by security researchers helps identify edge cases and novel attack vectors before they can be exploited.
           </p>
         </div>
       </div>
 
       {/* Certification Info */}
-      <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-6">
+      <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-6">
         <div className="flex items-start gap-3">
-          <svg className="w-6 h-6 text-blue-400 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 text-orange-400 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div>
-            <p className="text-blue-400 font-semibold text-lg mb-2">About ASL-3 Certification</p>
-            <p className="text-blue-300/90 text-sm leading-relaxed mb-3">
+            <p className="text-orange-400 font-semibold text-lg mb-2">About ASL-3 Certification</p>
+            <p className="text-orange-300/90 text-sm leading-relaxed mb-3">
               AI Safety Level 3 (ASL-3) is Anthropic's framework for advanced AI systems that could potentially assist in creating CBRN weapons. DefendML implements both the <span className="font-medium">Deployment Standard</span> (preventing misuse through 4-layer defense) and <span className="font-medium">Security Standard</span> (protecting model weights through encryption and access controls).
             </p>
             <div className="flex flex-wrap gap-4 text-sm">
-              <a href="#" className="text-blue-400 hover:text-blue-300 underline">Learn More</a>
-              <a href="#" className="text-blue-400 hover:text-blue-300 underline">View Documentation</a>
-              <a href="#" className="text-blue-400 hover:text-blue-300 underline">Certification Report</a>
+              <a href="#" className="text-orange-400 hover:text-orange-300 underline">Learn More</a>
+              <a href="#" className="text-orange-400 hover:text-orange-300 underline">View Documentation</a>
+              <a href="#" className="text-orange-400 hover:text-orange-300 underline">Certification Report</a>
             </div>
           </div>
         </div>
