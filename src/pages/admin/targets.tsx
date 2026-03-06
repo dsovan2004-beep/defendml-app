@@ -10,6 +10,7 @@ import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
 import RequireAuth from "../../components/RequireAuth";
 import { createClient } from "@supabase/supabase-js";
+import { useUserTier, isFree } from "../../lib/tierCheck";
 import {
   Plus,
   Target,
@@ -26,6 +27,7 @@ import {
   Zap,
   Activity,
   Clock,
+  Lock,
 } from "lucide-react";
 
 const supabase = createClient(
@@ -56,6 +58,9 @@ interface Target {
 }
 
 function AttackTargets() {
+  const { tier } = useUserTier();
+  const gated = isFree(tier);
+
   const [targets, setTargets] = useState<Target[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -343,14 +348,36 @@ function AttackTargets() {
             </div>
             <div className="flex gap-3">
               <button
-                onClick={() => setShowAddModal(true)}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+                onClick={() => { if (!gated) setShowAddModal(true); }}
+                disabled={gated}
+                title={gated ? "Upgrade to Pilot to add targets" : undefined}
+                className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+                  gated
+                    ? "bg-[#1A1A1A] text-zinc-500 cursor-not-allowed border border-zinc-700"
+                    : "bg-red-600 text-white hover:bg-red-700"
+                }`}
               >
-                <Plus className="w-4 h-4" />
+                {gated ? <Lock className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 Add Target
               </button>
             </div>
           </div>
+
+          {/* Upgrade banner — shown only for free tier */}
+          {gated && (
+            <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3 flex items-center gap-3">
+              <Lock className="w-4 h-4 text-red-400 flex-shrink-0" />
+              <span className="text-sm text-red-300">
+                Upgrade to Pilot ($2,500) to unlock real red team scans.{" "}
+                <a
+                  href="mailto:dsovan2004@gmail.com"
+                  className="underline text-red-400 hover:text-red-300 transition-colors"
+                >
+                  Contact us to upgrade →
+                </a>
+              </span>
+            </div>
+          )}
         </div>
 
         {loading ? (
@@ -368,10 +395,15 @@ function AttackTargets() {
               Add your first customer AI system to begin red team testing
             </p>
             <button
-              onClick={() => setShowAddModal(true)}
-              className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors inline-flex items-center gap-2"
+              onClick={() => { if (!gated) setShowAddModal(true); }}
+              disabled={gated}
+              className={`px-6 py-3 rounded-lg transition-colors inline-flex items-center gap-2 ${
+                gated
+                  ? "bg-[#1A1A1A] text-zinc-500 cursor-not-allowed border border-zinc-700"
+                  : "bg-red-600 text-white hover:bg-red-700"
+              }`}
             >
-              <Plus className="w-5 h-5" />
+              {gated ? <Lock className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
               Add Target
             </button>
           </div>
@@ -442,13 +474,19 @@ function AttackTargets() {
 
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => handleRunScan(target.id)}
-                      disabled={executing === target.id}
-                      className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      title="Execute attack"
+                      onClick={() => { if (!gated) handleRunScan(target.id); }}
+                      disabled={executing === target.id || gated}
+                      title={gated ? "Upgrade to Pilot to run scans" : "Execute attack"}
+                      className={`p-2 rounded-lg transition-colors ${
+                        gated
+                          ? "bg-[#1A1A1A] text-zinc-500 cursor-not-allowed border border-zinc-700"
+                          : "bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      }`}
                     >
                       {executing === target.id ? (
                         <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                      ) : gated ? (
+                        <Lock className="w-4 h-4" />
                       ) : (
                         <Play className="w-4 h-4" />
                       )}
