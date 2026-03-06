@@ -275,7 +275,7 @@ function OverviewPage() {
                       <Shield className="w-5 h-5 text-red-400" />
                       <span className="text-sm font-semibold text-red-300">Attack Scenarios</span>
                     </div>
-                    <div className="text-4xl font-bold text-red-400 mb-2">255</div>
+                    <div className="text-4xl font-bold text-red-400 mb-2">295</div>
                     <div className="text-xs text-[#A0A0A0]">Industry-leading coverage vs ~50-70</div>
                   </div>
                   <div className="bg-black/40 rounded-xl p-6 border border-orange-500/30">
@@ -407,7 +407,7 @@ function OverviewPage() {
                 </div>
                 <span className="text-xs font-semibold text-orange-300 bg-orange-500/20 px-3 py-1 rounded-full">Coverage</span>
               </div>
-              <div className="text-4xl font-bold text-white mb-2">255</div>
+              <div className="text-4xl font-bold text-white mb-2">295</div>
               <div className="text-[#F5F5F5] text-sm font-medium mb-1">Attack Prompts</div>
               <div className="text-[#A0A0A0] text-xs">vs competitors' ~50-70</div>
             </div>
@@ -447,7 +447,7 @@ function OverviewPage() {
                 </div>
                 <div className="text-4xl font-bold text-white mb-2">{(kpis?.pii_prevented ?? 0).toLocaleString()}</div>
                 <div className="text-[#F5F5F5] text-sm font-medium mb-1">PII Extraction Attacks</div>
-                <div className="text-[#A0A0A0] text-xs">35 attack prompts executed</div>
+                <div className="text-[#A0A0A0] text-xs">100 attack prompts per scan</div>
               </div>
               <div className="bg-[#111111] rounded-xl p-6 border border-[#1A1A1A] hover:border-green-500/50 transition-all">
                 <div className="flex items-start justify-between mb-4">
@@ -559,7 +559,7 @@ function OverviewPage() {
             <a href="/admin/targets" className="p-6 bg-[#111111] hover:bg-[#1A1A1A] rounded-xl border border-[#1A1A1A] hover:border-red-500/50 transition-all block">
               <Shield className="w-8 h-8 text-red-400 mb-3" />
               <div className="text-white font-semibold mb-1">Attack Scenarios</div>
-              <div className="text-[#A0A0A0] text-sm">255 offensive test prompts</div>
+              <div className="text-[#A0A0A0] text-sm">295 offensive test prompts</div>
             </a>
             <a href="/compliance" className="p-6 bg-[#111111] hover:bg-[#1A1A1A] rounded-xl border border-[#1A1A1A] hover:border-green-500/50 transition-all block">
               <FileCheck className="w-8 h-8 text-green-400 mb-3" />
