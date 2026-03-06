@@ -92,6 +92,41 @@ function CompliancePageContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  // Live category breakdown from red_team_tests
+  const [categoryBreakdown, setCategoryBreakdown] = useState<{ category: string; count: number }[]>([]);
+  const [libLoading, setLibLoading] = useState(true);
+
+  // Fetch attack library category counts from red_team_tests
+  useEffect(() => {
+    async function fetchCategoryBreakdown() {
+      try {
+        const { data, error: fetchError } = await supabase
+          .from('red_team_tests')
+          .select('category');
+
+        if (fetchError || !data) return;
+
+        // Group client-side — 295 rows, trivial cost
+        const counts: Record<string, number> = {};
+        for (const row of data) {
+          const cat = row.category || 'Other';
+          counts[cat] = (counts[cat] ?? 0) + 1;
+        }
+
+        const sorted = Object.entries(counts)
+          .map(([category, count]) => ({ category, count }))
+          .sort((a, b) => b.count - a.count);
+
+        setCategoryBreakdown(sorted);
+      } catch (_) {
+        // silent — UI falls back to skeleton
+      } finally {
+        setLibLoading(false);
+      }
+    }
+    fetchCategoryBreakdown();
+  }, []);
+
   // Fetch reports from Supabase on mount
   useEffect(() => {
     async function fetchReports() {
@@ -636,30 +671,34 @@ function CompliancePageContent() {
                 </p>
 
                 <div className="space-y-3 text-sm">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#F5F5F5]">Jailbreaks</span>
-                    <span className="text-red-400">45 prompts</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#F5F5F5]">CBRN/WMD</span>
-                    <span className="text-red-400">35 prompts</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#F5F5F5]">PII Extraction</span>
-                    <span className="text-red-400">35 prompts</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#F5F5F5]">Cybersecurity</span>
-                    <span className="text-red-400">30 prompts</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#F5F5F5]">Bias & Fairness</span>
-                    <span className="text-red-400">30 prompts</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#F5F5F5]">+5 more categories</span>
-                    <span className="text-red-400">85 prompts</span>
-                  </div>
+                  {libLoading ? (
+                    // skeleton while loading
+                    Array.from({ length: 5 }).map((_, i) => (
+                      <div key={i} className="flex items-center justify-between animate-pulse">
+                        <div className="h-3 w-28 bg-zinc-700 rounded" />
+                        <div className="h-3 w-16 bg-zinc-700 rounded" />
+                      </div>
+                    ))
+                  ) : categoryBreakdown.length > 0 ? (
+                    <>
+                      {categoryBreakdown.slice(0, 5).map(({ category, count }) => (
+                        <div key={category} className="flex items-center justify-between">
+                          <span className="text-[#F5F5F5]">{category}</span>
+                          <span className="text-red-400">{count} prompts</span>
+                        </div>
+                      ))}
+                      {categoryBreakdown.length > 5 && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#F5F5F5]">+{categoryBreakdown.length - 5} more categories</span>
+                          <span className="text-red-400">
+                            {categoryBreakdown.slice(5).reduce((s, c) => s + c.count, 0)} prompts
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="text-[#A0A0A0] text-xs">No library data available</div>
+                  )}
                 </div>
 
                 <div className="mt-4 text-xs text-zinc-500">
@@ -972,7 +1011,9 @@ function CompliancePageContent() {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-[#A0A0A0]">CBRN Tests</span>
-                      <span className="text-[#F5F5F5]">35</span>
+                      <span className="text-[#F5F5F5]">
+                        {libLoading ? '—' : (categoryBreakdown.find(c => c.category.toLowerCase().includes('cbrn'))?.count ?? '—')}
+                      </span>
                     </div>
                   </div>
                 </div>
