@@ -54,17 +54,17 @@ function StepIndicator({ current }: { current: Step }) {
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${
                 current > s.num
-                  ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white"
+                  ? "bg-red-600 text-white"
                   : current === s.num
-                  ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-500/50"
-                  : "bg-slate-800 text-slate-500 border border-slate-700"
+                  ? "bg-red-600 text-white shadow-lg shadow-red-600/50"
+                  : "bg-[#1A1A1A] text-zinc-500 border border-zinc-800"
               }`}
             >
               {current > s.num ? <CheckCircle2 className="w-4 h-4" /> : s.num}
             </div>
             <span
               className={`text-sm font-medium hidden sm:block ${
-                current === s.num ? "text-white" : "text-slate-500"
+                current === s.num ? "text-white" : "text-zinc-500"
               }`}
             >
               {s.label}
@@ -73,7 +73,7 @@ function StepIndicator({ current }: { current: Step }) {
           {i < STEPS.length - 1 && (
             <div
               className={`flex-1 h-px max-w-[60px] transition-all ${
-                current > s.num ? "bg-purple-500" : "bg-slate-700"
+                current > s.num ? "bg-red-500" : "bg-zinc-700"
               }`}
             />
           )}
@@ -251,11 +251,11 @@ export default function Onboarding() {
 
   // ── Render ───────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-slate-900 to-purple-950 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#0A0A0A] p-4">
       <div className="w-full max-w-lg">
         <StepIndicator current={step} />
 
-        <div className="bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-purple-500/20 p-8 shadow-2xl">
+        <div className="bg-[#111111] backdrop-blur-xl rounded-2xl border border-red-500/20 p-8 shadow-2xl">
 
           {/* ═══════════════════════════════════════════════════════════════════
               STEP 1 — Welcome
@@ -263,17 +263,17 @@ export default function Onboarding() {
           {step === 1 && (
             <div className="text-center">
               {/* Logo */}
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl mb-6 shadow-lg shadow-purple-500/50">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-red-600 rounded-2xl mb-6 shadow-lg shadow-red-600/50">
                 <Shield className="w-10 h-10 text-white" />
               </div>
 
               <h1 className="text-3xl font-bold text-white mb-2">
                 Welcome to DefendML
               </h1>
-              <p className="text-lg font-semibold text-purple-300 mb-4">
+              <p className="text-lg font-semibold text-red-300 mb-4">
                 Attack Before They Do.
               </p>
-              <p className="text-slate-400 mb-8 leading-relaxed text-sm">
+              <p className="text-[#A0A0A0] mb-8 leading-relaxed text-sm">
                 DefendML automatically runs red-team attacks against your AI
                 systems to find vulnerabilities before adversaries do — and
                 generates compliance evidence to prove it.
@@ -300,16 +300,16 @@ export default function Onboarding() {
                 ].map(({ Icon, label, text }) => (
                   <div
                     key={label}
-                    className="flex items-center gap-3 bg-slate-800/50 rounded-lg px-4 py-3 border border-purple-500/10"
+                    className="flex items-center gap-3 bg-[#1A1A1A]/50 rounded-lg px-4 py-3 border border-red-500/10"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-4 h-4 text-purple-400" />
+                    <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-4 h-4 text-red-400" />
                     </div>
                     <div>
-                      <span className="text-xs text-purple-400 font-medium block">
+                      <span className="text-xs text-red-400 font-medium block">
                         {label}
                       </span>
-                      <span className="text-slate-300 text-sm">{text}</span>
+                      <span className="text-[#F5F5F5] text-sm">{text}</span>
                     </div>
                   </div>
                 ))}
@@ -317,13 +317,13 @@ export default function Onboarding() {
 
               <button
                 onClick={() => setStep(2)}
-                className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+                className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
               >
                 Get Started <ArrowRight className="w-5 h-5" />
               </button>
               <button
                 onClick={() => window.location.replace("/overview")}
-                className="mt-3 w-full py-2 px-4 text-slate-500 hover:text-slate-300 text-sm transition-colors"
+                className="mt-3 w-full py-2 px-4 text-zinc-500 hover:text-[#F5F5F5] text-sm transition-colors"
               >
                 Skip for now — go to dashboard
               </button>
@@ -337,13 +337,13 @@ export default function Onboarding() {
             <div>
               {/* Header */}
               <div className="mb-6">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl mb-4 shadow-lg shadow-purple-500/30">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-red-600 rounded-xl mb-4 shadow-lg shadow-red-600/30">
                   <Target className="w-6 h-6 text-white" />
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-1">
                   Add Your First Target
                 </h2>
-                <p className="text-slate-400 text-sm">
+                <p className="text-[#A0A0A0] text-sm">
                   Tell us about the AI system you want to test.
                 </p>
               </div>
@@ -364,7 +364,7 @@ export default function Onboarding() {
                     onChange={(e) => setTargetName(e.target.value)}
                     required
                     placeholder="e.g. Production Chatbot"
-                    className="w-full px-4 py-3 bg-slate-800/50 border border-purple-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-4 py-3 bg-[#1A1A1A]/50 border border-red-500/30 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
                 </div>
 
@@ -377,7 +377,7 @@ export default function Onboarding() {
                     AI Endpoint URL
                   </label>
                   <div className="relative">
-                    <Globe className="absolute left-3 top-3.5 text-slate-400 w-4 h-4 pointer-events-none" />
+                    <Globe className="absolute left-3 top-3.5 text-[#A0A0A0] w-4 h-4 pointer-events-none" />
                     <input
                       id="target-url"
                       type="url"
@@ -385,7 +385,7 @@ export default function Onboarding() {
                       onChange={(e) => setTargetUrl(e.target.value)}
                       required
                       placeholder="https://api.openai.com/v1/chat/completions"
-                      className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-purple-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm"
+                      className="w-full pl-10 pr-4 py-3 bg-[#1A1A1A]/50 border border-red-500/30 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500 font-mono text-sm"
                     />
                   </div>
                 </div>
@@ -397,22 +397,22 @@ export default function Onboarding() {
                     className="block text-sm font-medium text-white mb-2"
                   >
                     API Key{" "}
-                    <span className="text-slate-500 font-normal text-xs">
+                    <span className="text-zinc-500 font-normal text-xs">
                       (optional)
                     </span>
                   </label>
                   <div className="relative">
-                    <Key className="absolute left-3 top-3.5 text-slate-400 w-4 h-4 pointer-events-none" />
+                    <Key className="absolute left-3 top-3.5 text-[#A0A0A0] w-4 h-4 pointer-events-none" />
                     <input
                       id="api-key"
                       type="password"
                       value={apiKey}
                       onChange={(e) => setApiKey(e.target.value)}
                       placeholder="sk-..."
-                      className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-purple-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm"
+                      className="w-full pl-10 pr-4 py-3 bg-[#1A1A1A]/50 border border-red-500/30 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500 font-mono text-sm"
                     />
                   </div>
-                  <p className="mt-1.5 text-xs text-slate-500 flex items-center gap-1">
+                  <p className="mt-1.5 text-xs text-zinc-500 flex items-center gap-1">
                     <Lock className="w-3 h-3" />
                     Stored encrypted — used only for attack execution
                   </p>
@@ -425,12 +425,12 @@ export default function Onboarding() {
                     className="block text-sm font-medium text-white mb-2"
                   >
                     Custom Headers{" "}
-                    <span className="text-slate-500 font-normal text-xs">
+                    <span className="text-zinc-500 font-normal text-xs">
                       (optional JSON)
                     </span>
                   </label>
                   <div className="relative">
-                    <Code2 className="absolute left-3 top-3 text-slate-400 w-4 h-4 pointer-events-none" />
+                    <Code2 className="absolute left-3 top-3 text-[#A0A0A0] w-4 h-4 pointer-events-none" />
                     <textarea
                       id="custom-headers"
                       value={customHeaders}
@@ -440,10 +440,10 @@ export default function Onboarding() {
                       }}
                       rows={3}
                       placeholder={'{"X-Custom-Header": "value"}'}
-                      className={`w-full pl-10 pr-4 py-3 bg-slate-800/50 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-xs resize-none ${
+                      className={`w-full pl-10 pr-4 py-3 bg-[#1A1A1A]/50 border rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500 font-mono text-xs resize-none ${
                         headersError
                           ? "border-red-500/50 focus:ring-red-500"
-                          : "border-purple-500/30"
+                          : "border-red-500/30"
                       }`}
                     />
                   </div>
@@ -464,14 +464,14 @@ export default function Onboarding() {
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="flex-1 py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-lg transition-all"
+                    className="flex-1 py-3 px-4 bg-[#1A1A1A] hover:bg-[#222222] text-[#F5F5F5] font-medium rounded-lg transition-all border border-zinc-800"
                   >
                     Back
                   </button>
                   <button
                     type="submit"
                     disabled={saving || !!headersError}
-                    className="flex-1 py-3 px-4 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 disabled:opacity-50 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+                    className="flex-1 py-3 px-4 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
                   >
                     {saving ? (
                       <>
@@ -497,15 +497,15 @@ export default function Onboarding() {
             <div>
               {/* Header */}
               <div className="mb-6">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl mb-4 shadow-lg shadow-purple-500/30">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-red-600 rounded-xl mb-4 shadow-lg shadow-red-600/30">
                   <Zap className="w-6 h-6 text-white" />
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-1">
                   Run Your First Scan
                 </h2>
-                <p className="text-slate-400 text-sm">
+                <p className="text-[#A0A0A0] text-sm">
                   Ready to attack{" "}
-                  <span className="text-purple-300 font-medium">
+                  <span className="text-red-300 font-medium">
                     {targetName}
                   </span>
                   . This will run a full red-team suite and generate a
@@ -516,9 +516,9 @@ export default function Onboarding() {
               {/* Pre-scan summary card */}
               {!scanning && !scanResult && !scanError && (
                 <div className="space-y-3 mb-6">
-                  <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-purple-500/10 flex items-center gap-3">
-                    <Globe className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                    <span className="text-slate-300 text-sm font-mono truncate">
+                  <div className="bg-[#1A1A1A]/50 rounded-lg px-4 py-3 border border-red-500/10 flex items-center gap-3">
+                    <Globe className="w-4 h-4 text-red-400 flex-shrink-0" />
+                    <span className="text-[#F5F5F5] text-sm font-mono truncate">
                       {targetUrl}
                     </span>
                   </div>
@@ -530,12 +530,12 @@ export default function Onboarding() {
                     ].map(({ label, value }) => (
                       <div
                         key={label}
-                        className="bg-slate-800/50 rounded-lg p-3 border border-purple-500/10 text-center"
+                        className="bg-[#1A1A1A]/50 rounded-lg p-3 border border-red-500/10 text-center"
                       >
                         <div className="text-white font-semibold text-sm">
                           {value}
                         </div>
-                        <div className="text-slate-500 text-xs mt-0.5">
+                        <div className="text-zinc-500 text-xs mt-0.5">
                           {label}
                         </div>
                       </div>
@@ -550,10 +550,10 @@ export default function Onboarding() {
                   {/* Spinner */}
                   <div className="flex items-center justify-center mb-6">
                     <div className="relative w-20 h-20">
-                      <div className="absolute inset-0 w-20 h-20 border-4 border-purple-500/30 rounded-full" />
-                      <div className="absolute inset-0 w-20 h-20 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                      <div className="absolute inset-0 w-20 h-20 border-4 border-red-500/30 rounded-full" />
+                      <div className="absolute inset-0 w-20 h-20 border-4 border-red-500 border-t-transparent rounded-full animate-spin" />
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <Zap className="w-8 h-8 text-purple-400" />
+                        <Zap className="w-8 h-8 text-red-400" />
                       </div>
                     </div>
                   </div>
@@ -567,17 +567,17 @@ export default function Onboarding() {
                           i < scanPhase
                             ? "bg-green-500/10 border border-green-500/20"
                             : i === scanPhase
-                            ? "bg-purple-500/20 border border-purple-500/40"
-                            : "bg-slate-800/30 border border-slate-700/50 opacity-40"
+                            ? "bg-red-500/20 border border-red-500/40"
+                            : "bg-[#1A1A1A]/30 border border-zinc-800/50 opacity-40"
                         }`}
                       >
                         <div className="flex-shrink-0">
                           {i < scanPhase ? (
                             <CheckCircle2 className="w-4 h-4 text-green-400" />
                           ) : i === scanPhase ? (
-                            <Loader2 className="w-4 h-4 text-purple-400 animate-spin" />
+                            <Loader2 className="w-4 h-4 text-red-400 animate-spin" />
                           ) : (
-                            <div className="w-4 h-4 rounded-full border border-slate-600" />
+                            <div className="w-4 h-4 rounded-full border border-zinc-700" />
                           )}
                         </div>
                         <span
@@ -585,8 +585,8 @@ export default function Onboarding() {
                             i < scanPhase
                               ? "text-green-300"
                               : i === scanPhase
-                              ? "text-purple-200"
-                              : "text-slate-500"
+                              ? "text-red-200"
+                              : "text-zinc-500"
                           }`}
                         >
                           {phase}
@@ -651,14 +651,14 @@ export default function Onboarding() {
                 <div className="flex flex-col gap-3">
                   <button
                     onClick={handleRunScan}
-                    className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+                    className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
                   >
                     <Zap className="w-5 h-5" />
                     Launch First Attack
                   </button>
                   <button
                     onClick={() => window.location.replace("/overview")}
-                    className="w-full py-2 px-4 text-slate-500 hover:text-slate-300 text-sm transition-colors"
+                    className="w-full py-2 px-4 text-zinc-500 hover:text-[#F5F5F5] text-sm transition-colors"
                   >
                     Skip — go to dashboard
                   </button>
@@ -673,14 +673,14 @@ export default function Onboarding() {
                       setScanError(null);
                       setScanResult(null);
                     }}
-                    className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+                    className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
                   >
                     <Zap className="w-5 h-5" />
                     Try Again
                   </button>
                   <button
                     onClick={() => window.location.replace("/overview")}
-                    className="w-full py-2 px-4 text-slate-500 hover:text-slate-300 text-sm transition-colors"
+                    className="w-full py-2 px-4 text-zinc-500 hover:text-[#F5F5F5] text-sm transition-colors"
                   >
                     Skip — go to dashboard
                   </button>
@@ -692,7 +692,7 @@ export default function Onboarding() {
                 <div className="flex flex-col gap-3 mt-2">
                   <button
                     onClick={() => window.location.replace("/overview")}
-                    className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold rounded-lg transition-all"
+                    className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all"
                   >
                     Go to Dashboard
                   </button>
@@ -703,7 +703,7 @@ export default function Onboarding() {
         </div>
 
         {/* Footer note */}
-        <p className="text-center text-xs text-slate-600 mt-6">
+        <p className="text-center text-xs text-zinc-700 mt-6">
           DefendML · Automated AI Red Teaming &amp; Compliance Evidence
         </p>
       </div>
