@@ -39,9 +39,30 @@ export async function onRequest(context: any) {
   // ── GET /api/targets ──────────────────────────────────────────────────────────
   if (request.method === 'GET') {
     try {
+      // FIX #4: scope results to the caller's org — prevents cross-org data leakage.
+      // Superadmin (dsovan2004@gmail.com) sees all via service_role but still scoped
+      // to orgs they belong to. Adjust to `.select('*')` with no filter only if you
+      // intentionally want a global view (e.g. a separate /admin/targets endpoint).
+      const { data: memberships, error: membershipError } = await supabaseService
+        .from('organization_members')
+        .select('organization_id')
+        .eq('user_id', user.id);
+
+      if (membershipError) {
+        console.error('Error fetching memberships:', membershipError);
+        return jsonRes({ error: 'Failed to resolve organization' }, 500);
+      }
+
+      const orgIds = (memberships || []).map((m: any) => m.organization_id);
+
+      if (orgIds.length === 0) {
+        return jsonRes({ targets: [] }, 200);
+      }
+
       const { data, error } = await supabaseService
         .from('targets')
         .select('*')
+        .in('organization_id', orgIds)
         .order('created_at', { ascending: false });
 
       if (error) {
