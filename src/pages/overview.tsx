@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import RequireAuth from '../components/RequireAuth';
@@ -25,6 +26,14 @@ type Kpis = {
   trend_compliance?: number;
   trend_latency?: number;
   trend_success?: number;
+};
+
+type FeedItem = {
+  id: string;
+  category: string;
+  decision: string;
+  created_at: string;
+  latency_ms: number | null;
 };
 
 type RedTeamMetrics = {
@@ -54,6 +63,8 @@ const TrendIndicator: React.FC<{ value?: number }> = ({ value }) => {
 function OverviewPage() {
   const [kpis, setKpis] = useState<Kpis | null>(null);
   const [redTeamMetrics, setRedTeamMetrics] = useState<RedTeamMetrics | null>(null);
+  const [attackFeed, setAttackFeed] = useState<FeedItem[]>([]);
+  const [feedLoading, setFeedLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [rangeFilter, setRangeFilter] = useState<number>(7);
@@ -61,50 +72,123 @@ function OverviewPage() {
   useEffect(() => {
     (async () => {
       setLoading(true);
+      setFeedLoading(true);
       setError(null);
       try {
-        const res = await fetch(`/api/kpis?range_days=${rangeFilter}`, { cache: 'no-store' });
-        if (!res.ok) throw new Error('API connection failed');
-        const data = await res.json();
-        setKpis(data?.kpis ?? null);
-      } catch (e) {
-        console.error('API Error:', e);
+        const sb = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        );
+        const since = new Date(Date.now() - rangeFilter * 86400000).toISOString();
+        const since24h = new Date(Date.now() - 86400000).toISOString();
+
+        const [
+          { count: totalCount },
+          { count: blockedCount },
+          { count: piiCount },
+          { data: latencyRows },
+          { data: reportsData },
+          { data: feedData },
+          { count: blocked24h },
+        ] = await Promise.all([
+          sb.from('red_team_results').select('id', { count: 'exact', head: true }).gte('created_at', since),
+          sb.from('red_team_results').select('id', { count: 'exact', head: true }).eq('decision', 'BLOCK').gte('created_at', since),
+          sb.from('red_team_results').select('id', { count: 'exact', head: true }).ilike('category', '%pii%').gte('created_at', since),
+          sb.from('red_team_results').select('latency_ms').gte('created_at', since).not('latency_ms', 'is', null),
+          sb.from('red_team_reports').select('block_rate').gte('created_at', since),
+          sb.from('red_team_results').select('id, category, decision, created_at, latency_ms').order('created_at', { ascending: false }).limit(5),
+          sb.from('red_team_results').select('id', { count: 'exact', head: true }).eq('decision', 'BLOCK').gte('created_at', since24h),
+        ]);
+
+        const total = totalCount ?? 0;
+        const blocked = blockedCount ?? 0;
+        const avgLatency = latencyRows?.length
+          ? latencyRows.reduce((s, r) => s + (r.latency_ms ?? 0), 0) / latencyRows.length
+          : 0;
+        const avgBlockRate = reportsData?.length
+          ? reportsData.reduce((s, r) => s + (r.block_rate ?? 0), 0) / reportsData.length
+          : 0;
+
         setKpis({
-          threats_blocked: 2847,
-          pii_prevented: 1234,
-          policy_violations: 89,
-          compliance_score: 99.2,
-          avg_latency_ms: 4.0,
-          success_rate: 99.94,
-          scan_count: 45678,
+          threats_blocked: blocked,
+          pii_prevented: piiCount ?? 0,
+          policy_violations: total > blocked ? total - blocked : 0,
+          compliance_score: parseFloat((avgBlockRate * 100).toFixed(1)),
+          avg_latency_ms: parseFloat(avgLatency.toFixed(1)),
+          success_rate: total > 0 ? parseFloat(((blocked / total) * 100).toFixed(1)) : 0,
+          scan_count: total,
           setup_time_minutes: 28,
           cost_saved_vs_calypso: 48750,
           multi_llm_providers: 4,
-          trend_threats: 15.3,
-          trend_pii: -8.2,
-          trend_policy: 12.1,
-          trend_compliance: 0.8,
-          trend_latency: -3.2,
-          trend_success: 0.1,
         });
+
+        setRedTeamMetrics({
+          // overall_score: live avg block rate when data exists, else product benchmark
+          overall_score: reportsData?.length ? parseFloat((avgBlockRate * 100).toFixed(1)) : 96.5,
+          status: 'ACTIVE',
+          deployment_standard: 98,     // static — product capability
+          security_standard: 94,       // static — product capability
+          classifier_accuracy: 99.6,   // static — product capability
+          classifier_latency: avgLatency > 0 ? parseFloat(avgLatency.toFixed(1)) : 4.0,
+          defense_layers_active: 4,    // static — product architecture
+          incident_response_time: 2.8, // static — product capability
+          false_positive_rate: 0.3,    // static — product capability
+          threats_blocked_24h: blocked24h ?? 0,
+        });
+
+        setAttackFeed((feedData ?? []) as FeedItem[]);
+      } catch (e) {
+        console.error('Dashboard error:', e);
+        setError('Failed to load dashboard data');
+        setKpis({
+          threats_blocked: 0, pii_prevented: 0, policy_violations: 0,
+          compliance_score: 0, avg_latency_ms: 0, success_rate: 0,
+          scan_count: 0, setup_time_minutes: 28, cost_saved_vs_calypso: 48750, multi_llm_providers: 4,
+        });
+        setRedTeamMetrics({
+          overall_score: 0, status: 'ACTIVE', deployment_standard: 98,
+          security_standard: 94, classifier_accuracy: 99.6, classifier_latency: 4.0,
+          defense_layers_active: 4, incident_response_time: 2.8,
+          false_positive_rate: 0.3, threats_blocked_24h: 0,
+        });
+        setAttackFeed([]);
       } finally {
         setLoading(false);
+        setFeedLoading(false);
       }
     })();
-
-    setRedTeamMetrics({
-      overall_score: 96.5,
-      status: 'ACTIVE',
-      deployment_standard: 98,
-      security_standard: 94,
-      classifier_accuracy: 99.6,
-      classifier_latency: 4.0,
-      defense_layers_active: 4,
-      incident_response_time: 2.8,
-      false_positive_rate: 0.3,
-      threats_blocked_24h: 847
-    });
   }, [rangeFilter]);
+
+  function formatRelativeTime(dateStr: string): string {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins} min ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    return `${Math.floor(hours / 24)}d ago`;
+  }
+
+  function severityFromCategory(cat: string): 'CRITICAL' | 'HIGH' | 'MEDIUM' {
+    const c = cat.toLowerCase();
+    if (c.includes('cbrn') || c.includes('wmd') || c.includes('cyber') || c.includes('exploit')) return 'CRITICAL';
+    if (c.includes('pii') || c.includes('jailbreak') || c.includes('injection') || c.includes('manipulation')) return 'HIGH';
+    return 'MEDIUM';
+  }
+
+  function formatCategory(cat: string): string {
+    const map: Record<string, string> = {
+      cbrn_wmd: 'CBRN/WMD Attack',
+      pii_data_extraction: 'PII Extraction',
+      cybersecurity_exploits: 'Cybersecurity Exploit',
+      jailbreaks_constitutional: 'Jailbreak Attempt',
+      model_manipulation: 'Model Manipulation',
+      prompt_injection: 'Prompt Injection',
+      bias_fairness: 'Bias Exploit',
+      adversarial_robustness: 'Adversarial Attack',
+    };
+    return map[cat] ?? cat.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  }
 
   if (loading) {
     return (
@@ -392,35 +476,81 @@ function OverviewPage() {
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                 <h3 className="text-lg font-bold text-white">Active Attack Feed</h3>
-                <span className="text-xs text-zinc-500">(demo)</span>
+                <span className="text-xs text-zinc-500">
+                  {feedLoading ? 'loading...' : attackFeed.length > 0 ? '(live)' : '(no scans yet)'}
+                </span>
               </div>
               <a href="/asl3-testing" className="text-sm text-red-400 hover:text-red-300 font-medium">View All →</a>
             </div>
             <div className="p-6 space-y-3">
-              {[
-                { time: '2 min ago', type: 'Prompt Injection Attack', severity: 'CRITICAL', action: 'BLOCKED', source: 'Claude' },
-                { time: '5 min ago', type: 'PII Extraction (SSN)', severity: 'HIGH', action: 'SANITIZED', source: 'GPT-4' },
-                { time: '8 min ago', type: 'Jailbreak Attempt', severity: 'HIGH', action: 'BLOCKED', source: 'Gemini' },
-                { time: '12 min ago', type: 'Policy Violation Test', severity: 'MEDIUM', action: 'FLAGGED', source: 'Claude' },
-              ].map((t, i) => (
-                <div key={i} className="flex items-center justify-between p-4 bg-[#1A1A1A] rounded-lg hover:bg-[#222222] transition-all border border-zinc-800">
-                  <div className="flex items-center gap-4">
-                    <div className={`w-3 h-3 rounded-full ${t.severity === 'CRITICAL' ? 'bg-red-500' : t.severity === 'HIGH' ? 'bg-orange-500' : 'bg-yellow-500'}`} />
-                    <div>
-                      <div className="text-white font-medium text-sm">{t.type}</div>
-                      <div className="text-[#A0A0A0] text-xs">{t.time} • {t.source}</div>
+              {feedLoading ? (
+                // Skeleton loading rows
+                [...Array(4)].map((_, i) => (
+                  <div key={i} className="flex items-center justify-between p-4 bg-[#1A1A1A] rounded-lg border border-zinc-800 animate-pulse">
+                    <div className="flex items-center gap-4">
+                      <div className="w-3 h-3 rounded-full bg-zinc-700" />
+                      <div>
+                        <div className="h-3 w-44 bg-zinc-700 rounded mb-2" />
+                        <div className="h-2 w-28 bg-zinc-800 rounded" />
+                      </div>
+                    </div>
+                    <div className="flex gap-3">
+                      <div className="h-6 w-16 bg-zinc-700 rounded-full" />
+                      <div className="h-6 w-14 bg-zinc-700 rounded" />
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${t.severity === 'CRITICAL' ? 'bg-red-500/20 text-red-300 border border-red-500/30' : t.severity === 'HIGH' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30' : 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'}`}>
-                      {t.severity}
-                    </span>
-                    <span className={`px-3 py-1 rounded-lg text-xs font-medium ${t.action === 'BLOCKED' ? 'bg-red-500/20 text-red-300 border border-red-500/30' : t.action === 'SANITIZED' ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30' : 'bg-orange-500/20 text-orange-300 border border-orange-500/30'}`}>
-                      {t.action}
-                    </span>
-                  </div>
+                ))
+              ) : attackFeed.length === 0 ? (
+                // Empty state — no scans yet
+                <div className="text-center py-10 text-zinc-500">
+                  <Activity className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                  <p className="text-sm mb-2">No scan results yet</p>
+                  <a href="/admin/targets" className="text-red-400 text-sm hover:text-red-300 transition-colors">
+                    Run your first attack scan →
+                  </a>
                 </div>
-              ))}
+              ) : (
+                // Live feed rows
+                attackFeed.map((item) => {
+                  const severity = severityFromCategory(item.category);
+                  const decisionColors: Record<string, string> = {
+                    BLOCK: 'bg-red-500/20 text-red-300 border-red-500/30',
+                    FLAG:  'bg-orange-500/20 text-orange-300 border-orange-500/30',
+                    ALLOW: 'bg-green-500/20 text-green-300 border-green-500/30',
+                    ERROR: 'bg-zinc-500/20 text-zinc-300 border-zinc-500/30',
+                  };
+                  const severityColors: Record<string, string> = {
+                    CRITICAL: 'bg-red-500/20 text-red-300 border-red-500/30',
+                    HIGH:     'bg-orange-500/20 text-orange-300 border-orange-500/30',
+                    MEDIUM:   'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
+                  };
+                  const dotColors: Record<string, string> = {
+                    CRITICAL: 'bg-red-500', HIGH: 'bg-orange-500', MEDIUM: 'bg-yellow-500',
+                  };
+                  return (
+                    <div key={item.id} className="flex items-center justify-between p-4 bg-[#1A1A1A] rounded-lg hover:bg-[#222222] transition-all border border-zinc-800">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-3 h-3 rounded-full ${dotColors[severity]}`} />
+                        <div>
+                          <div className="text-white font-medium text-sm">{formatCategory(item.category)}</div>
+                          <div className="text-[#A0A0A0] text-xs">
+                            {formatRelativeTime(item.created_at)}
+                            {item.latency_ms ? ` • ${item.latency_ms}ms` : ''}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${severityColors[severity]}`}>
+                          {severity}
+                        </span>
+                        <span className={`px-3 py-1 rounded-lg text-xs font-medium border ${decisionColors[item.decision] ?? decisionColors.ERROR}`}>
+                          {item.decision}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
 
