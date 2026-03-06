@@ -57,7 +57,7 @@ function pillForSeverity(s: Severity) {
   if (s === "CRITICAL") return "bg-red-500/10 text-red-300 border border-red-500/30";
   if (s === "HIGH") return "bg-orange-500/10 text-orange-300 border border-orange-500/30";
   if (s === "MEDIUM") return "bg-yellow-500/10 text-yellow-300 border border-yellow-500/30";
-  return "bg-slate-500/10 text-slate-300 border border-slate-500/30";
+  return "bg-zinc-500/10 text-zinc-300 border border-zinc-500/30";
 }
 
 function pct(n: number, d: number) {
@@ -82,7 +82,7 @@ function CompliancePageContent() {
   const [reports, setReports] = useState<EvidenceRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -241,13 +241,13 @@ function CompliancePageContent() {
     const headers = ['Report ID', 'Target System', 'Attack Scan', 'Result', 'Attack Type', 'Severity', 'Failed Layer', 'Timestamp'];
     const csvContent = [
       headers.join(','),
-      ...reports.map(row => 
+      ...reports.map(row =>
         [row.reportId, row.target, row.scan, row.decision, row.category, row.severity, row.layer, row.timestamp]
           .map(field => `"${field}"`)
           .join(',')
       )
     ].join('\n');
-    
+
     const dataUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent);
     const exportFileDefaultName = `DefendML-Attack-Evidence-${new Date().toISOString().split('T')[0]}.csv`;
     const linkElement = document.createElement('a');
@@ -260,10 +260,10 @@ function CompliancePageContent() {
     import('jspdf').then((module) => {
       const jsPDF = module.default;
       const doc = new jsPDF();
-      
-      doc.setFillColor(147, 51, 234);
+
+      doc.setFillColor(229, 62, 62);
       doc.rect(0, 0, 210, 60, 'F');
-      
+
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(28);
       doc.text('DefendML', 20, 25);
@@ -271,14 +271,14 @@ function CompliancePageContent() {
       doc.text('Red Team Attack Evidence Report', 20, 35);
       doc.setFontSize(10);
       doc.text(`Generated: ${new Date().toLocaleString()}`, 20, 45);
-      
+
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(14);
       doc.text('Executive Summary', 20, 75);
-      
+
       doc.setFontSize(10);
       let yPos = 85;
-      
+
       doc.text(`Total Attack Reports: ${total}`, 20, yPos);
       yPos += 7;
       doc.text(`Critical Vulnerabilities: ${decisionCounts.ALLOW}`, 20, yPos);
@@ -287,29 +287,29 @@ function CompliancePageContent() {
       yPos += 7;
       doc.text(`Defense Success Rate: ${pct(decisionCounts.BLOCK, total)}%`, 20, yPos);
       yPos += 10;
-      
+
       doc.setFontSize(12);
       doc.text('Risk Assessment', 20, yPos);
       yPos += 7;
       doc.setFontSize(10);
-      
+
       if (attackSuccessRate > 50) {
         doc.setTextColor(220, 38, 38);
-        doc.text('⚠ CRITICAL: Target defenses failed on majority of attacks', 20, yPos);
+        doc.text('⚠ CRITICAL: Target security controls failed on majority of attacks', 20, yPos);
       } else if (attackSuccessRate > 20) {
         doc.setTextColor(234, 88, 12);
         doc.text('⚠ HIGH RISK: Significant vulnerabilities detected', 20, yPos);
       } else {
         doc.setTextColor(34, 197, 94);
-        doc.text('✓ MODERATE: Target defenses performing adequately', 20, yPos);
+        doc.text('✓ MODERATE: Target security controls performing adequately', 20, yPos);
       }
       doc.setTextColor(0, 0, 0);
       yPos += 15;
-      
+
       doc.setFontSize(12);
       doc.text('Attack Results Breakdown', 20, yPos);
       yPos += 10;
-      
+
       doc.setFontSize(9);
       doc.text('Report ID', 20, yPos);
       doc.text('Target', 60, yPos);
@@ -317,21 +317,21 @@ function CompliancePageContent() {
       doc.text('Severity', 145, yPos);
       doc.text('Category', 170, yPos);
       yPos += 5;
-      
+
       doc.setLineWidth(0.5);
       doc.line(20, yPos, 190, yPos);
       yPos += 5;
-      
+
       reports.slice(0, 20).forEach((row) => {
         if (yPos > 270) {
           doc.addPage();
           yPos = 20;
         }
-        
+
         doc.setFontSize(8);
         doc.text(row.reportId.substring(0, 20), 20, yPos);
         doc.text(row.target.substring(0, 20), 60, yPos);
-        
+
         if (row.decision === 'ALLOW') {
           doc.setTextColor(220, 38, 38);
         } else if (row.decision === 'BLOCK') {
@@ -341,25 +341,25 @@ function CompliancePageContent() {
         }
         doc.text(row.decision, 120, yPos);
         doc.setTextColor(0, 0, 0);
-        
+
         doc.text(row.severity, 145, yPos);
         doc.text(row.category.substring(0, 15), 170, yPos);
         yPos += 6;
       });
-      
+
       doc.addPage();
       yPos = 20;
-      
-      doc.setFillColor(147, 51, 234);
+
+      doc.setFillColor(229, 62, 62);
       doc.rect(0, 0, 210, 30, 'F');
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(16);
       doc.text('Framework Coverage', 20, 18);
-      
+
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(10);
       yPos = 45;
-      
+
       doc.text('DefendML testing aligned with:', 20, yPos);
       yPos += 7;
       doc.text('✓ OWASP LLM Top 10: 100% coverage', 25, yPos);
@@ -369,11 +369,11 @@ function CompliancePageContent() {
       doc.text('✓ MITRE ATLAS: 95% coverage', 25, yPos);
       yPos += 6;
       doc.text('✓ ASL-3 CBRN: 96.5% measured compliance', 25, yPos);
-      
+
       doc.setFontSize(8);
       doc.setTextColor(100, 100, 100);
       doc.text('DefendML - Offensive AI Security Testing | Confidential Report', 20, 285);
-      
+
       const filename = `DefendML-Evidence-Report-${new Date().toISOString().split('T')[0]}.pdf`;
       doc.save(filename);
     });
@@ -383,7 +383,7 @@ function CompliancePageContent() {
     {
       icon: <Shield className="w-5 h-5 text-red-300" />,
       title: "Target should block CBRN categories immediately",
-      why: `Attack succeeded: ${decisionCounts.ALLOW} dangerous prompts bypassed target's defenses.`,
+      why: `Attack succeeded: ${decisionCounts.ALLOW} dangerous prompts bypassed target's security controls.`,
       what: [
         "Target must deploy explicit CBRN deny rules at L1",
         "Target's system requires constitutional AI filters",
@@ -423,26 +423,26 @@ function CompliancePageContent() {
 // Continue from Part 1...
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950">
+    <div className="min-h-screen flex flex-col bg-[#0A0A0A]">
       <Navigation />
 
       <main className="flex-1">
         {/* Header */}
-        <div className="bg-slate-900 border-b border-slate-800">
+        <div className="bg-[#111111] border-b border-[#1A1A1A]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-start justify-between gap-6">
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <FileText className="w-8 h-8 text-purple-400" />
+                  <FileText className="w-8 h-8 text-red-400" />
                   <h1 className="text-3xl font-bold text-white">Red Team Attack Reports</h1>
                 </div>
-                <p className="text-slate-400">
+                <p className="text-[#A0A0A0]">
                   Evidence of vulnerabilities found in customer AI systems through offensive red team testing.
                 </p>
-                <div className="mt-2 text-xs text-slate-500">
+                <div className="mt-2 text-xs text-zinc-500">
                   Attack Library:{" "}
-                  <span className="text-slate-300 font-semibold">255 scenarios</span> • Currently Testing:{" "}
-                  <span className="text-slate-300 font-semibold">40 prompts per scan</span>
+                  <span className="text-[#F5F5F5] font-semibold">255 scenarios</span> • Currently Testing:{" "}
+                  <span className="text-[#F5F5F5] font-semibold">40 prompts per scan</span>
                 </div>
               </div>
 
@@ -450,7 +450,7 @@ function CompliancePageContent() {
                 <button
                   type="button"
                   onClick={() => router.push('/tester')}
-                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium border border-slate-700 transition-colors"
+                  className="px-4 py-2 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] text-white text-sm font-medium border border-zinc-800 transition-colors"
                 >
                   Generate Report
                 </button>
@@ -458,7 +458,7 @@ function CompliancePageContent() {
                   type="button"
                   onClick={exportToPDF}
                   disabled={loading || reports.length === 0}
-                  className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:bg-slate-700 disabled:cursor-not-allowed text-white text-sm font-medium border border-purple-500/50 transition-colors flex items-center gap-2"
+                  className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 disabled:bg-[#1A1A1A] disabled:cursor-not-allowed text-white text-sm font-medium border border-red-500/50 transition-colors flex items-center gap-2"
                 >
                   <Download className="w-4 h-4" />
                   Export Evidence
@@ -487,8 +487,8 @@ function CompliancePageContent() {
         {loading && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="flex flex-col items-center justify-center gap-4">
-              <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
-              <p className="text-slate-400">Loading attack reports...</p>
+              <Loader2 className="w-8 h-8 text-red-400 animate-spin" />
+              <p className="text-[#A0A0A0]">Loading attack reports...</p>
             </div>
           </div>
         )}
@@ -498,35 +498,35 @@ function CompliancePageContent() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Summary cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-slate-900 rounded-xl p-5 border border-slate-800">
-                <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Latest Attack</div>
+              <div className="bg-[#111111] rounded-xl p-5 border border-[#1A1A1A]">
+                <div className="text-xs text-[#A0A0A0] uppercase tracking-wider mb-2">Latest Attack</div>
                 <div className="text-lg font-semibold text-white">
                   {latestReport ? latestReport.reportId : 'No reports yet'}
                 </div>
-                <div className="text-xs text-slate-500 mt-1">
+                <div className="text-xs text-zinc-500 mt-1">
                   {latestReport ? `Executed: ${latestReport.timestamp}` : 'Run a scan to generate reports'}
                 </div>
               </div>
 
-              <div className="bg-slate-900 rounded-xl p-5 border border-slate-800">
-                <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Attack Library Size</div>
-                <div className="text-3xl font-bold text-purple-400">255</div>
-                <div className="text-xs text-slate-500 mt-1">Total attack scenarios</div>
+              <div className="bg-[#111111] rounded-xl p-5 border border-[#1A1A1A]">
+                <div className="text-xs text-[#A0A0A0] uppercase tracking-wider mb-2">Attack Library Size</div>
+                <div className="text-3xl font-bold text-red-400">255</div>
+                <div className="text-xs text-zinc-500 mt-1">Total attack scenarios</div>
               </div>
 
-              <div className="bg-slate-900 rounded-xl p-5 border border-slate-800">
-                <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Critical Bypasses</div>
+              <div className="bg-[#111111] rounded-xl p-5 border border-[#1A1A1A]">
+                <div className="text-xs text-[#A0A0A0] uppercase tracking-wider mb-2">Critical Bypasses</div>
                 <div className="text-3xl font-bold text-red-400">{decisionCounts.ALLOW}</div>
-                <div className="text-xs text-slate-500 mt-1">Dangerous prompts allowed</div>
+                <div className="text-xs text-zinc-500 mt-1">Dangerous prompts allowed</div>
               </div>
 
-              <div className="bg-slate-900 rounded-xl p-5 border border-slate-800">
-                <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Attack Success Rate</div>
+              <div className="bg-[#111111] rounded-xl p-5 border border-[#1A1A1A]">
+                <div className="text-xs text-[#A0A0A0] uppercase tracking-wider mb-2">Attack Success Rate</div>
                 <div className="text-3xl font-bold text-red-400">{attackSuccessRate}%</div>
                 {attackSuccessRate > 0 && (
                   <div className="text-xs text-red-400 mt-2 flex items-center gap-1">
                     <AlertTriangle className="w-4 h-4" />
-                    Target defenses failed
+                    Target security controls failed
                   </div>
                 )}
               </div>
@@ -535,12 +535,12 @@ function CompliancePageContent() {
             {/* Attack Results Analysis */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
               {/* Target Defense Performance */}
-              <div className="bg-slate-900 rounded-xl p-6 border border-slate-800">
+              <div className="bg-[#111111] rounded-xl p-6 border border-[#1A1A1A]">
                 <div className="flex items-center gap-2 mb-1">
                   <Shield className="w-5 h-5 text-red-300" />
                   <h2 className="text-lg font-semibold text-white">Target Defense Performance</h2>
                 </div>
-                <p className="text-sm text-slate-400 mb-4">
+                <p className="text-sm text-[#A0A0A0] mb-4">
                   How customer's system responded to attacks.
                 </p>
 
@@ -553,11 +553,11 @@ function CompliancePageContent() {
                         <span className={`${isGood ? 'text-green-300' : isBad ? 'text-red-300' : 'text-yellow-300'}`}>
                           {d} {isGood && '✓'} {isBad && '✗'}
                         </span>
-                        <span className="text-slate-400">
+                        <span className="text-[#A0A0A0]">
                           {decisionCounts[d]} ({pct(decisionCounts[d], total)}%)
                         </span>
                       </div>
-                      <div className="h-2 rounded-full bg-slate-800 mt-2 overflow-hidden">
+                      <div className="h-2 rounded-full bg-[#1A1A1A] mt-2 overflow-hidden">
                         <div
                           className={`h-2 rounded-full ${
                             isGood ? 'bg-green-500/70' : isBad ? 'bg-red-500/70' : 'bg-yellow-500/70'
@@ -571,26 +571,26 @@ function CompliancePageContent() {
               </div>
 
               {/* Vulnerabilities by Severity */}
-              <div className="bg-slate-900 rounded-xl p-6 border border-slate-800">
+              <div className="bg-[#111111] rounded-xl p-6 border border-[#1A1A1A]">
                 <div className="flex items-center gap-2 mb-1">
                   <AlertTriangle className="w-5 h-5 text-orange-300" />
                   <h2 className="text-lg font-semibold text-white">Vulnerabilities Found</h2>
                 </div>
-                <p className="text-sm text-slate-400 mb-4">
-                  Severity of attacks that bypassed target's defenses.
+                <p className="text-sm text-[#A0A0A0] mb-4">
+                  Severity of attacks that bypassed target's security controls.
                 </p>
 
                 {(["CRITICAL", "HIGH", "MEDIUM", "LOW"] as Severity[]).map((s) => (
                   <div key={s} className="mb-3">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-300">{s}</span>
-                      <span className="text-slate-400">
+                      <span className="text-[#F5F5F5]">{s}</span>
+                      <span className="text-[#A0A0A0]">
                         {severityCounts[s]} ({pct(severityCounts[s], total)}%)
                       </span>
                     </div>
-                    <div className="h-2 rounded-full bg-slate-800 mt-2 overflow-hidden">
+                    <div className="h-2 rounded-full bg-[#1A1A1A] mt-2 overflow-hidden">
                       <div
-                        className="h-2 rounded-full bg-slate-500/70"
+                        className="h-2 rounded-full bg-zinc-500/70"
                         style={{ width: `${pct(severityCounts[s], total)}%` }}
                       />
                     </div>
@@ -599,54 +599,54 @@ function CompliancePageContent() {
               </div>
 
               {/* Attack Coverage */}
-              <div className="bg-slate-900 rounded-xl p-6 border border-slate-800">
+              <div className="bg-[#111111] rounded-xl p-6 border border-[#1A1A1A]">
                 <div className="flex items-center gap-2 mb-1">
-                  <Target className="w-5 h-5 text-purple-300" />
+                  <Target className="w-5 h-5 text-red-300" />
                   <h2 className="text-lg font-semibold text-white">Attack Coverage</h2>
                 </div>
-                <p className="text-sm text-slate-400 mb-4">
+                <p className="text-sm text-[#A0A0A0] mb-4">
                   Threat categories tested against target system.
                 </p>
 
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-300">Jailbreaks</span>
-                    <span className="text-purple-400">40 prompts</span>
+                    <span className="text-[#F5F5F5]">Jailbreaks</span>
+                    <span className="text-red-400">40 prompts</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-300">CBRN/WMD</span>
-                    <span className="text-purple-400">35 prompts</span>
+                    <span className="text-[#F5F5F5]">CBRN/WMD</span>
+                    <span className="text-red-400">35 prompts</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-300">PII Extraction</span>
-                    <span className="text-purple-400">35 prompts</span>
+                    <span className="text-[#F5F5F5]">PII Extraction</span>
+                    <span className="text-red-400">35 prompts</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-300">Cybersecurity</span>
-                    <span className="text-purple-400">30 prompts</span>
+                    <span className="text-[#F5F5F5]">Cybersecurity</span>
+                    <span className="text-red-400">30 prompts</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-300">Bias & Fairness</span>
-                    <span className="text-purple-400">30 prompts</span>
+                    <span className="text-[#F5F5F5]">Bias & Fairness</span>
+                    <span className="text-red-400">30 prompts</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-300">+5 more categories</span>
-                    <span className="text-purple-400">85 prompts</span>
+                    <span className="text-[#F5F5F5]">+5 more categories</span>
+                    <span className="text-red-400">85 prompts</span>
                   </div>
                 </div>
 
-                <div className="mt-4 text-xs text-slate-500">
+                <div className="mt-4 text-xs text-zinc-500">
                   Full 255-prompt library available for comprehensive testing.
                 </div>
               </div>
             </div>
 
             {/* Evidence table with pagination */}
-            <div className="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden mb-8">
-              <div className="p-6 border-b border-slate-800 flex items-start justify-between gap-6">
+            <div className="bg-[#111111] rounded-xl border border-[#1A1A1A] overflow-hidden mb-8">
+              <div className="p-6 border-b border-[#1A1A1A] flex items-start justify-between gap-6">
                 <div>
                   <h2 className="text-lg font-semibold text-white">Attack Evidence & Exports</h2>
-                  <p className="text-sm text-slate-400 mt-1">
+                  <p className="text-sm text-[#A0A0A0] mt-1">
                     Detailed results from red team attacks against customer AI systems.
                   </p>
                 </div>
@@ -655,7 +655,7 @@ function CompliancePageContent() {
                     type="button"
                     onClick={exportToPDF}
                     disabled={reports.length === 0}
-                    className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:bg-slate-800/50 disabled:cursor-not-allowed text-white text-sm font-medium border border-slate-700 transition-colors"
+                    className="px-3 py-2 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] disabled:bg-[#1A1A1A]/50 disabled:cursor-not-allowed text-white text-sm font-medium border border-zinc-800 transition-colors"
                   >
                     Export PDF
                   </button>
@@ -663,7 +663,7 @@ function CompliancePageContent() {
                     type="button"
                     onClick={exportToCSV}
                     disabled={reports.length === 0}
-                    className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:bg-slate-800/50 disabled:cursor-not-allowed text-white text-sm font-medium border border-slate-700 transition-colors"
+                    className="px-3 py-2 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] disabled:bg-[#1A1A1A]/50 disabled:cursor-not-allowed text-white text-sm font-medium border border-zinc-800 transition-colors"
                   >
                     Export CSV
                   </button>
@@ -671,7 +671,7 @@ function CompliancePageContent() {
                     type="button"
                     onClick={exportToJSON}
                     disabled={reports.length === 0}
-                    className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:bg-slate-800/50 disabled:cursor-not-allowed text-white text-sm font-medium border border-slate-700 transition-colors"
+                    className="px-3 py-2 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] disabled:bg-[#1A1A1A]/50 disabled:cursor-not-allowed text-white text-sm font-medium border border-zinc-800 transition-colors"
                   >
                     Export JSON
                   </button>
@@ -680,8 +680,8 @@ function CompliancePageContent() {
 
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
-                  <thead className="bg-slate-950/60">
-                    <tr className="text-left text-slate-400">
+                  <thead className="bg-[#0A0A0A]/60">
+                    <tr className="text-left text-[#A0A0A0]">
                       <th className="px-6 py-3 font-medium">Report ID</th>
                       <th className="px-6 py-3 font-medium">Target System</th>
                       <th className="px-6 py-3 font-medium">Attack Scan</th>
@@ -693,10 +693,10 @@ function CompliancePageContent() {
                       <th className="px-6 py-3 font-medium text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
+                  <tbody className="divide-y divide-[#1A1A1A]">
                     {currentReports.map((row) => (
-                      <tr key={row.reportId} className="text-slate-200 hover:bg-slate-950/40">
-                        <td className="px-6 py-4 font-mono text-xs text-slate-300">{row.reportId}</td>
+                      <tr key={row.reportId} className="text-[#F5F5F5] hover:bg-[#0A0A0A]/40">
+                        <td className="px-6 py-4 font-mono text-xs text-[#F5F5F5]">{row.reportId}</td>
                         <td className="px-6 py-4">{row.target}</td>
                         <td className="px-6 py-4">{row.scan}</td>
                         <td className="px-6 py-4">
@@ -708,7 +708,7 @@ function CompliancePageContent() {
                             {row.decision}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-slate-300">{row.category}</td>
+                        <td className="px-6 py-4 text-[#F5F5F5]">{row.category}</td>
                         <td className="px-6 py-4">
                           <span
                             className={`px-2.5 py-1 rounded-full text-xs font-semibold ${pillForSeverity(
@@ -719,16 +719,16 @@ function CompliancePageContent() {
                           </span>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-200 border border-slate-700">
+                          <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-[#1A1A1A] text-[#F5F5F5] border border-zinc-800">
                             {row.layer}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-slate-400">{row.timestamp}</td>
+                        <td className="px-6 py-4 text-[#A0A0A0]">{row.timestamp}</td>
                         <td className="px-6 py-4 text-right">
                           <button
                             type="button"
                             onClick={() => router.push(`/reports/${row.reportId}`)}
-                            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium border border-slate-700 transition-colors"
+                            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] text-white text-xs font-medium border border-zinc-800 transition-colors"
                           >
                             <Download className="w-4 h-4" />
                             Export
@@ -739,7 +739,7 @@ function CompliancePageContent() {
 
                     {reports.length === 0 && (
                       <tr>
-                        <td className="px-6 py-10 text-slate-400 text-center" colSpan={9}>
+                        <td className="px-6 py-10 text-[#A0A0A0] text-center" colSpan={9}>
                           No attack reports yet. Run a red team scan to generate evidence.
                         </td>
                       </tr>
@@ -750,18 +750,18 @@ function CompliancePageContent() {
 
               {/* Pagination Controls */}
               {reports.length > 0 && (
-                <div className="px-6 py-4 border-t border-slate-800 flex items-center justify-between bg-slate-950/40">
-                  <div className="text-sm text-slate-400">
-                    Showing <span className="font-medium text-slate-300">{startIndex + 1}</span> to{" "}
-                    <span className="font-medium text-slate-300">{Math.min(endIndex, reports.length)}</span> of{" "}
-                    <span className="font-medium text-slate-300">{reports.length}</span> reports
+                <div className="px-6 py-4 border-t border-[#1A1A1A] flex items-center justify-between bg-[#0A0A0A]/40">
+                  <div className="text-sm text-[#A0A0A0]">
+                    Showing <span className="font-medium text-[#F5F5F5]">{startIndex + 1}</span> to{" "}
+                    <span className="font-medium text-[#F5F5F5]">{Math.min(endIndex, reports.length)}</span> of{" "}
+                    <span className="font-medium text-[#F5F5F5]">{reports.length}</span> reports
                   </div>
 
                   <div className="flex items-center gap-2">
                     <button
                       onClick={goToPreviousPage}
                       disabled={currentPage === 1}
-                      className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:bg-slate-800/50 disabled:cursor-not-allowed text-white text-sm font-medium border border-slate-700 transition-colors flex items-center gap-2"
+                      className="px-3 py-2 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] disabled:bg-[#1A1A1A]/50 disabled:cursor-not-allowed text-white text-sm font-medium border border-zinc-800 transition-colors flex items-center gap-2"
                     >
                       <ChevronLeft className="w-4 h-4" />
                       Previous
@@ -769,17 +769,15 @@ function CompliancePageContent() {
 
                     <div className="flex items-center gap-1">
                       {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                        // Show first page, last page, current page, and pages around current
                         const showPage =
                           page === 1 ||
                           page === totalPages ||
                           (page >= currentPage - 1 && page <= currentPage + 1);
 
                         if (!showPage) {
-                          // Show ellipsis for skipped pages
                           if (page === currentPage - 2 || page === currentPage + 2) {
                             return (
-                              <span key={page} className="px-2 text-slate-500">
+                              <span key={page} className="px-2 text-zinc-500">
                                 ...
                               </span>
                             );
@@ -793,8 +791,8 @@ function CompliancePageContent() {
                             onClick={() => goToPage(page)}
                             className={`px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
                               currentPage === page
-                                ? 'bg-purple-600 text-white border-purple-500'
-                                : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
+                                ? 'bg-red-600 text-white border-red-500'
+                                : 'bg-[#1A1A1A] hover:bg-[#222222] text-[#F5F5F5] border-zinc-800'
                             }`}
                           >
                             {page}
@@ -806,7 +804,7 @@ function CompliancePageContent() {
                     <button
                       onClick={goToNextPage}
                       disabled={currentPage === totalPages}
-                      className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:bg-slate-800/50 disabled:cursor-not-allowed text-white text-sm font-medium border border-slate-700 transition-colors flex items-center gap-2"
+                      className="px-3 py-2 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] disabled:bg-[#1A1A1A]/50 disabled:cursor-not-allowed text-white text-sm font-medium border border-zinc-800 transition-colors flex items-center gap-2"
                     >
                       Next
                       <ChevronRight className="w-4 h-4" />
@@ -818,17 +816,17 @@ function CompliancePageContent() {
 
             {/* Target Remediation Recommendations */}
             {reports.length > 0 && (
-              <div className="bg-slate-900 rounded-xl border border-slate-800 mb-8 overflow-hidden">
-                <div className="p-6 border-b border-slate-800">
+              <div className="bg-[#111111] rounded-xl border border-[#1A1A1A] mb-8 overflow-hidden">
+                <div className="p-6 border-b border-[#1A1A1A]">
                   <h2 className="text-lg font-semibold text-white">Target Remediation Recommendations</h2>
-                  <p className="text-sm text-slate-400 mt-1">
+                  <p className="text-sm text-[#A0A0A0] mt-1">
                     What the TARGET system needs to fix based on attack results.
                   </p>
                 </div>
 
                 <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
                   {targetRecs.map((r) => (
-                    <div key={r.title} className="bg-slate-950/40 rounded-xl border border-slate-800 p-5">
+                    <div key={r.title} className="bg-[#0A0A0A]/40 rounded-xl border border-[#1A1A1A] p-5">
                       <div className="flex items-start justify-between gap-3 mb-3">
                         <div className="flex items-center gap-2">
                           {r.icon}
@@ -839,16 +837,16 @@ function CompliancePageContent() {
                         </span>
                       </div>
 
-                      <div className="text-sm text-slate-300 mb-3">
-                        <span className="text-slate-400">Finding:</span> {r.why}
+                      <div className="text-sm text-[#F5F5F5] mb-3">
+                        <span className="text-[#A0A0A0]">Finding:</span> {r.why}
                       </div>
 
-                      <div className="text-sm text-slate-300">
-                        <div className="text-slate-400 mb-2">Target must implement:</div>
+                      <div className="text-sm text-[#F5F5F5]">
+                        <div className="text-[#A0A0A0] mb-2">Target must implement:</div>
                         <ul className="space-y-2">
                           {r.what.map((w) => (
                             <li key={w} className="flex items-start gap-2">
-                              <span className="mt-1 w-1.5 h-1.5 rounded-full bg-slate-400" />
+                              <span className="mt-1 w-1.5 h-1.5 rounded-full bg-zinc-400" />
                               <span>{w}</span>
                             </li>
                           ))}
@@ -861,93 +859,93 @@ function CompliancePageContent() {
             )}
 
             {/* Attack Coverage Standards */}
-            <div className="bg-slate-900 rounded-xl border border-slate-800 mb-8">
-              <div className="p-6 border-b border-slate-800">
+            <div className="bg-[#111111] rounded-xl border border-[#1A1A1A] mb-8">
+              <div className="p-6 border-b border-[#1A1A1A]">
                 <h2 className="text-lg font-semibold text-white">Attack Coverage Standards</h2>
-                <p className="text-sm text-slate-400 mt-1">DefendML's 255-prompt library mapped to security frameworks.</p>
+                <p className="text-sm text-[#A0A0A0] mt-1">DefendML's 255-prompt library mapped to security frameworks.</p>
               </div>
 
               <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-slate-950/40 rounded-lg p-5 border border-slate-800">
+                <div className="bg-[#0A0A0A]/40 rounded-lg p-5 border border-[#1A1A1A]">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-base font-semibold text-white">NIST AI RMF</h3>
                     <CheckCircle2 className="w-5 h-5 text-green-400" />
                   </div>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Coverage</span>
+                      <span className="text-[#A0A0A0]">Coverage</span>
                       <span className="text-green-400 font-medium">100%</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Categories</span>
-                      <span className="text-slate-300">All 7</span>
+                      <span className="text-[#A0A0A0]">Categories</span>
+                      <span className="text-[#F5F5F5]">All 7</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Prompts</span>
-                      <span className="text-slate-300">255</span>
+                      <span className="text-[#A0A0A0]">Prompts</span>
+                      <span className="text-[#F5F5F5]">255</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-slate-950/40 rounded-lg p-5 border border-slate-800">
+                <div className="bg-[#0A0A0A]/40 rounded-lg p-5 border border-[#1A1A1A]">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-base font-semibold text-white">OWASP LLM Top 10</h3>
                     <CheckCircle2 className="w-5 h-5 text-green-400" />
                   </div>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Coverage</span>
+                      <span className="text-[#A0A0A0]">Coverage</span>
                       <span className="text-green-400 font-medium">100%</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Categories</span>
-                      <span className="text-slate-300">All 10</span>
+                      <span className="text-[#A0A0A0]">Categories</span>
+                      <span className="text-[#F5F5F5]">All 10</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Depth</span>
-                      <span className="text-slate-300">2.5x Lakera</span>
+                      <span className="text-[#A0A0A0]">Depth</span>
+                      <span className="text-[#F5F5F5]">2.5x Lakera</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-slate-950/40 rounded-lg p-5 border border-slate-800">
+                <div className="bg-[#0A0A0A]/40 rounded-lg p-5 border border-[#1A1A1A]">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-base font-semibold text-white">MITRE ATLAS</h3>
                     <CheckCircle2 className="w-5 h-5 text-green-400" />
                   </div>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Coverage</span>
+                      <span className="text-[#A0A0A0]">Coverage</span>
                       <span className="text-green-400 font-medium">95%</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Techniques</span>
-                      <span className="text-slate-300">38/40</span>
+                      <span className="text-[#A0A0A0]">Techniques</span>
+                      <span className="text-[#F5F5F5]">38/40</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Tactics</span>
-                      <span className="text-slate-300">14/14</span>
+                      <span className="text-[#A0A0A0]">Tactics</span>
+                      <span className="text-[#F5F5F5]">14/14</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-slate-950/40 rounded-lg p-5 border border-purple-500/30">
+                <div className="bg-[#0A0A0A]/40 rounded-lg p-5 border border-red-500/30">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-base font-semibold text-white">ASL-3</h3>
                     <CheckCircle2 className="w-5 h-5 text-green-400" />
                   </div>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Coverage</span>
+                      <span className="text-[#A0A0A0]">Coverage</span>
                       <span className="text-green-400 font-medium">100%</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Compliance</span>
+                      <span className="text-[#A0A0A0]">Compliance</span>
                       <span className="text-green-400 font-medium">100%</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">CBRN Tests</span>
-                      <span className="text-slate-300">35</span>
+                      <span className="text-[#A0A0A0]">CBRN Tests</span>
+                      <span className="text-[#F5F5F5]">35</span>
                     </div>
                   </div>
                 </div>
@@ -955,12 +953,12 @@ function CompliancePageContent() {
             </div>
 
             {/* Note */}
-            <div className="mt-8 text-xs text-slate-500 border border-slate-800 rounded-lg p-4 bg-slate-900">
-              <div className="font-semibold text-slate-400 mb-2">About this dashboard:</div>
+            <div className="mt-8 text-xs text-zinc-500 border border-[#1A1A1A] rounded-lg p-4 bg-[#111111]">
+              <div className="font-semibold text-[#A0A0A0] mb-2">About this dashboard:</div>
               <div className="space-y-1">
-                <p>• This shows evidence from red team attacks against <span className="text-slate-300">customer AI systems</span></p>
+                <p>• This shows evidence from red team attacks against <span className="text-[#F5F5F5]">customer AI systems</span></p>
                 <p>• ALLOW = Attack succeeded (bad for target, good for finding vulnerabilities)</p>
-                <p>• BLOCK = Target's defenses worked (good for target)</p>
+                <p>• BLOCK = Target's security controls worked (good for target)</p>
                 <p>• Recommendations are for what the TARGET needs to fix, not DefendML</p>
               </div>
             </div>
