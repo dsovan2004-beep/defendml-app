@@ -226,7 +226,7 @@ export default function ASL3Testing() {
             </div>
             <div className="space-y-1">
               <span className="text-sm font-semibold text-[#A0A0A0]">Total Scenarios</span>
-              <div className="text-3xl font-bold text-white">255</div>
+              <div className="text-3xl font-bold text-white">295</div>
               <div className="text-xs text-zinc-500 mt-1">Attack scenarios</div>
             </div>
           </div>
