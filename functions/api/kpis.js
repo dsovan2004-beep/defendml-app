@@ -94,6 +94,9 @@ function buildKpisFromWorkerRows(rows, rangeDays) {
     if (typeof r?.latency_ms === "number") latencies.push(r.latency_ms);
   }
 
+  // FIX #8: derive block rate from real data instead of hardcoding 90
+  const blockRate = total > 0 ? Math.round((threatsBlocked / total) * 100) : null;
+
   return {
     ok: true,
     source: "worker",
@@ -102,7 +105,7 @@ function buildKpisFromWorkerRows(rows, rangeDays) {
       threats_blocked: threatsBlocked,
       pii_prevented: piiPrevented,
       policy_violations: policyViolations,
-      compliance_score: 90,
+      block_rate: blockRate,
       latency_p95_ms: percentile95(latencies),
       error_rate: total ? Number(((errCount / total) * 100).toFixed(2)) : 0,
     },
@@ -123,6 +126,9 @@ function buildKpisFromSupabaseRows(rows, rangeDays) {
     if (typeof r?.latency_ms === "number") latencies.push(r.latency_ms);
   }
 
+  // FIX #8: derive block rate from real data instead of hardcoding 90
+  const blockRate = total > 0 ? Math.round((threatsBlocked / total) * 100) : null;
+
   return {
     ok: true,
     source: "supabase",
@@ -131,7 +137,7 @@ function buildKpisFromSupabaseRows(rows, rangeDays) {
       threats_blocked: threatsBlocked,
       pii_prevented: 0,
       policy_violations: 0,
-      compliance_score: 90,
+      block_rate: blockRate,
       latency_p95_ms: percentile95(latencies),
       error_rate: total ? Number(((errCount / total) * 100).toFixed(2)) : 0,
     },
@@ -148,7 +154,7 @@ function zeroedKpis(rangeDays) {
       threats_blocked: 0,
       pii_prevented: 0,
       policy_violations: 0,
-      compliance_score: 90,
+      block_rate: null,
       latency_p95_ms: 0,
       error_rate: 0,
     },
