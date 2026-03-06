@@ -343,7 +343,7 @@ export default function ResetPassword() {
         <div className="mt-6 text-center">
           <a
             href="/login"
-            className="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+            className="text-sm text-red-400 hover:text-red-300 font-medium transition-colors"
           >
             ← Back to Login
           </a>
