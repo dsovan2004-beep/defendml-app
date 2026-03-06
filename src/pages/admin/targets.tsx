@@ -190,17 +190,21 @@ function AttackTargets() {
         ? `${target.url}${target.endpoint_path}`
         : target.url;
 
+      const sessionData = await supabase.auth.getSession();
+      const accessToken = sessionData.data.session?.access_token;
+      if (!accessToken) throw new Error("No active session");
+
       const response = await fetch(
         "https://defendml-api.dsovan2004.workers.dev/api/red-team/execute",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
           },
           body: JSON.stringify({
             targetId: target.id,
             target: targetUrl,
-            // Send full config — worker may not have Supabase configured to look it up
             auth_method: target.auth_method || "none",
             auth_token: target.auth_token || null,
             auth_header_name: target.auth_header_name || null,
