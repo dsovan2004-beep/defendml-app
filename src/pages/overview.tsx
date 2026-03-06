@@ -265,10 +265,10 @@ function OverviewPage() {
                   <div className="bg-gradient-to-br from-green-500/20 to-green-600/10 rounded-xl p-6 border-2 border-green-500/40 shadow-lg">
                     <div className="flex items-center gap-2 mb-3">
                       <Target className="w-5 h-5 text-green-400" />
-                      <span className="text-sm font-semibold text-green-300">ASL-3 Compliance</span>
+                      <span className="text-sm font-semibold text-green-300">Attack Coverage Rate</span>
                     </div>
                     <div className="text-5xl font-bold text-green-400 mb-2">{redTeamMetrics.overall_score}%</div>
-                    <div className="text-xs text-[#A0A0A0]">Measured across 35 CBRN attack tests</div>
+                    <div className="text-xs text-[#A0A0A0]">Across all attack categories</div>
                   </div>
                   <div className="bg-black/40 rounded-xl p-6 border border-red-500/30">
                     <div className="flex items-center gap-2 mb-3">
@@ -300,7 +300,7 @@ function OverviewPage() {
                     <div className="text-xs text-green-400 mt-1">✓ Target: &lt;50ms</div>
                   </div>
                   <div className="bg-black/40 rounded-lg p-4 border border-red-500/20 hover:border-red-500/40 transition-all">
-                    <div className="text-2xl font-bold text-red-400 mb-1">10</div>
+                    <div className="text-2xl font-bold text-red-400 mb-1">6</div>
                     <div className="text-xs text-[#A0A0A0]">Frameworks</div>
                     <div className="text-xs text-green-400 mt-1">✓ OWASP+NIST+MITRE</div>
                   </div>
@@ -353,9 +353,9 @@ function OverviewPage() {
                     <div className="bg-red-500/10 rounded-lg p-3 border border-red-500/30">
                       <div className="flex items-center gap-2 mb-1">
                         <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                        <span className="text-xs font-semibold text-white">ASL-3 CBRN</span>
+                        <span className="text-xs font-semibold text-white">ASL-3 Safety Standard</span>
                       </div>
-                      <div className="text-xs text-[#A0A0A0]">96.5% measured compliance</div>
+                      <div className="text-xs text-[#A0A0A0]">Coverage verified</div>
                     </div>
                   </div>
                 </div>
