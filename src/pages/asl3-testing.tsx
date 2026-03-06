@@ -324,7 +324,7 @@ export default function ASL3Testing() {
                     <button
                       key={index}
                       onClick={() => setPrompt(scan.prompt)}
-                      className="text-left p-4 bg-[#1A1A1A] hover:bg-slate-750 border border-zinc-800 rounded-lg transition-colors group"
+                      className="text-left p-4 bg-[#1A1A1A] hover:bg-[#1A1A1A] border border-zinc-800 rounded-lg transition-colors group"
                     >
                       <div className="flex items-center justify-between mb-2">
                         <ExclamationTriangleIcon className="h-5 w-5 text-red-400" />
