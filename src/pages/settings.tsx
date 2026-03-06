@@ -150,7 +150,7 @@ function SettingsPageContent() {
     { id: 'users' as SettingsTab, label: 'User Management', icon: Users, description: 'Manage team members and permissions' },
     { id: 'rbac' as SettingsTab, label: 'Access Control', icon: Shield, description: 'Configure roles and permissions' },
     { id: 'api' as SettingsTab, label: 'API Configuration', icon: Code, description: 'API endpoints and rate limits' },
-    { id: 'prompts' as SettingsTab, label: 'Prompt Library', icon: Database, description: '255 attack scenarios & coverage' },
+    { id: 'prompts' as SettingsTab, label: 'Prompt Library', icon: Database, description: '295 attack scenarios & coverage' },
     { id: 'billing' as SettingsTab, label: 'Billing & Subscription', icon: CreditCard, description: 'Plan details and usage' },
     { id: 'integrations' as SettingsTab, label: 'Integrations', icon: Plug, description: 'Connect external services' },
     { id: 'notifications' as SettingsTab, label: 'Notifications', icon: Bell, description: 'Alert rules and channels' },
@@ -420,7 +420,8 @@ function SettingsPageContent() {
                             </span>
                           </div>
                           <h4 className="text-xl font-bold text-white mb-2">Free Tier</h4>
-                          <div className="text-3xl font-bold text-red-400 mb-4">$0<span className="text-lg text-[#A0A0A0]">/month</span></div>
+                          <div className="text-3xl font-bold text-red-400 mb-1">$0</div>
+                          <div className="text-sm text-[#A0A0A0] mb-4">Limited access</div>
                           <ul className="space-y-2 mb-6">
                             {[
                               '100 prompts per scan',
@@ -555,7 +556,7 @@ function SettingsPageContent() {
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                           {[
                             { label: 'Scans Executed', value: '12' },
-                            { label: 'Total Prompts', value: '1200', sub: '100 per scan' },
+                            { label: 'Total Prompts', value: '1200', sub: '100 per scan (Pilot limit)' },
                             { label: 'Evidence Reports', value: '12' },
                             { label: 'Infrastructure Cost', value: '$0', green: true },
                           ].map(({ label, value, sub, green }) => (
