@@ -442,14 +442,14 @@ function CompliancePageContent() {
                 <div className="mt-2 text-xs text-zinc-500">
                   Attack Library:{" "}
                   <span className="text-[#F5F5F5] font-semibold">255 scenarios</span> • Currently Testing:{" "}
-                  <span className="text-[#F5F5F5] font-semibold">40 prompts per scan</span>
+                  <span className="text-[#F5F5F5] font-semibold">100 prompts per scan</span>
                 </div>
               </div>
 
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={() => router.push('/tester')}
+                  onClick={() => router.push('/asl3-testing')}
                   className="px-4 py-2 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] text-white text-sm font-medium border border-zinc-800 transition-colors"
                 >
                   Generate Report
@@ -611,7 +611,7 @@ function CompliancePageContent() {
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-[#F5F5F5]">Jailbreaks</span>
-                    <span className="text-red-400">40 prompts</span>
+                    <span className="text-red-400">45 prompts</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-[#F5F5F5]">CBRN/WMD</span>
