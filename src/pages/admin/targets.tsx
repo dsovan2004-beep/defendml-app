@@ -218,7 +218,7 @@ function AttackTargets() {
         let workerMsg = `HTTP ${response.status}`;
         try {
           const errBody = await response.json();
-          workerMsg = errBody.error || errBody.message || JSON.stringify(errBody);
+          workerMsg = JSON.stringify(errBody);
         } catch {
           try { workerMsg = await response.text(); } catch {}
         }
