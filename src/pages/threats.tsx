@@ -168,7 +168,7 @@ function ThreatsPageContent() {
       case 'MEDIUM':
         return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30';
       default:
-        return 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+        return 'bg-red-500/20 text-orange-300 border-red-500/30';
     }
   };
 
@@ -181,12 +181,12 @@ function ThreatsPageContent() {
       case 'allowed':
         return 'bg-green-500/20 text-green-300 border border-green-500/30';
       default:
-        return 'bg-gray-500/20 text-gray-300 border border-gray-500/30';
+        return 'bg-gray-500/20 text-[#F5F5F5] border border-zinc-600/30';
     }
   };
 
   const getConfidenceColor = (confidence?: number): string => {
-    if (!confidence) return 'text-slate-400';
+    if (!confidence) return 'text-[#A0A0A0]';
     if (confidence >= 0.95) return 'text-green-400';
     if (confidence >= 0.85) return 'text-yellow-400';
     return 'text-orange-400';
@@ -236,8 +236,8 @@ function ThreatsPageContent() {
                     ASL-3 CERTIFIED
                   </span>
                 </div>
-                <p className="text-slate-300 text-sm sm:text-base">Real-time attack detection powered by Anthropic ASL-3</p>
-                <p className="text-slate-500 text-xs sm:text-sm mt-1">
+                <p className="text-[#F5F5F5] text-sm sm:text-base">Real-time attack detection powered by Anthropic ASL-3</p>
+                <p className="text-zinc-500 text-xs sm:text-sm mt-1">
                   <span className="text-green-400 font-semibold">CalypsoAI doesn't offer this:</span> Live threat feed by LLM provider
                 </p>
               </div>
@@ -263,14 +263,14 @@ function ThreatsPageContent() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-6">
           {/* ASL-3 Classifier Performance Widget - NEW! */}
-          <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/30 rounded-2xl p-6">
+          <div className="bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/30 rounded-2xl p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                <CheckCircle className="w-6 h-6 text-purple-400" />
+              <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                <CheckCircle className="w-6 h-6 text-red-400" />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-white">Constitutional Classifier Status</h3>
-                <p className="text-sm text-purple-300">ASL-3 Real-Time Detection Performance</p>
+                <p className="text-sm text-red-300">ASL-3 Real-Time Detection Performance</p>
               </div>
               <div className="ml-auto">
                 <span className="px-3 py-1 bg-green-500/20 text-green-300 text-xs font-bold rounded-full border border-green-500/30 flex items-center gap-1">
@@ -283,39 +283,39 @@ function ThreatsPageContent() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-black/20 rounded-lg p-4 border border-white/10">
                 <div className="text-3xl font-bold text-green-400 mb-1">{classifierAccuracy}%</div>
-                <div className="text-sm text-slate-300 font-medium">Accuracy</div>
-                <div className="text-xs text-slate-500 mt-1">Target: &gt;99%</div>
+                <div className="text-sm text-[#F5F5F5] font-medium">Accuracy</div>
+                <div className="text-xs text-zinc-500 mt-1">Target: &gt;99%</div>
               </div>
               
               <div className="bg-black/20 rounded-lg p-4 border border-white/10">
-                <div className="text-3xl font-bold text-blue-400 mb-1">{avgResponseTime}ms</div>
-                <div className="text-sm text-slate-300 font-medium">Latency (P95)</div>
-                <div className="text-xs text-slate-500 mt-1">Target: &lt;50ms</div>
+                <div className="text-3xl font-bold text-orange-400 mb-1">{avgResponseTime}ms</div>
+                <div className="text-sm text-[#F5F5F5] font-medium">Latency (P95)</div>
+                <div className="text-xs text-zinc-500 mt-1">Target: &lt;50ms</div>
               </div>
               
               <div className="bg-black/20 rounded-lg p-4 border border-white/10">
                 <div className="text-3xl font-bold text-yellow-400 mb-1">{falsePositiveRate}%</div>
-                <div className="text-sm text-slate-300 font-medium">False Positive Rate</div>
-                <div className="text-xs text-slate-500 mt-1">Target: &lt;1%</div>
+                <div className="text-sm text-[#F5F5F5] font-medium">False Positive Rate</div>
+                <div className="text-xs text-zinc-500 mt-1">Target: &lt;1%</div>
               </div>
               
               <div className="bg-black/20 rounded-lg p-4 border border-white/10">
-                <div className="text-3xl font-bold text-purple-400 mb-1">{multiTurnAttacks}</div>
-                <div className="text-sm text-slate-300 font-medium">Multi-Turn Attacks</div>
-                <div className="text-xs text-slate-500 mt-1">Coordinated threats</div>
+                <div className="text-3xl font-bold text-red-400 mb-1">{multiTurnAttacks}</div>
+                <div className="text-sm text-[#F5F5F5] font-medium">Multi-Turn Attacks</div>
+                <div className="text-xs text-zinc-500 mt-1">Coordinated threats</div>
               </div>
             </div>
 
             <div className="mt-4 pt-4 border-t border-white/10">
-              <div className="text-xs text-slate-400 mb-2">Top Constitutional Rules Triggered (24h):</div>
+              <div className="text-xs text-[#A0A0A0] mb-2">Top Constitutional Rules Triggered (24h):</div>
               <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded border border-purple-500/30">
+                <span className="px-2 py-1 bg-red-500/20 text-red-300 text-xs rounded border border-red-500/30">
                   CBRN-prevention (45%)
                 </span>
-                <span className="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded border border-purple-500/30">
+                <span className="px-2 py-1 bg-red-500/20 text-red-300 text-xs rounded border border-red-500/30">
                   Jailbreak-detection (32%)
                 </span>
-                <span className="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded border border-purple-500/30">
+                <span className="px-2 py-1 bg-red-500/20 text-red-300 text-xs rounded border border-red-500/30">
                   Policy-enforcement (23%)
                 </span>
               </div>
@@ -346,13 +346,13 @@ function ThreatsPageContent() {
               <div className="text-orange-400/60 text-xs mt-1">Immediate action required</div>
             </div>
 
-            <div className="bg-gradient-to-br from-purple-500/10 to-pink-600/10 rounded-xl p-6 border border-purple-500/20">
+            <div className="bg-gradient-to-br from-red-500/10 to-pink-600/10 rounded-xl p-6 border border-red-500/20">
               <div className="flex items-center justify-between mb-2">
-                <Zap className="w-6 h-6 text-purple-400" />
+                <Zap className="w-6 h-6 text-red-400" />
               </div>
               <div className="text-4xl font-bold text-white mb-1">{avgResponseTime}ms</div>
-              <div className="text-purple-300 text-sm font-medium">Avg Detection Time</div>
-              <div className="text-purple-400/60 text-xs mt-1">5x faster than CalypsoAI</div>
+              <div className="text-red-300 text-sm font-medium">Avg Detection Time</div>
+              <div className="text-red-400/60 text-xs mt-1">5x faster than CalypsoAI</div>
             </div>
 
             <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 rounded-xl p-6 border border-green-500/20">
@@ -370,8 +370,8 @@ function ThreatsPageContent() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
                 <div className="flex items-center gap-2">
-                  <Filter className="w-4 h-4 text-slate-400" />
-                  <span className="text-sm font-medium text-slate-300">Filter by Risk</span>
+                  <Filter className="w-4 h-4 text-[#A0A0A0]" />
+                  <span className="text-sm font-medium text-[#F5F5F5]">Filter by Risk</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {(['all', 'critical', 'high', 'medium'] as const).map((level) => (
@@ -381,7 +381,7 @@ function ThreatsPageContent() {
                       className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                         filter === level
                           ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
-                          : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                          : 'bg-white/5 text-[#F5F5F5] hover:bg-white/10'
                       }`}
                     >
                       {level.charAt(0).toUpperCase() + level.slice(1)}
@@ -421,37 +421,37 @@ function ThreatsPageContent() {
           <div className="bg-black/30 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
             <div className="px-6 py-4 border-b border-white/10 bg-white/5">
               <h3 className="text-lg font-bold text-white">Live Attack Feed</h3>
-              <p className="text-slate-400 text-sm">Real-time threat detection with ASL-3 classifier insights</p>
+              <p className="text-[#A0A0A0] text-sm">Real-time threat detection with ASL-3 classifier insights</p>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-white/5 border-b border-white/10">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">
                       <div className="flex items-center gap-2">
                         <Clock className="w-3 h-3" />
                         Time
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Risk Level</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Attack Type</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">Risk Level</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">Attack Type</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">
                       <div className="flex items-center gap-1">
                         Confidence
-                        <span className="text-purple-400">★</span>
+                        <span className="text-red-400">★</span>
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">
                       <div className="flex items-center gap-1">
                         Layer
-                        <span className="text-blue-400">★</span>
+                        <span className="text-orange-400">★</span>
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">LLM Provider</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Action</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Response Time</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Preview</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">LLM Provider</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">Action</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">Response Time</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-[#F5F5F5] uppercase tracking-wider">Preview</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -460,26 +460,26 @@ function ThreatsPageContent() {
                       <td colSpan={9} className="px-6 py-12 text-center">
                         <div className="flex flex-col items-center gap-3">
                           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-red-500"></div>
-                          <span className="text-slate-400">Loading threat data...</span>
+                          <span className="text-[#A0A0A0]">Loading threat data...</span>
                         </div>
                       </td>
                     </tr>
                   ) : filteredThreats.length === 0 ? (
                     <tr>
-                      <td colSpan={9} className="px-6 py-12 text-center text-slate-400">
-                        <Shield className="w-12 h-12 mx-auto mb-3 text-slate-600" />
+                      <td colSpan={9} className="px-6 py-12 text-center text-[#A0A0A0]">
+                        <Shield className="w-12 h-12 mx-auto mb-3 text-zinc-600" />
                         <div className="font-medium">No threats in this category</div>
-                        <div className="text-sm text-slate-500 mt-1">Your AI is secure!</div>
+                        <div className="text-sm text-zinc-500 mt-1">Your AI is secure!</div>
                       </td>
                     </tr>
                   ) : (
                     filteredThreats.map((threat, idx) => (
                       <tr key={threat.id ?? idx} className="hover:bg-white/5 transition-all group">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-slate-300">
+                          <div className="text-sm text-[#F5F5F5]">
                             {new Date(threat.timestamp).toLocaleTimeString()}
                           </div>
-                          <div className="text-xs text-slate-500">
+                          <div className="text-xs text-zinc-500">
                             {new Date(threat.timestamp).toLocaleDateString()}
                           </div>
                         </td>
@@ -495,7 +495,7 @@ function ThreatsPageContent() {
                               return (
                                 <span
                                   key={i}
-                                  className="px-2 py-1 bg-purple-500/20 text-purple-200 rounded text-xs font-medium border border-purple-500/30"
+                                  className="px-2 py-1 bg-red-500/20 text-red-200 rounded text-xs font-medium border border-red-500/30"
                                 >
                                   {label}
                                 </span>
@@ -517,8 +517,8 @@ function ThreatsPageContent() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-1">
-                            <Layers className="w-3 h-3 text-blue-400" />
-                            <span className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs font-bold border border-blue-500/30">
+                            <Layers className="w-3 h-3 text-orange-400" />
+                            <span className="px-2 py-1 bg-red-500/20 text-orange-300 rounded text-xs font-bold border border-red-500/30">
                               L{threat.defense_layer || '?'}
                             </span>
                           </div>
@@ -526,7 +526,7 @@ function ThreatsPageContent() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                            <span className="text-sm text-slate-300 font-medium">
+                            <span className="text-sm text-[#F5F5F5] font-medium">
                               {threat.llm_provider || 'Unknown'}
                             </span>
                           </div>
@@ -545,7 +545,7 @@ function ThreatsPageContent() {
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-sm text-slate-400 max-w-xs truncate group-hover:text-slate-300 transition-colors">
+                          <div className="text-sm text-[#A0A0A0] max-w-xs truncate group-hover:text-[#F5F5F5] transition-colors">
                             {threat.prompt_preview || 'N/A'}
                           </div>
                         </td>
@@ -558,29 +558,29 @@ function ThreatsPageContent() {
           </div>
 
           {/* ASL-3 Feature Explainer */}
-          <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-6">
+          <div className="bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/20 rounded-xl p-6">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Shield className="w-6 h-6 text-purple-400" />
+              <div className="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Shield className="w-6 h-6 text-red-400" />
               </div>
               <div>
-                <h4 className="text-lg font-semibold text-purple-300 mb-2">🎯 ASL-3 Enhanced Features Explained</h4>
-                <div className="space-y-2 text-sm text-purple-200/80">
+                <h4 className="text-lg font-semibold text-red-300 mb-2">🎯 ASL-3 Enhanced Features Explained</h4>
+                <div className="space-y-2 text-sm text-red-200/80">
                   <p>
-                    <strong className="text-purple-300">Confidence Score (★):</strong> Shows how certain our AI classifier is about the threat (95%+ = high confidence). 
+                    <strong className="text-red-300">Confidence Score (★):</strong> Shows how certain our AI classifier is about the threat (95%+ = high confidence). 
                     Competitors use black-box models - you never know if detections are accurate.
                   </p>
                   <p>
-                    <strong className="text-purple-300">Defense Layer (★):</strong> Shows which of our 4 protection layers caught the threat:
+                    <strong className="text-red-300">Defense Layer (★):</strong> Shows which of our 4 protection layers caught the threat:
                   </p>
                   <ul className="ml-6 space-y-1 text-xs">
-                    <li>• <span className="text-blue-400 font-bold">L1</span> - Access Controls (MFA, permissions)</li>
-                    <li>• <span className="text-blue-400 font-bold">L2</span> - Real-Time Classifiers (constitutional AI)</li>
-                    <li>• <span className="text-blue-400 font-bold">L3</span> - Async Monitoring (pattern detection)</li>
-                    <li>• <span className="text-blue-400 font-bold">L4</span> - Rapid Response (auto-remediation)</li>
+                    <li>• <span className="text-orange-400 font-bold">L1</span> - Access Controls (MFA, permissions)</li>
+                    <li>• <span className="text-orange-400 font-bold">L2</span> - Real-Time Classifiers (constitutional AI)</li>
+                    <li>• <span className="text-orange-400 font-bold">L3</span> - Async Monitoring (pattern detection)</li>
+                    <li>• <span className="text-orange-400 font-bold">L4</span> - Rapid Response (auto-remediation)</li>
                   </ul>
                   <p>
-                    <strong className="text-purple-300">Multi-Turn Attacks (🔗):</strong> Flags coordinated attacks across multiple queries in the same session. 
+                    <strong className="text-red-300">Multi-Turn Attacks (🔗):</strong> Flags coordinated attacks across multiple queries in the same session. 
                     This catches sophisticated adversaries that competitors miss.
                   </p>
                 </div>
