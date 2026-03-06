@@ -48,7 +48,7 @@ export default function Footer() {
           <div className="flex items-center gap-4 text-sm">
             <div className="flex items-center gap-2 text-[#F5F5F5]">
               <Lock className="w-4 h-4 text-green-400" />
-              <span>SOC 2 Certified</span>
+              <span>SOC 2 Ready</span>
             </div>
             <span className="text-slate-700">•</span>
             <div className="flex items-center gap-2 text-[#F5F5F5]">
