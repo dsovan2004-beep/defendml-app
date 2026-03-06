@@ -49,7 +49,7 @@ export async function onRequest(context: any) {
     const { data: report, error } = await supabaseService
       .from('red_team_reports')
       .select('*')
-      .eq('report_id', params.id)
+      .eq('id', params.id)
       .single();
 
     if (error) {
