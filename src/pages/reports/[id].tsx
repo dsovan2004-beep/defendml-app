@@ -240,11 +240,18 @@ function getPriorityBadge(count: number): { label: string; className: string } {
 
 function getTargetDisplayName(report: Report): string {
   if (report.target_name) return report.target_name;
-  try {
-    return new URL(report.target).hostname;
-  } catch {
-    return report.target || 'Target';
-  }
+  return 'your AI system';
+}
+
+function sanitizePlaybookText(text: string, targetName: string, rawTarget: string): string {
+  const escapedUrl = rawTarget.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text
+    .replace(/CUSTOMER/g, targetName)
+    .replace(new RegExp(escapedUrl, 'g'), targetName)
+    .replace(/Defense layers have insufficient coverage/g, 'Security controls failed to block')
+    .replace(/bypassed .+?'s defenses/g, `successfully exploited ${targetName}'s security controls`)
+    .replace(/\bdefenses\b/gi, 'security controls')
+    .replace(/without being blocked/gi, 'without triggering any security controls');
 }
 
 export default function ReportPage() {
@@ -576,7 +583,7 @@ export default function ReportPage() {
               <div>
                 <h3 className="text-lg font-semibold text-white mb-2">Critical Findings</h3>
                 <p className="text-slate-300">
-                  {report.allowed_count} attack vectors successfully exploited {targetName} without being blocked.
+                  {report.allowed_count} attack vectors successfully exploited {targetName} without triggering any security controls.
                   Immediate remediation required before production deployment.
                 </p>
               </div>
@@ -653,11 +660,11 @@ export default function ReportPage() {
               <span className="text-xs text-slate-400">AI-Powered Remediation Analysis</span>
             </div>
 
-            {/* Executive Summary — replace CUSTOMER with real target name */}
+            {/* Executive Summary */}
             <div className="mb-6 pb-6 border-b border-slate-700/50">
               <h4 className="text-lg font-semibold text-red-400 mb-2">Executive Summary</h4>
               <p className="text-slate-300">
-                {(playbook.summary || '').replace(/CUSTOMER/g, targetName)}
+                {sanitizePlaybookText(playbook.summary || '', targetName, report.target)}
               </p>
             </div>
 
@@ -666,7 +673,7 @@ export default function ReportPage() {
               <div className="mb-6 pb-6 border-b border-slate-700/50">
                 <h4 className="text-lg font-semibold text-red-400 mb-2">Root Cause Analysis</h4>
                 <p className="text-slate-300">
-                  {(playbook.rootCause || '').replace(/CUSTOMER/g, targetName)}
+                  {sanitizePlaybookText(playbook.rootCause || '', targetName, report.target)}
                 </p>
               </div>
             )}
@@ -678,7 +685,7 @@ export default function ReportPage() {
                   Attack Vector Remediation — {exploitedCategories.length} Categories Exploited
                 </h4>
                 <p className="text-slate-400 text-sm mb-6">
-                  The following attack vectors successfully bypassed {targetName}'s defenses.
+                  The following attack vectors successfully exploited {targetName}&apos;s security controls.
                   Each section includes framework mapping, a specific fix, and a verification test case.
                 </p>
 
