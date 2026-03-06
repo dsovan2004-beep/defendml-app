@@ -195,7 +195,7 @@ export default function ASL3Testing() {
                 <div>
                   <h3 className="text-sm font-semibold text-orange-300 mb-1">Demo Mode - Educational Tool</h3>
                   <p className="text-sm text-orange-200/80">
-                    This page demonstrates how prompt scanning works. For production red team testing with full 255-prompt library and audit-grade evidence reports, use Attack Targets.
+                    This page demonstrates how prompt scanning works. For production red team testing with full 295-prompt library and audit-grade evidence reports, use Attack Targets.
                   </p>
                 </div>
                 <button
@@ -214,7 +214,7 @@ export default function ASL3Testing() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Scans</h1>
           <p className="text-[#A0A0A0]">Interactive demo of red team prompt scanning</p>
-          <p className="text-sm text-red-400 mt-1">255 Attack Scenarios Available in Production Mode</p>
+          <p className="text-sm text-red-400 mt-1">295 Attack Scenarios Available in Production Mode</p>
         </div>
 
         {/* Stats Grid */}
@@ -365,7 +365,7 @@ export default function ASL3Testing() {
               <h2 className="text-xl font-semibold text-white mb-4">
                 Quick Scan Scenarios
                 <span className="text-xs text-zinc-500 ml-2 font-normal">
-                  (from production 255-prompt library)
+                  (from production 295-prompt library)
                 </span>
               </h2>
               
@@ -410,7 +410,7 @@ export default function ASL3Testing() {
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-2">Ready for Production Testing?</h3>
                   <p className="text-sm text-[#F5F5F5] mb-1">
-                    Run full red team scans with 100 prompts from our 255-scenario library
+                    Run full red team scans with 100 prompts from our 295-scenario library
                   </p>
                   <p className="text-xs text-[#A0A0A0]">
                     ✓ Audit-grade evidence reports • ✓ AI-powered remediation • ✓ Multi-format export (PDF/CSV/JSON)
@@ -444,7 +444,7 @@ export default function ASL3Testing() {
                   <div>
                     <div className="font-medium text-white mb-1">Pattern Matching</div>
                     <div className="text-sm text-[#A0A0A0]">
-                      Compares prompt against 255 known attack scenarios
+                      Compares prompt against 295 known attack scenarios
                     </div>
                   </div>
                 </div>
@@ -568,7 +568,7 @@ export default function ASL3Testing() {
                 <span className="text-[#A0A0A0]">Demo Mode Active</span>
               </div>
               <div className="text-zinc-500">
-                255 scenarios available • Production testing via Attack Targets
+                295 scenarios available • Production testing via Attack Targets
               </div>
             </div>
             <div className="text-zinc-500">
