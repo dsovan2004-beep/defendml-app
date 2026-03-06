@@ -15,7 +15,8 @@
 //   if (isFree(tier)) { /* show upgrade gate */ }
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+// FIX #5: use the shared singleton instead of allocating a new client on every mount
+import { supabase } from './supabaseClient';
 
 export type UserTier =
   | 'free'
@@ -35,12 +36,7 @@ export function useUserTier(): { tier: UserTier; loading: boolean } {
   useEffect(() => {
     (async () => {
       try {
-        const sb = createClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        );
-
-        const { data: { session } } = await sb.auth.getSession();
+        const { data: { session } } = await supabase.auth.getSession();
 
         if (!session) {
           setTier('free');
@@ -54,7 +50,7 @@ export function useUserTier(): { tier: UserTier; loading: boolean } {
         }
 
         // ── Look up role in public.users ─────────────────────────────────────
-        const { data: userRow } = await sb
+        const { data: userRow } = await supabase
           .from('users')
           .select('role')
           .eq('auth_user_id', session.user.id)
