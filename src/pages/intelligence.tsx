@@ -274,7 +274,7 @@ function IntelligencePage() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-white mb-2">Attack Intelligence</h1>
-                <p className="text-[#A0A0A0]">AI-powered insights from offensive security testing across 255 attack scenarios</p>
+                <p className="text-[#A0A0A0]">AI-powered insights from offensive security testing across 295 attack scenarios</p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-lg">
