@@ -43,10 +43,10 @@ function prettyRole(role: string) {
 
 function rolePill(role: string) {
   const r = role.toLowerCase();
-  if (r === 'superadmin') return 'bg-purple-500/20 text-purple-300 border border-purple-500/30';
-  if (r === 'admin') return 'bg-blue-500/20 text-blue-300 border border-blue-500/30';
+  if (r === 'superadmin') return 'bg-red-500/20 text-red-300 border border-red-500/30';
+  if (r === 'admin') return 'bg-red-500/20 text-orange-300 border border-red-500/30';
   if (r === 'analyst') return 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30';
-  return 'bg-slate-700 text-slate-300 border border-slate-600';
+  return 'bg-[#222222] text-[#F5F5F5] border border-zinc-700';
 }
 
 function formatLastActive(isoString: string | null) {
@@ -161,15 +161,15 @@ function SettingsPageContent() {
     <div className="min-h-screen flex flex-col">
       <Navigation />
 
-      <div className="flex-1 bg-slate-950">
+      <div className="flex-1 bg-[#0A0A0A]">
         {/* Header */}
-        <div className="border-b border-slate-800 bg-slate-900">
+        <div className="border-b border-[#1A1A1A] bg-[#111111]">
           <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6">
             <div className="flex items-center gap-3 mb-2">
-              <SettingsIcon className="w-8 h-8 text-purple-400" />
+              <SettingsIcon className="w-8 h-8 text-red-400" />
               <h1 className="text-3xl font-bold text-white">Settings</h1>
             </div>
-            <p className="text-slate-400">Manage your DefendML workspace, integrations, and security policies</p>
+            <p className="text-[#A0A0A0]">Manage your DefendML workspace, integrations, and security policies</p>
           </div>
         </div>
 
@@ -177,9 +177,9 @@ function SettingsPageContent() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Sidebar Navigation */}
             <div className="lg:col-span-1">
-              <div className="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden sticky top-4">
-                <div className="p-4 border-b border-slate-800">
-                  <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">Settings Menu</h3>
+              <div className="bg-[#111111] rounded-xl border border-[#1A1A1A] overflow-hidden sticky top-4">
+                <div className="p-4 border-b border-[#1A1A1A]">
+                  <h3 className="text-sm font-semibold text-[#F5F5F5] uppercase tracking-wider">Settings Menu</h3>
                 </div>
                 <nav className="p-2">
                   {tabs.map((tab) => {
@@ -191,8 +191,8 @@ function SettingsPageContent() {
                         onClick={() => setActiveTab(tab.id)}
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all mb-1 ${
                           isActive
-                            ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                            : 'text-slate-400 hover:bg-slate-800 hover:text-slate-300'
+                            ? 'bg-red-500/20 text-red-300 border border-red-500/30'
+                            : 'text-[#A0A0A0] hover:bg-[#1A1A1A] hover:text-[#F5F5F5]'
                         }`}
                       >
                         <Icon className="w-5 h-5 flex-shrink-0" />
@@ -215,18 +215,18 @@ function SettingsPageContent() {
                 {/* ── User Management Tab ───────────────────────────────── */}
                 {activeTab === 'users' && (
                   <div className="space-y-6">
-                    <div className="bg-slate-900 rounded-xl border border-slate-800 p-6">
+                    <div className="bg-[#111111] rounded-xl border border-[#1A1A1A] p-6">
                       <div className="flex items-center justify-between mb-6">
                         <div>
                           <h2 className="text-2xl font-bold text-white mb-2">User Management</h2>
-                          <p className="text-slate-400">Add, remove, and manage team member access</p>
+                          <p className="text-[#A0A0A0]">Add, remove, and manage team member access</p>
                         </div>
                         <div className="flex items-center gap-3">
-                          <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-all">
+                          <button className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-all">
                             <Upload className="w-4 h-4" />
                             Bulk Upload
                           </button>
-                          <button className="flex items-center gap-2 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-all">
+                          <button className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-all">
                             <Plus className="w-4 h-4" />
                             Add User
                           </button>
@@ -236,61 +236,61 @@ function SettingsPageContent() {
                       {/* Search and Filters */}
                       <div className="flex flex-col sm:flex-row gap-3 mb-6">
                         <div className="flex-1 relative">
-                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                           <input
                             type="text"
                             placeholder="Search users by name or email..."
-                            className="w-full pl-10 pr-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full pl-10 pr-4 py-2 bg-[#1A1A1A] border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500"
                           />
                         </div>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition-all">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-[#1A1A1A] hover:bg-[#222222] text-[#F5F5F5] rounded-lg border border-zinc-800 transition-all">
                           <Upload className="w-4 h-4" />
                           CSV Upload
                         </button>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition-all">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-[#1A1A1A] hover:bg-[#222222] text-[#F5F5F5] rounded-lg border border-zinc-800 transition-all">
                           <Download className="w-4 h-4" />
                           Export
                         </button>
                       </div>
 
                       {/* User Table */}
-                      <div className="border border-slate-800 rounded-lg overflow-hidden">
+                      <div className="border border-[#1A1A1A] rounded-lg overflow-hidden">
                         <table className="w-full">
-                          <thead className="bg-slate-800 border-b border-slate-700">
+                          <thead className="bg-[#1A1A1A] border-b border-zinc-800">
                             <tr>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase">User</th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase">Role</th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase">Status</th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase">Last Active</th>
-                              <th className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase">Actions</th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-[#F5F5F5] uppercase">User</th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-[#F5F5F5] uppercase">Role</th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-[#F5F5F5] uppercase">Status</th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-[#F5F5F5] uppercase">Last Active</th>
+                              <th className="px-6 py-3 text-right text-xs font-medium text-[#F5F5F5] uppercase">Actions</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-slate-800">
+                          <tbody className="divide-y divide-[#1A1A1A]">
                             {usersLoading ? (
                               <tr>
                                 <td colSpan={5} className="px-6 py-8 text-center">
-                                  <Loader2 className="w-6 h-6 animate-spin text-purple-400 mx-auto" />
+                                  <Loader2 className="w-6 h-6 animate-spin text-red-400 mx-auto" />
                                 </td>
                               </tr>
                             ) : users.length === 0 ? (
                               <tr>
-                                <td colSpan={5} className="px-6 py-8 text-center text-slate-500 text-sm">
+                                <td colSpan={5} className="px-6 py-8 text-center text-zinc-500 text-sm">
                                   No users found
                                 </td>
                               </tr>
                             ) : (
                               users.map((u) => (
-                                <tr key={u.id} className="hover:bg-slate-800/50">
+                                <tr key={u.id} className="hover:bg-[#1A1A1A]/50">
                                   <td className="px-6 py-4">
                                     <div className="flex items-center gap-3">
-                                      <div className="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <span className="text-purple-300 font-semibold text-sm">
+                                      <div className="w-8 h-8 bg-red-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span className="text-red-300 font-semibold text-sm">
                                           {initials(u.full_name, u.email)}
                                         </span>
                                       </div>
                                       <div>
                                         <div className="text-white font-medium">{u.full_name || u.email}</div>
-                                        <div className="text-slate-400 text-sm">{u.email}</div>
+                                        <div className="text-[#A0A0A0] text-sm">{u.email}</div>
                                       </div>
                                     </div>
                                   </td>
@@ -304,11 +304,11 @@ function SettingsPageContent() {
                                       Active
                                     </span>
                                   </td>
-                                  <td className="px-6 py-4 text-slate-300 text-sm">
+                                  <td className="px-6 py-4 text-[#F5F5F5] text-sm">
                                     {formatLastActive(u.last_sign_in_at)}
                                   </td>
                                   <td className="px-6 py-4 text-right">
-                                    <button className="text-slate-400 hover:text-white transition-colors">⋯</button>
+                                    <button className="text-[#A0A0A0] hover:text-white transition-colors">⋯</button>
                                   </td>
                                 </tr>
                               ))
@@ -320,11 +320,11 @@ function SettingsPageContent() {
 
                     {/* Quick Stats */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-xl p-4 border border-purple-500/20">
+                      <div className="bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-xl p-4 border border-red-500/20">
                         <div className="text-3xl font-bold text-white mb-1">
                           {usersLoading ? '—' : users.length}
                         </div>
-                        <div className="text-purple-300 text-sm">Total Users</div>
+                        <div className="text-red-300 text-sm">Total Users</div>
                       </div>
                       <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-xl p-4 border border-green-500/20">
                         <div className="text-3xl font-bold text-white mb-1">
@@ -342,59 +342,59 @@ function SettingsPageContent() {
 
                 {/* ── RBAC Tab ─────────────────────────────────────────── */}
                 {activeTab === 'rbac' && (
-                  <div className="bg-slate-900 rounded-xl border border-slate-800 p-6">
+                  <div className="bg-[#111111] rounded-xl border border-[#1A1A1A] p-6">
                     <h2 className="text-2xl font-bold text-white mb-2">Access Control (RBAC)</h2>
-                    <p className="text-slate-400 mb-6">Configure role-based access control and permissions</p>
+                    <p className="text-[#A0A0A0] mb-6">Configure role-based access control and permissions</p>
                     <div className="space-y-4">
-                      <div className="border border-purple-500/30 bg-purple-500/5 rounded-lg p-6">
+                      <div className="border border-red-500/30 bg-red-500/5 rounded-lg p-6">
                         <div className="flex items-start justify-between mb-4">
                           <div>
-                            <h3 className="text-lg font-bold text-purple-300 mb-1">Super Admin</h3>
-                            <p className="text-slate-400 text-sm">Full system access and management capabilities</p>
+                            <h3 className="text-lg font-bold text-red-300 mb-1">Super Admin</h3>
+                            <p className="text-[#A0A0A0] text-sm">Full system access and management capabilities</p>
                           </div>
-                          <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-xs font-semibold">
+                          <span className="px-3 py-1 bg-red-500/20 text-red-300 rounded-full text-xs font-semibold">
                             {usersLoading ? '—' : users.filter(u => u.role.toLowerCase() === 'superadmin').length} users
                           </span>
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                           {['All Resources', 'Create/Edit/Delete', 'Export Data', 'Manage Users'].map(p => (
-                            <div key={p} className="flex items-center gap-2 text-sm text-slate-300">
+                            <div key={p} className="flex items-center gap-2 text-sm text-[#F5F5F5]">
                               <div className="w-2 h-2 bg-green-500 rounded-full" />{p}
                             </div>
                           ))}
                         </div>
                       </div>
-                      <div className="border border-blue-500/30 bg-blue-500/5 rounded-lg p-6">
+                      <div className="border border-red-500/30 bg-red-500/5 rounded-lg p-6">
                         <div className="flex items-start justify-between mb-4">
                           <div>
-                            <h3 className="text-lg font-bold text-blue-300 mb-1">Security Analyst</h3>
-                            <p className="text-slate-400 text-sm">View security data and export reports</p>
+                            <h3 className="text-lg font-bold text-orange-300 mb-1">Security Analyst</h3>
+                            <p className="text-[#A0A0A0] text-sm">View security data and export reports</p>
                           </div>
-                          <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs font-semibold">
+                          <span className="px-3 py-1 bg-red-500/20 text-orange-300 rounded-full text-xs font-semibold">
                             {usersLoading ? '—' : users.filter(u => u.role.toLowerCase() === 'analyst').length} users
                           </span>
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                           {[['View All Data', true], ['Export Reports', true], ['No Edit Access', false], ['No User Management', false]].map(([label, ok]) => (
-                            <div key={label as string} className="flex items-center gap-2 text-sm text-slate-300">
+                            <div key={label as string} className="flex items-center gap-2 text-sm text-[#F5F5F5]">
                               <div className={`w-2 h-2 rounded-full ${ok ? 'bg-green-500' : 'bg-red-500'}`} />{label}
                             </div>
                           ))}
                         </div>
                       </div>
-                      <div className="border border-slate-700 bg-slate-800/50 rounded-lg p-6">
+                      <div className="border border-zinc-800 bg-[#1A1A1A]/50 rounded-lg p-6">
                         <div className="flex items-start justify-between mb-4">
                           <div>
-                            <h3 className="text-lg font-bold text-slate-300 mb-1">Viewer</h3>
-                            <p className="text-slate-400 text-sm">Read-only access to dashboards and reports</p>
+                            <h3 className="text-lg font-bold text-[#F5F5F5] mb-1">Viewer</h3>
+                            <p className="text-[#A0A0A0] text-sm">Read-only access to dashboards and reports</p>
                           </div>
-                          <span className="px-3 py-1 bg-slate-700 text-slate-300 rounded-full text-xs font-semibold">
+                          <span className="px-3 py-1 bg-[#222222] text-[#F5F5F5] rounded-full text-xs font-semibold">
                             {usersLoading ? '—' : users.filter(u => u.role.toLowerCase() === 'viewer').length} users
                           </span>
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                           {[['View Dashboards', true], ['No Export', false], ['No Edit Access', false], ['No User Management', false]].map(([label, ok]) => (
-                            <div key={label as string} className="flex items-center gap-2 text-sm text-slate-300">
+                            <div key={label as string} className="flex items-center gap-2 text-sm text-[#F5F5F5]">
                               <div className={`w-2 h-2 rounded-full ${ok ? 'bg-green-500' : 'bg-red-500'}`} />{label}
                             </div>
                           ))}
@@ -407,20 +407,20 @@ function SettingsPageContent() {
                 {/* ── Billing Tab ───────────────────────────────────────── */}
                 {activeTab === 'billing' && (
                   <div className="space-y-6">
-                    <div className="bg-slate-900 rounded-xl border border-slate-800 p-6">
+                    <div className="bg-[#111111] rounded-xl border border-[#1A1A1A] p-6">
                       <h2 className="text-2xl font-bold text-white mb-2">Billing & Subscription</h2>
-                      <p className="text-slate-400 mb-6">Manage your plan, usage, and billing details</p>
+                      <p className="text-[#A0A0A0] mb-6">Manage your plan, usage, and billing details</p>
 
                       <div className="mb-6">
                         <h3 className="text-lg font-semibold text-white mb-4">Current Plan</h3>
-                        <div className="relative p-6 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700">
+                        <div className="relative p-6 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-zinc-800">
                           <div className="absolute top-4 right-4">
                             <span className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-xs font-semibold border border-green-500/30">
                               CURRENT
                             </span>
                           </div>
                           <h4 className="text-xl font-bold text-white mb-2">Free Tier</h4>
-                          <div className="text-3xl font-bold text-purple-400 mb-4">$0<span className="text-lg text-slate-400">/month</span></div>
+                          <div className="text-3xl font-bold text-red-400 mb-4">$0<span className="text-lg text-[#A0A0A0]">/month</span></div>
                           <ul className="space-y-2 mb-6">
                             {[
                               '40 prompts per scan',
@@ -428,12 +428,12 @@ function SettingsPageContent() {
                               'Evidence reports & PDF export',
                               'ASL-3 & EU AI Act compliance',
                             ].map(f => (
-                              <li key={f} className="flex items-center gap-2 text-sm text-slate-300">
+                              <li key={f} className="flex items-center gap-2 text-sm text-[#F5F5F5]">
                                 <CheckCircle2 className="w-4 h-4 text-green-400" />{f}
                               </li>
                             ))}
                           </ul>
-                          <button disabled className="w-full px-4 py-2 bg-slate-700 text-slate-500 rounded-lg font-medium cursor-not-allowed">
+                          <button disabled className="w-full px-4 py-2 bg-[#222222] text-zinc-500 rounded-lg font-medium cursor-not-allowed">
                             Current Plan
                           </button>
                         </div>
@@ -448,10 +448,10 @@ function SettingsPageContent() {
                             { label: 'Evidence Reports', value: '12' },
                             { label: 'Infrastructure Cost', value: '$0', green: true },
                           ].map(({ label, value, sub, green }) => (
-                            <div key={label} className="p-4 bg-slate-800 rounded-lg border border-slate-700">
-                              <div className="text-sm text-slate-400 mb-1">{label}</div>
+                            <div key={label} className="p-4 bg-[#1A1A1A] rounded-lg border border-zinc-800">
+                              <div className="text-sm text-[#A0A0A0] mb-1">{label}</div>
                               <div className={`text-2xl font-bold ${green ? 'text-green-400' : 'text-white'}`}>{value}</div>
-                              {sub && <div className="text-xs text-slate-500">{sub}</div>}
+                              {sub && <div className="text-xs text-zinc-500">{sub}</div>}
                             </div>
                           ))}
                         </div>
@@ -468,9 +468,9 @@ function SettingsPageContent() {
                           { label: 'Microsoft PyRIT', value: '$20K-$40K' },
                         ].map(({ label, value, highlight }) => (
                           <div key={label} className={`text-center ${!highlight ? 'opacity-60' : ''}`}>
-                            <div className={`text-sm mb-1 ${highlight ? 'text-green-300' : 'text-slate-400'}`}>{label}</div>
-                            <div className={`text-2xl font-bold ${highlight ? 'text-white' : 'text-slate-300'}`}>{value}</div>
-                            <div className="text-xs text-slate-500">per month</div>
+                            <div className={`text-sm mb-1 ${highlight ? 'text-green-300' : 'text-[#A0A0A0]'}`}>{label}</div>
+                            <div className={`text-2xl font-bold ${highlight ? 'text-white' : 'text-[#F5F5F5]'}`}>{value}</div>
+                            <div className="text-xs text-zinc-500">per month</div>
                           </div>
                         ))}
                       </div>
