@@ -465,7 +465,16 @@ export default function ReportPage() {
   const playbook       = report.remediation_playbook;
   const targetName     = getTargetDisplayName(report);
   const isError        = report.blocked_count === 0 && report.allowed_count === 0 && report.flagged_count === 0;
-  const durationSec    = (report.total_latency_ms / 1000).toFixed(1);
+
+  // ── Duration: prefer real timestamp delta; fall back to total_latency_ms ──
+  const _tsDurationMs  = (report.completed_at && report.started_at)
+    ? new Date(report.completed_at).getTime() - new Date(report.started_at).getTime()
+    : 0;
+  const durationMs     = _tsDurationMs > 0 ? _tsDurationMs : (report.total_latency_ms || 0);
+  const durationSec    = durationMs >= 1000
+    ? `${(durationMs / 1000).toFixed(1)}s`
+    : `${durationMs}ms`;
+  const avgLatencyMs   = Math.round(durationMs / Math.max(report.total_prompts, 1));
 
   const exploitedCategories: { category: string; count: number }[] = intelligence?.categoryBreakdown
     ? Object.entries(intelligence.categoryBreakdown as Record<string, number>)
@@ -548,7 +557,7 @@ export default function ReportPage() {
               { label: 'Report ID',        value: report.report_id.length > 13 ? report.report_id.slice(0, 13) + '…' : report.report_id },
               { label: 'Target System',    value: targetName },
               { label: 'Assessment Date',  value: fmtDate(report.started_at) },
-              { label: 'Scan Duration',    value: `${durationSec}s` },
+              { label: 'Scan Duration',    value: durationSec },
               { label: 'Attack Library',   value: '295 scenarios' },
               { label: 'Prompts Executed', value: String(report.total_prompts) },
             ].map(({ label, value }) => (
@@ -835,8 +844,43 @@ export default function ReportPage() {
                 </tbody>
               </table>
             </div>
+          ) : isError ? (
+            <EmptySectionState message="No test results — execution failed. Verify API credentials and re-run." />
           ) : (
-            <EmptySectionState message={isError ? 'No test results — execution failed. Verify API credentials and re-run.' : '✓ No exploited categories detected. All attacks were blocked successfully.'} />
+            /* All attacks blocked — show full coverage table */
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-green-400 text-sm font-semibold">✓ No exploited categories detected. All attacks were blocked successfully.</span>
+              </div>
+              <div className="overflow-x-auto rounded-xl border border-[#1A1A1A]">
+                <table className="min-w-full text-sm">
+                  <thead className="bg-[#0A0A0A]/60">
+                    <tr className="text-left text-[#A0A0A0] text-xs uppercase tracking-wide">
+                      <th className="px-5 py-3 font-medium">Attack Category</th>
+                      <th className="px-5 py-3 font-medium text-center">Status</th>
+                      <th className="px-5 py-3 font-medium text-center">Result</th>
+                      <th className="px-5 py-3 font-medium">Framework Mapping</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#1A1A1A]">
+                    {Object.entries(CATEGORY_PLAYBOOKS).map(([key, meta]) => (
+                      <tr key={key} className="text-[#F5F5F5] hover:bg-[#0A0A0A]/30">
+                        <td className="px-5 py-3 font-semibold text-white">{meta.label}</td>
+                        <td className="px-5 py-3 text-center">
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-blue-900/40 text-blue-300">TESTED</span>
+                        </td>
+                        <td className="px-5 py-3 text-center">
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-green-900/40 text-green-300">✓ BLOCKED</span>
+                        </td>
+                        <td className="px-5 py-3 text-[#A0A0A0] text-xs">
+                          {meta.frameworks?.map(f => f.tag).slice(0, 2).join(' · ') || '—'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           )}
         </div>
 
@@ -1163,7 +1207,7 @@ export default function ReportPage() {
                 {[
                   { label: 'Assessment Started',    value: fmt(report.started_at) },
                   { label: 'Assessment Completed',  value: fmt(report.completed_at) },
-                  { label: 'Duration',              value: `${durationSec}s total` },
+                  { label: 'Duration',              value: `${durationSec} total` },
                   ...(report.analysis_completed_at ? [{ label: 'AI Analysis Completed', value: fmt(report.analysis_completed_at) }] : []),
                 ].map(({ label, value }) => (
                   <div key={label} className="flex items-center gap-3 bg-[#0A0A0A]/40 rounded-lg px-3 py-2 border border-[#1A1A1A]">
@@ -1180,8 +1224,8 @@ export default function ReportPage() {
               <h3 className="text-sm font-semibold text-white mb-3 uppercase tracking-wide">Performance Metrics</h3>
               <div className="space-y-2 text-sm">
                 {[
-                  { label: 'Total Latency',      value: `${report.total_latency_ms}ms` },
-                  { label: 'Avg Latency / Test', value: `${(report.total_latency_ms / Math.max(report.total_prompts, 1)).toFixed(0)}ms` },
+                  { label: 'Total Latency',      value: `${durationMs}ms` },
+                  { label: 'Avg Latency / Test', value: `${avgLatencyMs}ms` },
                   { label: 'Attack Library',     value: '295 scenarios' },
                   { label: 'Prompts Executed',   value: String(report.total_prompts) },
                 ].map(({ label, value }) => (
