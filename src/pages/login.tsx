@@ -185,7 +185,7 @@ export default function Login() {
         options: {
           data: {
             full_name: fullName,
-            role: "viewer",
+            role: "free",
           },
         },
       });
@@ -201,7 +201,7 @@ export default function Login() {
           auth_user_id: data.user.id,
           email: email,
           full_name: fullName,
-          role: "viewer",
+          role: "free",
         });
 
       // Ignore duplicate key errors (in case trigger already created it)
