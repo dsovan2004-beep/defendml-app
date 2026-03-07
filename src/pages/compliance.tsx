@@ -23,6 +23,7 @@ import RequireAuth from "../components/RequireAuth";
 import { UserRole } from "../types/roles";
 import { createClient } from "@supabase/supabase-js";
 import { useUserTier, isFree } from "../lib/tierCheck";
+import { normalizeBlockRate, calcAISecurityScore, scoreToRisk } from "../lib/security-metrics";
 
 /* -----------------------------
    Types
@@ -96,6 +97,19 @@ function CompliancePageContent() {
   const [categoryBreakdown, setCategoryBreakdown] = useState<{ category: string; count: number }[]>([]);
   const [libLoading, setLibLoading] = useState(true);
 
+  // Scan History state (PART 6)
+  type ScanHistoryRow = {
+    reportId: string;
+    target: string;
+    scanDate: string;
+    aiScore: number;
+    blockRate: number;
+    status: 'PASS' | 'FAIL' | 'IN PROGRESS';
+    totalTests: number;
+  };
+  const [scanHistory, setScanHistory] = useState<ScanHistoryRow[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(true);
+
   // Fetch attack library category counts from red_team_tests
   useEffect(() => {
     async function fetchCategoryBreakdown() {
@@ -125,6 +139,55 @@ function CompliancePageContent() {
       }
     }
     fetchCategoryBreakdown();
+  }, []);
+
+  // Fetch scan history for PART 6 Scan History Table
+  useEffect(() => {
+    async function fetchScanHistory() {
+      try {
+        const { data } = await supabase
+          .from('red_team_reports')
+          .select('report_id, target, started_at, completed_at, block_rate, blocked_count, flagged_count, allowed_count, total_tests')
+          .order('started_at', { ascending: false })
+          .limit(50);
+
+        if (!data) { setScanHistory([]); return; }
+
+        const rows = data.map((r: any) => {
+          const bl = r.blocked_count ?? 0;
+          const fl = r.flagged_count ?? 0;
+          const al = r.allowed_count ?? 0;
+          const tt = r.total_tests ?? (bl + fl + al);
+          const br = normalizeBlockRate(r.block_rate);
+          const score = calcAISecurityScore(bl, fl, al);
+          // Status: IN PROGRESS if no completed_at, PASS if br >= 90, else FAIL
+          const status: 'PASS' | 'FAIL' | 'IN PROGRESS' = !r.completed_at
+            ? 'IN PROGRESS'
+            : br >= 90 ? 'PASS' : 'FAIL';
+
+          // Parse hostname from target URL for a clean display name
+          let targetDisplay = r.target ?? 'Unknown Target';
+          try { targetDisplay = new URL(r.target).hostname; } catch (_) {}
+
+          return {
+            reportId: r.report_id ?? '',
+            target: targetDisplay,
+            scanDate: r.started_at ?? '',
+            aiScore: score,
+            blockRate: br,
+            status,
+            totalTests: tt,
+          };
+        });
+
+        setScanHistory(rows);
+      } catch (_) {
+        setScanHistory([]);
+      } finally {
+        setHistoryLoading(false);
+      }
+    }
+    fetchScanHistory();
   }, []);
 
   // Fetch reports from Supabase on mount
@@ -1024,6 +1087,104 @@ function CompliancePageContent() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* ── Scan History Table (PART 6) ─────────────────────────── */}
+            <div className="bg-[#111111] rounded-xl border border-[#1A1A1A] mb-8">
+              <div className="p-6 border-b border-[#1A1A1A] flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold text-white">Scan History</h2>
+                  <p className="text-sm text-[#A0A0A0] mt-1">All red team scans, newest first.</p>
+                </div>
+                <span className="text-xs text-zinc-500">
+                  {historyLoading ? '…' : `${scanHistory.length} scan${scanHistory.length !== 1 ? 's' : ''}`}
+                </span>
+              </div>
+
+              {historyLoading ? (
+                <div className="flex items-center justify-center py-10">
+                  <Loader2 className="w-6 h-6 animate-spin text-red-400" />
+                </div>
+              ) : scanHistory.length === 0 ? (
+                <div className="text-center py-12 text-zinc-500">
+                  <FileText className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                  <p className="text-sm">No scans recorded yet.</p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-[#0A0A0A]/60">
+                      <tr>
+                        {['Report ID', 'Target', 'Scan Date', 'AI Security Score', 'Block Rate', 'Status'].map(h => (
+                          <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-[#A0A0A0] uppercase tracking-wider whitespace-nowrap">
+                            {h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#1A1A1A]">
+                      {scanHistory.map(row => {
+                        const risk = scoreToRisk(row.aiScore);
+                        return (
+                          <tr key={row.reportId} className="hover:bg-[#1A1A1A]/40 transition-colors">
+                            <td className="px-5 py-3">
+                              {row.reportId ? (
+                                <a
+                                  href={`/reports/${row.reportId}`}
+                                  className="font-mono text-xs text-red-400 hover:text-red-300 hover:underline"
+                                >
+                                  {row.reportId.slice(0, 12)}…
+                                </a>
+                              ) : (
+                                <span className="font-mono text-xs text-zinc-600">—</span>
+                              )}
+                            </td>
+                            <td className="px-5 py-3 text-sm text-[#F5F5F5] max-w-[160px] truncate">
+                              {row.target}
+                            </td>
+                            <td className="px-5 py-3 text-xs text-[#A0A0A0] whitespace-nowrap">
+                              {row.scanDate
+                                ? new Date(row.scanDate).toLocaleString('en-US', {
+                                    month: 'short', day: 'numeric', year: 'numeric',
+                                    hour: '2-digit', minute: '2-digit',
+                                  })
+                                : '—'}
+                            </td>
+                            <td className="px-5 py-3">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-bold text-white">{row.aiScore.toFixed(0)}</span>
+                                <span className={`text-xs ${risk.color}`}>{risk.label}</span>
+                              </div>
+                            </td>
+                            <td className="px-5 py-3">
+                              <div className="flex items-center gap-2">
+                                <div className="w-16 h-1.5 bg-[#1A1A1A] rounded-full overflow-hidden">
+                                  <div
+                                    className={`h-full rounded-full ${row.blockRate >= 90 ? 'bg-green-500' : row.blockRate >= 70 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                                    style={{ width: `${row.blockRate}%` }}
+                                  />
+                                </div>
+                                <span className="text-xs text-[#A0A0A0]">{row.blockRate.toFixed(0)}%</span>
+                              </div>
+                            </td>
+                            <td className="px-5 py-3">
+                              <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${
+                                row.status === 'PASS'
+                                  ? 'bg-green-500/10 text-green-300 border-green-500/30'
+                                  : row.status === 'FAIL'
+                                  ? 'bg-red-500/10 text-red-300 border-red-500/30'
+                                  : 'bg-zinc-700/30 text-zinc-400 border-zinc-700'
+                              }`}>
+                                {row.status}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
 
             {/* Note */}
