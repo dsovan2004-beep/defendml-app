@@ -335,7 +335,7 @@ function sanitizeText(text: string, targetName: string, rawTarget: string): stri
 }
 
 function fmt(isoStr: string) {
-  try { return new Date(isoStr).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }); }
+  try { return new Date(isoStr).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'medium' }); }
   catch { return isoStr; }
 }
 
