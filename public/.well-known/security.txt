@@ -1,0 +1,15 @@
+# DefendML — Vulnerability Disclosure Policy
+# We're an offensive AI red team testing company.
+# If you find something in our infrastructure, we want to know.
+
+Contact: mailto:dsovan2004@gmail.com
+Expires: 2027-03-06T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://defendml.com/.well-known/security.txt
+
+# Scope
+# In scope:  app.defendml.com, defendml.com, defendml-api.dsovan2004.workers.dev
+# Out of scope: third-party services (Supabase, Cloudflare infrastructure)
+
+# We appreciate responsible disclosure.
+# Expected response time: 48 hours.
