@@ -1,5 +1,6 @@
 // src/components/landing/HowItWorks.tsx
 import Link from 'next/link';
+import { PRODUCT } from '../../lib/productConstants';
 
 const steps = [
   {
@@ -10,12 +11,12 @@ const steps = [
   {
     num: '2',
     title: 'Run Offensive Red Team Scans',
-    body: 'Execute 100 prompts randomly selected from our 295-attack library. CBRN, jailbreaks, PII leakage, cyber enablement — real offensive testing.',
+    body: `Execute ${PRODUCT.scanPromptCount} prompts randomly selected from our ${PRODUCT.attackLibrarySize}-scenario library. CBRN, jailbreaks, PII leakage, cyber enablement — real offensive testing.`,
   },
   {
     num: '3',
     title: 'Export Evidence + Remediation',
-    body: 'Get audit-grade reports with AI-powered remediation playbooks in 24 hours. Export PDF/CSV/JSON for security reviews and auditors.',
+    body: `Get audit-grade reports with AI-powered remediation playbooks in ${PRODUCT.deliveryHours} hours. Export PDF/CSV/JSON for security reviews and auditors.`,
   },
 ];
 
