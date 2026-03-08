@@ -1,10 +1,11 @@
 // src/components/landing/Pricing.tsx
 import Link from 'next/link';
+import { PRODUCT } from '../../lib/productConstants';
 
 const tiers = [
   {
     name: 'Free',
-    price: '$0',
+    price: PRODUCT.pricing.free,
     sub: 'Limited access',
     highlight: false,
     features: [
@@ -18,13 +19,13 @@ const tiers = [
   },
   {
     name: 'Pilot',
-    price: '$2,500',
+    price: PRODUCT.pricing.pilot,
     sub: 'One-time engagement',
     highlight: true,
     features: [
-      '100 prompts · 1 target',
-      '24-hour PDF delivery',
-      '6-framework evidence report',
+      `${PRODUCT.scanPromptCount} prompts · 1 target`,
+      `${PRODUCT.deliveryHours}-hour PDF delivery`,
+      `${PRODUCT.frameworkCount}-framework evidence report`,
       'AI-powered remediation playbook',
       'PASS / FAIL verdict with timestamps',
     ],
@@ -35,12 +36,12 @@ const tiers = [
   },
   {
     name: 'Standard',
-    price: '$4,999',
+    price: PRODUCT.pricing.standard,
     sub: 'One-time engagement',
     highlight: false,
     features: [
-      '295 prompts · 1 target',
-      '24-hour full delivery',
+      `${PRODUCT.attackLibrarySize} prompts · 1 target`,
+      `${PRODUCT.deliveryHours}-hour full delivery`,
       'Complete evidence package',
       'Priority AI remediation',
     ],
@@ -50,11 +51,11 @@ const tiers = [
   },
   {
     name: 'Growth',
-    price: '$9,999',
+    price: PRODUCT.pricing.growth,
     sub: '/month',
     highlight: false,
     features: [
-      '295 × 3 targets',
+      `${PRODUCT.attackLibrarySize} × 3 targets`,
       'Monthly scans',
       'AI Risk Score tracking',
       'CI/CD integration support',
@@ -71,10 +72,10 @@ export default function Pricing() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            <span className="text-red-500">10–80× More Affordable</span> Than Platforms
+            <span className="text-red-500">{PRODUCT.affordabilityLabel} More Affordable</span> Than Platforms
           </h2>
           <p className="text-[#A0A0A0] max-w-2xl mx-auto text-lg">
-            $2,500 pilot vs $10K–$200K+ platform contracts. Pay for offensive testing, not defensive features you don't need.
+            {PRODUCT.pricing.pilot} pilot vs $10K–$200K+ platform contracts. Pay for offensive testing, not defensive features you don't need.
           </p>
         </div>
 
@@ -135,7 +136,7 @@ export default function Pricing() {
         </div>
 
         <p className="text-center text-sm text-[#555555] mt-6">
-          Compare: Defensive platforms charge $10K–$200K+ annually. DefendML starts at $2,500 for offensive red team testing with audit-grade evidence.
+          Compare: Defensive platforms charge $10K–$200K+ annually. DefendML starts at {PRODUCT.pricing.pilot} for offensive red team testing with audit-grade evidence.
         </p>
       </div>
     </section>
