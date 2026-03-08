@@ -563,15 +563,15 @@ export default function ReportPage() {
         ════════════════════════════════════ */}
         <div className="rounded-2xl border border-[#1A1A1A] bg-[#111111] overflow-hidden mb-6">
           {/* Red header bar */}
-          <div className="bg-gradient-to-r from-red-700 to-red-900 px-8 py-6">
-            <div className="flex items-start justify-between gap-4">
+          <div className="bg-gradient-to-r from-red-700 to-red-900 px-4 sm:px-8 py-4 sm:py-6">
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
               <div>
                 <p className="text-red-200 text-xs font-mono uppercase tracking-widest mb-1">DefendML // Offensive AI Red Team Assessment</p>
-                <h1 className="text-3xl font-bold text-white leading-tight">Enterprise Evidence Report</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white leading-tight">Enterprise Evidence Report</h1>
                 <p className="text-red-200 text-sm mt-1">Attack Before They Do™</p>
               </div>
               <button onClick={() => window.print()}
-                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm rounded-xl border border-white/20 transition-colors shrink-0">
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm rounded-xl border border-white/20 transition-colors shrink-0 w-full sm:w-auto justify-center sm:justify-start">
                 <DocumentArrowDownIcon className="w-5 h-5" />
                 Export PDF
               </button>
