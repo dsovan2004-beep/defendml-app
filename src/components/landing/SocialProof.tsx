@@ -1,15 +1,16 @@
 // src/components/landing/SocialProof.tsx
+// Credibility pass Mar 2026: removed absolute claims ("the only", "zero competitors")
 
 const cards = [
   {
-    icon: '🎯',
-    title: 'Zero Direct Competitors',
-    body: 'While $500M+ went to defensive AI security platforms, DefendML is the only offensive red team testing service in the $2,500 pilot market.',
+    icon: '⚔️',
+    title: 'Offensive-First Approach',
+    body: 'While the market built defensive guardrails, DefendML was purpose-built for offensive red team testing — the attack-first mindset security professionals actually need.',
   },
   {
-    icon: '⚔️',
+    icon: '🛠️',
     title: 'Built by Practitioners',
-    body: 'Founded by a Senior IT Infrastructure & Security Manager with 20+ years experience and 4 successful SOC 2 Type II audits.',
+    body: "Founded by a Senior IT Infrastructure & Security Manager with 20+ years of experience and 4 successful SOC 2 Type II audits. We've been on the auditor's side of the table.",
   },
   {
     icon: '🤖',
