@@ -270,7 +270,7 @@ function IntelligencePage() {
       <div className="flex-1 bg-[#0A0A0A]">
         {/* Header Section */}
         <div className="border-b border-[#1A1A1A] bg-[#111111]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-white mb-2">Attack Intelligence</h1>
@@ -293,7 +293,7 @@ function IntelligencePage() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-8 py-8 space-y-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
           {/* Summary Cards */}
           {summary && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -384,7 +384,7 @@ function IntelligencePage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-4 mb-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-3">
                     <div>
                       <div className="text-xs text-[#A0A0A0] mb-1">Attacks Executed</div>
                       <div className="text-lg font-bold text-white">{tech.attempts}</div>
@@ -401,7 +401,7 @@ function IntelligencePage() {
 
                   <div className="mb-3">
                     <div className="text-xs text-[#A0A0A0] mb-2">Target Defense Layer Breakdown</div>
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                       <div className="bg-[#222222] rounded p-2">
                         <div className="text-xs text-[#A0A0A0]">L1: Access</div>
                         <div className="text-sm font-bold text-white">{tech.layer_breakdown.L1}</div>
