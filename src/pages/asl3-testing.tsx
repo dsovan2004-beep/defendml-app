@@ -12,6 +12,7 @@ import {
   InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 import { createClient } from "@supabase/supabase-js";
+import { normalizeBlockRate } from "../lib/security-metrics";
 
 interface TestResult {
   blocked: boolean;
@@ -93,16 +94,18 @@ export default function ASL3Testing() {
           })));
         }
 
-        // Wire stats
+        // Wire stats — normalizeBlockRate guards against block_rate stored as 0-100 int vs 0.0-1.0 legacy decimal
         const avgBlockRate = blockRateData?.length
-          ? blockRateData.reduce((s, r) => s + (r.block_rate ?? 0), 0) / blockRateData.length
+          ? parseFloat(
+              (blockRateData.reduce((s, r) => s + normalizeBlockRate(r.block_rate ?? 0), 0) / blockRateData.length).toFixed(1)
+            )
           : null;
         const avgLatencyMs = latencyData?.length
           ? latencyData.reduce((s, r) => s + (r.latency_ms ?? 0), 0) / latencyData.length
           : null;
         setLiveStats({
           criticalCount: criticalCount ?? null,
-          avgBlockRate: avgBlockRate !== null ? parseFloat((avgBlockRate * 100).toFixed(1)) : null,
+          avgBlockRate: avgBlockRate,
           avgLatencyS: avgLatencyMs !== null ? parseFloat((avgLatencyMs / 1000).toFixed(2)) : null,
         });
       } catch (err) {
