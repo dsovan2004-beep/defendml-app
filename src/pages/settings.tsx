@@ -376,7 +376,7 @@ function SettingsPageContent() {
       <div className="flex-1 bg-[#0A0A0A]">
         {/* Header */}
         <div className="border-b border-[#1A1A1A] bg-[#111111]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex items-center gap-3 mb-2">
               <SettingsIcon className="w-8 h-8 text-red-400" />
               <h1 className="text-3xl font-bold text-white">Settings</h1>
@@ -385,7 +385,7 @@ function SettingsPageContent() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Sidebar Navigation */}
             <div className="lg:col-span-1">
@@ -428,12 +428,12 @@ function SettingsPageContent() {
                 {activeTab === 'users' && (
                   <div className="space-y-6">
                     <div className="bg-[#111111] rounded-xl border border-[#1A1A1A] p-6">
-                      <div className="flex items-center justify-between mb-6">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
                         <div>
                           <h2 className="text-2xl font-bold text-white mb-2">User Management</h2>
                           <p className="text-[#A0A0A0]">Add, remove, and manage team member access</p>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 flex-shrink-0">
                           <button className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-all">
                             <Upload className="w-4 h-4" />
                             Bulk Upload
