@@ -354,14 +354,14 @@ function AttackTargets() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <div className="flex justify-between items-start">
+          <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">Attack Targets</h1>
               <p className="text-[#A0A0A0]">
                 Customer AI systems targeted for red team testing
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-shrink-0">
               <button
                 onClick={() => { if (!gated) setShowAddModal(true); }}
                 disabled={gated}
@@ -429,27 +429,27 @@ function AttackTargets() {
                 key={target.id}
                 className="bg-[#111111] rounded-lg p-6 hover:bg-[#1A1A1A] transition-colors border border-[#1A1A1A]"
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
+                <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="p-2 bg-[#1A1A1A] rounded-lg">
+                      <div className="p-2 bg-[#1A1A1A] rounded-lg flex-shrink-0">
                         {getTypeIcon(target.target_type)}
                       </div>
-                      <div>
+                      <div className="min-w-0">
                         <h3 className="text-lg font-semibold text-white">
                           {target.name}
                         </h3>
-                        <p className="text-sm text-[#A0A0A0]">{target.url}</p>
+                        <p className="text-sm text-[#A0A0A0] truncate">{target.url}</p>
                       </div>
                     </div>
 
                     {target.description && (
-                      <p className="text-[#A0A0A0] text-sm mb-4 ml-14">
+                      <p className="text-[#A0A0A0] text-sm mb-4 ml-0 sm:ml-14">
                         {target.description}
                       </p>
                     )}
 
-                    <div className="flex flex-wrap gap-4 ml-14">
+                    <div className="flex flex-wrap gap-3 ml-0 sm:ml-14">
                       <div className="flex items-center gap-2 text-sm">
                         <span className="text-zinc-500">Type:</span>
                         <span className="text-[#F5F5F5] capitalize">
@@ -487,7 +487,7 @@ function AttackTargets() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-shrink-0">
                     <button
                       onClick={() => { if (!gated) handleRunScan(target.id); }}
                       disabled={executing === target.id || gated}
@@ -569,7 +569,7 @@ function AttackTargets() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-[#F5F5F5] mb-2">
                         Type
