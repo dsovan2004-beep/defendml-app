@@ -1,15 +1,16 @@
 // src/components/landing/FAQ.tsx
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { PRODUCT } from '../../lib/productConstants';
 
 const faqs = [
   {
     q: 'What makes DefendML different from defensive AI security platforms?',
-    a: 'DefendML is OFFENSIVE — we attack AI systems to find vulnerabilities before adversaries do. Defensive platforms provide guardrails and runtime monitoring. We provide structured red team testing aligned with ASL-3 and 5 other industry frameworks, and deliver audit-grade evidence — typically 10–80\u00d7 more affordable than traditional manual engagements.',
+    a: `DefendML is OFFENSIVE — we attack AI systems to find vulnerabilities before adversaries do. Defensive platforms provide guardrails and runtime monitoring. We provide structured red team testing aligned with ASL-3 and ${PRODUCT.frameworkCount - 1} other industry frameworks, and deliver audit-grade evidence — typically ${PRODUCT.affordabilityLabel} more affordable than traditional manual engagements.`,
   },
   {
-    q: 'Are the 295 scenarios real AI red team tests?',
-    a: 'Yes. The 295 attack prompts represent a comprehensive offensive testing library covering CBRN synthesis, jailbreaks, PII leakage, cyber enablement, and prompt injection. Each scan randomly selects 100 prompts, ensuring no two scans are identical and comprehensive coverage is maintained.',
+    q: `Are the ${PRODUCT.attackLibrarySize} scenarios real AI red team tests?`,
+    a: `Yes. The ${PRODUCT.attackLibrarySize} attack prompts represent a comprehensive offensive testing library covering CBRN synthesis, jailbreaks, PII leakage, cyber enablement, and prompt injection. Each scan randomly selects ${PRODUCT.scanPromptCount} prompts, ensuring no two scans are identical and comprehensive coverage is maintained.`,
   },
   {
     q: 'What is AI-powered remediation?',
@@ -32,8 +33,8 @@ const faqs = [
     a: 'Yes (Enterprise tier). Custom scenarios are tenant-private by default and designed to avoid cross-tenant leakage. We never train on customer data without explicit opt-in.',
   },
   {
-    q: 'What does 6-framework coverage mean?',
-    a: 'Our 295-scenario library maps simultaneously to OWASP LLM Top 10, NIST AI RMF, MITRE ATLAS, ASL-3, SOC 2/ISO 27001, and EU AI Act. Every finding is tagged to the relevant framework controls so your auditors get complete evidence packages.',
+    q: `What does ${PRODUCT.frameworkCount}-framework coverage mean?`,
+    a: `Our ${PRODUCT.attackLibrarySize}-scenario library maps simultaneously to ${PRODUCT.frameworks.join(', ')}. Every finding is tagged to the relevant framework controls so your auditors get complete evidence packages.`,
   },
 ];
 
