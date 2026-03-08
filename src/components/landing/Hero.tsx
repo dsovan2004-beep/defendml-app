@@ -1,5 +1,13 @@
 // src/components/landing/Hero.tsx
 import Link from 'next/link';
+import { PRODUCT } from '../../lib/productConstants';
+
+const pills = [
+  `${PRODUCT.attackLibrarySize} Attack Scenarios`,
+  `${PRODUCT.aslCoverageLabel}`,
+  `${PRODUCT.scanPromptCount} Prompts / Scan`,
+  `${PRODUCT.deliveryLabel} Delivery`,
+];
 
 export default function Hero() {
   return (
@@ -16,12 +24,7 @@ export default function Hero() {
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Badge pills */}
         <div className="flex flex-wrap justify-center gap-2 mb-8">
-          {[
-            '295 Attack Scenarios',
-            '6 Frameworks',
-            '100 Prompts / Scan',
-            '24hr Delivery',
-          ].map((pill) => (
+          {pills.map((pill) => (
             <span
               key={pill}
               className="text-xs font-semibold px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/25 text-red-300"
@@ -38,13 +41,14 @@ export default function Hero() {
           <span className="text-red-500">Offensive AI Red Team Testing</span>
         </h1>
 
-        {/* Sub-headline */}
+        {/* Sub-headline — credible, no absolute claims */}
         <p className="text-lg sm:text-xl text-[#A0A0A0] max-w-3xl mx-auto mb-10 leading-relaxed">
           DefendML attacks your AI with{' '}
-          <strong className="text-[#F5F5F5]">295 real attack scenarios</strong> across{' '}
-          <strong className="text-[#F5F5F5]">6 security frameworks</strong>. Get audit-grade evidence
-          in 24 hours for{' '}
-          <strong className="text-[#F5F5F5]">$2,500</strong> — not $10K–$200K.
+          <strong className="text-[#F5F5F5]">{PRODUCT.attackLibrarySize} real attack scenarios</strong> aligned with{' '}
+          <strong className="text-[#F5F5F5]">ASL-3 security requirements</strong> and{' '}
+          <strong className="text-[#F5F5F5]">{PRODUCT.frameworkCount} industry frameworks</strong>. Get
+          audit-ready evidence in {PRODUCT.deliveryHours} hours — starting at{' '}
+          <strong className="text-[#F5F5F5]">{PRODUCT.pricing.pilot}</strong>.
         </p>
 
         {/* CTAs */}
