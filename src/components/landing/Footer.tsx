@@ -1,5 +1,6 @@
 // src/components/landing/Footer.tsx
 import Link from 'next/link';
+import { PRODUCT } from '../../lib/productConstants';
 
 const productLinks = [
   { label: 'Red Team', href: '#red-team' },
@@ -42,8 +43,9 @@ export default function LandingFooter() {
               </svg>
               <span className="text-lg font-bold text-white">DefendML</span>
             </div>
+            {/* No absolute claims — describe the service accurately */}
             <p className="text-[#555555] text-sm leading-relaxed">
-              The only offensive AI red team testing service. Generate audit-grade evidence in 24 hours.
+              Offensive AI red team testing — {PRODUCT.attackLibrarySize} scenarios, {PRODUCT.frameworkCount} frameworks, audit-grade evidence in {PRODUCT.deliveryHours} hours.
             </p>
           </div>
 
