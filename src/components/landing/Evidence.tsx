@@ -1,4 +1,5 @@
 // src/components/landing/Evidence.tsx
+import { PRODUCT } from '../../lib/productConstants';
 
 const cards = [
   {
@@ -13,8 +14,8 @@ const cards = [
   },
   {
     icon: '🎯',
-    title: '6-Framework Coverage',
-    body: 'Our 295-scenario library maps to OWASP LLM Top 10, NIST AI RMF, MITRE ATLAS, ASL-3, SOC 2/ISO 27001, and EU AI Act simultaneously.',
+    title: `${PRODUCT.frameworkCount}-Framework Coverage`,
+    body: `Our ${PRODUCT.attackLibrarySize}-scenario library maps to ${PRODUCT.frameworks.slice(0, 4).join(', ')}, and more — simultaneously. ${PRODUCT.aslCoverage} ASL-3 coverage in every scan.`,
   },
 ];
 
@@ -47,10 +48,10 @@ export default function Evidence() {
         {/* Frameworks strip */}
         <div className="bg-[#111111] border border-[#1A1A1A] rounded-xl p-6">
           <p className="text-center text-xs text-[#555555] uppercase tracking-widest mb-4 font-semibold">
-            All 6 Frameworks Covered in Every Scan
+            All {PRODUCT.frameworkCount} Frameworks Covered in Every Scan
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            {['OWASP LLM Top 10', 'NIST AI RMF', 'MITRE ATLAS', 'ASL-3', 'SOC 2 / ISO 27001', 'EU AI Act'].map((f) => (
+            {PRODUCT.frameworks.map((f) => (
               <span
                 key={f}
                 className="text-xs font-semibold px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-300"
