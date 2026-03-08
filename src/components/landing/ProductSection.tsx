@@ -1,11 +1,12 @@
 // src/components/landing/ProductSection.tsx
 import Link from 'next/link';
+import { PRODUCT } from '../../lib/productConstants';
 
 const cards = [
   {
     icon: '⚔️',
-    title: '295 Attack Scenarios',
-    body: 'Execute varied red team attacks against YOUR AI implementation. 100 prompts per scan randomly selected — no two scans are identical.',
+    title: `${PRODUCT.attackLibrarySize} Attack Scenarios`,
+    body: `Execute varied red team attacks against YOUR AI implementation. ${PRODUCT.scanPromptCount} prompts per scan randomly selected — no two scans are identical.`,
     bullets: [
       'CBRN synthesis & dual-use enablement',
       'Jailbreak + prompt injection resistance',
@@ -26,11 +27,11 @@ const cards = [
   {
     icon: '📊',
     title: 'Audit-Grade Evidence',
-    body: 'Generate evidence-ready reports mapped to OWASP, NIST, MITRE, ASL-3, SOC 2/ISO, and EU AI Act. Export PDF/CSV/JSON for auditors.',
+    body: `Generate evidence-ready reports mapped to OWASP, NIST, MITRE, ASL-3, SOC 2/ISO, and EU AI Act. Export PDF/CSV/JSON for auditors. ${PRODUCT.frameworkCount} frameworks covered in every scan.`,
     bullets: [
       'Multi-format export (PDF / CSV / JSON)',
       'Decision rationale + timestamps',
-      '6-framework coverage mapping',
+      `${PRODUCT.frameworkCount}-framework coverage mapping`,
     ],
   },
 ];
@@ -75,7 +76,7 @@ export default function ProductSection() {
           <div className="text-3xl mb-3">🎯</div>
           <h3 className="text-xl font-bold text-white mb-2">No Two Scans Are Identical</h3>
           <p className="text-[#A0A0A0] mb-6">
-            100 prompts randomly selected from the 295-scenario library — ensuring varied, comprehensive coverage every time.
+            {PRODUCT.scanPromptCount} prompts randomly selected from the {PRODUCT.attackLibrarySize}-scenario library — ensuring varied, comprehensive coverage every time.
           </p>
           <Link
             href="/asl3-testing"
