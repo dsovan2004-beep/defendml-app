@@ -93,7 +93,7 @@ export default function LandingFooter() {
 
         <div className="border-t border-[#1A1A1A] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-[#555555]">
           <p>© 2026 DefendML. All rights reserved.</p>
-          <p>The Only Offensive AI Red Team Testing Service — Attack Before They Do.</p>
+          <p>Offensive AI Red Team Testing — Attack Before They Do.</p>
         </div>
       </div>
     </footer>
