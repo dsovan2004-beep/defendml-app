@@ -5,7 +5,7 @@ import { ChevronDown } from 'lucide-react';
 const faqs = [
   {
     q: 'What makes DefendML different from defensive AI security platforms?',
-    a: 'DefendML is OFFENSIVE — we attack AI systems to find vulnerabilities. Defensive platforms provide guardrails and monitoring. We provide red team testing and audit-grade evidence. That\'s why we\'re 10–80× cheaper and have zero direct competitors in the offensive testing category.',
+    a: 'DefendML is OFFENSIVE — we attack AI systems to find vulnerabilities before adversaries do. Defensive platforms provide guardrails and runtime monitoring. We provide structured red team testing aligned with ASL-3 and 5 other industry frameworks, and deliver audit-grade evidence — typically 10–80\u00d7 more affordable than traditional manual engagements.',
   },
   {
     q: 'Are the 295 scenarios real AI red team tests?',
