@@ -191,7 +191,7 @@ export default function ASL3Testing() {
           <div className="flex items-start gap-3">
             <InformationCircleIcon className="w-6 h-6 text-orange-400 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="text-sm font-semibold text-orange-300 mb-1">Demo Mode - Educational Tool</h3>
                   <p className="text-sm text-orange-200/80">
@@ -200,7 +200,7 @@ export default function ASL3Testing() {
                 </div>
                 <button
                   onClick={() => router.push('/admin/targets')}
-                  className="flex-shrink-0 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
+                  className="flex-shrink-0 w-full sm:w-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center sm:justify-start gap-2"
                 >
                   Run Production Scan
                   <ArrowRightIcon className="w-4 h-4" />
@@ -406,7 +406,7 @@ export default function ASL3Testing() {
 
             {/* Production CTA */}
             <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/30 rounded-xl p-6">
-              <div className="flex items-center justify-between gap-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-2">Ready for Production Testing?</h3>
                   <p className="text-sm text-[#F5F5F5] mb-1">
@@ -418,7 +418,7 @@ export default function ASL3Testing() {
                 </div>
                 <button
                   onClick={() => router.push('/admin/targets')}
-                  className="flex-shrink-0 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all duration-200 flex items-center gap-2"
+                  className="flex-shrink-0 w-full sm:w-auto px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center sm:justify-start gap-2"
                 >
                   Go to Attack Targets
                   <ArrowRightIcon className="w-5 h-5" />
@@ -561,17 +561,17 @@ export default function ASL3Testing() {
 
         {/* Bottom Info Bar */}
         <div className="mt-8 bg-[#111111]/50 backdrop-blur-sm border border-[#1A1A1A] rounded-xl p-4">
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-sm">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-6">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                <div className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></div>
                 <span className="text-[#A0A0A0]">Demo Mode Active</span>
               </div>
               <div className="text-zinc-500">
                 295 scenarios available • Production testing via Attack Targets
               </div>
             </div>
-            <div className="text-zinc-500">
+            <div className="text-zinc-500 text-xs sm:text-sm">
               Last updated: {new Date().toLocaleTimeString()}
             </div>
           </div>
