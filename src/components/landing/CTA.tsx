@@ -1,5 +1,6 @@
 // src/components/landing/CTA.tsx
 import Link from 'next/link';
+import { PRODUCT } from '../../lib/productConstants';
 
 export default function CTA() {
   return (
@@ -17,7 +18,7 @@ export default function CTA() {
           Red Team Your AI — <span className="text-red-500">And Export Proof</span>
         </h2>
         <p className="text-lg text-[#A0A0A0] mb-10">
-          Run 295 AI red team attack scenarios and generate audit-grade evidence in 24 hours. $2,500 Pilot. No hidden costs.
+          Run {PRODUCT.attackLibrarySize} AI red team attack scenarios and generate audit-grade evidence in {PRODUCT.deliveryHours} hours. {PRODUCT.pricing.pilot} Pilot. No hidden costs.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
