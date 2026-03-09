@@ -294,4 +294,14 @@ Messaging must remain credible for enterprise security teams.
 
 ---
 
+## 15. Security Scoring Policy
+
+DefendML uses the **DefendML Security Score** as the primary customer-facing metric.
+
+Internal safety evaluation may reference ASL-3 safety levels for engineering analysis.
+
+ASL-3 is not exposed in customer reports or marketing materials.
+
+---
+
 *End of Playbook*
