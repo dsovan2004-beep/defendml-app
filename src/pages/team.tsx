@@ -7,25 +7,25 @@ import { PRODUCT } from '../lib/productConstants';
 
 const team = [
   {
-    initials: '',
+    emoji: '👨‍💻',
     role: 'Co-Founder & CEO',
     tags: ['IT Operations', 'Security', 'SOC 2'],
     bio: '20+ years in IT and cybersecurity. Chief architect leading enterprise security systems for large-scale organizations. Led 4 successful SOC 2 Type II audits and brings deep operational knowledge of the regulatory pressure driving demand for AI red team evidence.',
   },
   {
-    initials: '',
+    emoji: '👨‍💻',
     role: 'Co-Founder, Chief Architect',
     tags: ['AI Security', 'Architecture', 'Frameworks'],
     bio: 'AI security architecture expert with deep specialization in adversarial machine learning and security framework alignment. Designs the scanning infrastructure and framework mapping logic that powers every DefendML evidence report.',
   },
   {
-    initials: '',
+    emoji: '👩‍💻',
     role: 'Co-Founder, CTO — AI & CX Solutions',
     tags: ['AI', 'LLM', 'Customer Experience'],
     bio: '10+ years specializing in AI-powered customer experience and LLM implementations. Brings hands-on experience deploying AI applications in production environments — and the attacker\'s knowledge of where those deployments break.',
   },
   {
-    initials: '',
+    emoji: '👨‍💻',
     role: 'Founding Full-Stack Engineer',
     tags: ['Next.js', 'Cloudflare Workers', 'Supabase'],
     bio: 'Built DefendML\'s entire tech stack from the ground up. Expertise in Next.js, Cloudflare Workers, and Supabase — the infrastructure that powers the scan engine, evidence pipeline, and customer-facing dashboard.',
@@ -111,19 +111,7 @@ export default function TeamPage() {
                   >
                     {/* Avatar */}
                     <div className="w-14 h-14 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-5">
-                      <svg
-                        className="w-6 h-6 text-red-400"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                        />
-                      </svg>
+                      <span style={{ fontSize: '28px', lineHeight: 1 }}>{member.emoji}</span>
                     </div>
 
                     <p className="text-white font-bold text-base mb-2">{member.role}</p>
