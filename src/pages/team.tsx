@@ -10,6 +10,7 @@ const team = [
     emoji: '👨‍💻',
     name: 'Sareth Dustin Sovan',
     role: 'Co-Founder & CEO',
+    credibility: 'Enterprise Security Leader • SOC 2 Type II & ISO 27001 Programs • Palo Alto Networks Ecosystem',
     tags: ['IT Operations', 'Security', 'SOC 2', 'ISO 27001'],
     bio: '20+ years in IT and cybersecurity. Chief architect leading enterprise security systems for large-scale organizations. Led multiple SOC 2 Type II and ISO 27001 audit programs and brings deep operational knowledge of the regulatory pressure driving demand for AI red team evidence.',
   },
@@ -119,7 +120,11 @@ export default function TeamPage() {
                     {'name' in member && member.name && (
                       <p className="text-white font-bold text-lg mb-0.5">{member.name}</p>
                     )}
-                    <p className="text-[#A0A0A0] font-medium text-sm mb-2">{member.role}</p>
+                    <p className="text-[#A0A0A0] font-medium text-sm mb-1">{member.role}</p>
+
+                    {'credibility' in member && member.credibility && (
+                      <p className="text-[#555555] text-xs leading-relaxed mb-3">{member.credibility}</p>
+                    )}
 
                     {/* Tags */}
                     <div className="flex flex-wrap gap-2 mb-4">
