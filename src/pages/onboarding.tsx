@@ -187,15 +187,15 @@ export default function Onboarding() {
         timeout_seconds: 30,
       };
 
-      // Try to attach org — silently skipped if the column doesn't exist
-      const { data: profile } = await supabase
-        .from("users")
+      // Look up org via organization_members (user_id = auth.users.id)
+      const { data: membership } = await supabase
+        .from("organization_members")
         .select("organization_id")
-        .eq("auth_user_id", user.id)
+        .eq("user_id", user.id)
         .maybeSingle();
 
-      if (profile?.organization_id) {
-        insert.organization_id = profile.organization_id;
+      if (membership?.organization_id) {
+        insert.organization_id = membership.organization_id;
       }
 
       const { data, error } = await supabase
