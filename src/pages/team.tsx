@@ -8,12 +8,14 @@ import { PRODUCT } from '../lib/productConstants';
 const team = [
   {
     emoji: '👨‍💻',
+    name: 'Sareth Dustin Sovan',
     role: 'Co-Founder & CEO',
     tags: ['IT Operations', 'Security', 'SOC 2'],
     bio: '20+ years in IT and cybersecurity. Chief architect leading enterprise security systems for large-scale organizations. Led 4 successful SOC 2 Type II audits and brings deep operational knowledge of the regulatory pressure driving demand for AI red team evidence.',
   },
   {
     emoji: '👨‍💻',
+    name: 'Sareth Dustin Sovan',
     role: 'Co-Founder, Chief Architect',
     tags: ['AI Security', 'Architecture', 'Frameworks'],
     bio: 'AI security architecture expert with deep specialization in adversarial machine learning and security framework alignment. Designs the scanning infrastructure and framework mapping logic that powers every DefendML evidence report.',
@@ -114,7 +116,10 @@ export default function TeamPage() {
                       <span style={{ fontSize: '28px', lineHeight: 1 }}>{member.emoji}</span>
                     </div>
 
-                    <p className="text-white font-bold text-base mb-2">{member.role}</p>
+                    {'name' in member && member.name && (
+                      <p className="text-white font-bold text-lg mb-0.5">{member.name}</p>
+                    )}
+                    <p className="text-[#A0A0A0] font-medium text-sm mb-2">{member.role}</p>
 
                     {/* Tags */}
                     <div className="flex flex-wrap gap-2 mb-4">
