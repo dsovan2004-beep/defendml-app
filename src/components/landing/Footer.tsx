@@ -11,6 +11,8 @@ const productLinks = [
 ];
 
 const companyLinks = [
+  { label: 'About', href: '/about' },
+  { label: 'Team', href: '/team' },
   { label: 'Login', href: '/login' },
   { label: 'FAQ', href: '#faq' },
 ];
@@ -69,9 +71,15 @@ export default function LandingFooter() {
             <ul className="space-y-2">
               {companyLinks.map((l) => (
                 <li key={l.label}>
-                  <a href={l.href} className="text-sm text-[#555555] hover:text-white transition-colors">
-                    {l.label}
-                  </a>
+                  {l.href.startsWith('/') ? (
+                    <Link href={l.href} className="text-sm text-[#555555] hover:text-white transition-colors">
+                      {l.label}
+                    </Link>
+                  ) : (
+                    <a href={l.href} className="text-sm text-[#555555] hover:text-white transition-colors">
+                      {l.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
