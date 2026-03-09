@@ -5,47 +5,30 @@ import LandingNavbar from '../components/landing/Navbar';
 import LandingFooter from '../components/landing/Footer';
 import { PRODUCT } from '../lib/productConstants';
 
-const teamGroups = [
+const team = [
   {
-    group: 'Founding Team',
-    description:
-      'Security and infrastructure practitioners who spent years on the defender side before building tools to attack AI systems first.',
-    members: [
-      {
-        initials: 'D.S.',
-        role: 'Founder & CEO',
-        focus: 'Product strategy, AI security research, customer outcomes',
-        background:
-          '20+ years in IT infrastructure and security operations. 4 successful SOC 2 Type II audits. Experienced in the regulatory pressure that drives demand for AI red team evidence.',
-      },
-    ],
+    initials: '',
+    role: 'Co-Founder & CEO',
+    tags: ['IT Operations', 'Security', 'SOC 2'],
+    bio: '20+ years in IT and cybersecurity. Chief architect leading enterprise security systems for large-scale organizations. Led 4 successful SOC 2 Type II audits and brings deep operational knowledge of the regulatory pressure driving demand for AI red team evidence.',
   },
   {
-    group: 'Security Engineering',
-    description:
-      'Responsible for the attack library, scan execution engine, and evidence pipeline that power every DefendML scan.',
-    members: [
-      {
-        initials: 'SE',
-        role: 'Security Engineering',
-        focus: `Attack library governance — ${PRODUCT.attackLibrarySize} adversarial scenarios across 7 attack categories`,
-        background:
-          'Builds and maintains the adversarial prompt library, scan execution pipeline, and MITRE ATLAS / OWASP framework mapping logic.',
-      },
-    ],
+    initials: '',
+    role: 'Co-Founder, Chief Architect',
+    tags: ['AI Security', 'Architecture', 'Frameworks'],
+    bio: 'AI security architecture expert with deep specialization in adversarial machine learning and security framework alignment. Designs the scanning infrastructure and framework mapping logic that powers every DefendML evidence report.',
   },
   {
-    group: 'Product & Research',
-    description:
-      'Translates emerging AI attack research into structured scenarios and drives the evidence report experience for enterprise security teams.',
-    members: [
-      {
-        initials: 'PR',
-        role: 'Product & Research',
-        focus: 'AI security research, evidence report design, framework alignment',
-        background: `Maps real-world AI vulnerabilities into the ${PRODUCT.attackLibrarySize}-scenario attack library. Maintains ${PRODUCT.frameworkCount}-framework coverage across OWASP, NIST, MITRE, SOC 2, and EU AI Act.`,
-      },
-    ],
+    initials: '',
+    role: 'Co-Founder, CTO — AI & CX Solutions',
+    tags: ['AI', 'LLM', 'Customer Experience'],
+    bio: '10+ years specializing in AI-powered customer experience and LLM implementations. Brings hands-on experience deploying AI applications in production environments — and the attacker\'s knowledge of where those deployments break.',
+  },
+  {
+    initials: '',
+    role: 'Founding Full-Stack Engineer',
+    tags: ['Next.js', 'Cloudflare Workers', 'Supabase'],
+    bio: 'Built DefendML\'s entire tech stack from the ground up. Expertise in Next.js, Cloudflare Workers, and Supabase — the infrastructure that powers the scan engine, evidence pipeline, and customer-facing dashboard.',
   },
 ];
 
@@ -53,7 +36,7 @@ const values = [
   {
     icon: '⚔️',
     title: 'Attack First',
-    body: 'We find vulnerabilities before adversaries do. Every product decision starts with the attacker\'s perspective.',
+    body: "We find vulnerabilities before adversaries do. Every product decision starts with the attacker's perspective.",
   },
   {
     icon: '📋',
@@ -63,12 +46,12 @@ const values = [
   {
     icon: '🎯',
     title: 'Honest Positioning',
-    body: 'We test AI applications pre-deployment. We don\'t provide runtime protection, and we don\'t overstate what a single scan can prove.',
+    body: "We test AI applications pre-deployment. We don't provide runtime protection, and we don't overstate what a single scan can prove.",
   },
   {
     icon: '🔬',
     title: 'Practitioner-Built',
-    body: 'DefendML is built by people who have been through SOC 2 audits, incident reviews, and security assessments — not just read about them.',
+    body: "DefendML is built by people who have been through SOC 2 audits, incident reviews, and security assessments — not just read about them.",
   },
 ];
 
@@ -117,40 +100,52 @@ export default function TeamPage() {
             </div>
           </section>
 
-          {/* ── Team Groups ────────────────────────────── */}
+          {/* ── Team Cards ─────────────────────────────── */}
           <section className="py-16 sm:py-20">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-              {teamGroups.map((group) => (
-                <div key={group.group}>
-                  <div className="mb-8">
-                    <h2 className="text-xl font-bold text-white mb-2">{group.group}</h2>
-                    <p className="text-[#A0A0A0] text-sm max-w-2xl">{group.description}</p>
-                  </div>
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {group.members.map((m) => (
-                      <div
-                        key={m.role}
-                        className="bg-[#111111] border border-[#1A1A1A] hover:border-red-500/30 rounded-xl p-6 transition-colors"
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-6">
+                {team.map((member) => (
+                  <div
+                    key={member.role}
+                    className="bg-[#111111] border border-[#1A1A1A] hover:border-red-500/30 rounded-xl p-8 transition-colors"
+                  >
+                    {/* Avatar */}
+                    <div className="w-14 h-14 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-5">
+                      <svg
+                        className="w-6 h-6 text-red-400"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
                       >
-                        {/* Avatar placeholder */}
-                        <div className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4">
-                          <span className="text-red-400 text-sm font-bold">{m.initials}</span>
-                        </div>
-                        <p className="text-white font-semibold mb-1">{m.role}</p>
-                        <p className="text-red-400 text-xs mb-3">{m.focus}</p>
-                        <p className="text-[#A0A0A0] text-sm leading-relaxed">{m.background}</p>
-                      </div>
-                    ))}
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                        />
+                      </svg>
+                    </div>
+
+                    <p className="text-white font-bold text-base mb-2">{member.role}</p>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {member.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-xs px-2 py-0.5 rounded bg-red-500/10 border border-red-500/20 text-red-400"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <p className="text-[#A0A0A0] text-sm leading-relaxed">{member.bio}</p>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </section>
-
-          {/* ── Divider ────────────────────────────────── */}
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="border-t border-[#1A1A1A]" />
-          </div>
 
           {/* ── Values ─────────────────────────────────── */}
           <section className="py-16 sm:py-20 bg-[#0D0D0D]">
@@ -178,11 +173,17 @@ export default function TeamPage() {
             </div>
           </section>
 
-          {/* ── Contact / Join ──────────────────────────── */}
+          {/* ── Join Our Mission ────────────────────────── */}
           <section className="py-16 sm:py-20">
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="bg-[#111111] border border-[#1A1A1A] rounded-2xl p-8 sm:p-12 text-center">
-                <h2 className="text-2xl font-bold text-white mb-4">Work With Us</h2>
+                <h2 className="text-2xl font-bold text-white mb-4">Join Our Mission</h2>
+                <p className="text-[#A0A0A0] mb-4 leading-relaxed">
+                  We're building the offensive AI red team testing layer the security industry
+                  needs — starting with a library of{' '}
+                  <span className="text-white font-semibold">{PRODUCT.attackLibrarySize} adversarial scenarios</span>{' '}
+                  and evidence reports that hold up to enterprise scrutiny.
+                </p>
                 <p className="text-[#A0A0A0] mb-8 leading-relaxed">
                   DefendML is a small, focused team. We work with security engineers and AI
                   practitioners who want to build the offensive testing layer the AI security
