@@ -92,7 +92,7 @@ export default function LandingFooter() {
               "We find vulnerabilities. We don't prevent them."
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              {['OWASP', 'NIST', 'MITRE', 'ASL-3'].map((f) => (
+              {['OWASP', 'NIST', 'MITRE'].map((f) => (
                 <span key={f} className="text-xs px-2 py-1 rounded bg-red-500/10 border border-red-500/20 text-red-400">
                   {f}
                 </span>
