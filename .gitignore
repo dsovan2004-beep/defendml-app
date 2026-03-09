@@ -70,6 +70,10 @@ web_modules/
 .env.*
 !.env.example
 
+# DefendML local agent configuration — never commit (may contain credentials)
+CLAUDE.local.md
+.defendml-token
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
