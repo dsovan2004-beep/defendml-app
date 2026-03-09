@@ -216,8 +216,17 @@ export default function ASL3Testing() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Scans</h1>
-          <p className="text-[#A0A0A0]">Interactive demo of red team prompt scanning</p>
-          <p className="text-sm text-red-400 mt-1">295 Attack Scenarios Available in Production Mode</p>
+          <p className="text-lg font-semibold text-white mb-1">
+            AI Security Red Team Testing for LLM Applications
+          </p>
+          <p className="text-[#A0A0A0] max-w-2xl">
+            Test your AI application against adversarial attack scenarios to detect prompt injection, jailbreaks, and data exposure risks.
+          </p>
+          <p className="text-sm text-red-400 mt-2">295 Attack Scenarios Available in Production Mode</p>
+          <p className="text-sm text-[#555555] mt-1">
+            <a href="/login" className="text-red-400 hover:text-red-300 underline underline-offset-2 transition-colors">Create an account</a>{' '}
+            to run a full AI red team scan against your AI system.
+          </p>
         </div>
 
         {/* Stats Grid */}
@@ -297,6 +306,31 @@ export default function ASL3Testing() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - 2/3 width */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Target AI System */}
+            <div className="bg-[#111111]/50 backdrop-blur-sm border border-[#1A1A1A] rounded-xl p-5">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <h2 className="text-sm font-semibold text-[#A0A0A0] uppercase tracking-widest">Target AI System</h2>
+                <span className="ml-auto text-xs px-2 py-0.5 bg-[#1A1A1A] border border-[#2A2A2A] text-[#555555] rounded">Example</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {[
+                  { label: 'Target Name', value: 'Customer Support Copilot' },
+                  { label: 'Endpoint', value: 'https://api.company.ai/chat' },
+                  { label: 'Model', value: 'GPT-4 / Claude / Llama' },
+                  { label: 'Type', value: 'Chat API' },
+                ].map((item) => (
+                  <div key={item.label}>
+                    <p className="text-xs text-[#555555] mb-1">{item.label}</p>
+                    <p className="text-sm text-[#F5F5F5] font-medium truncate">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-xs text-[#555555]">
+                In production, DefendML executes attack prompts against your real AI endpoint — chatbot, API, agent, or RAG application. <a href="/login" className="text-red-400 hover:text-red-300 transition-colors">Add your target →</a>
+              </p>
+            </div>
+
             {/* Live Prompt Scan */}
             <div className="bg-[#111111]/50 backdrop-blur-sm border border-[#1A1A1A] rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
@@ -432,22 +466,22 @@ export default function ASL3Testing() {
 
           {/* Right Column - 1/3 width */}
           <div className="space-y-6">
-            {/* How Scanning Works */}
+            {/* How DefendML Works */}
             <div className="bg-[#111111]/50 backdrop-blur-sm border border-[#1A1A1A] rounded-xl p-6">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <LightBulbIcon className="h-5 w-5 text-red-400" />
-                How Scanning Works
+                How DefendML Works
               </h3>
-              
-              <div className="space-y-4">
+
+              <div className="space-y-5">
                 <div className="flex gap-3">
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 font-semibold text-sm">
                     1
                   </div>
                   <div>
-                    <div className="font-medium text-white mb-1">Pattern Matching</div>
+                    <div className="font-medium text-white mb-1">Connect AI Target</div>
                     <div className="text-sm text-[#A0A0A0]">
-                      Compares prompt against 295 known attack scenarios
+                      After signup, add your AI system endpoint — chatbot, API, agent, or RAG application.
                     </div>
                   </div>
                 </div>
@@ -457,9 +491,9 @@ export default function ASL3Testing() {
                     2
                   </div>
                   <div>
-                    <div className="font-medium text-white mb-1">Context Analysis</div>
+                    <div className="font-medium text-white mb-1">Run Red Team Attacks</div>
                     <div className="text-sm text-[#A0A0A0]">
-                      Evaluates intent and potential impact
+                      DefendML automatically executes 295 adversarial prompts against your AI system — prompt injection, jailbreak attempts, and data extraction.
                     </div>
                   </div>
                 </div>
@@ -469,24 +503,22 @@ export default function ASL3Testing() {
                     3
                   </div>
                   <div>
-                    <div className="font-medium text-white mb-1">AI Processing</div>
+                    <div className="font-medium text-white mb-1">Generate Security Evidence</div>
                     <div className="text-sm text-[#A0A0A0]">
-                      Advanced model determines threat level
+                      Review vulnerabilities and download audit-ready evidence reports aligned with OWASP and MITRE ATLAS.
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 font-semibold text-sm">
-                    4
-                  </div>
-                  <div>
-                    <div className="font-medium text-white mb-1">Target Analysis</div>
-                    <div className="text-sm text-[#A0A0A0]">
-                      Analyzes which layer of target's defenses failed
-                    </div>
-                  </div>
-                </div>
+              <div className="mt-5 pt-4 border-t border-[#1A1A1A]">
+                <a
+                  href="/login"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg transition-colors"
+                >
+                  Start Free — Create Account
+                  <ArrowRightIcon className="w-4 h-4" />
+                </a>
               </div>
             </div>
 
