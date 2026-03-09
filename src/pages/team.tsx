@@ -10,8 +10,8 @@ const team = [
     emoji: '👨‍💻',
     name: 'Sareth Dustin Sovan',
     role: 'Co-Founder & CEO',
-    tags: ['IT Operations', 'Security', 'SOC 2'],
-    bio: '20+ years in IT and cybersecurity. Chief architect leading enterprise security systems for large-scale organizations. Led 4 successful SOC 2 Type II audits and brings deep operational knowledge of the regulatory pressure driving demand for AI red team evidence.',
+    tags: ['IT Operations', 'Security', 'SOC 2', 'ISO 27001'],
+    bio: '20+ years in IT and cybersecurity. Chief architect leading enterprise security systems for large-scale organizations. Led multiple SOC 2 Type II and ISO 27001 audit programs and brings deep operational knowledge of the regulatory pressure driving demand for AI red team evidence.',
   },
   {
     emoji: '👨‍💻',
