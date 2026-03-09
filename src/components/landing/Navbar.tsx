@@ -12,6 +12,7 @@ export default function LandingNavbar() {
     { label: 'Evidence', href: '#evidence' },
     { label: 'Pricing', href: '#pricing' },
     { label: 'FAQ', href: '#faq' },
+    { label: 'About', href: '/about' },
   ];
 
   return (
@@ -48,15 +49,25 @@ export default function LandingNavbar() {
 
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-6">
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="text-[#A0A0A0] hover:text-white text-sm font-medium transition-colors"
-              >
-                {l.label}
-              </a>
-            ))}
+            {links.map((l) =>
+              l.href.startsWith('/') ? (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className="text-[#A0A0A0] hover:text-white text-sm font-medium transition-colors"
+                >
+                  {l.label}
+                </Link>
+              ) : (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  className="text-[#A0A0A0] hover:text-white text-sm font-medium transition-colors"
+                >
+                  {l.label}
+                </a>
+              )
+            )}
           </div>
 
           {/* Desktop CTAs */}
@@ -89,16 +100,27 @@ export default function LandingNavbar() {
       {open && (
         <div className="md:hidden border-t border-[#1A1A1A] bg-[#0D0D0D]">
           <div className="px-4 py-4 space-y-3">
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="block text-[#A0A0A0] hover:text-white text-base font-medium py-2 transition-colors"
-              >
-                {l.label}
-              </a>
-            ))}
+            {links.map((l) =>
+              l.href.startsWith('/') ? (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  className="block text-[#A0A0A0] hover:text-white text-base font-medium py-2 transition-colors"
+                >
+                  {l.label}
+                </Link>
+              ) : (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  className="block text-[#A0A0A0] hover:text-white text-base font-medium py-2 transition-colors"
+                >
+                  {l.label}
+                </a>
+              )
+            )}
             <div className="pt-2 border-t border-[#1A1A1A] flex flex-col gap-2">
               <Link
                 href="/login"
