@@ -54,7 +54,7 @@ export default function Hero() {
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
           <Link
-            href="/asl3-testing"
+            href="/scan"
             className="inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold text-base px-8 py-4 rounded-lg transition-colors shadow-xl shadow-red-900/40"
           >
             Run a Live Red Team Test
