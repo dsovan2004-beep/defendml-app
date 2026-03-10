@@ -7,7 +7,7 @@ const productLinks = [
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Evidence', href: '#evidence' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Live Demo', href: '/asl3-testing' },
+  { label: 'Live Demo', href: '/scan' },
 ];
 
 const companyLinks = [
