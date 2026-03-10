@@ -304,4 +304,75 @@ ASL-3 is not exposed in customer reports or marketing materials.
 
 ---
 
+## 16. DefendML Product Workflow
+
+The DefendML user-facing product follows a three-step workflow.
+
+**Targets → Scan → Reports**
+
+1. **Targets** — Customers register AI endpoints, models, or APIs they want to test. Each target includes the endpoint URL, authentication configuration, and payload template.
+2. **Scan** — DefendML executes red team attack scenarios against the configured target. 100 offensive prompts are run from the 295-scenario attack library across all 6 security frameworks.
+3. **Reports** — Evidence reports are generated showing blocked attacks, exploit success rate, AI Security Score, framework coverage, and remediation guidance.
+
+This three-step flow is the canonical user workflow and must be reflected consistently across the application, onboarding, and documentation.
+
+App routes:
+
+- Targets → `/admin/targets`
+- Scan → `/scan`
+- Reports → `/reports`
+
+---
+
+## 17. Legacy Route Redirects
+
+The following legacy routes are maintained for backward compatibility.
+
+| Legacy Route | Redirects To | Type |
+|---|---|---|
+| `/asl3-testing` | `/scan` | Client-side (useEffect) |
+| `/compliance` | `/reports` | Client-side (useEffect) |
+
+Purpose:
+
+- preserve old bookmarks
+- prevent broken links in older documentation
+- maintain compatibility with external references
+
+Do not remove these redirects unless all external references to the legacy routes are confirmed updated. These are implemented as client-side `useEffect` + `router.replace()` redirects in the Next.js pages router, compatible with Cloudflare Pages static export (`output: 'export'`).
+
+---
+
+## 18. System Status Page
+
+DefendML maintains a public status page for operational transparency.
+
+**Status URL:** `https://status.defendml.com`
+
+The status page displays operational health for core platform services:
+
+- Dashboard
+- Scan Engine
+- Reports
+- API
+- Authentication
+
+This page is hosted via Cloudflare Pages and is linked from the application footer. It must remain publicly accessible without authentication.
+
+---
+
+## 19. Customer Security Evaluation Workflow
+
+When onboarding new customers, the typical security evaluation process follows these steps.
+
+1. **Target Registration** — Customer adds an AI endpoint or model to DefendML via the Targets page. Minimum required: endpoint URL, HTTP method, authentication method, and payload template.
+2. **Initial Red Team Scan** — DefendML runs the 100-prompt attack suite against the configured target. Results are captured in real time across all 6 security frameworks.
+3. **Vulnerability Analysis** — DefendML identifies prompt injection, jailbreak, data exfiltration, and model manipulation risks. Each finding is mapped to OWASP LLM Top 10, MITRE ATLAS, NIST AI RMF, EU AI Act, SOC 2/ISO 27001, and ASL-3.
+4. **Evidence Reports** — Security reports are generated in PDF, JSON, and CSV formats for use by engineering, compliance, and audit teams. Reports include the AI Security Score, block rate, framework coverage, and remediation playbook.
+5. **Remediation Review** — Customer reviews mitigation guidance and retests the system. DefendML recommends quarterly re-scans as attack techniques evolve.
+
+Purpose: Provide a consistent, repeatable workflow for evaluating AI security posture and generating audit-ready evidence.
+
+---
+
 *End of Playbook*
