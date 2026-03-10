@@ -79,7 +79,7 @@ export default function ProductSection() {
             {PRODUCT.scanPromptCount} prompts randomly selected from the {PRODUCT.attackLibrarySize}-scenario library — ensuring varied, comprehensive coverage every time.
           </p>
           <Link
-            href="/asl3-testing"
+            href="/scan"
             className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg transition-colors"
           >
             Try Live Demo
