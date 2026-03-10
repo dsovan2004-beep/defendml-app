@@ -3,14 +3,14 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Navigation from "../components/Navigation";
 import {
-  BeakerIcon,
-  ShieldCheckIcon,
-  ClockIcon,
-  LightBulbIcon,
-  ExclamationTriangleIcon,
-  ArrowRightIcon,
-  InformationCircleIcon,
-} from "@heroicons/react/24/outline";
+  Beaker as BeakerIcon,
+  ShieldCheck as ShieldCheckIcon,
+  Clock as ClockIcon,
+  Lightbulb as LightBulbIcon,
+  AlertTriangle as ExclamationTriangleIcon,
+  ArrowRight as ArrowRightIcon,
+  Info as InformationCircleIcon,
+} from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 import { normalizeBlockRate } from "../lib/security-metrics";
 
