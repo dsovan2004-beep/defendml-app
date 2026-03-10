@@ -551,6 +551,15 @@ export default function ReportPage() {
       const html2canvas = (await import('html2canvas')).default;
       const { jsPDF }   = await import('jspdf');
 
+      // Wait for all fonts to finish loading before capture —
+      // prevents text-spacing collapse where words run together
+      await document.fonts.ready;
+
+      // Scroll to top so html2canvas captures from the beginning
+      window.scrollTo(0, 0);
+      // Brief pause to let layout settle after scroll + font load
+      await new Promise(resolve => setTimeout(resolve, 300));
+
       // Capture the full report div at 2× for retina quality
       const canvas = await html2canvas(reportRef.current, {
         scale: 2,
@@ -558,31 +567,40 @@ export default function ReportPage() {
         allowTaint: true,
         backgroundColor: '#0A0A0A',
         logging: false,
-        // Expand clone to full scroll height so nothing is clipped
-        windowWidth: reportRef.current.scrollWidth,
+        // Capture full scroll height — not just visible viewport
+        windowWidth:  reportRef.current.scrollWidth,
         windowHeight: reportRef.current.scrollHeight,
+        // Offset to ensure full content from top
+        scrollY: -window.scrollY,
       });
 
-      const imgData   = canvas.toDataURL('image/png');
-      const pdf       = new jsPDF('p', 'mm', 'a4');
-      const pageW     = pdf.internal.pageSize.getWidth();   // 210mm
-      const pageH     = pdf.internal.pageSize.getHeight();  // 297mm
+      const imgData = canvas.toDataURL('image/png');
+      const pdf     = new jsPDF('p', 'mm', 'a4');
+      const pageW   = pdf.internal.pageSize.getWidth();   // 210mm
+      const pageH   = pdf.internal.pageSize.getHeight();  // 297mm
 
-      // Scale the canvas width to fit the PDF page width
-      const ratio     = pageW / canvas.width;
-      const imgH      = canvas.height * ratio;              // full image height in mm
+      // Scale canvas width to fit the full PDF page width
+      const ratio   = pageW / canvas.width;
+      const imgH    = canvas.height * ratio;  // total image height in mm
 
-      let remaining   = imgH;
-      let yOffset     = 0;   // position on the image (in mm, negative means shifted up)
+      let remaining = imgH;
+      let yOffset   = 0;  // shifts image up as pages progress
 
       // First page
       pdf.addImage(imgData, 'PNG', 0, yOffset, pageW, imgH);
       remaining -= pageH;
 
-      // Add additional pages while content remains
+      // Add pages while content remains — last page uses exact remaining height
+      // to eliminate the white gap at the bottom of the final page
       while (remaining > 0) {
-        yOffset  -= pageH;
+        yOffset -= pageH;
         pdf.addPage();
+
+        if (remaining < pageH) {
+          // Last page: trim page height to content so there's no white gap
+          pdf.internal.pageSize = { width: pageW, height: remaining } as any;
+        }
+
         pdf.addImage(imgData, 'PNG', 0, yOffset, pageW, imgH);
         remaining -= pageH;
       }
