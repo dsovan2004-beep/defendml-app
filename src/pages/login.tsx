@@ -115,6 +115,8 @@ export default function Login() {
           // Supabase redirects back here after Google auth; the session check
           // useEffect above handles the first-time vs returning routing.
           redirectTo: `${window.location.origin}/login`,
+          // Always show the Google account picker — required for multi-account users
+          queryParams: { prompt: 'select_account' },
         },
       });
       if (oauthError) throw oauthError;
