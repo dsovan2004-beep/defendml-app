@@ -47,7 +47,7 @@ export default function HowItWorks() {
 
         <div className="text-center">
           <Link
-            href="/asl3-testing"
+            href="/scan"
             className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-4 rounded-lg transition-colors shadow-xl shadow-red-900/30"
           >
             Try Live Demo
