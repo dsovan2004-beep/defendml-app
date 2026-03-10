@@ -473,7 +473,7 @@ export default function ReportPage() {
           <ExclamationTriangleIcon className="w-16 h-16 text-red-400 mx-auto mb-4" />
           <div className="text-red-400 text-xl mb-4">Failed to load report</div>
           <div className="text-[#A0A0A0] mb-6">{error || 'Report not found'}</div>
-          <button onClick={() => router.push('/compliance')}
+          <button onClick={() => router.push('/reports')}
             className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">
             Back to Reports Dashboard
           </button>
