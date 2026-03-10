@@ -79,7 +79,7 @@ export default function LandingNavbar() {
               Login
             </Link>
             <Link
-              href="/asl3-testing"
+              href="/scan"
               className="text-sm font-semibold bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg transition-colors shadow-lg shadow-red-900/30"
             >
               Attack Your AI →
@@ -130,7 +130,7 @@ export default function LandingNavbar() {
                 Login
               </Link>
               <Link
-                href="/asl3-testing"
+                href="/scan"
                 onClick={() => setOpen(false)}
                 className="block text-center py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
               >
