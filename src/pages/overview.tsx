@@ -627,10 +627,10 @@ function OverviewPage() {
                     <span className="font-semibold text-white">Offense-first AI red team service</span> delivering evidence-grade reports in hours, not quarters
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    <a href="/compliance" className="flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 rounded-lg text-red-300 text-sm font-medium transition-all">
+                    <a href="/reports" className="flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 rounded-lg text-red-300 text-sm font-medium transition-all">
                       <FileCheck className="w-4 h-4" />Attack Evidence<ExternalLink className="w-3 h-3" />
                     </a>
-                    <a href="/asl3-testing" className="flex items-center gap-2 px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40 rounded-lg text-orange-300 text-sm font-medium transition-all">
+                    <a href="/scan" className="flex items-center gap-2 px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40 rounded-lg text-orange-300 text-sm font-medium transition-all">
                       <Shield className="w-4 h-4" />Execute Scan<ExternalLink className="w-3 h-3" />
                     </a>
                     <a href="/intelligence" className="flex items-center gap-2 px-4 py-2 bg-green-500/20 hover:bg-green-500/30 border border-green-500/40 rounded-lg text-green-300 text-sm font-medium transition-all">
@@ -958,7 +958,7 @@ function OverviewPage() {
                   {feedLoading ? 'loading...' : attackFeed.length > 0 ? '(live)' : '(no scans yet)'}
                 </span>
               </div>
-              <a href="/asl3-testing" className="text-sm text-red-400 hover:text-red-300 font-medium">View All →</a>
+              <a href="/scan" className="text-sm text-red-400 hover:text-red-300 font-medium">View All →</a>
             </div>
             <div className="p-6 space-y-3">
               {feedLoading ? (
@@ -1039,7 +1039,7 @@ function OverviewPage() {
               <div className="text-white font-semibold mb-1">Attack Scenarios</div>
               <div className="text-[#A0A0A0] text-sm">295 offensive test prompts</div>
             </a>
-            <a href="/compliance" className="p-6 bg-[#111111] hover:bg-[#1A1A1A] rounded-xl border border-[#1A1A1A] hover:border-green-500/50 transition-all block">
+            <a href="/reports" className="p-6 bg-[#111111] hover:bg-[#1A1A1A] rounded-xl border border-[#1A1A1A] hover:border-green-500/50 transition-all block">
               <FileCheck className="w-8 h-8 text-green-400 mb-3" />
               <div className="text-white font-semibold mb-1">Evidence Reports</div>
               <div className="text-[#A0A0A0] text-sm">Audit-grade documentation</div>
