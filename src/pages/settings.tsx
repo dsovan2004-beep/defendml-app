@@ -358,15 +358,30 @@ function SettingsPageContent() {
       )
     : prompts;
 
-  const tabs = [
-    { id: 'users' as SettingsTab, label: 'User Management', icon: Users, description: 'Manage team members and permissions' },
-    { id: 'rbac' as SettingsTab, label: 'Access Control', icon: Shield, description: 'Configure roles and permissions' },
-    { id: 'api' as SettingsTab, label: 'API Configuration', icon: Code, description: 'API endpoints and rate limits' },
-    { id: 'prompts' as SettingsTab, label: 'Prompt Library', icon: Database, description: '295 attack scenarios & coverage' },
-    { id: 'billing' as SettingsTab, label: 'Billing & Subscription', icon: CreditCard, description: 'Plan details and usage' },
-    { id: 'integrations' as SettingsTab, label: 'Integrations', icon: Plug, description: 'Connect external services' },
-    { id: 'notifications' as SettingsTab, label: 'Notifications', icon: Bell, description: 'Alert rules and channels' },
-    { id: 'organization' as SettingsTab, label: 'Organization', icon: Building2, description: 'Company settings and API keys' },
+  const tabGroups = [
+    {
+      label: 'Account',
+      items: [
+        { id: 'users' as SettingsTab, label: 'User Management', icon: Users, description: 'Team members & access' },
+        { id: 'rbac' as SettingsTab, label: 'Access Control', icon: Shield, description: 'Roles & permissions' },
+        { id: 'organization' as SettingsTab, label: 'Organization', icon: Building2, description: 'Company & API keys' },
+      ],
+    },
+    {
+      label: 'Platform',
+      items: [
+        { id: 'api' as SettingsTab, label: 'API Configuration', icon: Code, description: 'Endpoints & rate limits' },
+        { id: 'prompts' as SettingsTab, label: 'Prompt Library', icon: Database, description: '295 attack scenarios' },
+        { id: 'billing' as SettingsTab, label: 'Billing & Plan', icon: CreditCard, description: 'Plan details & usage' },
+      ],
+    },
+    {
+      label: 'Preferences',
+      items: [
+        { id: 'integrations' as SettingsTab, label: 'Integrations', icon: Plug, description: 'Connect services' },
+        { id: 'notifications' as SettingsTab, label: 'Notifications', icon: Bell, description: 'Alerts & channels' },
+      ],
+    },
   ];
 
   return (
@@ -394,28 +409,35 @@ function SettingsPageContent() {
                   <h3 className="text-sm font-semibold text-[#F5F5F5] uppercase tracking-wider">Settings Menu</h3>
                 </div>
                 <nav className="p-2">
-                  {tabs.map((tab) => {
-                    const Icon = tab.icon;
-                    const isActive = activeTab === tab.id;
-                    return (
-                      <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all mb-1 ${
-                          isActive
-                            ? 'bg-red-500/20 text-red-300 border border-red-500/30'
-                            : 'text-[#A0A0A0] hover:bg-[#1A1A1A] hover:text-[#F5F5F5]'
-                        }`}
-                      >
-                        <Icon className="w-5 h-5 flex-shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium text-sm">{tab.label}</div>
-                          <div className="text-xs opacity-70 truncate">{tab.description}</div>
-                        </div>
-                        {isActive && <ChevronRight className="w-4 h-4 flex-shrink-0" />}
-                      </button>
-                    );
-                  })}
+                  {tabGroups.map((group, gi) => (
+                    <div key={group.label} className={gi > 0 ? 'mt-3' : ''}>
+                      <div className="px-4 pb-1 pt-2">
+                        <span className="text-[10px] font-semibold text-[#555555] uppercase tracking-widest">{group.label}</span>
+                      </div>
+                      {group.items.map((tab) => {
+                        const Icon = tab.icon;
+                        const isActive = activeTab === tab.id;
+                        return (
+                          <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id)}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all mb-1 ${
+                              isActive
+                                ? 'bg-red-500/20 text-red-300 border border-red-500/30'
+                                : 'text-[#A0A0A0] hover:bg-[#1A1A1A] hover:text-[#F5F5F5]'
+                            }`}
+                          >
+                            <Icon className="w-5 h-5 flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium text-sm">{tab.label}</div>
+                              <div className="text-xs opacity-70 truncate">{tab.description}</div>
+                            </div>
+                            {isActive && <ChevronRight className="w-4 h-4 flex-shrink-0" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ))}
                 </nav>
               </div>
             </div>
