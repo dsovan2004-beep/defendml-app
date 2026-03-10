@@ -544,7 +544,7 @@ function IntelligencePage() {
                   </div>
                 ))}
                 <a
-                  href="/compliance"
+                  href="/reports"
                   className="block w-full p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-center text-red-300 hover:bg-red-500/20 transition-all font-medium"
                 >
                   View All Evidence Reports →
@@ -555,12 +555,12 @@ function IntelligencePage() {
 
           {/* Bottom CTAs */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="/asl3-testing" className="p-6 bg-[#111111] hover:bg-[#1A1A1A] rounded-xl border border-[#1A1A1A] hover:border-red-500/50 transition-all block">
+            <a href="/scan" className="p-6 bg-[#111111] hover:bg-[#1A1A1A] rounded-xl border border-[#1A1A1A] hover:border-red-500/50 transition-all block">
               <Target className="w-8 h-8 text-red-400 mb-3" />
               <div className="text-white font-semibold mb-1">Execute New Scan</div>
               <div className="text-[#A0A0A0] text-sm">Launch red team attack against new target</div>
             </a>
-            <a href="/compliance" className="p-6 bg-[#111111] hover:bg-[#1A1A1A] rounded-xl border border-[#1A1A1A] hover:border-green-500/50 transition-all block">
+            <a href="/reports" className="p-6 bg-[#111111] hover:bg-[#1A1A1A] rounded-xl border border-[#1A1A1A] hover:border-green-500/50 transition-all block">
               <FileText className="w-8 h-8 text-green-400 mb-3" />
               <div className="text-white font-semibold mb-1">Evidence Reports</div>
               <div className="text-[#A0A0A0] text-sm">View audit-grade documentation</div>
