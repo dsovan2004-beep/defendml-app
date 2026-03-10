@@ -1,11 +1,15 @@
-// src/pages/asl3-testing.tsx — permanent redirect to /scan
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+// src/pages/asl3-testing.tsx — server-side permanent redirect to /scan
+import type { GetServerSideProps } from "next";
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    redirect: {
+      destination: "/scan",
+      permanent: true,
+    },
+  };
+};
 
 export default function ASL3TestingRedirect() {
-  const router = useRouter();
-  useEffect(() => {
-    router.replace("/scan");
-  }, [router]);
   return null;
 }
