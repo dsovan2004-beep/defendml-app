@@ -547,7 +547,9 @@ export default function ReportPage() {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
-      <Navigation />
+      <div className="print:hidden">
+        <Navigation />
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
