@@ -386,7 +386,7 @@ function CompliancePageContent() {
       yPos += 7;
       doc.text(`Critical Vulnerabilities: ${decisionCounts.ALLOW}`, 20, yPos);
       yPos += 7;
-      doc.text(`Attack Success Rate: ${attackSuccessRate}%`, 20, yPos);
+      doc.text(`Exploit Bypass Rate: ${attackSuccessRate}%`, 20, yPos);
       yPos += 7;
       doc.text(`Defense Success Rate: ${pct(decisionCounts.BLOCK, total)}%`, 20, yPos);
       yPos += 10;
@@ -618,8 +618,28 @@ function CompliancePageContent() {
           </div>
         )}
 
+        {/* Empty state — no scans yet */}
+        {!loading && !error && reports.length === 0 && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+            <div className="bg-[#111111] rounded-xl p-12 border border-[#1A1A1A] max-w-lg mx-auto">
+              <Shield className="w-14 h-14 text-zinc-600 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-white mb-2">No scans completed yet</h3>
+              <p className="text-[#A0A0A0] mb-6 text-sm leading-relaxed">
+                Evidence reports are generated after running a red team scan on an AI target.
+                Each scan fires 100 adversarial prompts and produces an audit-ready evidence package.
+              </p>
+              <a
+                href="/admin/targets"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
+              >
+                Add a target and run your first attack →
+              </a>
+            </div>
+          </div>
+        )}
+
         {/* Main Content - Only show if not loading and no error */}
-        {!loading && !error && (
+        {!loading && !error && reports.length > 0 && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Summary cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -646,12 +666,16 @@ function CompliancePageContent() {
               </div>
 
               <div className="bg-[#111111] rounded-xl p-5 border border-[#1A1A1A]">
-                <div className="text-xs text-[#A0A0A0] uppercase tracking-wider mb-2">Attack Success Rate</div>
+                <div className="text-xs text-[#A0A0A0] uppercase tracking-wider mb-2">Exploit Bypass Rate</div>
                 <div className="text-3xl font-bold text-red-400">{attackSuccessRate}%</div>
-                {attackSuccessRate > 0 && (
+                {attackSuccessRate > 0 ? (
                   <div className="text-xs text-red-400 mt-2 flex items-center gap-1">
-                    <AlertTriangle className="w-4 h-4" />
-                    Target security controls failed
+                    <AlertTriangle className="w-3 h-3" />
+                    AI was compromised — attacks succeeded
+                  </div>
+                ) : (
+                  <div className="text-xs text-green-400 mt-2">
+                    ✓ All attacks blocked
                   </div>
                 )}
               </div>
