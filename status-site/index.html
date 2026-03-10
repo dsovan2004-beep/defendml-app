@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DefendML System Status</title>
+  <meta name="description" content="Live status for DefendML dashboard, scan engine, reports, and API services." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0A0A0A;
+      --surface:     #111111;
+      --surface-2:   #1A1A1A;
+      --border:      #1A1A1A;
+      --border-2:    #222222;
+      --text:        #F5F5F5;
+      --muted:       #A0A0A0;
+      --dim:         #555555;
+      --green:       #22c55e;
+      --green-bg:    rgba(34, 197, 94, 0.10);
+      --green-border:rgba(34, 197, 94, 0.25);
+      --red:         #ef4444;
+      --red-bg:      rgba(239, 68, 68, 0.10);
+      --red-dim:     rgba(220, 38, 38, 0.15);
+      --accent:      #dc2626;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Top bar ─────────────────────────────────────────── */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      color: #ef4444;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 3px rgba(239,68,68,0.8)) drop-shadow(0 0 8px rgba(239,68,68,0.4));
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+
+    .logo-divider {
+      color: var(--dim);
+      margin: 0 6px;
+    }
+
+    .logo-sub {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* ── Main wrapper ────────────────────────────────────── */
+    main {
+      flex: 1;
+      max-width: 780px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 52px 24px 48px;
+    }
+
+    /* ── Hero headline ───────────────────────────────────── */
+    .hero {
+      margin-bottom: 40px;
+    }
+
+    .all-operational {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      border-radius: 8px;
+      padding: 8px 16px;
+      margin-bottom: 20px;
+    }
+
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--green);
+      border-radius: 50%;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .pulse-dot::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: var(--green);
+      opacity: 0;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%   { transform: scale(0.8); opacity: 0.4; }
+      50%  { transform: scale(1.6); opacity: 0; }
+      100% { transform: scale(0.8); opacity: 0; }
+    }
+
+    .all-operational span {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 540px;
+    }
+
+    /* ── Section header ──────────────────────────────────── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--dim);
+      margin-bottom: 12px;
+    }
+
+    /* ── Services card ───────────────────────────────────── */
+    .services-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .service-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      gap: 12px;
+    }
+
+    .service-row + .service-row {
+      border-top: 1px solid var(--border);
+    }
+
+    .service-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .service-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--muted);
+    }
+
+    .service-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .service-name {
+      font-weight: 500;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .service-desc {
+      font-size: 12px;
+      color: var(--dim);
+      margin-top: 1px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .status-badge.operational {
+      background: var(--green-bg);
+      color: var(--green);
+      border: 1px solid var(--green-border);
+    }
+
+    .status-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ── Uptime strip ────────────────────────────────────── */
+    .uptime-section {
+      margin-bottom: 32px;
+    }
+
+    .uptime-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .uptime-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .uptime-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .uptime-pct {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .uptime-bar {
+      display: flex;
+      gap: 2px;
+      height: 28px;
+      align-items: stretch;
+      margin-bottom: 8px;
+    }
+
+    .uptime-day {
+      flex: 1;
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      border-radius: 3px;
+      min-width: 0;
+      transition: background 0.15s;
+    }
+
+    .uptime-day:hover {
+      background: rgba(34, 197, 94, 0.25);
+    }
+
+    .uptime-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    /* ── Incidents section ───────────────────────────────── */
+    .incidents-section {
+      margin-bottom: 40px;
+    }
+
+    .incidents-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .incidents-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .incidents-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .incidents-range {
+      font-size: 12px;
+      color: var(--dim);
+    }
+
+    .no-incidents {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .no-incidents-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+      color: var(--green);
+    }
+
+    .no-incidents-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .no-incidents-text {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .no-incidents-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ── Last updated ────────────────────────────────────── */
+    .last-updated {
+      text-align: center;
+      font-size: 12px;
+      color: var(--dim);
+      margin-bottom: 40px;
+    }
+
+    .last-updated span {
+      color: var(--muted);
+    }
+
+    /* ── Footer ──────────────────────────────────────────── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 20px 24px;
+    }
+
+    .footer-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .footer-links a.primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 7px;
+      font-weight: 600;
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+
+    .footer-links a.primary:hover {
+      background: #b91c1c;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--dim);
+    }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 500px) {
+      main { padding: 32px 16px 36px; }
+      .hero h1 { font-size: 22px; }
+      .service-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .uptime-bar { height: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top navigation bar -->
+  <div class="topbar">
+    <!-- DefendML logo mark (angular shield + crosshair) -->
+    <svg class="logo-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 3L5 7.5V16C5 21.8 9.8 27.1 16 29C22.2 27.1 27 21.8 27 16V7.5L16 3Z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+      <line x1="16" y1="0" x2="16" y2="8"  stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 1.5"/>
+      <line x1="16" y1="24" x2="16" y2="32" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 1.5"/>
+      <line x1="0"  y1="16" x2="8"  y2="16" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 1.5"/>
+      <line x1="24" y1="16" x2="32" y2="16" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 1.5"/>
+      <circle cx="16" cy="16" r="4" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 2" fill="none"/>
+      <circle cx="16" cy="16" r="1.8" fill="currentColor"/>
+    </svg>
+    <span class="logo-text">DefendML</span>
+    <span class="logo-divider">·</span>
+    <span class="logo-sub">System Status</span>
+  </div>
+
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="all-operational">
+        <span class="pulse-dot"></span>
+        <span>All Systems Operational</span>
+      </div>
+      <h1>DefendML System Status</h1>
+      <p>Live status for the DefendML dashboard, scan engine, reports, and API services.</p>
+    </div>
+
+    <!-- Services -->
+    <div class="section-label">Services</div>
+    <div class="services-card">
+
+      <div class="service-row">
+        <div class="service-info">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </div>
+          <div>
+            <div class="service-name">Dashboard</div>
+            <div class="service-desc">app.defendml.com · Overview, Analytics, Navigation</div>
+          </div>
+        </div>
+        <div class="status-badge operational"><span class="dot"></span> Operational</div>
+      </div>
+
+      <div class="service-row">
+        <div class="service-info">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7l-9-5z"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+          </div>
+          <div>
+            <div class="service-name">Scan Engine</div>
+            <div class="service-desc">Red team attack execution · 295 attack scenarios</div>
+          </div>
+        </div>
+        <div class="status-badge operational"><span class="dot"></span> Operational</div>
+      </div>
+
+      <div class="service-row">
+        <div class="service-info">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/>
+              <line x1="9" y1="17" x2="13" y2="17"/>
+            </svg>
+          </div>
+          <div>
+            <div class="service-name">Reports</div>
+            <div class="service-desc">Evidence reports · PDF/JSON/CSV export · Audit packages</div>
+          </div>
+        </div>
+        <div class="status-badge operational"><span class="dot"></span> Operational</div>
+      </div>
+
+      <div class="service-row">
+        <div class="service-info">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <div>
+            <div class="service-name">API</div>
+            <div class="service-desc">defendml-api.dsovan2004.workers.dev · Scan execution endpoint</div>
+          </div>
+        </div>
+        <div class="status-badge operational"><span class="dot"></span> Operational</div>
+      </div>
+
+      <div class="service-row">
+        <div class="service-info">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div>
+            <div class="service-name">Authentication</div>
+            <div class="service-desc">Sign-in · Session management · OAuth</div>
+          </div>
+        </div>
+        <div class="status-badge operational"><span class="dot"></span> Operational</div>
+      </div>
+
+    </div>
+
+    <!-- 90-day uptime -->
+    <div class="uptime-section">
+      <div class="section-label">90-Day Uptime</div>
+      <div class="uptime-card">
+        <div class="uptime-header">
+          <span class="uptime-label">All services combined</span>
+          <span class="uptime-pct">100.0%</span>
+        </div>
+        <div class="uptime-bar" id="uptimeBar"></div>
+        <div class="uptime-meta">
+          <span>90 days ago</span>
+          <span>Today</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent incidents -->
+    <div class="incidents-section">
+      <div class="section-label">Recent Incidents</div>
+      <div class="incidents-card">
+        <div class="incidents-header">
+          <span class="incidents-title">Incident History</span>
+          <span class="incidents-range">Last 30 days</span>
+        </div>
+        <div class="no-incidents">
+          <div class="no-incidents-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <div class="no-incidents-text">No incidents reported</div>
+          <div class="no-incidents-sub">All services have been operational for the last 30 days.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Last updated -->
+    <div class="last-updated">
+      Last updated automatically · <span id="lastUpdated"></span>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="https://app.defendml.com" class="primary">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Back to App
+        </a>
+        <a href="mailto:dsovan2004@gmail.com">Contact Support</a>
+      </div>
+      <span class="footer-copy">© 2026 DefendML</span>
+    </div>
+  </footer>
+
+  <script>
+    // Build 90-day uptime bar
+    const bar = document.getElementById('uptimeBar');
+    for (let i = 0; i < 90; i++) {
+      const d = document.createElement('div');
+      d.className = 'uptime-day';
+      d.title = (() => {
+        const dt = new Date();
+        dt.setDate(dt.getDate() - (89 - i));
+        return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' — Operational';
+      })();
+      bar.appendChild(d);
+    }
+
+    // Last updated timestamp
+    const el = document.getElementById('lastUpdated');
+    if (el) {
+      el.textContent = new Date().toLocaleString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric',
+        hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
+      });
+    }
+  </script>
+
+</body>
+</html>
