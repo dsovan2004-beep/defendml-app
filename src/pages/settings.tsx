@@ -244,40 +244,28 @@ function SettingsPageContent() {
         const userId = session?.user?.id;
         if (!userId) { setOrgError('Not authenticated. Please log in again.'); return; }
 
-        const { data: membership, error: memErr } = await supabase
-          .from('organization_members')
-          .select('organization_id, role')
-          .eq('user_id', userId)
-          .maybeSingle();
+        // Use SECURITY DEFINER RPC — bypasses table-level GRANT issues
+        // caused by multiple GoTrueClient instances diluting the JWT context.
+        // Runs as postgres internally but still filters by auth.uid() securely.
+        const { data: orgRows, error: rpcErr } = await supabase
+          .rpc('get_my_organization');
 
-        if (memErr) {
-          console.error('[Org] membership query error:', memErr.code, memErr.message);
-          setOrgError(`Could not load membership (${memErr.code}). Contact support.`);
+        if (rpcErr) {
+          console.error('[Org] RPC error:', rpcErr.code, rpcErr.message);
+          setOrgError(`Could not load organization (${rpcErr.code}). Contact support.`);
           return;
         }
-        if (!membership) {
+        const orgRow = orgRows?.[0];
+        if (!orgRow) {
           setOrgError('No organization found. Contact your admin to be added to an org.');
           return;
         }
 
-        const { data: org, error: orgErr } = await supabase
-          .from('organizations')
-          .select('id, name, created_at')
-          .eq('id', membership.organization_id)
-          .single();
-
-        if (orgErr || !org) { setOrgError('Could not load organization details.'); return; }
-
-        const { count } = await supabase
-          .from('organization_members')
-          .select('*', { count: 'exact', head: true })
-          .eq('organization_id', membership.organization_id);
-
         setOrgData({
-          id: org.id,
-          name: org.name,
-          created_at: org.created_at,
-          memberCount: count ?? 0,
+          id: orgRow.org_id,
+          name: orgRow.org_name,
+          created_at: orgRow.org_created_at,
+          memberCount: Number(orgRow.member_count ?? 0),
         });
 
         // Also load API keys for this org
@@ -285,7 +273,7 @@ function SettingsPageContent() {
         const { data: keys } = await supabase
           .from('api_keys')
           .select('id, name, key_hash, created_at')
-          .eq('organization_id', org.id)
+          .eq('organization_id', orgRow.org_id)
           .order('created_at', { ascending: false });
         setApiKeys(keys ?? []);
         setApiKeysLoading(false);
