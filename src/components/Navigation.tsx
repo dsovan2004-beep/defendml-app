@@ -96,7 +96,7 @@ export default function Navigation() {
       icon: LayoutDashboard,
     },
     {
-      name: "Scans",
+      name: "Demo",
       href: "/asl3-testing", // route unchanged
       icon: Beaker,
     },
