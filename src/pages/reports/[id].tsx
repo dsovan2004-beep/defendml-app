@@ -1,6 +1,6 @@
 // src/pages/reports/[id].tsx — DefendML Enterprise Evidence Report v2
 import { useRouter } from 'next/router';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Navigation from '../../components/Navigation';
 import {
@@ -387,9 +387,6 @@ export default function ReportPage() {
   const router = useRouter();
   const { id } = router.query;
 
-  const reportRef = useRef<HTMLDivElement>(null);
-  const [exportLoading, setExportLoading] = useState(false);
-
   const [report, setReport]   = useState<Report | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState<string | null>(null);
@@ -542,84 +539,17 @@ export default function ReportPage() {
   const aiSecurityScore = Math.round(Math.max(0, Math.min(100, blockRate - flaggedPenalty - exploitPenalty)));
   const scoreRisk       = getScoreRisk(aiSecurityScore);
 
-  // ── PDF Export — captures full report content via html2canvas + jsPDF ──
-  async function exportPDF() {
-    if (!reportRef.current || exportLoading) return;
-    setExportLoading(true);
-    try {
-      // Dynamic imports keep SSR clean
-      const html2canvas = (await import('html2canvas')).default;
-      const { jsPDF }   = await import('jspdf');
-
-      // Wait for all fonts to finish loading before capture —
-      // prevents text-spacing collapse where words run together
-      await document.fonts.ready;
-
-      // Scroll to top so html2canvas captures from the beginning
-      window.scrollTo(0, 0);
-      // Brief pause to let layout settle after scroll + font load
-      await new Promise(resolve => setTimeout(resolve, 300));
-
-      // Capture the full report div at 2× for retina quality
-      const canvas = await html2canvas(reportRef.current, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#0A0A0A',
-        logging: false,
-        // Capture full scroll height — not just visible viewport
-        windowWidth:  reportRef.current.scrollWidth,
-        windowHeight: reportRef.current.scrollHeight,
-        // Offset to ensure full content from top
-        scrollY: -window.scrollY,
-      });
-
-      const imgData = canvas.toDataURL('image/png');
-      const pdf     = new jsPDF('p', 'mm', 'a4');
-      const pageW   = pdf.internal.pageSize.getWidth();   // 210mm
-      const pageH   = pdf.internal.pageSize.getHeight();  // 297mm
-
-      // Scale canvas width to fit the full PDF page width
-      const ratio   = pageW / canvas.width;
-      const imgH    = canvas.height * ratio;  // total image height in mm
-
-      let remaining = imgH;
-      let yOffset   = 0;  // shifts image up as pages progress
-
-      // First page
-      pdf.addImage(imgData, 'PNG', 0, yOffset, pageW, imgH);
-      remaining -= pageH;
-
-      // Add pages while content remains — last page uses exact remaining height
-      // to eliminate the white gap at the bottom of the final page
-      while (remaining > 0) {
-        yOffset -= pageH;
-        pdf.addPage();
-
-        if (remaining < pageH) {
-          // Last page: trim page height to content so there's no white gap
-          pdf.internal.pageSize = { width: pageW, height: remaining } as any;
-        }
-
-        pdf.addImage(imgData, 'PNG', 0, yOffset, pageW, imgH);
-        remaining -= pageH;
-      }
-
-      const filename = `DefendML-Report-${report?.report_id?.slice(0, 8) ?? 'export'}.pdf`;
-      pdf.save(filename);
-    } catch (err) {
-      console.error('PDF export failed:', err);
-      alert('PDF export failed. Please try again.');
-    } finally {
-      setExportLoading(false);
-    }
+  // ── PDF Export — uses browser's native print-to-PDF ──
+  // This produces clean, properly-spaced, searchable PDFs without font issues.
+  function exportPDF() {
+    window.print();
   }
 
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
       <Navigation />
 
-      <div ref={reportRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* ── Analysis in-progress banner ── */}
         {!analysisReady && (
@@ -648,23 +578,10 @@ export default function ReportPage() {
               </div>
               <button
                 onClick={exportPDF}
-                disabled={exportLoading}
-                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm rounded-xl border border-white/20 transition-colors shrink-0 w-full sm:w-auto justify-center sm:justify-start"
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm rounded-xl border border-white/20 transition-colors shrink-0 w-full sm:w-auto justify-center sm:justify-start print:hidden"
               >
-                {exportLoading ? (
-                  <>
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Generating…
-                  </>
-                ) : (
-                  <>
-                    <DocumentArrowDownIcon className="w-5 h-5" />
-                    Export PDF
-                  </>
-                )}
+                <DocumentArrowDownIcon className="w-5 h-5" />
+                Export PDF
               </button>
             </div>
           </div>
