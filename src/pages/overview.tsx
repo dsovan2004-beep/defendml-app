@@ -707,9 +707,19 @@ function OverviewPage() {
                   <FileCheck className="w-6 h-6 text-green-400" />
                 </div>
                 {/* FIXED: was compliance_score * 100 (double-multiplied) — now correctly 0-100 */}
-                <div className="text-4xl font-bold text-white mb-2">{(kpis?.avg_block_rate ?? 0).toFixed(1)}%</div>
+                <div className={`text-4xl font-bold mb-2 ${
+                  (kpis?.avg_block_rate ?? 0) >= 80 ? 'text-green-400'
+                  : (kpis?.avg_block_rate ?? 0) >= 50 ? 'text-yellow-400'
+                  : 'text-red-400'
+                }`}>{(kpis?.avg_block_rate ?? 0).toFixed(1)}%</div>
                 <div className="text-[#F5F5F5] text-sm font-medium mb-1">Avg Block Rate</div>
-                <div className="text-[#A0A0A0] text-xs">How often targets blocked attacks</div>
+                <div className={`text-xs font-medium ${
+                  (kpis?.avg_block_rate ?? 0) >= 80 ? 'text-green-400'
+                  : (kpis?.avg_block_rate ?? 0) >= 50 ? 'text-yellow-400'
+                  : 'text-red-400'
+                }`}>
+                  {(kpis?.avg_block_rate ?? 0) >= 80 ? '✓ Target met (≥80%)' : `Target: ≥80% — ${(kpis?.avg_block_rate ?? 0) >= 50 ? 'Moderate risk' : 'High risk'}`}
+                </div>
               </div>
               <div className="bg-[#111111] rounded-xl p-6 border border-[#1A1A1A] hover:border-red-500/50 transition-all">
                 <div className="flex items-start justify-between mb-4">
@@ -721,6 +731,23 @@ function OverviewPage() {
               </div>
             </div>
           </div>
+
+          {/* ── Empty state — no scans completed yet ─────────────────────── */}
+          {!loading && (kpis?.scan_count ?? 0) === 0 && (
+            <div className="bg-[#111111] rounded-xl border border-dashed border-zinc-700 p-8 text-center">
+              <Target className="w-10 h-10 text-zinc-600 mx-auto mb-3" />
+              <h3 className="text-base font-semibold text-white mb-1">No scans completed yet</h3>
+              <p className="text-sm text-[#A0A0A0] mb-4">
+                Add an AI target and run your first red team attack to populate this dashboard.
+              </p>
+              <a
+                href="/admin/targets"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
+              >
+                Add a target and run your first attack →
+              </a>
+            </div>
+          )}
 
           {/* ── PART 2: Vulnerability Timeline ──────────────────────────── */}
           <div className="bg-[#111111] rounded-2xl border border-[#1A1A1A] p-6">
@@ -750,7 +777,7 @@ function OverviewPage() {
             {/* Legend */}
             <div className="flex items-center gap-5 mb-3 text-xs">
               <div className="flex items-center gap-1.5"><span className="w-5 h-0.5 bg-green-500 inline-block" />Block Rate</div>
-              <div className="flex items-center gap-1.5"><span className="w-5 h-0.5 bg-red-500 inline-block border-dashed" style={{ borderTop: '2px dashed #ef4444', background: 'none' }} />Attack Success Rate</div>
+              <div className="flex items-center gap-1.5"><span className="w-5 h-0.5 bg-red-500 inline-block border-dashed" style={{ borderTop: '2px dashed #ef4444', background: 'none' }} />Exploit Rate</div>
               <div className="flex items-center gap-1.5"><span className="w-5 h-0.5 bg-yellow-500 inline-block" />AI Security Score</div>
             </div>
 
