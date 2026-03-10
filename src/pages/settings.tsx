@@ -237,18 +237,25 @@ function SettingsPageContent() {
     setOrgError(null);
     (async () => {
       try {
-        const { data: authData } = await supabase.auth.getUser();
-        const userId = authData?.user?.id;
-        if (!userId) { setOrgError('Not authenticated'); return; }
+        // Use getSession() to ensure the JWT is fully loaded into the client
+        // before making PostgREST queries — getUser() validates server-side
+        // but doesn't guarantee auth.uid() is set in the RLS context.
+        const { data: { session } } = await supabase.auth.getSession();
+        const userId = session?.user?.id;
+        if (!userId) { setOrgError('Not authenticated. Please log in again.'); return; }
 
         const { data: membership, error: memErr } = await supabase
           .from('organization_members')
           .select('organization_id, role')
           .eq('user_id', userId)
-          .limit(1)
-          .single();
+          .maybeSingle();
 
-        if (memErr || !membership) {
+        if (memErr) {
+          console.error('[Org] membership query error:', memErr.code, memErr.message);
+          setOrgError(`Could not load membership (${memErr.code}). Contact support.`);
+          return;
+        }
+        if (!membership) {
           setOrgError('No organization found. Contact your admin to be added to an org.');
           return;
         }
