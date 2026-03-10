@@ -1,11 +1,15 @@
-// src/pages/compliance.tsx — permanent redirect to /reports
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+// src/pages/compliance.tsx — server-side permanent redirect to /reports
+import type { GetServerSideProps } from "next";
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    redirect: {
+      destination: "/reports",
+      permanent: true,
+    },
+  };
+};
 
 export default function ComplianceRedirect() {
-  const router = useRouter();
-  useEffect(() => {
-    router.replace("/reports");
-  }, [router]);
   return null;
 }
