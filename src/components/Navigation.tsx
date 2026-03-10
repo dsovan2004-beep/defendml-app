@@ -96,13 +96,13 @@ export default function Navigation() {
       icon: LayoutDashboard,
     },
     {
-      name: "Demo",
-      href: "/asl3-testing", // route unchanged
+      name: "Scan",
+      href: "/scan",
       icon: Beaker,
     },
     {
       name: "Reports",
-      href: "/compliance", // route unchanged
+      href: "/reports",
       icon: FileText,
     },
     {
@@ -127,11 +127,18 @@ export default function Navigation() {
         router.pathname === "/dashboard"
       );
     }
-    if (href === "/compliance") {
+    if (href === "/reports") {
       return (
+        router.pathname === "/reports" ||
         router.pathname === "/compliance" ||
         router.pathname === "/audit" ||
         router.pathname === "/usage"
+      );
+    }
+    if (href === "/scan") {
+      return (
+        router.pathname === "/scan" ||
+        router.pathname === "/asl3-testing"
       );
     }
     return router.pathname === href;
