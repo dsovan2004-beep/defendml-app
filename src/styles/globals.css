@@ -8,3 +8,14 @@ html, body, #__next {
   overflow-x: hidden;   /* prevent any layout overflow from causing horizontal scroll */
   max-width: 100vw;     /* clamp width to viewport on all screen sizes */
 }
+
+/* ── Print styles — ensures window.print() captures full report ── */
+@media print {
+  html, body, #__next {
+    height: auto !important;       /* override 100% height so full content prints */
+    overflow: visible !important;  /* allow all content to be visible for print */
+    background-color: #0A0A0A !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
